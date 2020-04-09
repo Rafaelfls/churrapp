@@ -1,8 +1,17 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, Image, Text} from 'react-native';
 
-export default function Login(){
+import style from './styles';
+
+import logo from '../../assets/logo.jpg'
+
+export default function Calculadora(){
     return(
-        <View/>
-    )
+        <View style={style.container}>
+            <View style={style.header}>
+                <Image source={logo}/>
+                <Text style={style.titulo}>Churrapp</Text>
+            </View>
+        </View>
+    );
 }
