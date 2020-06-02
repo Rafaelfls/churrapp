@@ -21,6 +21,7 @@ export default function Routes(){
         <NavigationContainer>
 
             <AppStack.Navigator>
+                <AppStack.Screen name="Login" component={Login}/>
                 <AppStack.Screen name="Calculadora" component={Calculadora}/>
                 <AppStack.Screen name="CatalogoRestaurante" component={CatalogoRestaurante}/>
                 <AppStack.Screen name="DividirCompra" component={DividirCompra}/>
@@ -28,7 +29,6 @@ export default function Routes(){
                 <AppStack.Screen name="InformacaoCerveja" component={InformacaoCerveja}/>
                 <AppStack.Screen name="InformacaoRestaurante" component={InformacaoRestaurante}/>
                 <AppStack.Screen name="ItemRestaurante" component={ItemRestaurante}/>
-                <AppStack.Screen name="Login" component={Login}/>
                 <AppStack.Screen name="Restaurante" component={Restaurante}/>
                 <AppStack.Screen name="ResumoChurras" component={ResumoChurras}/>
             </AppStack.Navigator>
