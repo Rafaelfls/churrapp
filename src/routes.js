@@ -57,7 +57,7 @@ export default function Routes(){
 
     return(
         <NavigationContainer>
-            <AppStack.Navigator >
+            <AppStack.Navigator screenOptions={{headerShown: false}}>
                 <AppStack.Screen name="Login" component={Login}/>
                 <AppStack.Screen name="Tabs" component={CriarTabs}/>
                 <AppStack.Screen name="Calculadora" component={Calculadora}/>
