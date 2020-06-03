@@ -11,15 +11,14 @@ export default StyleSheet.create({
         fontSize : 40,
     },
     logo:{
-        height   : "100%",
-        width    : "100%",
+        height   : "120%",
+        width    : "130%",
         alignSelf: "center",
     },
     imageContainer:{
         height         : "10%",
         width          : "19%",
         alignSelf      : "center",
-        backgroundColor: "yellow",
         marginTop      : 20,
     },
     title:{
@@ -37,8 +36,11 @@ export default StyleSheet.create({
         justifyContent: "space-evenly",
     },
     fbBtn:{
-        color: "#4C69BA",
-        marginHorizontal: 70
+        padding: 6,
+        backgroundColor: "#3B5998",
+        borderRadius: 10,
+        marginBottom: 10,
+        flexDirection: 'row'
     },
     loginBtn:{
         marginHorizontal: 70,
@@ -46,9 +48,29 @@ export default StyleSheet.create({
         alignSelf: "center",
         
     },
+    googleBtn:{
+        padding: 6, 
+        backgroundColor: '#fff', 
+        borderRadius: 10, 
+        marginBottom: 10, 
+        flexDirection: 'row'
+    },
+    celularBtn:{
+        padding: 6, 
+        backgroundColor: '#a3a29b', 
+        borderRadius: 10, 
+        flexDirection: 'row',
+    },
+    textBtnGoogle: {
+        fontSize: 20,
+        color: 'lightgray',
+        fontWeight: 'bold',
+        paddingHorizontal: 10
+
+    },
     textBtn: {
         fontSize: 20,
-        color: '#000',
+        color: 'white',
         fontWeight: 'bold',
         paddingHorizontal: 10
 
