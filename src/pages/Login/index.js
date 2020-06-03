@@ -29,15 +29,15 @@ export default function Calculadora(){
     <View   style = {style.allBtn}>
         <View style = {style.loginBtn}>
         
-            <TouchableOpacity style = {{padding: 6, backgroundColor: '#0068d6', borderRadius: 10, marginBottom: 10, flexDirection: 'row'}} onPress={navigateToResumo}>
+            <TouchableOpacity style = {style.fbBtn} onPress={navigateToResumo}>
               <Icon             name  = "facebook" size = {35}/>
               <Text style={style.textBtn}>Facebook</Text>
             </TouchableOpacity>
-            <TouchableOpacity style = {{padding: 6, backgroundColor: '#ffe366', borderRadius: 10, marginBottom: 10, flexDirection: 'row'}}>
+            <TouchableOpacity style = {style.googleBtn}>
               <Icon             name  = "google" size = {35}/>
-              <Text style={style.textBtn}>Google</Text>
+              <Text style={style.textBtnGoogle}>Google</Text>
             </TouchableOpacity>
-            <TouchableOpacity style = {{padding: 6, backgroundColor: '#a3a29b', borderRadius: 10, flexDirection: 'row'}}>
+            <TouchableOpacity style = {style.celularBtn}>
               <Icon             name  = "phone" size = {35}/>
               <Text style={style.textBtn}>Celular</Text>
             </TouchableOpacity>

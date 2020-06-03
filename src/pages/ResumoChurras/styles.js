@@ -8,7 +8,8 @@ export default StyleSheet.create({
   },  
   header: {
     justifyContent: 'center',
-    alignItems: "center"
+    alignItems: "center",
+    flexDirection: 'row',
   },
   textHeader: {
     fontSize: 40,
@@ -28,6 +29,8 @@ export default StyleSheet.create({
     borderRadius: 8,
     padding: 24,
     marginBottom: 16
-  }
+  },
+  logoutBtn:{
+  },
     
 });

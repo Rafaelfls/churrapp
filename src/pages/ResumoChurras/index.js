@@ -1,11 +1,13 @@
 import React from 'react';
-import {View, Text, Image, FlatList} from 'react-native';
+import {View, Text, Image, FlatList, TouchableOpacity} from 'react-native';
+import { useNavigation } from '@react-navigation/native'
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import logoImg from '../../assets/logo.jpg';
 
 import style from './styles';
+import styles from '../Login/styles';
 
 const churras= [
     {
@@ -17,11 +19,24 @@ const churras= [
 ]
 
 export default function ResumoChurras(){
+    const navigation = useNavigation();
+
+    function logout() {
+        navigation.replace('Login');
+      }
+      
+      function criarChurras() {
+        navigation.replace('CriarChurrasco');
+      }
+
     return(
 
         <View style={style.container}>
             <View style={style.header}>
                 <Text style={style.textHeader}>Churrapp</Text>
+                <TouchableOpacity style = {styles.logutBtn} onPress={logout}>
+                    <Icon             name  = "sign-out-alt" size = {25}/>
+                </TouchableOpacity>
             </View>
 
             <FlatList
@@ -37,7 +52,7 @@ export default function ResumoChurras(){
             />
             
             <ActionButton>
-                <ActionButton.Item  title="Criar Churras" onPress={() => {}}>
+                <ActionButton.Item  title="Criar Churras" onPress={criarChurras}>
                     <Icon name="plus" style={style.fabBtn}/>
                 </ActionButton.Item>
                 <ActionButton.Item  title="Participar do Churras" onPress={() => {}}>
