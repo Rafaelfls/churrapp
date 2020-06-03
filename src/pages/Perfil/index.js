@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 
-export default function GuiaCerveja(){
+export default function Perfil(){
     return(
         <View>
-            <Text>TESTANDO</Text>
+            <Text>Perfil</Text>
         </View>
     )
 }

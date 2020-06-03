@@ -7,15 +7,8 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 const AppStack =  createStackNavigator();
 
 // Import pages
-import Calculadora from './pages/Calculadora';
-import CatalogoRestaurante from './pages/CatalogoRestaurante';
-import DividirCompra from './pages/DividirCompra';
-import GuiaCerveja from './pages/GuiaCerveja';
-import InformacaoCerveja from './pages/InformacaoCerveja';
-import InformacaoRestaurante from './pages/InformacaoRestaurante';
-import ItemRestaurante from './pages/ItemRestaurante';
+import Perfil from './pages/Perfil';
 import Login from './pages/Login';
-import Restaurante from './pages/Restaurante';
 import ResumoChurras from './pages/ResumoChurras';
 import OutrosChurras from './pages/OutrosChurras';
 
@@ -47,7 +40,7 @@ const Tab = createBottomTabNavigator();
             })} initialRouteName={'Meu Churras'} tabBarOptions={{activeTintColor: "#fff308", inactiveTintColor: "#c2ba19"}}>
                 <Tab.Screen name="Outros Churras" component={OutrosChurras}/>
                 <Tab.Screen name="Meu Churras" component={ResumoChurras}/>
-                <Tab.Screen name="Perfil" component={GuiaCerveja}/>
+                <Tab.Screen name="Perfil" component={Perfil}/>
             </Tab.Navigator>
         );
     }
@@ -60,15 +53,9 @@ export default function Routes(){
             <AppStack.Navigator screenOptions={{headerShown: false}}>
                 <AppStack.Screen name="Login" component={Login}/>
                 <AppStack.Screen name="Tabs" component={CriarTabs}/>
-                <AppStack.Screen name="Calculadora" component={Calculadora}/>
-                <AppStack.Screen name="CatalogoRestaurante" component={CatalogoRestaurante}/>
-                <AppStack.Screen name="DividirCompra" component={DividirCompra}/>
-                <AppStack.Screen name="GuiaCerveja" component={GuiaCerveja}/>
-                <AppStack.Screen name="InformacaoCerveja" component={InformacaoCerveja}/>
-                <AppStack.Screen name="InformacaoRestaurante" component={InformacaoRestaurante}/>
-                <AppStack.Screen name="ItemRestaurante" component={ItemRestaurante}/>
-                <AppStack.Screen name="Restaurante" component={Restaurante}/>
+                <AppStack.Screen name="Perfil" component={Perfil}/>
                 <AppStack.Screen name="ResumoChurras" component={ResumoChurras}/>
+                <AppStack.Screen name="OutrosChurras" component={OutrosChurras}/>
             </AppStack.Navigator>
  
         </NavigationContainer>
