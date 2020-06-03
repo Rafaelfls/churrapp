@@ -3,40 +3,54 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
     container: {
         height: "100%",
-        width: "100%",
+        width : "100%",
     },
     appName:{
         marginTop: "20%",
         alignSelf: "center",
-        fontSize: 40,    
+        fontSize : 40,
     },
     logo:{
-        height:"100%",
-        width:"100%",
+        height   : "100%",
+        width    : "100%",
         alignSelf: "center",
     },
     imageContainer:{
-        height: "10%",
-        width: "19%",
-        alignSelf: "center",
+        height         : "10%",
+        width          : "19%",
+        alignSelf      : "center",
         backgroundColor: "yellow",
-        marginTop: 20,
+        marginTop      : 20,
     },
     title:{
         alignSelf: "center",
         marginTop: 70,
-        fontSize: 25,
+        fontSize : 25,
     },
     subtitle:{
         alignSelf: "center",
         marginTop: 15,
-        color: "gray",
+        color    : "gray",
     },
     allBtn:{
-        marginTop: 40,
+        marginTop     : 40,
         justifyContent: "space-evenly",
     },
     fbBtn:{
         color: "#4C69BA",
-    }
+        marginHorizontal: 70
+    },
+    loginBtn:{
+        marginHorizontal: 70,
+        width: 150,
+        alignSelf: "center",
+        
+    },
+    textBtn: {
+        fontSize: 20,
+        color: '#000',
+        fontWeight: 'bold',
+        paddingHorizontal: 10
+
+    },
 });
