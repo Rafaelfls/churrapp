@@ -72,9 +72,11 @@ export default function ResumoChurras(){
         <View style={style.container}>
             <View style={style.header}>
                 <Text style={style.textHeader}>Churrapp</Text>
-                <TouchableOpacity onPress={logout}>
-                    <Icon             name  = "sign-out-alt" size = {25}/>
-                </TouchableOpacity>
+                <View style={style.signOutBtn}>
+                    <TouchableOpacity onPress={logout}>
+                        <Icon             name  = "sign-out-alt" size = {25}/>
+                    </TouchableOpacity>
+                </View>
             </View>
 
             <FlatList

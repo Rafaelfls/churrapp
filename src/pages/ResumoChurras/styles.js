@@ -25,7 +25,9 @@ export default StyleSheet.create({
       color: '#fff308'
     },
   churrasList: {
-    margin: 24,
+    marginHorizontal: 20,
+    marginVertical: 10,
+    backgroundColor: "transparent"
   },
   churras: {
     backgroundColor: '#fff308',
@@ -33,7 +35,10 @@ export default StyleSheet.create({
     padding: 24,
     marginBottom: 16,
   },
-  logoutBtn:{
+  signOutBtn:{
+    position: 'absolute',
+    top: 15,
+    right: 20,
   },
   churrasData: {
     fontWeight: 'bold',
