@@ -19,15 +19,10 @@ export default function CriarChurrasco(){
       }
 
     return(
-        <View style={style.container}> 
-          <View style={style.header}>
-            <Text style={style.textHeader}>Vamos começar?</Text>
-            <View style={style.stepHeader}>
-              <Text style={style.textHeader}>1/4</Text>
-            </View>
-          </View>
+        <View style={style.container}>
           <SafeAreaView>
             <ScrollView style={style.scrollView}>
+              <Text style={style.textHeader}>Vamos começar?</Text>
               <View style={style.formGroup}>
                 <Text style={style.textLabel}>Nome do churrasco:</Text>
                 <TextInput
@@ -49,31 +44,39 @@ export default function CriarChurrasco(){
                   placeholder={"O melhor churras do ano"}
                   onChangeText={text => onChangeText(text)}
                 />
-                <View style={style.datePicker}>
+                <View style={style.imagePicker}>
                   <ImagePicker/>
                 </View>
-                <View style={style.datePicker}>
+                <View style={style.componentPicker}>
                   <Text style={style.textLabel}>Data:</Text>
-                  <DatePicker/>
+                  <View style={style.picker}>
+                    <DatePicker/>
+                  </View>
                 </View>
-                <View style={style.datePicker}>
+                <View style={style.componentPicker}>
                   <Text style={style.textLabel}>Início:</Text>
-                  <TimePicker/>
+                  <View style={style.picker}>
+                    <TimePicker/>
+                  </View>
                 </View>
-                <View style={style.datePicker}>
+                <View style={style.componentPicker}>
                   <Text style={style.textLabel}>Término:</Text>
-                  <TimePicker/>
+                  <View style={style.picker}>
+                    <TimePicker/>
+                  </View>
                 </View>
+              </View>
+              
+
+              <View style={style.footer}>
+                  <Text style={style.textFooter}>Etapa 1/4</Text>
+                  <TouchableOpacity style = {style.continueBtn} onPress={next}>
+                    <Icon style={style.iconBtn} name  = "check" size = {20}/>
+                    <Text style={style.textBtn}>Continuar</Text>
+                  </TouchableOpacity>
               </View>
             </ScrollView>
           </SafeAreaView>
-
-          <View style={style.footer}>
-            <TouchableOpacity style = {style.continueBtn} onPress={next}>
-              <Icon style={style.iconBtn} name  = "check" size = {20}/>
-              <Text style={style.textBtn}>Continuar</Text>
-            </TouchableOpacity>
-          </View>
         </View>
     )
 }

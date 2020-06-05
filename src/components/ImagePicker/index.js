@@ -11,29 +11,6 @@ import style from './styles';
 export default function ImagePickerExample()   {
   const [image, setImage] = useState(null);
 
-  async function checkMultiPermissions() {
-    const { status, expires, permissions } = await Permissions.askAsync(
-      ImagePicker.CAMERA_ROLL,
-    );
-    if (status !== 'granted') { 
-      alert('Hey! You have not enabled selected permissions');
-    }else{
-      pickImage()
-
-    }
-  }
-
-  async function getLocationAsync() {
-    // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
-    const { status, permissions } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    if (status === 'granted') {
-     
-      return ;
-    } else {
-      throw new Error('Location permission not granted');
-    }
-  }
-
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -51,7 +28,7 @@ export default function ImagePickerExample()   {
 
   return (
     
-    <TouchableOpacity style={style.inputDisplay} onPress={checkMultiPermissions} >
+    <TouchableOpacity style={style.inputDisplay} onPress={pickImage} >
       {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, paddingVertical: 10 }} />}
     </TouchableOpacity>
   );

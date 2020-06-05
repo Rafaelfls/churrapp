@@ -1,4 +1,4 @@
-import { StyleSheet, YellowBox } from 'react-native';
+import { StyleSheet, YellowBox, RecyclerViewBackedScrollViewComponent } from 'react-native';
 import Constants from 'expo-constants';
 import { ceil } from 'react-native-reanimated';
 
@@ -22,10 +22,11 @@ export default StyleSheet.create({
   textHeader: {
     fontSize: 25,
     color: '#fb2',
+    marginLeft: 15,
   },
   formGroup:{
     marginHorizontal:20,
-    marginVertical: 15,
+    marginTop: 15,
     justifyContent: "center",
   },
   textLabel:{
@@ -41,23 +42,35 @@ export default StyleSheet.create({
     borderRadius:8,
     marginBottom: 10,
   },
-  datePicker:{
+  imagePicker:{
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignContent: "center",
     marginVertical: 10,
-  },    
-  fabBtn: {
-      fontSize: 20,
-      height: 22,
-      color: '#fff308',
+  },  
+  componentPicker:{
+    flexDirection: "row",
+    alignContent: "center",
+    marginVertical: 10,
+  },   
+    footer:{
+      height: 100,
+      flexDirection: "row",
+      justifyContent: "flex-start",
+      alignContent: 'center',
+      backgroundColor: 'brown'
     },
-  footer:{
-    position: 'absolute',
-    bottom: 30,
-    right: 10,
-  },
+    textFooter:{
+      position: 'absolute',
+      bottom: 40,
+      fontSize: 20,
+      color: 'yellow',
+      marginLeft: 15
+    },
   continueBtn:{
+    position: 'absolute',
+    right: 10,
+    bottom: 35,
     flexDirection:'row-reverse',
     borderRadius:8,
     backgroundColor: 'black',
@@ -77,6 +90,10 @@ export default StyleSheet.create({
     top:0,
   },
   scrollView:{
-    marginBottom: 30,
+    marginBottom: 0,
+  },
+  picker:{
+    position: 'absolute',
+    right: 0,
   },
 });

@@ -19,22 +19,42 @@ export default StyleSheet.create({
   textHeader: {
     fontSize: 25,
     color: '#fb2',
+    marginLeft: 15,
   },
   stepHeader:{
     position:'absolute',
     right: 20,
     top:0,
-  },
+  },   
   footer:{
+    height: 100,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignContent: 'center',
+    backgroundColor: 'brown'
+  },
+  textFooter:{
     position: 'absolute',
-    bottom: 30,
-    right: 10,
+    bottom: 40,
+    fontSize: 20,
+    color: 'yellow',
+    marginLeft: 15
   },
-  continueBtn:{
-    flexDirection:'row-reverse',
-    borderRadius:8,
-    backgroundColor: 'black',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
+continueBtn:{
+  position: 'absolute',
+  right: 10,
+  bottom: 35,
+  flexDirection:'row-reverse',
+  borderRadius:8,
+  backgroundColor: 'black',
+  paddingHorizontal: 10,
+  paddingVertical: 5,
+},
+textBtn:{
+  marginRight: 10,
+  color: 'yellow',
+},
+iconBtn:{
+  color:"yellow",
+},
 })
