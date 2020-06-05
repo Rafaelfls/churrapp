@@ -12,6 +12,7 @@ import Login from './pages/Login';
 import ResumoChurras from './pages/ResumoChurras';
 import OutrosChurras from './pages/OutrosChurras';
 import CriarChurrasco from './pages/CriarChurrasco';
+import DetalheChurras from './pages/DetalheChurras';
 
 
 const Tab = createBottomTabNavigator();
@@ -58,6 +59,7 @@ export default function Routes(){
                 <AppStack.Screen name="ResumoChurras" component={ResumoChurras}/>
                 <AppStack.Screen name="OutrosChurras" component={OutrosChurras}/>
                 <AppStack.Screen name="CriarChurrasco" component={CriarChurrasco}/>
+                <AppStack.Screen name="DetalheChurras" component={DetalheChurras}/>
             </AppStack.Navigator>
  
         </NavigationContainer>

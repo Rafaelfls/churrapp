@@ -49,6 +49,11 @@ export default StyleSheet.create({
     marginBottom: 5,
     color: '#000'
   },
+  churrasSubTitle: {
+    fontSize: 18,
+    marginBottom: 5,
+    color: '#000'
+  },
   detailBtn: {
     backgroundColor: '#000',
     borderRadius: 8,
