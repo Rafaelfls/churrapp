@@ -29,9 +29,7 @@ export default StyleSheet.create({
       color: '#fff308'
     },
   churrasList: {
-    marginHorizontal: 20,
-    marginVertical: 10,
-    backgroundColor: "transparent"
+    margin: 24,
   },
   churras: {
     backgroundColor: '#fff308',
@@ -39,10 +37,7 @@ export default StyleSheet.create({
     padding: 24,
     marginBottom: 16,
   },
-  signOutBtn:{
-    position: 'absolute',
-    top: 15,
-    right: 20,
+  logoutBtn:{
   },
   churrasData: {
     fontWeight: 'bold',
@@ -51,6 +46,11 @@ export default StyleSheet.create({
   },
   churrasTitle: {
     fontSize: 20,
+    marginBottom: 5,
+    color: '#000'
+  },
+  churrasSubTitle: {
+    fontSize: 18,
     marginBottom: 5,
     color: '#000'
   },
