@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, Image, FlatList, TouchableOpacity} from 'react-native';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import api from '../../services/api';
@@ -62,12 +62,14 @@ export default function ResumoChurras(){
         <View style={style.container}>
             <View style={style.header}>
                 <Text style={style.textHeader}>Churrapp</Text>
+
                 <Text style={ style.subHeader }>Você tem {total} churras criados</Text>
             </View>
 
             <View style={{ alignItems: 'flex-end', justifyContent: 'center', marginHorizontal: 20 }}>
                 <TouchableOpacity   onPress={logout}>
                     <Icon    name  = "sign-out-alt" size = {25}/>
+
                 </TouchableOpacity>
             </View>
 
