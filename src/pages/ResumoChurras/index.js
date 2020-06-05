@@ -62,14 +62,11 @@ export default function ResumoChurras(){
         <View style={style.container}>
             <View style={style.header}>
                 <Text style={style.textHeader}>Churrapp</Text>
-
                 <Text style={ style.subHeader }>Você tem {total} churras criados</Text>
             </View>
-
-            <View style={{ alignItems: 'flex-end', justifyContent: 'center', marginHorizontal: 20 }}>
+            <View style={style.signOutBtn}>
                 <TouchableOpacity   onPress={logout}>
                     <Icon    name  = "sign-out-alt" size = {25}/>
-
                 </TouchableOpacity>
             </View>
 

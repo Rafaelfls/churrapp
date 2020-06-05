@@ -1,4 +1,4 @@
-import { StyleSheet, YellowBox } from 'react-native';
+import { StyleSheet, YellowBox, RecyclerViewBackedScrollViewComponent } from 'react-native';
 import Constants from 'expo-constants';
 import { ceil } from 'react-native-reanimated';
 
@@ -6,21 +6,27 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Constants.statusBarHeight + 15,
-  },  
+    backgroundColor: '#fff',    
+  },   
   header: {
-    justifyContent: "space-evenly",
+    justifyContent: "flex-start",
     alignItems: "center",
     flexDirection: 'row',
     borderBottomWidth:1,
     borderBottomColor:"lightgray",
+    paddingLeft:10,
+    paddingBottom: 10,
+    zIndex: 1,
+    backgroundColor: '#fff',
   },
   textHeader: {
     fontSize: 25,
     color: '#fb2',
+    marginLeft: 15,
   },
   formGroup:{
     marginHorizontal:20,
-    marginVertical: 15,
+    marginTop: 15,
     justifyContent: "center",
   },
   textLabel:{
@@ -36,23 +42,35 @@ export default StyleSheet.create({
     borderRadius:8,
     marginBottom: 10,
   },
-  datePicker:{
+  imagePicker:{
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignContent: "center",
     marginVertical: 10,
-  },    
-  fabBtn: {
-      fontSize: 20,
-      height: 22,
-      color: '#fff308',
+  },  
+  componentPicker:{
+    flexDirection: "row",
+    alignContent: "center",
+    marginVertical: 10,
+  },   
+    footer:{
+      height: 100,
+      flexDirection: "row",
+      justifyContent: "flex-start",
+      alignContent: 'center',
+      backgroundColor: 'brown'
     },
-  footer:{
-    position: 'absolute',
-    bottom: 30,
-    right: 10,
-  },
+    textFooter:{
+      position: 'absolute',
+      bottom: 40,
+      fontSize: 20,
+      color: 'yellow',
+      marginLeft: 15
+    },
   continueBtn:{
+    position: 'absolute',
+    right: 10,
+    bottom: 35,
     flexDirection:'row-reverse',
     borderRadius:8,
     backgroundColor: 'black',
@@ -65,5 +83,17 @@ export default StyleSheet.create({
   },
   iconBtn:{
     color:"yellow",
-  }
+  },
+  stepHeader:{
+    position:'absolute',
+    right: 20,
+    top:0,
+  },
+  scrollView:{
+    marginBottom: 0,
+  },
+  picker:{
+    position: 'absolute',
+    right: 0,
+  },
 });
