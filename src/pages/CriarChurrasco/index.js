@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, TextInput,} from 'react-native';
+import {View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView ,} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 
@@ -26,41 +26,47 @@ export default function CriarChurrasco(){
               <Text style={style.textHeader}>1/4</Text>
             </View>
           </View>
-          <View style={style.formGroup}>
-            <Text style={style.textLabel}>Nome do churrasco:</Text>
-            <TextInput
-              style={style.inputStandard}
-              placeholder={'Churrasbom'}
-              onChangeText={text => onChangeText(text)}
-            />
-            <Text style={style.textLabel}>Local do churrasco:</Text>
-            <TextInput
-              style={style.inputStandard}
-              placeholder={"Alameda santos, 202"}
-              onChangeText={text => onChangeText(text)}
-            />
-            <Text style={style.textLabel}>Descrição:</Text>
-            <TextInput
-              style={style.inputStandard}
-              multiline={true}
-              numberOfLines={3}
-              placeholder={"O melhor churras do ano"}
-              onChangeText={text => onChangeText(text)}
-            />
-            <ImagePicker/>
-            <View style={style.datePicker}>
-              <Text style={style.textLabel}>Data:</Text>
-              <DatePicker/>
-            </View>
-            <View style={style.datePicker}>
-              <Text style={style.textLabel}>Início:</Text>
-              <TimePicker/>
-            </View>
-            <View style={style.datePicker}>
-              <Text style={style.textLabel}>Término:</Text>
-              <TimePicker/>
-            </View>
-          </View>
+          <SafeAreaView>
+            <ScrollView style={style.scrollView}>
+              <View style={style.formGroup}>
+                <Text style={style.textLabel}>Nome do churrasco:</Text>
+                <TextInput
+                  style={style.inputStandard}
+                  placeholder={'Churrasbom'}
+                  onChangeText={text => onChangeText(text)}
+                />
+                <Text style={style.textLabel}>Local do churrasco:</Text>
+                <TextInput
+                  style={style.inputStandard}
+                  placeholder={"Alameda santos, 202"}
+                  onChangeText={text => onChangeText(text)}
+                />
+                <Text style={style.textLabel}>Descrição:</Text>
+                <TextInput
+                  style={style.inputStandard}
+                  multiline={true}
+                  numberOfLines={3}
+                  placeholder={"O melhor churras do ano"}
+                  onChangeText={text => onChangeText(text)}
+                />
+                <View style={style.datePicker}>
+                  <ImagePicker/>
+                </View>
+                <View style={style.datePicker}>
+                  <Text style={style.textLabel}>Data:</Text>
+                  <DatePicker/>
+                </View>
+                <View style={style.datePicker}>
+                  <Text style={style.textLabel}>Início:</Text>
+                  <TimePicker/>
+                </View>
+                <View style={style.datePicker}>
+                  <Text style={style.textLabel}>Término:</Text>
+                  <TimePicker/>
+                </View>
+              </View>
+            </ScrollView>
+          </SafeAreaView>
 
           <View style={style.footer}>
             <TouchableOpacity style = {style.continueBtn} onPress={next}>

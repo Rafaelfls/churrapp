@@ -15,6 +15,7 @@
     "@react-navigation/stack": "^5.4.1",
     "@valdio/react-native-scrollable-tabview": "^0.8.12",
     "expo": "~37.0.3",
+    "expo-cli": "^3.21.5",
     "expo-constants": "~9.0.0",
     "expo-image-picker": "~8.1.0",
     "native-base": "^2.13.12",
@@ -32,7 +33,8 @@
     "react-native-screens": "~2.2.0",
     "react-native-vector-icons": "^6.6.0",
     "react-native-web": "~0.11.7",
-    "typeface-bree-serif": "0.0.72"
+    "typeface-bree-serif": "0.0.72",
+    "expo-permissions": "~8.1.0"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.1.0",

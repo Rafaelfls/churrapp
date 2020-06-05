@@ -15,7 +15,7 @@ export default function AdicionaConvidados(){
           </View>
           
           <View style={style.footer}>
-            <TouchableOpacity style = {style.continueBtn} onPress={next}>
+            <TouchableOpacity style = {style.continueBtn}>
               <Icon style={style.iconBtn} name  = "check" size = {20}/>
               <Text style={style.textBtn}>Continuar</Text>
             </TouchableOpacity>

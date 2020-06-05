@@ -6,6 +6,7 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Constants.statusBarHeight + 15,
+    backgroundColor: '#fff',    
   },   
   header: {
     justifyContent: "flex-start",
@@ -13,8 +14,10 @@ export default StyleSheet.create({
     flexDirection: 'row',
     borderBottomWidth:1,
     borderBottomColor:"lightgray",
-    marginLeft:10,
+    paddingLeft:10,
     paddingBottom: 10,
+    zIndex: 1,
+    backgroundColor: '#fff',
   },
   textHeader: {
     fontSize: 25,
@@ -72,5 +75,8 @@ export default StyleSheet.create({
     position:'absolute',
     right: 20,
     top:0,
+  },
+  scrollView:{
+    marginBottom: 30,
   },
 });
