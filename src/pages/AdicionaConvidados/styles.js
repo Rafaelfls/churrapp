@@ -21,6 +21,11 @@ export default StyleSheet.create({
     color: '#fb2',
     marginLeft: 15,
   },
+  fabBtn: {
+      fontSize: 20,
+      height: 22,
+      color: '#fff308'
+    },
   stepHeader:{
     position:'absolute',
     right: 20,
