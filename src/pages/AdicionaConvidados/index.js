@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, TextInput, SafeAreaView, ScrollView } from 'react-native';
+import {View, Text, TouchableOpacity, TextInput, SafeAreaView, ScrollView, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
@@ -27,6 +27,8 @@ export default function AdicionaConvidados(){
         <SafeAreaView>
           <ScrollView style={style.scrollView}>
             <Text style={style.textHeader}>Convide seus amigos!</Text>
+
+            <FlatList></FlatList>
 
             
             
