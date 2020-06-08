@@ -22,7 +22,7 @@ export default function CriarChurrasco(){
         <View style={style.container}>
           <SafeAreaView>
             <ScrollView style={style.scrollView}>
-              <Text style={style.textHeader}>Vamos começar?</Text>
+              <Text style={style.textHeader}>Vamos começar!</Text>
               <View style={style.formGroup}>
                 <Text style={style.textLabel}>Nome do churrasco:</Text>
                 <TextInput
@@ -71,7 +71,7 @@ export default function CriarChurrasco(){
               <View style={style.footer}>
                   <Text style={style.textFooter}>Etapa 1/4</Text>
                   <TouchableOpacity style = {style.continueBtn} onPress={next}>
-                    <Icon style={style.iconBtn} name  = "check" size = {20}/>
+                    <Icon style={style.iconBtn} name  = "angle-double-right" size = {20}/>
                     <Text style={style.textBtn}>Continuar</Text>
                   </TouchableOpacity>
               </View>
