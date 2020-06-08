@@ -36,7 +36,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     alignContent: 'center',
-    backgroundColor: 'brown'
+    backgroundColor: 'brown',
   },
   textFooter:{
     position: 'absolute',
