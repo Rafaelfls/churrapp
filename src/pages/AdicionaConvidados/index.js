@@ -1,48 +1,139 @@
-import React from 'react';
-import {View, Text, TouchableOpacity, TextInput, SafeAreaView, ScrollView, FlatList } from 'react-native';
+import React, {Component} from 'react';
+import {View, Text, TouchableOpacity, TextInput, SafeAreaView, ScrollView, FlatList, Linking} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
-import * as Permissions from 'expo-permissions';
 
 import style from './styles';
 
+
+
+const convidadosList = [
+  {
+    id: '1',
+    nome: "Matheus Torres",
+    telefone: "19996071004",
+    status: '1',
+  },
+  {
+    id: '2',
+    nome: "Rafael França",
+    telefone: "12996281340",
+    status: '2',
+  },
+  {
+    id: '3',
+    nome: "Joao Gabriel",
+    telefone: "11974374042",
+    status: '1',    
+  },
+  {
+    id: '4',
+    nome: "Joao Gabriel",
+    telefone: "11974374042",
+    status: '1',    
+  },
+  {
+    id: '5',
+    nome: "Joao Gabriel",
+    telefone: "11974374042",
+    status: '1',    
+  },
+]
+
 export default function AdicionaConvidados(){
 
-  const [onChangeText] = React.useState('');
+  function getStatus (convidado){
+    if(convidado == 1){
+        return 'Presença confirmada'
+    }else if(convidado == 2){
+        return'Aguardando confirmação'
+    }
+
+  }
+
+  const [value, onChangeText] = React.useState('');
   
   const navigation = useNavigation();
 
-  async function askPermission(){
-    const { status, permissions } = await Permissions.askAsync(Permissions.CONTACTS);
-  }
-  
+  const inviteStandard = "Ola, Rafael esta te convidadando para o churrasco *Top dos 100*, o valor do churrasco por pessoa ficou 25 reais. Pague pelo app do Churrapp ou para ele pessoalmente."
+  const phone = "19983282931";
+
   function next() {
       navigation.replace('CriarChurrasco');
     }
+    
+  function backHome(){
+    navigation.replace('Tabs')
+  }
 
+  function openContactList(){
+    navigation.replace('OpenContactList')
+  }
+  
+    WhatsApp = (invite, phone) =>  {
+      console.log(invite, phone)
+      if(invite === ''){
+        invite = inviteStandard;
+      }
+      Linking.openURL(`whatsapp://send?text=${invite}&phone=+55${phone}`);
+    }
 
     return(
       <View style={style.container}>
-        <SafeAreaView>
-          <ScrollView style={style.scrollView}>
+        <SafeAreaView style={style.body}>
+            <View style={style.headerGroup}>
             <Text style={style.textHeader}>Convide seus amigos!</Text>
+              <TouchableOpacity style={style.exitBtn} onPress={backHome}>
+                <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
+                <Text style={style.textHeaderBtn}>Sair</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={style.formGroup}>
+                <Text style={style.textLabel}>Convite:</Text>
+                <TextInput
+                  style={style.inputStandard}
+                  onChange = { text => onChangeText('') }
+                  onChangeText={text => onChangeText(text)}
+                  placeholder={inviteStandard}
+                />
+            </View>
 
-            <FlatList style={style.listStyle}>
+            <FlatList 
+            data = {convidadosList}
+            keyExtractor={convidadosList => String(convidadosList.id)}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item: convidadosList})=>(  
+              <View style={style.listaConvidados}>          
+                <View style={style.listaConvidadosItem}>
+                  <Text style={style.listaConvidadosLabel}>Nome:</Text>
+                  <Text style={style.listaConvidadosLabel}>{convidadosList.nome}</Text>
+                </View>
+                <View style={style.listaConvidadosItem}>
+                  <Text style={style.listaConvidadosLabel}>Telefone:</Text>
+                  <Text style={style.listaConvidadosLabel}>{convidadosList.telefone}</Text>
+                </View>
+                <View style={style.listaConvidadosItem}>
+                  <Text style={style.listaConvidadosLabel}>Status:</Text>
+                  <View style={style.listaConvidadosItem}>
+                    <Icon  style={style.listaConvidadosLabel} name  = "exclamation" size = {20}/>
+                    <Text style={style.listaConvidadosLabel}>{getStatus(convidadosList.status)}</Text>
+                  </View>
+                </View>
+              </View> 
+            )}
+            style={style.listStyle}/>
+            
+          <ActionButton offsetX={10} offsetY={90} onPress={openContactList}/>  
 
-            </FlatList>
-            <ActionButton onPress={askPermission} />
-
-            <View style={style.footer}>
+          <View style={style.footer}>
               <Text style={style.textFooter}>Etapa 2/4</Text>
               <TouchableOpacity style = {style.continueBtn} onPress={next}>
                 <Icon style={style.iconBtn} name  = "angle-double-right" size = {20}/>
                 <Text style={style.textBtn}>Continuar</Text>
               </TouchableOpacity>
-            </View>
-          </ScrollView>
-        </SafeAreaView>
-        
+            </View>             
+        </SafeAreaView>    
       </View>
     )
 }
