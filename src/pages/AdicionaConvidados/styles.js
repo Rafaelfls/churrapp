@@ -31,7 +31,7 @@ export default StyleSheet.create({
     right: 20,
     top:0,
   },   
-  footer:{
+  footer:{    
     height: 100,
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -61,5 +61,11 @@ textBtn:{
 },
 iconBtn:{
   color:"yellow",
+},
+listStyle:{
+  height: 1000
+},
+actionBtn:{
+
 },
 })

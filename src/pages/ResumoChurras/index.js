@@ -22,8 +22,8 @@ export default function ResumoChurras(){
         navigation.replace('Login');
       }
       
-    function criarChurras() {
-        navigation.replace('CriarChurrasco');
+    function inicioCriarChurras() {
+        navigation.replace('InicioCriaChurras');
      }
      
      function detalheChurras(churras) {
@@ -97,7 +97,7 @@ export default function ResumoChurras(){
             />
             
             <ActionButton>
-                <ActionButton.Item  title="Criar Churras" onPress={criarChurras}>
+                <ActionButton.Item  title="Criar Churras" onPress={inicioCriarChurras}>
                     <Icon name="plus" style={style.fabBtn}/>
                 </ActionButton.Item>
                 <ActionButton.Item  title="Participar do Churras" onPress={() => {}}>

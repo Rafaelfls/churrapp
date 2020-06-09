@@ -28,21 +28,21 @@ export default function AdicionaConvidados(){
           <ScrollView style={style.scrollView}>
             <Text style={style.textHeader}>Convide seus amigos!</Text>
 
-            <FlatList></FlatList>
+            <FlatList style={style.listStyle}>
 
-            
-            
+            </FlatList>
+            <ActionButton onPress={askPermission} />
+
             <View style={style.footer}>
               <Text style={style.textFooter}>Etapa 2/4</Text>
               <TouchableOpacity style = {style.continueBtn} onPress={next}>
-                <Icon style={style.iconBtn} name  = "check" size = {20}/>
+                <Icon style={style.iconBtn} name  = "angle-double-right" size = {20}/>
                 <Text style={style.textBtn}>Continuar</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
         </SafeAreaView>
         
-        <ActionButton onPress={askPermission} />
       </View>
     )
 }
