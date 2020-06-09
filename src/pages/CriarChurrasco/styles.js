@@ -53,24 +53,27 @@ export default StyleSheet.create({
     alignContent: "center",
     marginVertical: 10,
   },   
-    footer:{
-      height: 100,
-      flexDirection: "row",
-      justifyContent: "flex-start",
-      alignContent: 'center',
-      backgroundColor: 'brown'
-    },
-    textFooter:{
-      position: 'absolute',
-      bottom: 40,
-      fontSize: 20,
-      color: 'yellow',
-      marginLeft: 15
-    },
+  body:{
+    flex: 1,
+  },
+  footer:{    
+    height: 70,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignContent: 'center',
+    backgroundColor: 'brown',
+    bottom:0,
+  },
+  textFooter:{
+    alignSelf: 'center',
+    fontSize: 20,
+    color: 'yellow',
+    marginLeft: 15
+  },
   continueBtn:{
+    alignSelf: 'center',
     position: 'absolute',
-    right: 10,
-    bottom: 35,
+    right: 20,
     flexDirection:'row-reverse',
     borderRadius:8,
     backgroundColor: 'black',
@@ -89,11 +92,21 @@ export default StyleSheet.create({
     right: 20,
     top:0,
   },
-  scrollView:{
-    marginBottom: 0,
-  },
   picker:{
     position: 'absolute',
     right: 0,
   },
+  headerGroup:{
+    flexDirection:'row',
+  },
+  exitBtn:{
+    flexDirection:'row-reverse',
+    position:"absolute",
+    right: 10,
+    top: 10,
+  },
+  textHeaderBtn:{
+    fontSize: 15,
+    marginHorizontal: 7,
+  }
 });
