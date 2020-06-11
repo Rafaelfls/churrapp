@@ -23,11 +23,11 @@ export default StyleSheet.create({
   },
   detalheTitle: {
     fontSize: 40,
-    marginBottom: 5,
+    marginBottom: 0,
     alignSelf: 'center',
     color: '#000',
     fontWeight: 'bold',
-    paddingBottom: 30
+    paddingBottom: 15
   },
   churrasSubTitle: {
     fontSize: 18,
@@ -35,15 +35,14 @@ export default StyleSheet.create({
     color: '#000'
   },
   detalheDescricao: {
-    left: '10%',
-    fontSize: 18
+    alignSelf: 'center',
+    fontSize: 18,
+    paddingHorizontal: 20,
   },
-  detalheBtn: {
-    borderRadius: 8,
-    borderWidth: 0,
-    top: 380,
-    marginHorizontal: 20,
-    alignItems: 'center'
+  detalheBtnView: {
+    position: 'absolute',
+    alignSelf: 'center',
+    top: '101%',
     
   }
     
