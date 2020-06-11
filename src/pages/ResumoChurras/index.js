@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, Image, FlatList, TouchableOpacity} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -9,41 +9,41 @@ import logoImg from '../../assets/logo.jpg';
 
 import style from './styles';
 
-export default function ResumoChurras(){
+export default function ResumoChurras() {
     const [churras, setChurras] = useState([]);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
-    const[loading, setLoading] = useState(false);
-    const[usuario_id, setUsuarioId] = useState('0516f9fb26e6be70');
+    const [loading, setLoading] = useState(false);
+    const [usuario_id, setUsuarioId] = useState('0516f9fb26e6be70');
 
     const navigation = useNavigation();
 
     function logout() {
         navigation.replace('Login');
-      }
-      
+    }
+
     function inicioCriarChurras() {
         navigation.replace('InicioCriaChurras');
-     }
-     
-     function detalheChurras(churras) {
-         navigation.navigate('DetalheChurras', { churras });
-     }
-    
+    }
+
+    function detalheChurras(churras) {
+        navigation.navigate('DetalheChurras', { churras });
+    }
+
 
     async function loadChurras() {
-        if(loading) {
+        if (loading) {
             return;
         }
 
-        if(total > 0 && churras.length === total) {
+        if (total > 0 && churras.length === total) {
             return;
         }
 
         setLoading(true);
 
         const response = await api.get(`/churras/${usuario_id}`, {
-            params: { usuario_id, page  }
+            params: { usuario_id, page }
         });
 
         setChurras([...churras, ...response.data]);
@@ -57,7 +57,7 @@ export default function ResumoChurras(){
         loadChurras();
     }, []);
 
-    return(
+    return (
 
         <View style={style.container}>
 
@@ -65,8 +65,8 @@ export default function ResumoChurras(){
                 <Text style={style.textHeader}>Churrapp</Text>
                 <Text style={style.textSubHeader}>Você tem {total} churras criados</Text>
                 <View style={style.signOutBtn}>
-                    <TouchableOpacity   onPress={logout}>
-                        <Icon    name  = "sign-out-alt" size = {25}/>
+                    <TouchableOpacity onPress={logout}>
+                        <Icon name="sign-out-alt" size={25} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -93,22 +93,24 @@ export default function ResumoChurras(){
                             </View>
                         </View>
                         <View style={style.verMaisView}>
-                            <Text style={style.verMais} onPress={() => detalheChurras(churras)}>ver mais</Text>
+                            <TouchableOpacity onPress={() => detalheChurras(churras)}>
+                                <Text style={style.verMais} >ver mais</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
 
                 )}
             />
-            
+
             <ActionButton>
-                <ActionButton.Item  title="Criar Churras" onPress={inicioCriarChurras}>
-                    <Icon name="plus" style={style.fabBtn}/>
+                <ActionButton.Item title="Criar Churras" onPress={inicioCriarChurras}>
+                    <Icon name="plus" style={style.fabBtn} />
                 </ActionButton.Item>
-                <ActionButton.Item  title="Participar do Churras" onPress={() => {}}>
-                    <Icon name="users" style={style.fabBtn}/>
+                <ActionButton.Item title="Participar do Churras" onPress={() => { }}>
+                    <Icon name="users" style={style.fabBtn} />
                 </ActionButton.Item>
             </ActionButton>
-            
+
         </View>
 
     )
