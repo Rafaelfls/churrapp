@@ -10,15 +10,17 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import style from './styles';
 
 export default function OutrosChurras(){
-    const [churras, setChurras] = useState([]);
+    const [churrasPassado, setChurrasPassados] = useState([]);
+    const [churrasFuturo, setChurrasFuturo] = useState([]);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
     const[loading, setLoading] = useState(false);
-    const[data, setData] = useState('10/07/2020');
+    const[dataPassado, setDataPassado] = useState('22/07/2020');
+    const[dataFuturo, setDataFuturo] = useState('2020-06-20');
 
     const navigation = useNavigation();
 
-    async function loadChurras() {
+    async function loadChurrasPassados() {
         if(loading) {
             return;
         }
@@ -29,19 +31,40 @@ export default function OutrosChurras(){
         
         setLoading(true);
 
-        const response = await api.get(`churras/${data}`, {
+        const response = await api.get(`churraspassados?data=${dataPassado}`, {
             params: { page }
         });
         
-        setChurras([...churras, ...response.data]);
+        setChurrasPassados([...churrasPassado, ...response.data]);
         setTotal(response.headers['x-total-count']);
         setPage(page + 1);
         setLoading(false);
     }
 
+    async function loadChurrasFuturos() {
+        if(loading) {
+            return;
+        }
+
+        if(total > 0 && churras.length === total) {
+            return;
+        }
+        
+        setLoading(true);
+
+        const response = await api.get(`churrasfuturo?data=${dataFuturo}`, {
+            params: { page }
+        });
+        
+        setChurrasFuturo([...churrasFuturo, ...response.data]);
+        setTotal(response.headers['x-total-count']);
+        setPage(page + 1);
+        setLoading(false);
+    }
 
     useEffect(() => {
-        loadChurras();
+        loadChurrasPassados();
+        loadChurrasFuturos();
     }, []);
 
     function detalheChurras(churras) {
@@ -59,11 +82,11 @@ export default function OutrosChurras(){
         >
           <FlatList
               tabLabel='Churras Passados'
-              data={churras}
+              data={churrasPassado}
               style={style.churrasList}
               showsVerticalScrollIndicator={false}
               keyExtractor={churras => String(churras.id)}
-              onEndReached={loadChurras}
+              onEndReached={loadChurrasPassados}
               onEndReachedThreshold={0.2}
               renderItem={({item: churras}) => (
 
@@ -84,11 +107,11 @@ export default function OutrosChurras(){
           />
           <FlatList
               tabLabel='Próximos Churras'
-              data={churras}
+              data={churrasFuturo}
               style={style.churrasList}
               showsVerticalScrollIndicator={false}
               keyExtractor={churras => String(churras.id)}
-              onEndReached={loadChurras}
+              onEndReached={loadChurrasFuturos}
               onEndReachedThreshold={0.2}
               renderItem={({item: churras}) => (
                   
