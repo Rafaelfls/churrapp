@@ -16,12 +16,23 @@ export default function DetalheChurras () {
 
   return(
     <View style={style.container}>
-      <Text style={style.churrasTitle}>Organizador: <Text style={style.churrasData}>{churras.nome}</Text></Text>
-      <Text style={style.churrasSubTitle}>Data do Churras: <Text style={style.churrasData}>{churras.data}</Text></Text>
-      <Text style={style.churrasData}>Horário de início: {churras.hrInicio}</Text>
-      <Text style={style.churrasData}>Horário de término: {churras.hrFim}</Text>
-      <Text style={style.churrasData}>Número de convidados: {churras.convidados} </Text>
-      <Text style={style.churrasData}>Local: {churras.local}</Text>
+      <View>
+        <Text style={style.detalheTitle}>{churras.nomeChurras}</Text>
+      </View>
+      <View style={style.detalheChurras}>
+        <Text style={style.churrasTitle}>Organizador: <Text style={style.churrasData}>{churras.nome}</Text></Text>
+        <Text style={style.churrasSubTitle}>Data do Churras: <Text style={style.churrasData}>{churras.data}</Text></Text>
+        <Text style={style.churrasData}>Horário de início: {churras.hrInicio}</Text>
+        <Text style={style.churrasData}>Horário de término: {churras.hrFim}</Text>
+        <Text style={style.churrasData}>Número de convidados: {churras.convidados} </Text>
+        <Text style={style.churrasData}>Local: {churras.local}</Text>
+      </View>
+      <Text style={style.detalheDescricao}>{churras.descricao}</Text>
+      <View >
+        <TouchableOpacity style={style.detalheBtn}>
+          <Icon size={25} name="angle-up"/>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
