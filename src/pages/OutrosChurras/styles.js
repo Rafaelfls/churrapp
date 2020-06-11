@@ -6,34 +6,23 @@ export default StyleSheet.create({
     flex: 1,
     paddingTop: Constants.statusBarHeight + 15,
     backgroundColor: '#fff'
-  },  
-  header: {
-    justifyContent: 'center',
-    alignItems: "center",
-    flexDirection: 'row',
-    
   },
-  textHeader: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    color: '#e74c3c',
-    marginHorizontal: 70
-  },
-  fabBtn: {
-      fontSize: 20,
-      height: 22,
-      color: '#fff308'
-    },
   churrasList: {
     margin: 24,
   },
-  churras: {
-    backgroundColor: '#fff308',
+  churrasPassado: {
+    backgroundColor: '#F0F0F0',
     borderRadius: 8,
-    padding: 24,
+    borderWidth: 2,
+    padding: 14,
     marginBottom: 16,
   },
-  logoutBtn:{
+  churrasFuturo: {
+    backgroundColor: '#A0522D',
+    borderRadius: 8,
+    borderWidth: 2,
+    padding: 14,
+    marginBottom: 16,
   },
   churrasData: {
     fontWeight: 'bold',
@@ -44,6 +33,11 @@ export default StyleSheet.create({
     fontSize: 20,
     marginBottom: 5,
     color: '#000'
-  }
+  },
+  cardBtn: {
+    position: 'absolute',
+    top: 137,
+    left: '82%'
+  }, 
     
 });

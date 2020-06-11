@@ -6,62 +6,44 @@ export default StyleSheet.create({
     flex: 1,
     paddingTop: Constants.statusBarHeight + 15,
     backgroundColor: '#fff'
-  },  
-  header: {
-    justifyContent: 'center',
-    alignItems: "center",
-    flexDirection: 'column',
-    
   },
-  subHeader:{
-    fontWeight: 'bold',
-    fontSize: 15
-  },
-  textHeader: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    color: '#e74c3c',
-    marginHorizontal: 70
-  },
-  fabBtn: {
-      fontSize: 20,
-      height: 22,
-      color: '#fff308'
-    },
-  churrasList: {
-    margin: 24,
-  },
-  churras: {
-    backgroundColor: '#fff308',
+  detalheChurras: {
+    backgroundColor: '#fff',
+    borderColor: '#000',
+    borderWidth: 2,
     borderRadius: 8,
     padding: 24,
     marginBottom: 16,
-  },
-  logoutBtn:{
+    marginHorizontal: 15,
   },
   churrasData: {
     fontWeight: 'bold',
-    marginBottom: 12,
+    marginTop: 12,
     color: '#000'
   },
-  churrasTitle: {
-    fontSize: 20,
+  detalheTitle: {
+    fontSize: 40,
     marginBottom: 5,
-    color: '#000'
+    alignSelf: 'center',
+    color: '#000',
+    fontWeight: 'bold',
+    paddingBottom: 30
   },
   churrasSubTitle: {
     fontSize: 18,
     marginBottom: 5,
     color: '#000'
   },
-  detailBtn: {
-    backgroundColor: '#000',
-    borderRadius: 8,
-    padding: 14,
-    
+  detalheDescricao: {
+    left: '10%',
+    fontSize: 18
   },
-  detailBtnText: {
-    color: "#fff",
+  detalheBtn: {
+    borderRadius: 8,
+    borderWidth: 0,
+    top: 380,
+    marginHorizontal: 20,
+    alignItems: 'center'
     
   }
     

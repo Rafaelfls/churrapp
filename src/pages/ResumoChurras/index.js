@@ -15,6 +15,7 @@ export default function ResumoChurras(){
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
     const[loading, setLoading] = useState(false);
+    const[usuario_id, setUsuarioId] = useState('0516f9fb26e6be70');
 
     const navigation = useNavigation();
 
@@ -42,12 +43,12 @@ export default function ResumoChurras(){
 
         setLoading(true);
 
-        const response = await api.get('churras', {
-            params: { page }
+        const response = await api.get(`/churras/${usuario_id}`, {
+            params: { usuario_id, page  }
         });
 
         setChurras([...churras, ...response.data]);
-        setTotal(response.headers['x-total-count']);
+        setTotal(response.headers['total-meu']);
         setPage(page + 1);
         setLoading(false);
 
