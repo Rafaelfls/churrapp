@@ -2,6 +2,8 @@ import { StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 
 export default StyleSheet.create({
+  
+  //header
   container: {
     flex: 1,
     paddingTop: Constants.statusBarHeight + 15,
@@ -11,11 +13,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: "center",
     flexDirection: 'column',
-    
-  },
-  subHeader:{
-    fontWeight: 'bold',
-    fontSize: 15
   },
   textHeader: {
     fontSize: 40,
@@ -23,46 +20,75 @@ export default StyleSheet.create({
     color: '#e74c3c',
     marginHorizontal: 70
   },
-  fabBtn: {
-      fontSize: 20,
-      height: 22,
-      color: '#fff308'
-    },
-  churrasList: {
-    marginHorizontal: 20,
-    marginVertical: 10,
-    backgroundColor: "transparent"
-  },
-  churras: {
-    backgroundColor: '#fff308',
-    borderRadius: 8,
-    padding: 24,
-    marginBottom: 16,
+  textSubHeader:{
+    fontWeight: 'bold',
+    fontSize: 15
   },
   signOutBtn:{
     position: 'absolute',
+    justifyContent: 'center',
     top: 15,
     right: 20,
   },
-  churrasData: {
-    fontWeight: 'bold',
+
+  //cards
+  churrasList: {
+    marginHorizontal: 20,
+    marginTop: 10,
+    backgroundColor: "transparent"
+  },
+  churras: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'black',
+    padding: 20,
+    marginBottom: 16,
+  },
+
+  //cardContent
+  churrasTitleView:{
+    alignItems: 'center',
     marginBottom: 12,
-    color: '#000'
   },
   churrasTitle: {
     fontSize: 20,
-    marginBottom: 5,
-    color: '#000'
+    fontWeight: 'bold',
   },
-  detailBtn: {
-    backgroundColor: '#000',
-    borderRadius: 8,
-    padding: 14,
-    
+  churrasDescricao:{
+    flexDirection:'row',
+    alignItems: 'center',
+    marginBottom: 10,
   },
-  detailBtnText: {
-    color: "#fff",
-    
-  }
-    
+  churrasFoto:{
+    width: 40,
+    height: 40,
+  },
+  churrasInfosView:{
+    marginLeft: 20,
+  },
+  churrasLocal:{
+    fontSize: 18,
+    marginBottom: 6,
+  },
+  churrasData: {
+    color: 'gray',
+    marginBottom: 2,
+  },
+  churrasDono:{
+    color: 'gray',
+  },
+  verMaisView:{
+    alignItems: 'flex-end',
+  },
+  verMais:{
+    fontWeight: "bold",
+  },
+
+  //fabButton
+  fabBtn: {
+    fontSize: 20,
+    height: 22,
+    color: '#fff308'
+  },
 });
