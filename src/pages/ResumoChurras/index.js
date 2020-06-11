@@ -9,7 +9,6 @@ import logoImg from '../../assets/logo.jpg';
 
 import style from './styles';
 
-
 export default function ResumoChurras(){
     const [churras, setChurras] = useState([]);
     const [total, setTotal] = useState(0);
@@ -61,14 +60,15 @@ export default function ResumoChurras(){
     return(
 
         <View style={style.container}>
+
             <View style={style.header}>
                 <Text style={style.textHeader}>Churrapp</Text>
-                <Text style={ style.subHeader }>Você tem {total} churras criados</Text>
-            </View>
-            <View style={style.signOutBtn}>
-                <TouchableOpacity   onPress={logout}>
-                    <Icon    name  = "sign-out-alt" size = {25}/>
-                </TouchableOpacity>
+                <Text style={style.textSubHeader}>Você tem {total} churras criados</Text>
+                <View style={style.signOutBtn}>
+                    <TouchableOpacity   onPress={logout}>
+                        <Icon    name  = "sign-out-alt" size = {25}/>
+                    </TouchableOpacity>
+                </View>
             </View>
 
             <FlatList
@@ -79,21 +79,24 @@ export default function ResumoChurras(){
                 onEndReached={loadChurras}
                 onEndReachedThreshold={0.2}
                 renderItem={({ item: churras }) => (
+
                     <View style={style.churras}>
-                        <Text style={style.churrasTitle}>Data do Churras: <Text style={style.churrasData}>{churras.data}</Text></Text>
-                        <Text style={style.churrasData}>Horário de início: {churras.hrInicio}</Text>
-                        <Text style={style.churrasData}>Horário de término: {churras.hrFim}</Text>
-                        <Text style={style.churrasData}>Número de convidados: {churras.convidados} </Text>
-                        <Text style={style.churrasData}>Local: {churras.local}</Text>
-
-                        <View style={style.detailBtn}>
-                            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', justifyContent:'space-between'}}onPress={() => detalheChurras(churras)}>
-                                <Text style={style.detailBtnText}>Detalhes</Text>
-                                <Icon name="newspaper" color="#fff" size={23}/>
-                            </TouchableOpacity>
+                        <View style={style.churrasTitleView}>
+                            <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
                         </View>
-
+                        <View style={style.churrasDescricao}>
+                            <Image source={logoImg} style={style.churrasFoto} />
+                            <View style={style.churrasInfosView}>
+                                <Text style={style.churrasLocal}>{churras.local}</Text>
+                                <Text style={style.churrasData}>{churras.data} - {churras.hrFim} às {churras.hrFim}</Text>
+                                <Text style={style.churrasDono}>{churras.nome} </Text>
+                            </View>
+                        </View>
+                        <View style={style.verMaisView}>
+                            <Text style={style.verMais} onPress={() => detalheChurras(churras)}>ver mais</Text>
+                        </View>
                     </View>
+
                 )}
             />
             
