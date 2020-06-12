@@ -16,7 +16,7 @@ export default function OutrosChurras() {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [dataPassado, setDataPassado] = useState('22/07/2020');
-    const [dataFuturo, setDataFuturo] = useState('2020-06-20');
+    const [dataFuturo, setDataFuturo] = useState('22/07/2020');
 
     const navigation = useNavigation();
 
