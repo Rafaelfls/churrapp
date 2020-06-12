@@ -25,7 +25,7 @@ export default function OutrosChurras() {
             return;
         }
 
-        if (total > 0 && churras.length === total) {
+        if (total > 0 && churrasPassado.length === total) {
             return;
         }
 
@@ -46,7 +46,7 @@ export default function OutrosChurras() {
             return;
         }
 
-        if (total > 0 && churras.length === total) {
+        if (total > 0 && churrasFuturo.length === total) {
             return;
         }
 

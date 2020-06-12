@@ -21,7 +21,8 @@ export default function DetalheChurras() {
   const churras = route.params.churras;
   const [modalVisivel, setModalVisivel] = useState(false);
 
-  return (
+ 
+  return(
     <View style={style.container}>
       <View style={style.containerImg}>
         <Image source={backgroundImg} style={style.backgroundImg} />
