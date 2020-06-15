@@ -8,12 +8,15 @@ export default StyleSheet.create({
     backgroundColor: '#fff'
   },
 
+  scroll:{
+    flex: 1,
+  },
+
   //header
   containerImg: {
-    flex: 0.5,
+    flex: 0.18,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginBottom: 15,
   },
   backgroundImg: {
     opacity: 0.3,
@@ -58,7 +61,16 @@ export default StyleSheet.create({
 
   //body
   infosPrincipais: {
-    marginLeft: 20,
+    marginLeft: 15,
+    marginBottom: 5,
+    flexDirection: 'row',
+    justifyContent:  'space-between',
+    alignItems: 'center',
+    marginRight: 15,
+    marginTop: 10,
+  },
+  infosLocDat: {
+    marginLeft: 5,
   },
   churrasLocalContainer: {
     marginBottom: 9,
@@ -74,7 +86,6 @@ export default StyleSheet.create({
     marginRight: 8,
   },
   churrasDataContainer: {
-    marginBottom: 15,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -87,21 +98,28 @@ export default StyleSheet.create({
     marginRight: 8,
   },
   churrasDonoContainer: {
-    marginBottom: 5,
-    flexDirection: 'row',
+    marginBottom: 0,
+    alignItems: 'center',
+    borderColor: 'darkgrey',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 3,
   },
   churrasDono: {
     color: 'black',
-    fontSize: 23,
+    fontSize: 15,
+    opacity: 0.7,
   },
-  donoIcon: {
-    marginRight: 8,
+  donoImg: {
+    height: 60,
+    width: 60,
+    borderRadius: 30,
   },
 
   //linha
   linhaDeSeparacao:{
-    backgroundColor: 'gray',
-    height: 0.5,
+    backgroundColor: 'lightgray',
+    height: 1,
     width: "90%",
     alignSelf: 'center',
     marginVertical: 5,
@@ -130,27 +148,75 @@ export default StyleSheet.create({
     fontSize: 17,
     opacity: 0.7,
   },
-
   containerConvidados:{
   },
   convidado:{
     alignItems: 'center',
     justifyContent: 'center',
-    borderColor: 'black',
+    borderColor: 'lightgray',
+    borderWidth: 1,
+    borderRadius: 10,
+    margin: 10,
+    padding: 8,
+    height: 150,
+  },
+  profileImg:{
+    height: 110,
+    width: 100,
+    marginBottom: 3,
+    borderRadius: 2,
+  },
+  nomeConvidado:{
+  },
+
+  //Itens
+  cabecalhoItens:{
+    flexDirection: 'row',
+    marginHorizontal: 10,
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginTop: 5,
+  },
+  containerTituloItens:{
+    alignItems: 'flex-start',
+  },
+  tituloItens:{
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  verTodos:{
+    fontWeight: 'bold',
+  },
+  subtituloItens:{
+    fontSize: 17,
+    opacity: 0.7,
+  },
+  containerItens:{
+  },
+  item:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: 'lightgray',
     borderWidth: 1,
     borderRadius: 10,
     margin: 10,
     padding: 8,
     height: 170,
   },
-  profileImg:{
-    height: 130,
+  itemImg:{
+    height: 110,
     width: 100,
     marginBottom: 3,
+    borderRadius: 2,
   },
-  nomeConvidado:{
-    
+  nomeItem:{
+    marginBottom: 3,
   },
+  qtdItem:{
+    color: 'gray',
+  },
+
+
 
 
   detalheChurras: {
