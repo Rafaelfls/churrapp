@@ -5,7 +5,7 @@ import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import api from '../../services/api';
 
-import logoImg from '../../assets/logo.jpg';
+import churrasPhoto from '../../assets/fundoDescricao.jpg';
 
 import style from './styles';
 
@@ -24,6 +24,10 @@ export default function ResumoChurras() {
 
     function inicioCriarChurras() {
         navigation.replace('InicioCriaChurras');
+    }
+
+    function ParticiparChurras() {
+        navigation.replace('ParticiparChurrasco');
     }
 
     function detalheChurras(churras) {
@@ -85,7 +89,7 @@ export default function ResumoChurras() {
                             <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
                         </View>
                         <View style={style.churrasDescricao}>
-                            <Image source={logoImg} style={style.churrasFoto} />
+                            <Image source={churrasPhoto} style={style.churrasFoto} />
                             <View style={style.churrasInfosView}>
                                 <Text style={style.churrasLocal}>{churras.local}</Text>
                                 <Text style={style.churrasData}>{churras.data} - {churras.hrFim} às {churras.hrFim}</Text>
@@ -106,7 +110,7 @@ export default function ResumoChurras() {
                 <ActionButton.Item title="Criar Churras" onPress={inicioCriarChurras}>
                     <Icon name="plus" style={style.fabBtn} />
                 </ActionButton.Item>
-                <ActionButton.Item title="Participar do Churras" onPress={() => { }}>
+                <ActionButton.Item title="Participar do Churras" onPress={ParticiparChurras}>
                     <Icon name="users" style={style.fabBtn} />
                 </ActionButton.Item>
             </ActionButton>

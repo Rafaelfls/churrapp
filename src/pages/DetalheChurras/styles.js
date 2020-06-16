@@ -20,7 +20,6 @@ export default StyleSheet.create({
   },
   backgroundImg: {
     opacity: 0.3,
-    resizeMode: 'contain',
     height: '100%',
     alignSelf: 'center',
     resizeMode: 'cover',

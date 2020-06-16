@@ -1,94 +1,91 @@
 import { StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
+import { Row } from 'native-base';
 
 export default StyleSheet.create({
-  
-  //header
+
   container: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight + 15,
-    backgroundColor: '#fff'
-  },  
-  header: {
-    justifyContent: 'center',
-    alignItems: "center",
-    flexDirection: 'column',
-  },
-  textHeader: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    color: '#e74c3c',
-    marginHorizontal: 70
-  },
-  textSubHeader:{
-    fontWeight: 'bold',
-    fontSize: 15
-  },
-  signOutBtn:{
-    position: 'absolute',
-    justifyContent: 'center',
-    top: 15,
-    right: 20,
-  },
-
-  //cards
-  churrasList: {
-    marginHorizontal: 20,
-    marginTop: 10,
-    backgroundColor: "transparent"
-  },
-  churras: {
     backgroundColor: 'white',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: 'black',
-    padding: 20,
-    marginBottom: 16,
   },
 
-  //cardContent
-  churrasTitleView:{
+  containerProfile: {
+    marginTop: Constants.statusBarHeight + 70,
     alignItems: 'center',
-    marginBottom: 12,
   },
-  churrasTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  churrasDescricao:{
-    flexDirection:'row',
-    alignItems: 'center',
+
+  profileImg:{
+    height: 160,
+    width: 160,
+    borderRadius: 80,
     marginBottom: 10,
   },
-  churrasFoto:{
-    width: 40,
-    height: 40,
-  },
-  churrasInfosView:{
-    marginLeft: 20,
-  },
-  churrasLocal:{
-    fontSize: 18,
-    marginBottom: 6,
-  },
-  churrasData: {
-    color: 'gray',
-    marginBottom: 2,
-  },
-  churrasDono:{
-    color: 'gray',
-  },
-  verMaisView:{
-    alignItems: 'flex-end',
-  },
-  verMais:{
+
+  profileName:{
     fontWeight: "bold",
+    fontSize: 30,
   },
 
-  //fabButton
-  fabBtn: {
+  profileLocal:{
     fontSize: 20,
-    height: 22,
-    color: '#fff308'
+    color: 'darkgrey',
   },
+
+  profileIdade:{
+    fontSize: 20,
+    color: 'darkgrey',
+  },
+
+  profileOrg:{
+    fontSize: 20,
+    color: 'black',
+    marginTop: 15,
+    fontWeight: 'bold',
+  },
+
+  profilePart:{
+    fontSize: 20,
+    color: 'black',
+    fontWeight: 'bold',
+  },
+
+  containerGeral:{
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    paddingTop: 25,
+    paddingHorizontal: 20,
+    paddingBottom: 5,
+  },
+
+  containerEsq:{
+    alignItems: 'flex-start',
+  },
+
+  containerDir:{
+    alignItems: 'flex-end',
+  },
+
+  infos:{
+    fontSize: 19,
+    marginHorizontal: 5,
+  },
+
+  containerInfos:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 3,
+  },
+
+  editarContainer:{
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingBottom: 15,
+  },
+
+  editar:{
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+
 });
