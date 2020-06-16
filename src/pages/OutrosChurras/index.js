@@ -71,14 +71,13 @@ export default function OutrosChurras() {
         navigation.push('DetalheChurras', { churras });
     }
 
-
-
     return (
         <ScrollableTabView
             style={style.container}
-            tabBarPosition="top" tabBarActiveTextColor="black" tabBarInactiveTextColor="gray"
-            tabBarTextStyle={{ fontWeight: 'bold' }}
+            tabBarPosition="top" tabBarActiveTextColor="orange" tabBarInactiveTextColor="dimgray"
+            tabBarTextStyle={{ fontWeight: 'bold', fontSize: 16 }}
             tabBarBackgroundColor='white'
+            tabBarUnderlineStyle={{backgroundColor:'orange', height:2, }}
             renderTabBar={() => <DefaultTabBar />}
             ref={(tabView) => { this.tabView = tabView; }}
             initialPage={1}

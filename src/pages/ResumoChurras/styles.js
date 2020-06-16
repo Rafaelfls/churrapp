@@ -41,7 +41,7 @@ export default StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: 'lightgray',
     padding: 20,
     marginBottom: 16,
   },
@@ -61,8 +61,9 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   churrasFoto:{
-    width: 40,
-    height: 40,
+    width: 65,
+    height: 65,
+    borderRadius: 5,
   },
   churrasInfosView:{
     marginLeft: 20,
