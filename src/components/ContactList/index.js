@@ -26,11 +26,11 @@ export default class App extends React.Component {
 
   renderItem = ({ item }) => (
     <View style={{ minHeight: 70, padding: 5 }}>
-      <Text style={{ color: '#bada55', fontWeight: 'bold', fontSize: 26 }}>
+      <Text style={{ color: 'brown', fontWeight: 'bold', fontSize: 26 }}>
         {item.firstName + ' '}
         {item.lastName}
       </Text>
-      <Text style={{ color: 'white', fontWeight: 'bold' }}>
+      <Text style={{ color: 'gold', fontWeight: 'bold' }}>
         {item.phoneNumbers[0].number}
       </Text>
     </View>
@@ -55,22 +55,25 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <SafeAreaView style={{ backgroundColor: '#2f363c' }} />
+        <SafeAreaView style={{ backgroundColor: 'white' }} />
         <TextInput
-          placeholder="Search"
-          placeholderTextColor="#dddddd"
+          placeholder="Buscar"
+          placeholderTextColor="gold"
           style={{
-            backgroundColor: '#2f363c',
+            backgroundColor: 'brown',
             height: 50,
             fontSize: 36,
-            padding: 10,
+            padding: 5,
+            paddingLeft: 10,
             color: 'white',
-            borderBottomWidth: 0.5,
-            borderBottomColor: '#7d90a0'
+            borderBottomWidth: 3,
+            borderBottomColor: 'gold',
+            borderTopWidth: 3,
+            borderTopColor: 'gold',
           }}
           onChangeText={value => this.searchContacts(value)}
         />
-        <View style={{ flex: 1, backgroundColor: '#2f363c' }}>
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
           {this.state.isLoading ? (
             <View
               style={{
@@ -79,7 +82,7 @@ export default class App extends React.Component {
                 justifyContent: 'center'
               }}
             >
-              <ActivityIndicator size="large" color="#bad555" />
+              <ActivityIndicator size="large" color="brown" />
             </View>
           ) : null}
           <FlatList
@@ -95,7 +98,7 @@ export default class App extends React.Component {
                   marginTop: 50
                 }}
               >
-                <Text style={{ color: '#bad555' }}>No Contacts Found</Text>
+                <Text style={{ color: 'brown' }}>No Contacts Found</Text>
               </View>
             )}
           />

@@ -60,7 +60,7 @@ export default function AdicionaConvidados(){
   const phone = "19983282931";
 
   function next() {
-      navigation.replace('CriarChurrasco');
+      navigation.navigate('AdicionarPratoPrincipal');
     }
     
   function backHome(){
@@ -68,7 +68,7 @@ export default function AdicionaConvidados(){
   }
 
   function openContactList(){
-    navigation.replace('OpenContactList')
+    navigation.push('OpenContactList')
   }
   
     WhatsApp = (invite, phone) =>  {
