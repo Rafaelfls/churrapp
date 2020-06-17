@@ -61,11 +61,11 @@ export default class App extends React.Component {
           placeholderTextColor="gold"
           style={{
             backgroundColor: 'brown',
-            height: 50,
-            fontSize: 36,
+            height: 60,
+            fontSize: 25,
             padding: 5,
             paddingLeft: 10,
-            color: 'white',
+            color: 'gold',
             borderBottomWidth: 3,
             borderBottomColor: 'gold',
             borderTopWidth: 3,

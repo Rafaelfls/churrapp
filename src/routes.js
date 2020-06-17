@@ -19,6 +19,8 @@ import OpenContactList from './pages/OpenContactList';
 import AdicionarPratoPrincipal from './pages/AdicionarPratoPrincipal';
 import ParticiparChurrasco from './pages/ParticiparChurrasco';
 import CompartilharChurrasco from './pages/CompartilharChurrasco';
+import EscolherPratoPrincipal from './pages/EscolherPratoPrincipal';
+import TodosOsItensAdicionar from './pages/TodosOsItensAdicionar';
 
 const Tab = createBottomTabNavigator();
 
@@ -74,6 +76,8 @@ export default function Routes(){
                 <AppStack.Screen name="DetalheChurras" component={DetalheChurras}/>
                 <AppStack.Screen name="OpenContactList" component={OpenContactList}/>
                 <AppStack.Screen name="AdicionarPratoPrincipal" component={AdicionarPratoPrincipal}/>
+                <AppStack.Screen name="EscolherPratoPrincipal" component={EscolherPratoPrincipal}/>
+                <AppStack.Screen name="TodosOsItensAdicionar" component={TodosOsItensAdicionar}/>
                 {/* Fim telas de criação do churrasco */}
 
             </AppStack.Navigator>

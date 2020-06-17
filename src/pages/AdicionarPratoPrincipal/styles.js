@@ -90,9 +90,10 @@ componentPicker:{
   backgroundColor:'white'
 },   
 textLabel:{
-  fontSize: 20,
+  fontSize: 15,
   color:"brown",
   marginBottom: 10,
+  marginLeft: 10
 },
 picker:{
   position: 'absolute',
@@ -115,9 +116,11 @@ quantidadeInput:{
     borderRadius: 0,
     width:100,
 },
-iconMeat:{
-    zIndex: 100,
+iconTipo:{
+    alignSelf:'center',
     color: 'black',
-    fontSize: 20
+    top: -5,
+    fontSize: 17,
+    color: 'brown'
 }
 })
