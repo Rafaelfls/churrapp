@@ -22,6 +22,9 @@ import ParticiparChurrasco from './pages/ParticiparChurrasco';
 const Tab = createBottomTabNavigator();
 
 
+
+
+
     function CriarTabs() {
         return(
             <Tab.Navigator screenOptions={({ route }) => ({
