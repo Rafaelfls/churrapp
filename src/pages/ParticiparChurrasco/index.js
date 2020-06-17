@@ -12,7 +12,6 @@ export default function ParticiparChurrasco() {
 
     const navigation = useNavigation();
 
-
     function backHome() {
         navigation.replace('Tabs')
     }

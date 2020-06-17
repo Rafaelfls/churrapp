@@ -25,15 +25,24 @@ export default function DetalheChurras() {
   const churras = route.params.churras;
   const [modalVisivel, setModalVisivel] = useState(false);
 
+  const navigation = useNavigation();
+
+  function CompartilharChurras() {
+    navigation.replace('CompartilharChurrasco');
+  }
+
+  function backHome() {
+    navigation.replace('Tabs')
+  }
 
   return (
     <View style={style.container}>
       <View style={style.containerImg}>
         <Image source={backgroundImg} style={style.backgroundImg} />
         <Container style={style.cabecalho}>
-          <IconOct name="chevron-left" size={25} style={style.backBtn} />
+            <IconOct name="chevron-left" size={25} style={style.backBtn} onPress={backHome} />
           <Text style={style.detalheTitle}>{churras.nomeChurras}</Text>
-          <IconEnt name="share" size={25} style={style.shareBtn} />
+            <IconEnt name="share" size={25} style={style.shareBtn} onPress={CompartilharChurras}/>
         </Container>
       </View>
 
