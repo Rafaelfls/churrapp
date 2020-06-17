@@ -16,6 +16,10 @@ export default function ParticiparChurrasco() {
         navigation.replace('Tabs')
     }
 
+    function LerQR() {
+        navigation.replace('QRCodeLeitor');
+    }
+
     return (
 
         <View style={style.container}>
@@ -36,7 +40,7 @@ export default function ParticiparChurrasco() {
                     <Text style={style.textBtn}>Entrar</Text>
                 </TouchableOpacity>
                 <Text style={style.ou}>ou</Text>
-                <TouchableOpacity style={style.enterBtn} onPress={backHome}>
+                <TouchableOpacity style={style.enterBtn} onPress={LerQR}>
                     <IconFA name="qrcode" size={40} style={style.qrBtn} />
                     <Text style={style.textBtn}>Ler QR Code</Text>
                 </TouchableOpacity>

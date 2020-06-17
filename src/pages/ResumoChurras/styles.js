@@ -10,86 +10,106 @@ export default StyleSheet.create({
     backgroundColor: '#fff'
   },  
   header: {
-    justifyContent: 'center',
-    alignItems: "center",
-    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: "flex-start",
+    flexDirection: 'row',
+    marginHorizontal: 20,
+    marginBottom: 15,
+  },
+  titulo: {
   },
   textHeader: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    color: '#e74c3c',
-    marginHorizontal: 70
+    fontSize: 30,
+    color: 'black',
+    fontFamily: 'poppins-semi-bold',
   },
   textSubHeader:{
-    fontWeight: 'bold',
-    fontSize: 15
+    fontSize: 15,
+    color: 'gray',
+    fontFamily: 'poppins-medium',
   },
   signOutBtn:{
-    position: 'absolute',
+    paddingTop: 10,
     justifyContent: 'center',
-    top: 15,
-    right: 20,
+  },
+  signOutIcon:{
+    color: 'gray',
   },
 
   //cards
   churrasList: {
-    marginHorizontal: 20,
-    marginTop: 10,
+    marginLeft: 20,
+    paddingTop: 15,
     backgroundColor: "transparent"
   },
+
+  //cardDesign
   churras: {
     backgroundColor: 'white',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: 'lightgray',
-    padding: 20,
-    marginBottom: 16,
+    marginBottom: 15,
+    marginLeft: 0,
   },
 
   //cardContent
-  churrasTitleView:{
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  churrasTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
   churrasDescricao:{
     flexDirection:'row',
     alignItems: 'center',
     marginBottom: 10,
   },
   churrasFoto:{
-    width: 65,
-    height: 65,
-    borderRadius: 5,
+    width: 66,
+    height: 66,
+    borderRadius: 33,
   },
   churrasInfosView:{
-    marginLeft: 20,
+    marginLeft: 10,
   },
-  churrasLocal:{
-    fontSize: 18,
-    marginBottom: 6,
-  },
-  churrasData: {
-    color: 'gray',
-    marginBottom: 2,
+  churrasTitle: {
+    fontSize: 15,
+    fontFamily: 'poppins-semi-bold',
   },
   churrasDono:{
     color: 'gray',
+    fontFamily: 'poppins-medium',
   },
-  verMaisView:{
-    alignItems: 'flex-end',
+  churrasLocDat: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  verMais:{
-    fontWeight: "bold",
+  localIcon:{
+    color: 'steelblue',
+    paddingBottom: 5,
+  },
+  churrasLocal: {
+    fontSize: 13,
+    color: 'steelblue',
+    marginBottom: 2,
+    fontFamily: 'poppins-medium',
+  },
+  locDatSeparator: {
+    fontSize: 13,
+    color: 'gray',
+    marginBottom: 2,
+    fontFamily: 'poppins-medium',
+  },
+  dataIcon:{
+    paddingBottom: 5,
+    color: 'orangered',
+  },
+  churrasData: {
+    fontSize: 13,
+    color: 'orangered',
+    marginBottom: 2,
+    fontFamily: 'poppins-medium',
   },
 
   //fabButton
-  fabBtn: {
+  fabBtn:{
+    opacity: 0.85,
+  },
+  fabBtnIcon: {
     fontSize: 20,
     height: 22,
-    color: '#fff308'
+    color: 'white'
   },
 });

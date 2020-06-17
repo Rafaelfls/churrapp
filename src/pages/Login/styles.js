@@ -9,6 +9,7 @@ export default StyleSheet.create({
         marginTop: "20%",
         alignSelf: "center",
         fontSize : 40,
+        fontFamily: 'patua-one',
     },
     logo:{
         height   : "120%",
@@ -25,11 +26,13 @@ export default StyleSheet.create({
         alignSelf: "center",
         marginTop: 70,
         fontSize : 25,
+        fontFamily: 'patua-one',
     },
     subtitle:{
         alignSelf: "center",
         marginTop: 15,
         color    : "gray",
+        fontFamily: 'patua-one',
     },
     allBtn:{
         marginTop     : 40,
@@ -72,7 +75,6 @@ export default StyleSheet.create({
         fontSize: 20,
         color: 'white',
         fontWeight: 'bold',
-        paddingHorizontal: 10
-
+        paddingHorizontal: 10,
     },
 });
