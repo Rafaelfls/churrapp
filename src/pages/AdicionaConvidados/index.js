@@ -131,7 +131,7 @@ export default function AdicionaConvidados(){
           <ActionButton offsetX={10} offsetY={90} onPress={openContactList}/>  
 
           <View style={style.footer}>
-              <Text style={style.textFooter}>Etapa 2/4</Text>
+              <Text style={style.textFooter}>Etapa 2/6</Text>
               <TouchableOpacity style = {style.continueBtn} onPress={next}>
                 <Icon style={style.iconBtn} name  = "angle-double-right" size = {20}/>
                 <Text style={style.textBtn}>Continuar</Text>
