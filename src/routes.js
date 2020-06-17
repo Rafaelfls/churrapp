@@ -18,6 +18,7 @@ import InicioCriaChurras from './pages/InicioCriaChurras';
 import OpenContactList from './pages/OpenContactList';
 import ParticiparChurrasco from './pages/ParticiparChurrasco';
 import CompartilharChurrasco from './pages/CompartilharChurrasco';
+import QRCodeLeitor from './pages/QRCodeLeitor';
 
 const Tab = createBottomTabNavigator();
 
@@ -65,6 +66,7 @@ export default function Routes(){
 
                 <AppStack.Screen name="ParticiparChurrasco" component={ParticiparChurrasco}/>
                 <AppStack.Screen name="CompartilharChurrasco" component={CompartilharChurrasco}/>
+                <AppStack.Screen name="QRCodeLeitor" component={QRCodeLeitor}/>
 
                 {/* Inicio telas de criação do churrasco */}
                 <AppStack.Screen name="InicioCriaChurras" component={InicioCriaChurras}/>

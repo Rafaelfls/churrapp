@@ -3,6 +3,10 @@ import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconEnt from 'react-native-vector-icons/Entypo';
+import IconFea from 'react-native-vector-icons/Feather';
+
 import api from '../../services/api';
 
 import churrasPhoto from '../../assets/fundoDescricao.jpg';
@@ -66,11 +70,13 @@ export default function ResumoChurras() {
         <View style={style.container}>
 
             <View style={style.header}>
-                <Text style={style.textHeader}>Churrapp</Text>
-                <Text style={style.textSubHeader}>Você tem {total} churras criados</Text>
+                <View style={style.titulo}>
+                    <Text style={style.textHeader}>Meus churras</Text>
+                    <Text style={style.textSubHeader}>Você tem {total} churras criados</Text>
+                </View>
                 <View style={style.signOutBtn}>
                     <TouchableOpacity onPress={logout}>
-                        <Icon name="sign-out-alt" size={25} />
+                        <IconMCI style={style.signOutIcon} name="logout" size={25} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -84,34 +90,36 @@ export default function ResumoChurras() {
                 onEndReachedThreshold={0.2}
                 renderItem={({ item: churras }) => (
 
-                    <View style={style.churras}>
-                        <View style={style.churrasTitleView}>
-                            <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
-                        </View>
-                        <View style={style.churrasDescricao}>
-                            <Image source={churrasPhoto} style={style.churrasFoto} />
-                            <View style={style.churrasInfosView}>
-                                <Text style={style.churrasLocal}>{churras.local}</Text>
-                                <Text style={style.churrasData}>{churras.data} - {churras.hrFim} às {churras.hrFim}</Text>
-                                <Text style={style.churrasDono}>{churras.nome} </Text>
+                    <View>
+                        <TouchableOpacity onPress={() => detalheChurras(churras)}>
+                            <View style={style.churras}>
+                                <View style={style.churrasDescricao}>
+                                    <Image source={churrasPhoto} style={style.churrasFoto} />
+                                    <View style={style.churrasInfosView}>
+                                        <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
+                                        <Text style={style.churrasDono}>{churras.nome} </Text>
+                                        <View style={style.churrasLocDat}>
+                                            <IconEnt style={style.localIcon} name="location-pin" size={15} />
+                                            <Text style={style.churrasLocal}> {churras.local}</Text>
+                                            <Text style={style.locDatSeparator}>  |  </Text>
+                                            <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                            <Text style={style.churrasData}> {churras.data}</Text>
+                                        </View>
+                                    </View>
+                                </View>
                             </View>
-                        </View>
-                        <View style={style.verMaisView}>
-                            <TouchableOpacity onPress={() => detalheChurras(churras)}>
-                                <Text style={style.verMais} >ver mais</Text>
-                            </TouchableOpacity>
-                        </View>
+                        </TouchableOpacity>
                     </View>
 
                 )}
             />
 
-            <ActionButton>
-                <ActionButton.Item title="Criar Churras" onPress={inicioCriarChurras}>
-                    <Icon name="plus" style={style.fabBtn} />
+            <ActionButton style={style.fabBtn}>
+                <ActionButton.Item title="Criar Churras" style={style.fabBtn} onPress={inicioCriarChurras}>
+                    <Icon name="plus" style={style.fabBtnIcon} />
                 </ActionButton.Item>
-                <ActionButton.Item title="Participar do Churras" onPress={ParticiparChurras}>
-                    <Icon name="users" style={style.fabBtn} />
+                <ActionButton.Item title="Participar do Churras" style={style.fabBtn} onPress={ParticiparChurras}>
+                    <Icon name="users" style={style.fabBtnIcon} />
                 </ActionButton.Item>
             </ActionButton>
 

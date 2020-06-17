@@ -48,9 +48,6 @@ export default function CompartilharChurrasco() {
                 </TouchableOpacity>
             </View>
 
-
-
-
         </View>
 
     )
