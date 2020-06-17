@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute} from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import api from '../../services/api';
@@ -10,11 +10,19 @@ import churrasPhoto from '../../assets/fundoDescricao.jpg';
 import style from './styles';
 
 export default function ResumoChurras() {
+    const route = useRoute();
+    const login1 = route.params.loginFranca;
+    const login2 = route.params.loginJoao;
     const [churras, setChurras] = useState([]);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
-    const [usuario_id, setUsuarioId] = useState('0516f9fb26e6be70');
+    const [usuario_id, setUsuarioId] = useState(login2);
+
+    
+
+    
+
 
     const navigation = useNavigation();
 

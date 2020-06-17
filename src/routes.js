@@ -25,6 +25,9 @@ import TodosOsItensAdicionar from './pages/TodosOsItensAdicionar';
 const Tab = createBottomTabNavigator();
 
 
+
+
+
     function CriarTabs() {
         return(
             <Tab.Navigator screenOptions={({ route }) => ({
