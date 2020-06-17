@@ -1,39 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, FlatList } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
-import NumericInput from 'react-native-numeric-input'
+import NumericInput from 'react-native-numeric-input';
+
+//Icones imports
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import style from './styles';
 
-const pratoPrincipal = [
+
+//Tipo 
+//
+// 1 -> Vaca
+// 2 -> Porco
+// 3 -> Frango
+// 4 -> Peixe
+// 5 -> Exotico
+var pratoPrincipal = [
     {
         id:'1',
         item:'picanha',
         qtd: 100,
-        unidade: 'g',
+        unidade: 'kg',
         tipo:'1'
     },
     {
         id:'2',
         item:'coração',
         qtd:50,
-        unidade: 'g',
+        unidade: 'kg',
         tipo:'3'
     },
     {
         id:'3',
         item:'tulipa',
         qtd:50,
-        unidade: 'g',
+        unidade: 'kg',
         tipo:'3'
     },
     {
         id:'4',
         item:'costela',
         qtd:100,
-        unidade: 'g',
+        unidade: 'kg',
         tipo:'2'
     },
 
@@ -55,7 +66,11 @@ export default function AdicionarPratoPrincipal() {
         navigation.replace('Tabs')
     }
 
-    const [value, onChangeText] = React.useState('');
+    function onChangeVar(text, varivael){
+        console.log("Var " + varivael + " text "+text)
+        varivael = text;
+        console.log("Var " + varivael + " text "+text)
+    }
 
 
     return(
@@ -80,10 +95,19 @@ export default function AdicionarPratoPrincipal() {
                         showsVerticalScrollIndicator={false}
                         renderItem={({item: pratoPrincipal})=>(  
                             <View style={style.componentPicker}>
+                                {pratoPrincipal.tipo == 1 &&
+                                    <MaterialCommunityIcons style={style.iconTipo} name="cow" size={15} color="black" />
+                                }
+                                {pratoPrincipal.tipo == 2 &&
+                                    <Icon style={style.iconTipo} name  = "piggy-bank" size = {15}/>
+                                }
+                                {pratoPrincipal.tipo == 3 &&
+                                    <Icon style={style.iconTipo} name  = "feather" size = {15}/>
+                                }
                                 <Text style={style.textLabel}>{pratoPrincipal.item +" ("+pratoPrincipal.unidade+")"}</Text>
                                 <View style={style.picker}>
                                 <NumericInput 
-                                    onChange = { text => onChangeText(text) }
+                                    onChange = { text => onChangeVar(text, pratoPrincipal.qtd) }
                                     onLimitReached={(isMax,msg) => console.log(isMax,msg)}
                                     totalWidth={150} 
                                     totalHeight={30} 

@@ -43,21 +43,12 @@ const convidadosList = [
 
 export default function AdicionaConvidados(){
 
-  function getStatus (convidado){
-    if(convidado == 1){
-        return 'Presença confirmada'
-    }else if(convidado == 2){
-        return'Aguardando confirmação'
-    }
-
-  }
-
   const [value, onChangeText] = React.useState('');
   
   const navigation = useNavigation();
 
   const inviteStandard = "Ola, Rafael esta te convidadando para o churrasco *Top dos 100*, o valor do churrasco por pessoa ficou 25 reais. Pague pelo app do Churrapp ou para ele pessoalmente."
-  const phone = "19983282931";
+  const phone = "12996281340";
 
   function next() {
       navigation.navigate('AdicionarPratoPrincipal');
@@ -116,8 +107,18 @@ export default function AdicionaConvidados(){
                 <View style={style.listaConvidadosItem}>
                   <Text style={style.listaConvidadosLabel}>Status:</Text>
                   <View style={style.listaConvidadosItem}>
-                    <Icon  style={style.listaConvidadosLabel} name  = "exclamation" size = {20}/>
-                    <Text style={style.listaConvidadosLabel}>{getStatus(convidadosList.status)}</Text>
+                    {convidadosList.status == 1 &&
+                    <Text style={style.listaConvidadosLabelOK}>Presença confirmada</Text>
+                    }
+                    {convidadosList.status == 1 &&
+                    <Icon  style={style.listaConvidadosLabelOK} name  = "check"  size = {20}/>
+                    }
+                    {convidadosList.status == 2 &&
+                    <Text style={style.listaConvidadosLabelNOK}>Aguardando confirmação</Text>
+                    }                    
+                    {convidadosList.status == 2 &&
+                    <Icon  style={style.listaConvidadosLabelNOK} name  = "exclamation"  size = {20}/>
+                    }
                   </View>
                 </View>
               </View> 

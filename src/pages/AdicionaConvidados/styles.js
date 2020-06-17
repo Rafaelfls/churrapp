@@ -85,6 +85,18 @@ listaConvidadosLabel:{
   color: 'brown',
   marginLeft: 10,
 },
+listaConvidadosLabelOK:{
+  fontSize: 15,
+  fontWeight: 'bold',
+  color: 'green',
+  marginLeft: 10,
+},
+listaConvidadosLabelNOK:{
+  fontSize: 15,
+  fontWeight: 'bold',
+  color: 'red',
+  marginLeft: 10,
+},
 headerGroup:{
   flexDirection:'row',
 },
