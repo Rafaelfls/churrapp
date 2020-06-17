@@ -22,6 +22,10 @@ import CompartilharChurrasco from './pages/CompartilharChurrasco';
 import QRCodeLeitor from './pages/QRCodeLeitor';
 import EscolherPratoPrincipal from './pages/EscolherPratoPrincipal';
 import TodosOsItensAdicionar from './pages/TodosOsItensAdicionar';
+import AdicionarAcompanhamento from './pages/AdicionarAcompanhamento';
+import AdicionarBebidas from './pages/AdicionarBebidas';
+import AdicionarExtras from './pages/AdicionarExtras';
+import FinalCriaChurras from './pages/FinalCriaChurras';
 
 const Tab = createBottomTabNavigator();
 
@@ -83,6 +87,10 @@ export default function Routes(){
                 <AppStack.Screen name="AdicionarPratoPrincipal" component={AdicionarPratoPrincipal}/>
                 <AppStack.Screen name="EscolherPratoPrincipal" component={EscolherPratoPrincipal}/>
                 <AppStack.Screen name="TodosOsItensAdicionar" component={TodosOsItensAdicionar}/>
+                <AppStack.Screen name="AdicionarAcompanhamento" component={AdicionarAcompanhamento}/>
+                <AppStack.Screen name="AdicionarBebidas" component={AdicionarBebidas}/>
+                <AppStack.Screen name="AdicionarExtras" component={AdicionarExtras}/>
+                <AppStack.Screen name="FinalCriaChurras" component={FinalCriaChurras}/>
                 {/* Fim telas de criação do churrasco */}
 
             </AppStack.Navigator>

@@ -82,48 +82,20 @@ var pratoPrincipal = [
         unidade: 'g',
         tipo: '6'
     },
-    {
-        id: '8',
-        item: 'Skol',
-        qtd: 20,
-        unidade: 'g',
-        tipo: '8'
-    },
-    {
-        id: '9',
-        item: 'Brahma',
-        qtd: 20,
-        unidade: 'g',
-        tipo: '8'
-    },
-    {
-        id: '10',
-        item: 'Absolut',
-        qtd: 20,
-        unidade: 'g',
-        tipo: '8'
-    },
-    {
-        id: '11',
-        item: 'Coca Cola',
-        qtd: 20,
-        unidade: 'g',
-        tipo: '7'
-    },
 
 ]
 
-export default function AdicionarPratoPrincipal() {
+export default function AdicionarAcompanhamento() {
 
     const navigation = useNavigation();
     const loginFranca = "0516f9fb26e6be70";
     const loginJoao = "bdadea9527f65f1f";
 
     function next() {
-        navigation.push('AdicionarAcompanhamento');
+        navigation.push('AdicionarBebidas');
     }
 
-    function escolherPratoPrincipal() {
+    function escolherAcompanhamentos() {
         navigation.push('EscolherPratoPrincipal')
     }
 
@@ -146,8 +118,8 @@ export default function AdicionarPratoPrincipal() {
             <SafeAreaView style={style.body}>
                 <View style={style.headerGroup}>
                     <View style={style.headerTextGroup}>
-                        <Text style={style.textHeader}>Vamos escolher as</Text>
-                        <Text style={style.textHeader}>carnes?</Text>
+                        <Text style={style.textHeader}>Vamos escolher os</Text>
+                        <Text style={style.textHeader}>acompanhamentos?</Text>
                     </View>
                     <TouchableOpacity style={style.exitBtn} onPress={() => backHome(loginJoao)}>
                         <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
@@ -163,17 +135,9 @@ export default function AdicionarPratoPrincipal() {
                             showsVerticalScrollIndicator={false}
                             renderItem={({ item: pratoPrincipal }) => (
                                 <View>
-                                    {pratoPrincipal.tipo <= 5 &&
-                                        <View style={style.componentPicker}>
-                                            {pratoPrincipal.tipo == 1 &&
-                                                <MaterialCommunityIcons style={style.iconTipo} name="cow" size={15} color="black" />
-                                            }
-                                            {pratoPrincipal.tipo == 2 &&
-                                                <Icon style={style.iconTipo} name="piggy-bank" size={15} />
-                                            }
-                                            {pratoPrincipal.tipo == 3 &&
-                                                <Icon style={style.iconTipo} name="feather" size={15} />
-                                            }
+                                    {pratoPrincipal.tipo == 6 &&
+                                        <View style={style.componentPicker}>                                    
+                                            <MaterialCommunityIcons style={style.iconTipo}  name="rice"/>
                                             <Text style={style.textLabel}>{pratoPrincipal.item + " (" + pratoPrincipal.unidade + ")"}</Text>
                                             <View style={style.picker}>
                                                 <NumericInput
@@ -198,10 +162,10 @@ export default function AdicionarPratoPrincipal() {
                     </View>
                 </ScrollView>
 
-                <ActionButton offsetX={10} offsetY={90} onPress={escolherPratoPrincipal} />
+                <ActionButton offsetX={10} offsetY={90} onPress={escolherAcompanhamentos} />
 
                 <View style={style.footer}>
-                    <Text style={style.textFooter}>Etapa 3/6</Text>
+                    <Text style={style.textFooter}>Etapa 4/6</Text>
                     <TouchableOpacity style={style.continueBtn} onPress={next}>
                         <Icon style={style.iconBtn} name="angle-double-right" size={20} />
                         <Text style={style.textBtn}>Continuar</Text>
