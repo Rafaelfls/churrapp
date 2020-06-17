@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, SafeAreaView, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import api from '../../services/api';
 
 //Icones imports
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -9,7 +10,28 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import style from './styles';
 
 export default function EscolherPratoPrincipal({navigation}){
+
+    const [item, setItem] = useState([]);
+    const [loading, setLoading] = useState(false);
     
+    async function carregarItem() {
+        if (loading) {
+            return;
+        }
+
+        setLoading(true);
+
+        const response = await api.get(`/item`);
+
+        setItem([...item, ...response.data]);
+        setLoading(false);
+
+    }
+
+    useEffect(() => {
+        carregarItem();
+    }, []);
+
     function backHome(){
         navigation.navigate('AdicionarPratoPrincipal')
     }
@@ -17,6 +39,7 @@ export default function EscolherPratoPrincipal({navigation}){
     function nextFiltering(tipo){
         navigation.push('TodosOsItensAdicionar', {tipo})
     }
+
 
     return(
         <View style={style.container}>
@@ -32,28 +55,19 @@ export default function EscolherPratoPrincipal({navigation}){
                 </TouchableOpacity>
                 </View>                 
 
-                <ScrollView>
-                        <TouchableOpacity style={style.card} onPress={() => nextFiltering(1)}>
-                            <MaterialCommunityIcons style={style.iconTipo} name="cow"/>
-                            <Text style={style.textCard}>Bovino</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={style.card} onPress={() => nextFiltering(2)}>
-                            <Icon style={style.iconTipo} name  = "piggy-bank"/>
-                            <Text style={style.textCard}>Suino</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={style.card} onPress={() => nextFiltering(3)}>
-                            <Icon style={style.iconTipo} name  = "feather"/>
-                            <Text style={style.textCard}>Frango</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={style.card} onPress={() => nextFiltering(4)}>
-                            <Icon style={style.iconTipo} name="fish" />
-                            <Text style={style.textCard}>Peixe</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={style.card} onPress={() => nextFiltering(5)}>
-                            <MaterialCommunityIcons style={style.iconTipo} name="rabbit" />
-                            <Text style={style.textCard}>Exoticas</Text>
-                        </TouchableOpacity>
-                    </ScrollView>
+                <FlatList
+                data={item}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={item => String(item.id)}
+                renderItem={({ item: item }) => (
+                        <View>
+                            <TouchableOpacity style={style.card} onPress={() => nextFiltering(item.tipo)}>
+                                <MaterialCommunityIcons style={style.iconTipo} name="cow"/>
+                                <Text style={style.textCard}>{item.nomeItem}</Text>
+                            </TouchableOpacity>
+                        </View>
+                        )}
+                    />
 
             </SafeAreaView>
         </View>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList } from 'react-native';
 import { ScrollableTabView, DefaultTabBar, ScrollableTabBar, } from '@valdio/react-native-scrollable-tabview'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../services/api';
 import IconOct from 'react-native-vector-icons/Octicons';
 import IconEnt from 'react-native-vector-icons/Entypo';
@@ -18,9 +18,10 @@ import { Container } from 'native-base';
 import styles from './styles';
 
 export default function Perfil() {
+    const route = useRoute();
     const [loading, setLoading] = useState(false);
     const [perfil, setPerfil] = useState([]);
-    const [id, setId] = useState('bbf6aab64dfbc3b2');
+    const [id, setId] = useState('bdadea9527f65f1f');
 
     async function loadPerfil() {
         if (loading) {

@@ -14,7 +14,7 @@ export default function Calculadora(){
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
   const loginFranca = "0516f9fb26e6be70";
-  const loginJoao = "bbf6aab64dfbc3b2";
+  const loginJoao = "bdadea9527f65f1f";
 
   function navigateToResumo() {
     navigation.replace('Tabs', {
@@ -23,7 +23,7 @@ export default function Calculadora(){
   }
   function navegarParaResumo() {
     navigation.replace('Tabs', {
-      screen: 'Meu Churras', 
+      screen: 'Meu Churras',
       params: {loginJoao}});
   }
 

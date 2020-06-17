@@ -11,7 +11,8 @@ import style from './styles';
 
 export default function CriarChurrasco() {
   const [value, onChangeText] = React.useState('Useless Placeholder');
-
+  const loginFranca = "0516f9fb26e6be70";
+  const loginJoao = "bdadea9527f65f1f";
   const navigation = useNavigation();
 
   function next() {
@@ -19,7 +20,9 @@ export default function CriarChurrasco() {
   }
 
   function backHome(){
-    navigation.replace('Tabs')
+    navigation.replace('Tabs', {
+      screen: 'Meu Churras', 
+      params: {loginFranca, loginJoao}});
   }
 
   return (
@@ -27,7 +30,7 @@ export default function CriarChurrasco() {
       <SafeAreaView style={style.body}>
         <View style={style.headerGroup}>
           <Text style={style.textHeader}>Vamos começar!</Text>
-          <TouchableOpacity style={style.exitBtn} onPress={backHome}>
+          <TouchableOpacity style={style.exitBtn} onPress={() => backHome(loginFranca)}>
             <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
             <Text style={style.textHeaderBtn}>Sair</Text>
           </TouchableOpacity>

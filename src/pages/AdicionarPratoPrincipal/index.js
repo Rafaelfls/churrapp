@@ -53,6 +53,8 @@ var pratoPrincipal = [
 export default function AdicionarPratoPrincipal() {
 
     const navigation = useNavigation();
+    const loginFranca = "0516f9fb26e6be70";
+    const loginJoao = "bdadea9527f65f1f";
 
     function next() {
         navigation.push('CriarChurrasco');
@@ -63,7 +65,9 @@ export default function AdicionarPratoPrincipal() {
     }
 
     function backHome(){
-        navigation.replace('Tabs')
+        navigation.replace('Tabs', {
+            screen: 'Meu Churras', 
+            params: {loginFranca, loginJoao}});
     }
 
     function onChangeVar(text, varivael){
@@ -81,7 +85,7 @@ export default function AdicionarPratoPrincipal() {
                         <Text style={style.textHeader}>Vamos escolher as</Text>
                         <Text style={style.textHeader}>carnes?</Text>
                     </View>
-                <TouchableOpacity style={style.exitBtn} onPress={backHome}>
+                <TouchableOpacity style={style.exitBtn} onPress={() => backHome(loginJoao)}>
                     <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
                     <Text style={style.textHeaderBtn}>Sair</Text>
                 </TouchableOpacity>
