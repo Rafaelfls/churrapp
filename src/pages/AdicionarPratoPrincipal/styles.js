@@ -7,18 +7,26 @@ export default StyleSheet.create({
     flex: 1,
     paddingTop: Constants.statusBarHeight + 15,
   },  
+  body:{
+    flex: 1,
+  },
+  headerGroup:{
+    flexDirection:'row',
+  },
   textHeader: {
     fontSize: 25,
     color: '#fb2',
     marginLeft: 15,
   },
-  stepHeader:{
-    position:'absolute',
-    right: 20,
-    top:0,
-  },   
-  body:{
-    flex: 1,
+  exitBtn:{
+    flexDirection:'row-reverse',
+    position:"absolute",
+    right: 10,
+    top: 20,
+  },
+  textHeaderBtn:{
+    fontSize: 15,
+    marginHorizontal: 7,
   },
   footer:{    
     height: 70,
@@ -26,7 +34,9 @@ export default StyleSheet.create({
     justifyContent: "flex-start",
     alignContent: 'center',
     backgroundColor: 'brown',
-    bottom:0,
+    position: 'absolute',
+    width: '100%',
+    bottom: 0,
   },
   textFooter:{
     alignSelf: 'center',
@@ -69,45 +79,48 @@ inputStandard:{
   borderRadius:8,
   marginBottom: 10,
 },
-listaConvidados:{
-  backgroundColor:'lightgray',
-  marginHorizontal: 25,
-  borderRadius: 8,
-  padding: 15,
+componentPicker:{
+  flexDirection: "row",
+  alignContent: "center",
   marginVertical: 10,
-},
-listaConvidadosItem:{
-  flexDirection: 'row',
-},
-listaConvidadosLabel:{
+  borderWidth: 1,
+  borderRadius: 8,
+  paddingHorizontal: 5,
+  paddingVertical: 10,
+  backgroundColor:'white'
+},   
+textLabel:{
   fontSize: 15,
-  fontWeight: 'bold',
-  color: 'brown',
-  marginLeft: 10,
+  color:"brown",
+  marginBottom: 10,
+  marginLeft: 10
 },
-listaConvidadosLabelOK:{
-  fontSize: 15,
-  fontWeight: 'bold',
-  color: 'green',
-  marginLeft: 10,
-},
-listaConvidadosLabelNOK:{
-  fontSize: 15,
-  fontWeight: 'bold',
-  color: 'red',
-  marginLeft: 10,
-},
-headerGroup:{
+picker:{
+  position: 'absolute',
+  right: 5,
+  top:10,
   flexDirection:'row',
+  borderWidth: 1,
+  borderRadius: 6,
 },
-exitBtn:{
-  flexDirection:'row-reverse',
-  position:"absolute",
-  right: 10,
-  top: 10,
+icons:{
+    marginHorizontal: 5,
+    justifyContent: 'center',
+    textAlign: 'center'
 },
-textHeaderBtn:{
-  fontSize: 15,
-  marginHorizontal: 7,
+quantidadeInput:{
+    paddingHorizontal: 30,
+    borderWidth: 0.2,
+    borderBottomWidth: 0,
+    borderTopWidth: 0,
+    borderRadius: 0,
+    width:100,
+},
+iconTipo:{
+    alignSelf:'center',
+    color: 'black',
+    top: -5,
+    fontSize: 17,
+    color: 'brown'
 }
 })
