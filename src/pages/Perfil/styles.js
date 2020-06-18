@@ -9,53 +9,105 @@ export default StyleSheet.create({
     backgroundColor: 'white',
   },
 
+  backgroundProfile:{
+    backgroundColor: "maroon",
+    marginBottom: 10,
+    paddingBottom: 10,
+  },
+
+  editarContainer:{
+    marginTop: Constants.statusBarHeight + 15,
+    marginLeft: 15,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+
+  editIcon: {
+    color: 'white',
+  },
+
   containerProfile: {
-    marginTop: Constants.statusBarHeight + 70,
     alignItems: 'center',
   },
 
   profileImg:{
-    height: 160,
-    width: 160,
-    borderRadius: 80,
+    height: 140,
+    width: 140,
+    borderRadius: 70,
     marginBottom: 10,
   },
 
   profileName:{
-    fontWeight: "bold",
+    fontFamily: 'poppins-medium',
     fontSize: 30,
+    color: 'white',
   },
 
   profileLocal:{
     fontSize: 20,
-    color: 'darkgrey',
+    color: 'white',
+    fontFamily: 'poppins-regular',
   },
 
   profileIdade:{
     fontSize: 20,
-    color: 'darkgrey',
+    color: 'white',
+    fontFamily: 'poppins-regular',
+
+  },
+
+  //Meus Churrascos
+  containerMyChurras: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+
+  containerOrg: {
+    alignItems: 'center',
   },
 
   profileOrg:{
-    fontSize: 20,
+    fontSize: 17,
     color: 'black',
-    marginTop: 15,
-    fontWeight: 'bold',
+    fontFamily: 'poppins-regular',
+  },
+
+  profileOrgNumber:{
+    fontSize: 23,
+    color: 'black',
+    fontFamily: 'poppins-semi-bold',
+  },
+
+  linhaSeparaçãoHor:{
+    height: "90%",
+    width: 1,
+    backgroundColor: 'gray',
+  },
+
+  containerPart: {
+    alignItems: 'center',
   },
 
   profilePart:{
-    fontSize: 20,
+    fontSize: 17,
     color: 'black',
-    fontWeight: 'bold',
+    fontFamily: 'poppins-regular',
   },
 
+  profilePartNumber:{
+    fontSize: 23,
+    color: 'black',
+    fontFamily: 'poppins-semi-bold',
+  },
+
+  //Minhas Preferências
   containerGeral:{
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     paddingTop: 25,
     paddingHorizontal: 20,
-    paddingBottom: 5,
+    paddingBottom: 10,
   },
 
   containerEsq:{
@@ -69,23 +121,13 @@ export default StyleSheet.create({
   infos:{
     fontSize: 19,
     marginHorizontal: 5,
+    fontFamily: 'poppins-regular',
   },
 
   containerInfos:{
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 3,
-  },
-
-  editarContainer:{
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingBottom: 15,
-  },
-
-  editar:{
-    fontWeight: 'bold',
-    fontSize: 18,
   },
 
 });
