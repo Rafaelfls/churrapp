@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Image } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
@@ -11,7 +11,7 @@ import style from './styles';
 export default function CriarChurrasco() {
   const [value, onChangeText] = React.useState('Useless Placeholder');
   const loginFranca = "0516f9fb26e6be70";
-  const loginJoao = "bdadea9527f65f1f";
+  const loginJoao = "99d8830296d7c838";
   const navigation = useNavigation();
   const [nomeChurras, setNomeChurras] = useState();
   const [local, setlocal] = useState();
@@ -26,8 +26,15 @@ export default function CriarChurrasco() {
   };
 
   function next() {
-    criarChurras()
-    navigation.replace('AdicionaConvidados');
+    if(nomeChurras != null && hrInicio != null && date != null && local != null) {
+      criarChurras()
+      navigation.replace('AdicionaConvidados');
+    } else {
+      Alert.alert(
+        'Digite todos os campos obrigatórios por favor!'
+      )
+    }
+    
   }
 
   function backHome(){

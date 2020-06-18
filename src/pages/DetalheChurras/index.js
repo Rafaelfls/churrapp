@@ -21,6 +21,9 @@ import { Container } from 'native-base';
 
 export default function DetalheChurras() {
   const route = useRoute();
+  const loginFranca = "0516f9fb26e6be70";
+  const loginJoao = "99d8830296d7c838";
+  const [itens, setItens] = useState([]);
 
   const churras = route.params.churras;
   const [modalVisivel, setModalVisivel] = useState(false);
@@ -32,8 +35,20 @@ export default function DetalheChurras() {
   }
 
   function backHome() {
-    navigation.replace('Tabs')
+    navigation.replace('Tabs',  {
+      screen: 'Meu Churras', 
+      params: {loginFranca, loginJoao}});
   }
+  
+  async function carregarItens() {
+    const response = await api.get(`/itemdochurras?churras_code=${churras.churrasCode}`);
+
+    setItens([...itens, ...response.data]);
+  }
+
+  useEffect(() => {
+        carregarItens();
+    }, []);
 
   return (
     <View style={style.container}>
@@ -42,8 +57,9 @@ export default function DetalheChurras() {
         <Container style={style.cabecalho}>
             <IconOct name="chevron-left" size={25} style={style.backBtn} onPress={backHome} />
           <Text style={style.detalheTitle}>{churras.nomeChurras}</Text>
-            <IconEnt name="share" size={25} style={style.shareBtn} onPress={CompartilharChurras}/>
+            <IconEnt name="share" size={25} style={style.shareBtn} onPress={CompartilharChurras}/>            
         </Container>
+        <Text>{churras.churrasCode}</Text>
       </View>
 
       <ScrollView nestedScrollEnabled={true} style={style.scroll}>
@@ -115,28 +131,27 @@ export default function DetalheChurras() {
           </TouchableOpacity>
         </View>
 
-        <ScrollView horizontal={true} nestedScrollEnabled={true} style={style.containerItens}>
-          <View style={style.item}>
-            <Image source={frango} style={style.itemImg} />
-            <Text style={style.nomeItem}>Frango</Text>
-            <Text style={style.qtdItem}>2 kg</Text>
-          </View>
-          <View style={style.item}>
-            <Image source={linguica} style={style.itemImg} />
-            <Text style={style.nomeItem}>Linguiça</Text>
-            <Text style={style.qtdItem}>2,5 kg</Text>
-          </View>
-          <View style={style.item}>
-            <Image source={fraldinha} style={style.itemImg} />
-            <Text style={style.nomeItem}>Fraldinha</Text>
-            <Text style={style.qtdItem}>2 kg</Text>
-          </View>
-          <View style={style.item}>
-            <Image source={pao} style={style.itemImg} />
-            <Text style={style.nomeItem}>Pão Francês</Text>
-            <Text style={style.qtdItem}>10 unid.</Text>
-          </View>
-        </ScrollView>
+        <FlatList
+                data={itens}
+                horizontal
+                pagingEnabled={true}
+                style={{height: 200, width: 400}}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={itens => String(itens.id)}
+                renderItem={({ item: itens }) => (
+
+                    <View style = {{ width: 140, height: 'auto', flexDirection:'row'}}>
+                      <TouchableOpacity>
+                          <View style={style.item}>
+                            <Image source={frango} style={style.itemImg} />
+                            <Text style={style.nomeItem}>{itens.nomeItem}</Text>
+                            <Text style={style.qtdItem}>{itens.quantidade}{itens.unidade}</Text>
+                          </View> 
+                        </TouchableOpacity>
+                    </View>
+
+                )}
+            />
 
       </ScrollView>
 

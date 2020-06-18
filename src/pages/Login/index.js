@@ -14,7 +14,7 @@ export default function Calculadora(){
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
   const loginFranca = "0516f9fb26e6be70";
-  const loginJoao = "bdadea9527f65f1f";
+  const loginJoao = "99d8830296d7c838";
 
   function navigateToResumo() {
     navigation.replace('Tabs', {

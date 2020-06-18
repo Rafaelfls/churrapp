@@ -45,7 +45,7 @@ export default function AdicionaConvidados(){
 
   const [value, onChangeText] = React.useState('');
   const loginFranca = "0516f9fb26e6be70";
-  const loginJoao = "bdadea9527f65f1f";
+  const loginJoao = "99d8830296d7c838";
   const navigation = useNavigation();
 
   const inviteStandard = "Ola, Rafael esta te convidadando para o churrasco *Top dos 100*, o valor do churrasco por pessoa ficou 25 reais. Pague pelo app do Churrapp ou para ele pessoalmente."
