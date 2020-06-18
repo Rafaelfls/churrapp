@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
+import api from '../../services/api';
 
 import DatePicker from '../../components/DatePicker'
 import TimePicker from '../../components/TimePicker'
@@ -14,6 +15,19 @@ export default function CriarChurrasco() {
   const loginFranca = "0516f9fb26e6be70";
   const loginJoao = "bdadea9527f65f1f";
   const navigation = useNavigation();
+  const [nomeChurras, setNomeChurras] = useState();
+  const [local, setlocal] = useState();
+  const [hrInicio, sethrInicio] = useState();
+  const [descricao, setdescricao] = useState();
+  const config= {
+    headers: {'Authorization': loginJoao}
+  };
+
+  function pegarHora(event, tempo) {
+    const dataAtual = tempo || hrInicio;
+    sethrInicio(dataAtual);
+    console.log("TA AUQI")
+  }
 
   function next() {
     navigation.replace('AdicionaConvidados');
@@ -23,6 +37,19 @@ export default function CriarChurrasco() {
     navigation.replace('Tabs', {
       screen: 'Meu Churras', 
       params: {loginFranca, loginJoao}});
+  }
+  
+   function criarChurras() {
+    
+    
+    return  api.post('/churras', {
+      nomeChurras: nomeChurras,
+      local: local,
+      hrInicio: '16:00:00',
+      descricao: descricao,
+      data: '2020-20-08'
+    }, config);
+
   }
 
   return (
@@ -40,14 +67,16 @@ export default function CriarChurrasco() {
             <Text style={style.textLabel}>Nome do churrasco:</Text>
             <TextInput
               style={style.inputStandard}
-              onChangeText={text => onChangeText(text)}
+              onChangeText={text => setNomeChurras(text)}
               placeholder={'Churrasbom'}
             />
+            <Text>Nome: {nomeChurras} Local: {local} Descrição: {descricao}</Text>
+            <Text>ID: {loginJoao}</Text>
             <Text style={style.textLabel}>Local do churrasco:</Text>
             <TextInput
               style={style.inputStandard}
               placeholder={"Alameda santos, 202"}
-              onChangeText={text => onChangeText(text)}
+              onChangeText={text => setlocal(text)}
             />
             <Text style={style.textLabel}>Descrição:</Text>
             <TextInput
@@ -55,8 +84,11 @@ export default function CriarChurrasco() {
               multiline={true}
               numberOfLines={3}
               placeholder={"O melhor churras do ano"}
-              onChangeText={text => onChangeText(text)}
+              onChangeText={text => setdescricao(text)}
             />
+            <TouchableOpacity onPress={criarChurras}>
+              <Text>Enviar</Text>
+            </TouchableOpacity>
             <View style={style.imagePicker}>
               <ImagePicker />
             </View>
