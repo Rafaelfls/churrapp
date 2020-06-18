@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
-
-import DatePicker from '../../components/DatePicker'
-import TimePicker from '../../components/TimePicker'
-import ImagePicker from '../../components/ImagePicker'
+import api from '../../services/api';
+import DatePicker from 'react-native-datepicker';
+import * as ImagePicker from 'expo-image-picker';
 
 import style from './styles';
 
@@ -14,8 +13,20 @@ export default function CriarChurrasco() {
   const loginFranca = "0516f9fb26e6be70";
   const loginJoao = "bdadea9527f65f1f";
   const navigation = useNavigation();
+  const [nomeChurras, setNomeChurras] = useState();
+  const [local, setlocal] = useState();
+  const [hrInicio, sethrInicio] = useState();
+  const [hrFim, sethrFim] = useState();
+  const [descricao, setdescricao] = useState();
+  const [date, setDate] = useState();
+  const [image, setImage] = useState(null);
+
+  const config= {
+    headers: {'Authorization': loginJoao}
+  };
 
   function next() {
+    criarChurras()
     navigation.replace('AdicionaConvidados');
   }
 
@@ -23,6 +34,35 @@ export default function CriarChurrasco() {
     navigation.replace('Tabs', {
       screen: 'Meu Churras', 
       params: {loginFranca, loginJoao}});
+  }
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [9, 16],
+      quality: 1,
+    });    
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
+  
+   function criarChurras() {
+    
+    
+    return  api.post('/churras', {
+      nomeChurras: nomeChurras,
+      local: local,
+      hrInicio: hrInicio,
+      hrFim: hrFim,
+      descricao: descricao,
+      data: date,
+    }, config);
+
   }
 
   return (
@@ -40,14 +80,14 @@ export default function CriarChurrasco() {
             <Text style={style.textLabel}>Nome do churrasco:</Text>
             <TextInput
               style={style.inputStandard}
-              onChangeText={text => onChangeText(text)}
+              onChangeText={text => setNomeChurras(text)}
               placeholder={'Churrasbom'}
             />
             <Text style={style.textLabel}>Local do churrasco:</Text>
             <TextInput
               style={style.inputStandard}
               placeholder={"Alameda santos, 202"}
-              onChangeText={text => onChangeText(text)}
+              onChangeText={text => setlocal(text)}
             />
             <Text style={style.textLabel}>Descrição:</Text>
             <TextInput
@@ -55,34 +95,102 @@ export default function CriarChurrasco() {
               multiline={true}
               numberOfLines={3}
               placeholder={"O melhor churras do ano"}
-              onChangeText={text => onChangeText(text)}
+              onChangeText={text => setdescricao(text)}
             />
             <View style={style.imagePicker}>
-              <ImagePicker />
+              <TouchableOpacity style={style.inputDisplay} onPress={pickImage} >
+                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, paddingVertical: 10 }} />}
+              </TouchableOpacity>
             </View>
             <View style={style.componentPicker}>
               <Text style={style.textLabel}>Data:</Text>
               <View style={style.picker}>
-                <DatePicker />
+                <DatePicker
+                  style={{width: 200}}
+                  date={date}
+                  mode="date"
+                  placeholder="Escolha a data"
+                  format="DD-MM-YYYY"
+                  minDate="01-05-2020"
+                  maxDate="01-05-2025"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      position: 'absolute',
+                      left: 0,
+                      top: 4,
+                      marginLeft: 0
+                    },
+                    dateInput: {
+                      borderRadius:8,
+                      marginLeft: 36
+                    },
+                    // ... You can check the source to find the other keys.
+                  }}
+                  onDateChange={(date) => {setDate(date)}}
+                />
               </View>
             </View>
             <View style={style.componentPicker}>
               <Text style={style.textLabel}>Início:</Text>
               <View style={style.picker}>
-                <TimePicker />
+                <DatePicker
+                    style={{width: 200}}
+                    date={hrInicio}
+                    mode="time"
+                    placeholder="Hora de Início"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    customStyles={{
+                      dateIcon: {
+                        position: 'absolute',
+                        left: 0,
+                        top: 4,
+                        marginLeft: 0
+                      },
+                      dateInput: {
+                        borderRadius:8,
+                        marginLeft: 36
+                      },
+                      // ... You can check the source to find the other keys.
+                    }}
+                    onDateChange={(hrInicio) => {sethrInicio(hrInicio)}}
+                  />
               </View>
             </View>
             <View style={style.componentPicker}>
               <Text style={style.textLabel}>Término:</Text>
               <View style={style.picker}>
-                <TimePicker />
+                <DatePicker
+                    style={{width: 200}}
+                    date={hrFim}
+                    mode="time"
+                    placeholder="Hora de Início"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    customStyles={{
+                      dateIcon: {
+                        position: 'absolute',
+                        left: 0,
+                        top: 4,
+                        marginLeft: 0
+                      },
+                      dateInput: {
+                        borderRadius:8,
+                        marginLeft: 36
+                      },
+                      // ... You can check the source to find the other keys.
+                    }}
+                    onDateChange={(hrFim) => {sethrFim(hrFim)}}
+                  />
               </View>
             </View>
           </View>
 
 
           <View style={style.footer}>
-            <Text style={style.textFooter}>Etapa 1/4</Text>
+            <Text style={style.textFooter}>Etapa 1/6</Text>
             <TouchableOpacity style={style.continueBtn} onPress={next}>
               <Icon style={style.iconBtn} name="angle-double-right" size={20} />
               <Text style={style.textBtn}>Continuar</Text>

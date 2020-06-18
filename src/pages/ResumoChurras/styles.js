@@ -35,6 +35,9 @@ export default StyleSheet.create({
   signOutIcon:{
     color: 'gray',
   },
+  slideBtn:{
+    flexDirection:'row',
+  },
 
   //cards
   churrasList: {

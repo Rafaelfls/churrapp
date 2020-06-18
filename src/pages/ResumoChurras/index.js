@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
-import { useNavigation, useRoute} from '@react-navigation/native';
+import { View, Text, Image, FlatList, TouchableOpacity, Alert, Vibration, ToastAndroid } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconEnt from 'react-native-vector-icons/Entypo';
 import IconFea from 'react-native-vector-icons/Feather';
+import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
 
 import api from '../../services/api';
 
@@ -22,13 +23,26 @@ export default function ResumoChurras() {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [usuario_id, setUsuarioId] = useState(login2);
-
-    
-
-    
-
+    const config = {
+        headers: { 'Authorization': login2 }
+    };
 
     const navigation = useNavigation();
+
+    function deletar(churras) {
+        Alert.alert(
+            `Churras deletado`,
+            churras.nome,
+            [
+                {
+                    text: "Beleza"
+                }
+            ]
+        );
+        Vibration.vibrate(60);
+        api.delete(`/churras/${churras.id}`, config);       
+
+    }
 
     function logout() {
         navigation.replace('Login');
@@ -99,30 +113,46 @@ export default function ResumoChurras() {
                 renderItem={({ item: churras }) => (
 
                     <View>
+
+
+
                         <TouchableOpacity onPress={() => detalheChurras(churras)}>
+
                             <View style={style.churras}>
                                 <View style={style.churrasDescricao}>
-                                    <Image source={churrasPhoto} style={style.churrasFoto} />
-                                    <View style={style.churrasInfosView}>
-                                        <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
-                                        <Text style={style.churrasDono}>{churras.nome} </Text>
-                                        <View style={style.churrasLocDat}>
-                                            <IconEnt style={style.localIcon} name="location-pin" size={15} />
-                                            <Text style={style.churrasLocal}> {churras.local}</Text>
-                                            <Text style={style.locDatSeparator}>  |  </Text>
-                                            <IconFea style={style.dataIcon} name="calendar" size={15} />
-                                            <Text style={style.churrasData}> {churras.data}</Text>
+                                    <RNSlidingButton
+                                        style={{ backgroundColor: 'transparent', width: "100%" }}
+                                        height={90}
+                                        onSlidingSuccess={() => deletar(churras)}
+                                        slideDirection={SlideDirection.LEFT}>
+                                        <View style={style.slideBtn}>
+                                            <Image source={churrasPhoto} style={style.churrasFoto} />
+                                            <View style={style.churrasInfosView}>
+                                                <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
+                                                <Text style={style.churrasDono}>{churras.nome} </Text>
+                                                <View style={style.churrasLocDat}>
+                                                    <IconEnt style={style.localIcon} name="location-pin" size={15} />
+                                                    <Text style={style.churrasLocal}> {churras.local}</Text>
+                                                    <Text style={style.locDatSeparator}>  |  </Text>
+                                                    <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                                    <Text style={style.churrasData}> {churras.data}</Text>
+                                                </View>
+                                            </View>
                                         </View>
-                                    </View>
+                                    </RNSlidingButton>
                                 </View>
                             </View>
+
                         </TouchableOpacity>
+
+
+
                     </View>
 
                 )}
             />
 
-            <ActionButton style={style.fabBtn}>
+            <ActionButton style={style.fabBtn} onPress={() => Vibration.vibrate(50)}>
                 <ActionButton.Item title="Criar Churras" style={style.fabBtn} onPress={inicioCriarChurras}>
                     <Icon name="plus" style={style.fabBtnIcon} />
                 </ActionButton.Item>

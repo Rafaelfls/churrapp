@@ -86,41 +86,41 @@ var pratoPrincipal = [
         id: '8',
         item: 'Skol',
         qtd: 20,
-        unidade: 'g',
+        unidade: 'latas',
         tipo: '8'
     },
     {
         id: '9',
         item: 'Brahma',
         qtd: 20,
-        unidade: 'g',
+        unidade: 'latas',
         tipo: '8'
     },
     {
         id: '10',
         item: 'Absolut',
         qtd: 20,
-        unidade: 'g',
+        unidade: 'garrafa',
         tipo: '8'
     },
     {
         id: '11',
         item: 'Coca Cola',
         qtd: 20,
-        unidade: 'g',
+        unidade: 'garrafa',
         tipo: '7'
     },
 
 ]
 
-export default function AdicionarPratoPrincipal() {
+export default function AdicionarBebidas() {
 
     const navigation = useNavigation();
     const loginFranca = "0516f9fb26e6be70";
     const loginJoao = "bdadea9527f65f1f";
 
     function next() {
-        navigation.push('AdicionarAcompanhamento');
+        navigation.push('AdicionarExtras');
     }
 
     function escolherPratoPrincipal() {
@@ -147,7 +147,7 @@ export default function AdicionarPratoPrincipal() {
                 <View style={style.headerGroup}>
                     <View style={style.headerTextGroup}>
                         <Text style={style.textHeader}>Vamos escolher as</Text>
-                        <Text style={style.textHeader}>carnes?</Text>
+                        <Text style={style.textHeader}>bebidas?</Text>
                     </View>
                     <TouchableOpacity style={style.exitBtn} onPress={() => backHome(loginJoao)}>
                         <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
@@ -163,16 +163,13 @@ export default function AdicionarPratoPrincipal() {
                             showsVerticalScrollIndicator={false}
                             renderItem={({ item: pratoPrincipal }) => (
                                 <View>
-                                    {pratoPrincipal.tipo <= 5 &&
+                                    {(pratoPrincipal.tipo <= 8  && pratoPrincipal.tipo >= 7 )  &&
                                         <View style={style.componentPicker}>
-                                            {pratoPrincipal.tipo == 1 &&
-                                                <MaterialCommunityIcons style={style.iconTipo} name="cow" size={15} color="black" />
+                                            {pratoPrincipal.tipo == 8 &&
+                                                <MaterialCommunityIcons style={style.iconTipo} name="glass-mug"/>
                                             }
-                                            {pratoPrincipal.tipo == 2 &&
-                                                <Icon style={style.iconTipo} name="piggy-bank" size={15} />
-                                            }
-                                            {pratoPrincipal.tipo == 3 &&
-                                                <Icon style={style.iconTipo} name="feather" size={15} />
+                                            {pratoPrincipal.tipo == 7 &&
+                                                <MaterialCommunityIcons style={style.iconTipo} name="glass-stange" />
                                             }
                                             <Text style={style.textLabel}>{pratoPrincipal.item + " (" + pratoPrincipal.unidade + ")"}</Text>
                                             <View style={style.picker}>
@@ -201,7 +198,7 @@ export default function AdicionarPratoPrincipal() {
                 <ActionButton offsetX={10} offsetY={90} onPress={escolherPratoPrincipal} />
 
                 <View style={style.footer}>
-                    <Text style={style.textFooter}>Etapa 3/6</Text>
+                    <Text style={style.textFooter}>Etapa 5/6</Text>
                     <TouchableOpacity style={style.continueBtn} onPress={next}>
                         <Icon style={style.iconBtn} name="angle-double-right" size={20} />
                         <Text style={style.textBtn}>Continuar</Text>
