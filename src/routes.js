@@ -29,39 +29,34 @@ import FinalCriaChurras from './pages/FinalCriaChurras';
 
 const Tab = createBottomTabNavigator();
 
-
-
-
-
     function CriarTabs() {
         return(
             <Tab.Navigator screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size}) => {
+                tabBarIcon: ({focused, color, size}) => {
                     let iconName;
                     if (route.name === "Outros Churras") {
                         iconName = focused 
                         ? 'glass-cheers'
-                        : 'beer';
+                        : 'glass-cheers';
                     } else if (route.name === "Meu Churras") {
                         iconName = focused
                         ? 'home'
-                        : 'burn';
+                        : 'home';
                     } else if (route.name === "Perfil") {
                         iconName = focused
                         ? 'creative-commons-by'
-                        : 'couch';
+                        : 'creative-commons-by';
                     }
                     return <Icon name={iconName} size={size} color={color} />;
 
                 }
-            })} initialRouteName={'Meu Churras'} tabBarOptions={{activeTintColor: "#fff308", inactiveTintColor: "#c2ba19"}}>
+            })} initialRouteName={'Meu Churras'} tabBarOptions={{activeTintColor: "maroon", inactiveTintColor: "gray"}}>
                 <Tab.Screen name="Outros Churras" component={OutrosChurras}/>
                 <Tab.Screen name="Meu Churras" component={ResumoChurras}/>
                 <Tab.Screen name="Perfil" component={Perfil}/>
             </Tab.Navigator>
         );
     }
-
 
 export default function Routes(){
 

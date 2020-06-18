@@ -17,15 +17,12 @@ export default function InicioCriaChurras(){
     return(
         <View style={style.container}>
             <View style={style.textContainer}>
-                <Text style={style.textHeader10}>Vamos marcar</Text>
-                <Text style={style.textHeader01}>um churrasco?</Text>
+                <Text style={style.textHeader10}>Vamos marcar um churrasco?</Text>
             </View>
             <Text style={style.textHeader2}>Estamos aqui para te ajudar.</Text>
             <Text style={style.textHeader3}>São apenas 6 etapas!</Text>
             
-            
             <TouchableOpacity style = {style.continueBtn} onPress={next}>
-                <Icon style={style.iconBtn} name  = "angle-double-right" size = {30}/>
                 <Text style={style.textBtn}>Começar</Text>
             </TouchableOpacity>
         </View>
