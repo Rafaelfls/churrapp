@@ -19,6 +19,9 @@ export default function CriarChurrasco() {
   const [local, setlocal] = useState();
   const [hrInicio, sethrInicio] = useState();
   const [descricao, setdescricao] = useState();
+  const config= {
+    headers: {'Authorization': loginJoao}
+  };
 
   function pegarHora(event, tempo) {
     const dataAtual = tempo || hrInicio;
@@ -36,9 +39,16 @@ export default function CriarChurrasco() {
       params: {loginFranca, loginJoao}});
   }
   
-  function criarChurras() {
+   function criarChurras() {
     
-
+    
+    return  api.post('/churras', {
+      nomeChurras: nomeChurras,
+      local: local,
+      hrInicio: '16:00:00',
+      descricao: descricao,
+      data: '2020-20-08'
+    }, config);
 
   }
 
@@ -61,6 +71,7 @@ export default function CriarChurrasco() {
               placeholder={'Churrasbom'}
             />
             <Text>Nome: {nomeChurras} Local: {local} Descrição: {descricao}</Text>
+            <Text>ID: {loginJoao}</Text>
             <Text style={style.textLabel}>Local do churrasco:</Text>
             <TextInput
               style={style.inputStandard}
@@ -75,6 +86,9 @@ export default function CriarChurrasco() {
               placeholder={"O melhor churras do ano"}
               onChangeText={text => setdescricao(text)}
             />
+            <TouchableOpacity onPress={criarChurras}>
+              <Text>Enviar</Text>
+            </TouchableOpacity>
             <View style={style.imagePicker}>
               <ImagePicker />
             </View>
@@ -87,10 +101,7 @@ export default function CriarChurrasco() {
             <View style={style.componentPicker}>
               <Text style={style.textLabel}>Início:</Text>
               <View style={style.picker}>
-                <TimePicker 
-                value={hrInicio}
-                onChange={pegarHora} />
-              <Text>Hora: {hrInicio}</Text>
+                <TimePicker />
               </View>
             </View>
             <View style={style.componentPicker}>
