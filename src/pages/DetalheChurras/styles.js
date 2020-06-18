@@ -27,35 +27,28 @@ export default StyleSheet.create({
     backgroundColor: 'transparent',
     width: '100%',
   },
+
   cabecalho: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
     backgroundColor: 'transparent',
     position: 'absolute',
     flex: 0.5,
     paddingTop: Constants.statusBarHeight + 15,
   },
   backBtn:{
-    marginLeft: 15,
-    alignSelf: 'flex-start',
     marginTop: 10,
-    paddingRight: 10,
   },
   detalheTitle: {
     fontSize: 30,
     marginBottom: 0,
-    alignSelf: 'flex-start',
     fontWeight: 'bold',
     color: '#000',
-    paddingBottom: 15,
-    marginLeft: 20,
+    paddingBottom: 15,  
   },
   shareBtn: {
-    marginRight: 15,
-    alignSelf: 'flex-start',
     marginTop: 10,
-    paddingLeft: 20,
   },
 
   //body
