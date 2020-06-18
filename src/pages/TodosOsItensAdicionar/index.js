@@ -5,7 +5,6 @@ import NumericInput from 'react-native-numeric-input';
 
 //Icones imports
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import style from './styles';
 

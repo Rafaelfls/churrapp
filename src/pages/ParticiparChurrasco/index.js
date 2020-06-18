@@ -17,7 +17,7 @@ export default function ParticiparChurrasco() {
     }
 
     function LerQR() {
-        navigation.replace('QRCodeLeitor');
+        navigation.push('QRCodeLeitor');
     }
 
     return (
