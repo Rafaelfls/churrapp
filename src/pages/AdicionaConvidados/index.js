@@ -66,11 +66,16 @@ export default function AdicionaConvidados(){
   }
   
     WhatsApp = (invite, phone) =>  {
-      console.log(invite, phone)
-      if(invite === ''){
-        invite = inviteStandard;
-      }
-      Linking.openURL(`whatsapp://send?text=${invite}&phone=+55${phone}`);
+      Linking.canOpenURL(`whatsapp://send?text=${invite}`).then(supported => {
+        if (supported) {
+          if(invite === ''){
+            invite = inviteStandard;
+          }
+          return Linking.openURL(`whatsapp://send?text=${invite}&phone=+55${phone}`);
+        }else{
+          return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${phone}&text=${invite}`)
+        }
+      })
     }
 
     return(
