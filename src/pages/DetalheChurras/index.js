@@ -27,11 +27,13 @@ export default function DetalheChurras() {
 
   const churras = route.params.churras;
   const [modalVisivel, setModalVisivel] = useState(false);
+  const [churrasCode , setChurrasCode] = useState(churras.churrasCode)
 
+  console.log(churrasCode)
   const navigation = useNavigation();
 
-  function CompartilharChurras(codigoDoChurras) {
-    navigation.replace('CompartilharChurrasco',codigoDoChurras);
+  function CompartilharChurras(churrasCode) {
+    navigation.push('CompartilharChurrasco',{churrasCode});
   }
 
   function backHome() {
