@@ -32,8 +32,10 @@ export default function DetalheChurras() {
   console.log(churrasCode)
   const navigation = useNavigation();
 
+
   function CompartilharChurras(churrasCode) {
     navigation.push('CompartilharChurrasco',{churrasCode});
+
   }
 
   function backHome() {
@@ -59,9 +61,10 @@ export default function DetalheChurras() {
         <Container style={style.cabecalho}>
             <IconOct name="chevron-left" size={25} style={style.backBtn} onPress={backHome} />
           <Text style={style.detalheTitle}>{churras.nomeChurras}</Text>
+
             <IconEnt name="share" size={25} style={style.shareBtn} onPress={() => CompartilharChurras(churras.churrasCode)}/>            
+
         </Container>
-        <Text>{churras.churrasCode}</Text>
       </View>
 
       <ScrollView nestedScrollEnabled={true} style={style.scroll}>
@@ -137,8 +140,8 @@ export default function DetalheChurras() {
                 data={itens}
                 horizontal
                 pagingEnabled={true}
-                style={{height: 200, width: 400}}
-                showsVerticalScrollIndicator={false}
+                style={{height: 200, width: "100%"}}
+                showsHorizontalScrollIndicator={false}
                 keyExtractor={itens => String(itens.id)}
                 renderItem={({ item: itens }) => (
 

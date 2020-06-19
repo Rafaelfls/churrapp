@@ -18,8 +18,10 @@ export default function OutrosChurras() {
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
+
     const [dataPassado, setDataPassado] = useState(today);
     const [dataFuturo, setDataFuturo] = useState(today);
+
 
     const navigation = useNavigation();
 
