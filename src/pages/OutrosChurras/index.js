@@ -10,13 +10,18 @@ import logoImg from '../../assets/logo.jpg';
 import style from './styles';
 
 export default function OutrosChurras() {
+    var date = new Date()
+    var today = date.getDay() + "/" +date.getMonth() + "/" +date.getFullYear()
+
     const [churrasPassado, setChurrasPassados] = useState([]);
     const [churrasFuturo, setChurrasFuturo] = useState([]);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
-    const [dataPassado, setDataPassado] = useState('18-06-2020');
-    const [dataFuturo, setDataFuturo] = useState('2020-06-20');
+
+    const [dataPassado, setDataPassado] = useState(today);
+    const [dataFuturo, setDataFuturo] = useState(today);
+
 
     const navigation = useNavigation();
 
@@ -79,7 +84,7 @@ export default function OutrosChurras() {
             tabBarBackgroundColor='white'
             tabBarUnderlineStyle={{backgroundColor:'orange', height:2, }}
             renderTabBar={() => <DefaultTabBar />}
-            ref={(tabView) => { this.tabView = tabView; }}
+            ref={(tabView) => { tabView = tabView; }}
             initialPage={1}
         >
 

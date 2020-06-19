@@ -1,7 +1,8 @@
 import React from 'react';
 import {StyleSheet,Text,View,TextInput,SafeAreaView,FlatList,ActivityIndicator} from 'react-native';
 import * as Contacts from 'expo-contacts';
-export default class App extends React.Component {
+
+export default class ContactList extends React.Component {
   constructor() {
     super();
     this.state = {

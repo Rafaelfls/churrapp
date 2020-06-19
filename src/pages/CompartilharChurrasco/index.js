@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, FlatList, TextInput, TouchableOpacity, } from 'react-native';
+
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
+
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconOct from 'react-native-vector-icons/Octicons';
 import IconEnt from 'react-native-vector-icons/Entypo';
-import api from '../../services/api';
-
-import qrCode from '../../assets/qrCode.jpg';
+import { QRCode } from 'react-native-custom-qr-codes-expo';
 
 import style from './styles';
-import styles from '../DetalheChurras/styles';
 
-export default function CompartilharChurrasco() {
-    const route = useRoute();
-    const churras = route.params.churras;
 
-    const navigation = useNavigation();
+export default function CompartilharChurrasco({ route, navigation }) {
+
+
+    const { churrasCode } = route.params;
+    console.log({churrasCode})
 
     function goBack() {
         navigation.goBack()
@@ -43,8 +43,12 @@ export default function CompartilharChurrasco() {
                     <IconEnt name="calendar" size={22} style={style.dataIcon} />
                     <Text style={style.churrasData}>{churras.data} - {churras.hrInicio}</Text>
                 </View>
-                <Text style={style.codigo}>{churras.churrasCode}</Text>
-                <Image source={qrCode} style={style.qrCode}/>
+
+                <Text style={style.codigo}>{churrasCode}</Text>
+                <View style={style.qrCode}>
+                    <QRCode content={churrasCode}/>
+                </View>
+
                 <TouchableOpacity onPress={goBack} style={style.shareBtn}>
                     <Text style={style.shareText}>Compartilhar</Text>
                 </TouchableOpacity>

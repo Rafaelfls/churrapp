@@ -155,48 +155,46 @@ export default function AdicionarPratoPrincipal() {
                     </TouchableOpacity>
                 </View>
 
-                <ScrollView style={style.scrollView}>
-                    <View style={style.formGroup}>
-                        <FlatList
-                            data={pratoPrincipal}
-                            keyExtractor={pratoPrincipal => String(pratoPrincipal.id)}
-                            showsVerticalScrollIndicator={false}
-                            renderItem={({ item: pratoPrincipal }) => (
-                                <View>
-                                    {pratoPrincipal.tipo <= 5 &&
-                                        <View style={style.componentPicker}>
-                                            {pratoPrincipal.tipo == 1 &&
-                                                <MaterialCommunityIcons style={style.iconTipo} name="cow" size={15} color="black" />
-                                            }
-                                            {pratoPrincipal.tipo == 2 &&
-                                                <Icon style={style.iconTipo} name="piggy-bank" size={15} />
-                                            }
-                                            {pratoPrincipal.tipo == 3 &&
-                                                <Icon style={style.iconTipo} name="feather" size={15} />
-                                            }
-                                            <Text style={style.textLabel}>{pratoPrincipal.item + " (" + pratoPrincipal.unidade + ")"}</Text>
-                                            <View style={style.picker}>
-                                                <NumericInput
-                                                    onChange={text => onChangeVar(text, pratoPrincipal.qtd)}
-                                                    onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-                                                    totalWidth={150}
-                                                    totalHeight={30}
-                                                    iconSize={15}
-                                                    initValue={pratoPrincipal.qtd}
-                                                    step={5}
-                                                    valueType='real'
-                                                    rounded
-                                                    textColor='brown'
-                                                    iconStyle={{ color: 'brown' }}
-                                                    style={style.quantidadeInput} />
-                                            </View>
+                <View style={style.formGroup}>
+                    <FlatList
+                        data={pratoPrincipal}
+                        keyExtractor={pratoPrincipal => String(pratoPrincipal.id)}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({ item: pratoPrincipal }) => (
+                            <View>
+                                {pratoPrincipal.tipo <= 5 &&
+                                    <View style={style.componentPicker}>
+                                        {pratoPrincipal.tipo == 1 &&
+                                            <MaterialCommunityIcons style={style.iconTipo} name="cow" size={15} color="black" />
+                                        }
+                                        {pratoPrincipal.tipo == 2 &&
+                                            <Icon style={style.iconTipo} name="piggy-bank" size={15} />
+                                        }
+                                        {pratoPrincipal.tipo == 3 &&
+                                            <Icon style={style.iconTipo} name="feather" size={15} />
+                                        }
+                                        <Text style={style.textLabel}>{pratoPrincipal.item + " (" + pratoPrincipal.unidade + ")"}</Text>
+                                        <View style={style.picker}>
+                                            <NumericInput
+                                                onChange={text => onChangeVar(text, pratoPrincipal.qtd)}
+                                                onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+                                                totalWidth={150}
+                                                totalHeight={30}
+                                                iconSize={15}
+                                                initValue={pratoPrincipal.qtd}
+                                                step={5}
+                                                valueType='real'
+                                                rounded
+                                                textColor='brown'
+                                                iconStyle={{ color: 'brown' }}
+                                                style={style.quantidadeInput} />
                                         </View>
-                                    }
-                                </View>
-                            )}
-                            style={style.listStyle} />
-                    </View>
-                </ScrollView>
+                                    </View>
+                                }
+                            </View>
+                        )}
+                        style={style.listStyle} />
+                </View>
 
                 <ActionButton offsetX={10} offsetY={90} onPress={escolherPratoPrincipal} />
 

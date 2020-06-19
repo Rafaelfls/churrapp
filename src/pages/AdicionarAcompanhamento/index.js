@@ -127,7 +127,6 @@ export default function AdicionarAcompanhamento() {
                     </TouchableOpacity>
                 </View>
 
-                <ScrollView style={style.scrollView}>
                     <View style={style.formGroup}>
                         <FlatList
                             data={pratoPrincipal}
@@ -160,7 +159,6 @@ export default function AdicionarAcompanhamento() {
                             )}
                             style={style.listStyle} />
                     </View>
-                </ScrollView>
 
                 <ActionButton offsetX={10} offsetY={90} onPress={escolherAcompanhamentos} />
 

@@ -111,17 +111,12 @@ export default function ResumoChurras() {
                 onEndReached={loadChurras}
                 onEndReachedThreshold={0.2}
                 renderItem={({ item: churras }) => (
-
                     <View>
-
-
-
                         <TouchableOpacity onPress={() => detalheChurras(churras)}>
-
                             <View style={style.churras}>
                                 <View style={style.churrasDescricao}>
                                     <RNSlidingButton
-                                        style={{ backgroundColor: 'transparent', width: "100%" }}
+                                        style={{ backgroundColor: 'white', width: "100%" }}
                                         height={90}
                                         onSlidingSuccess={() => deletar(churras)}
                                         slideDirection={SlideDirection.LEFT}>
@@ -142,13 +137,8 @@ export default function ResumoChurras() {
                                     </RNSlidingButton>
                                 </View>
                             </View>
-
                         </TouchableOpacity>
-
-
-
                     </View>
-
                 )}
             />
 
