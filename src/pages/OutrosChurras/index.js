@@ -36,7 +36,7 @@ export default function OutrosChurras() {
 
         setLoading(true);
 
-        const response = await api.get(`churraspassados?data=${dataPassado}`, {
+        const response = await api.get(`churraspassados`, {
             params: { page }
         });
 
@@ -57,7 +57,7 @@ export default function OutrosChurras() {
 
         setLoading(true);
 
-        const response = await api.get(`churrasfuturo?data=${dataFuturo}`, {
+        const response = await api.get(`churrasfuturo`, {
             params: { page }
         });
 
@@ -131,7 +131,7 @@ export default function OutrosChurras() {
 
                     <View style={style.churras}>
                         <View style={style.churrasTitleView}>
-                            <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
+                        <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
                         </View>
                         <View style={style.churrasDescricao}>
                             <Image source={logoImg} style={style.churrasFoto} />
