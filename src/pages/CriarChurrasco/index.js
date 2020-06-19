@@ -117,9 +117,9 @@ export default function CriarChurrasco() {
                   date={date}
                   mode="date"
                   placeholder="Escolha a data"
-                  format="DD-MM-YYYY"
-                  minDate="01-05-2020"
-                  maxDate="01-05-2025"
+                  format="DD/MM/YYYY"
+                  minDate="01/05/2020"
+                  maxDate="01/05/2025"
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
                   customStyles={{
@@ -193,17 +193,15 @@ export default function CriarChurrasco() {
                   />
               </View>
             </View>
-          </View>
-
-
-          <View style={style.footer}>
+          </View>          
+        </ScrollView>
+        <View style={style.footer}>
             <Text style={style.textFooter}>Etapa 1/6</Text>
             <TouchableOpacity style={style.continueBtn} onPress={next}>
               <Icon style={style.iconBtn} name="angle-double-right" size={20} />
               <Text style={style.textBtn}>Continuar</Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
       </SafeAreaView>
     </View>
   )
