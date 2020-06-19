@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, FlatList, TextInput, TouchableOpacity, } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconOct from 'react-native-vector-icons/Octicons';
@@ -13,6 +13,8 @@ import style from './styles';
 import styles from '../DetalheChurras/styles';
 
 export default function CompartilharChurrasco() {
+    const route = useRoute();
+    const churras = route.params.churras;
 
     const navigation = useNavigation();
 
@@ -32,16 +34,16 @@ export default function CompartilharChurrasco() {
             </View>
 
             <View style={style.conteudoContainer}>
-                <Text style={style.nomeChurras} >Churras do França</Text>
+                <Text style={style.nomeChurras} >{churras.nomeChurras}</Text>
                 <View style={style.churrasLocalContainer}>
                     <IconFA name="map-o" size={20} style={style.localIcon} />
-                    <Text style={style.churrasLocal}>St. Antonio de Jesus</Text>
+                    <Text style={style.churrasLocal}>{churras.local}</Text>
                 </View>
                 <View style={style.churrasDataContainer}>
                     <IconEnt name="calendar" size={22} style={style.dataIcon} />
-                    <Text style={style.churrasData}>22/07/2020 - 12:00</Text>
+                    <Text style={style.churrasData}>{churras.data} - {churras.hrInicio}</Text>
                 </View>
-                <Text style={style.codigo}>#345098</Text>
+                <Text style={style.codigo}>{churras.churrasCode}</Text>
                 <Image source={qrCode} style={style.qrCode}/>
                 <TouchableOpacity onPress={goBack} style={style.shareBtn}>
                     <Text style={style.shareText}>Compartilhar</Text>

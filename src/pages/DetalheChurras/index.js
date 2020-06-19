@@ -30,8 +30,8 @@ export default function DetalheChurras() {
 
   const navigation = useNavigation();
 
-  function CompartilharChurras() {
-    navigation.replace('CompartilharChurrasco');
+  function CompartilharChurras(churras) {
+    navigation.replace('CompartilharChurrasco', {churras});
   }
 
   function backHome() {
@@ -57,9 +57,8 @@ export default function DetalheChurras() {
         <Container style={style.cabecalho}>
             <IconOct name="chevron-left" size={25} style={style.backBtn} onPress={backHome} />
           <Text style={style.detalheTitle}>{churras.nomeChurras}</Text>
-            <IconEnt name="share" size={25} style={style.shareBtn} onPress={CompartilharChurras}/>            
+            <IconEnt name="share" size={25} style={style.shareBtn} onPress={() => CompartilharChurras(churras)}/>            
         </Container>
-        <Text>{churras.churrasCode}</Text>
       </View>
 
       <ScrollView nestedScrollEnabled={true} style={style.scroll}>
@@ -135,8 +134,8 @@ export default function DetalheChurras() {
                 data={itens}
                 horizontal
                 pagingEnabled={true}
-                style={{height: 200, width: 400}}
-                showsVerticalScrollIndicator={false}
+                style={{height: 200, width: "100%"}}
+                showsHorizontalScrollIndicator={false}
                 keyExtractor={itens => String(itens.id)}
                 renderItem={({ item: itens }) => (
 

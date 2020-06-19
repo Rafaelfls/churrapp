@@ -32,7 +32,7 @@ export default function ResumoChurras() {
     function deletar(churras) {
         Alert.alert(
             `Churras deletado`,
-            churras.nome,
+            churras.nomeChurras,
             [
                 {
                     text: "Beleza"
