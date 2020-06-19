@@ -13,10 +13,9 @@ import style from './styles';
 
 
 export default function CompartilharChurrasco({ route, navigation }) {
-
-
-    const { churrasCode } = route.params;
-    console.log({churrasCode})
+    const rota = useRoute();
+    console.log();
+    const churras = rota.params.churras
 
     function goBack() {
         navigation.goBack()
@@ -44,9 +43,9 @@ export default function CompartilharChurrasco({ route, navigation }) {
                     <Text style={style.churrasData}>{churras.data} - {churras.hrInicio}</Text>
                 </View>
 
-                <Text style={style.codigo}>{churrasCode}</Text>
+                <Text style={style.codigo}>{churras.churrasCode}</Text>
                 <View style={style.qrCode}>
-                    <QRCode content={churrasCode}/>
+                    <QRCode content={churras.churrasCode}/>
                 </View>
 
                 <TouchableOpacity onPress={goBack} style={style.shareBtn}>

@@ -33,8 +33,8 @@ export default function DetalheChurras() {
   const navigation = useNavigation();
 
 
-  function CompartilharChurras(churrasCode) {
-    navigation.push('CompartilharChurrasco',{churrasCode});
+  function CompartilharChurras(churras) {
+    navigation.push('CompartilharChurrasco',{churras});
 
   }
 
@@ -62,7 +62,7 @@ export default function DetalheChurras() {
             <IconOct name="chevron-left" size={25} style={style.backBtn} onPress={backHome} />
           <Text style={style.detalheTitle}>{churras.nomeChurras}</Text>
 
-            <IconEnt name="share" size={25} style={style.shareBtn} onPress={() => CompartilharChurras(churras.churrasCode)}/>            
+            <IconEnt name="share" size={25} style={style.shareBtn} onPress={() => CompartilharChurras(churras)}/>            
 
         </Container>
       </View>
