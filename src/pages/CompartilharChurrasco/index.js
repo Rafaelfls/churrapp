@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, FlatList, TextInput, TouchableOpacity, } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import ActionButton from 'react-native-action-button';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconOct from 'react-native-vector-icons/Octicons';
 import IconEnt from 'react-native-vector-icons/Entypo';
-import api from '../../services/api';
-
-import qrCode from '../../assets/qrCode.jpg';
+import QRCode from 'react-native-qrcode';
 
 import style from './styles';
-import styles from '../DetalheChurras/styles';
 
-export default function CompartilharChurrasco() {
+export default function CompartilharChurrasco({ route, navigation }) {
 
-    const navigation = useNavigation();
+    const { codigoDoChurras } = route.params;
 
     function goBack() {
         navigation.goBack()
@@ -42,7 +38,14 @@ export default function CompartilharChurrasco() {
                     <Text style={style.churrasData}>22/07/2020 - 12:00</Text>
                 </View>
                 <Text style={style.codigo}>#345098</Text>
-                <Image source={qrCode} style={style.qrCode}/>
+                <View>
+                    <QRCode
+                        value={codigoDoChurras}
+                        size={200}
+                        bgColor='maroon'
+                        fgColor='white' />
+                </View>
+                <Image source={qrCode} style={style.qrCode} />
                 <TouchableOpacity onPress={goBack} style={style.shareBtn}>
                     <Text style={style.shareText}>Compartilhar</Text>
                 </TouchableOpacity>
