@@ -4,13 +4,14 @@ import { useNavigation } from '@react-navigation/native';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconOct from 'react-native-vector-icons/Octicons';
 import IconEnt from 'react-native-vector-icons/Entypo';
-import QRCode from 'react-native-qrcode';
+import { QRCode } from 'react-native-custom-qr-codes-expo';
 
 import style from './styles';
 
 export default function CompartilharChurrasco({ route, navigation }) {
 
-    const { codigoDoChurras } = route.params;
+    const { churrasCode } = route.params;
+    console.log({churrasCode})
 
     function goBack() {
         navigation.goBack()
@@ -37,15 +38,10 @@ export default function CompartilharChurrasco({ route, navigation }) {
                     <IconEnt name="calendar" size={22} style={style.dataIcon} />
                     <Text style={style.churrasData}>22/07/2020 - 12:00</Text>
                 </View>
-                <Text style={style.codigo}>#345098</Text>
-                <View>
-                    <QRCode
-                        value={codigoDoChurras}
-                        size={200}
-                        bgColor='maroon'
-                        fgColor='white' />
+                <Text style={style.codigo}>{churrasCode}</Text>
+                <View style={style.qrCode}>
+                    <QRCode content={churrasCode}/>
                 </View>
-                <Image source={qrCode} style={style.qrCode} />
                 <TouchableOpacity onPress={goBack} style={style.shareBtn}>
                     <Text style={style.shareText}>Compartilhar</Text>
                 </TouchableOpacity>
