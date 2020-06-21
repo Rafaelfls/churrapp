@@ -10,17 +10,13 @@ import logoImg from '../../assets/logo.jpg';
 import style from './styles';
 
 export default function OutrosChurras() {
-    var date = new Date()
-    var today = date.getDay() + "/" +date.getMonth() + "/" +date.getFullYear()
+    
 
     const [churrasPassado, setChurrasPassados] = useState([]);
     const [churrasFuturo, setChurrasFuturo] = useState([]);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
-
-    const [dataPassado, setDataPassado] = useState(today);
-    const [dataFuturo, setDataFuturo] = useState(today);
 
 
     const navigation = useNavigation();
@@ -36,7 +32,7 @@ export default function OutrosChurras() {
 
         setLoading(true);
 
-        const response = await api.get(`churraspassados?data=${dataPassado}`, {
+        const response = await api.get(`churraspassados`, {
             params: { page }
         });
 
@@ -57,7 +53,7 @@ export default function OutrosChurras() {
 
         setLoading(true);
 
-        const response = await api.get(`churrasfuturo?data=${dataFuturo}`, {
+        const response = await api.get(`churrasfuturo`, {
             params: { page }
         });
 
@@ -131,7 +127,7 @@ export default function OutrosChurras() {
 
                     <View style={style.churras}>
                         <View style={style.churrasTitleView}>
-                            <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
+                        <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
                         </View>
                         <View style={style.churrasDescricao}>
                             <Image source={logoImg} style={style.churrasFoto} />
