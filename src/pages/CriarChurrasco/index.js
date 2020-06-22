@@ -11,7 +11,7 @@ import style from './styles';
 export default function CriarChurrasco() {
   const [value, onChangeText] = React.useState('Useless Placeholder');
   const loginFranca = "0516f9fb26e6be70";
-  const loginJoao = "99d8830296d7c838";
+  const loginJoao = "dcca00a6fb1c45a8";
   const navigation = useNavigation();
   const [nomeChurras, setNomeChurras] = useState();
   const [local, setlocal] = useState();
@@ -68,6 +68,7 @@ export default function CriarChurrasco() {
       hrFim: hrFim,
       descricao: descricao,
       data: date,
+      foto: image,
     }, config);
 
   }
