@@ -325,7 +325,7 @@ export default function EscolherNovosItens({ route, navigation }) {
                     </View>
                 </Modal>
 
-                <ActionButton offsetX={10} offsetY={90}/>
+                
 
             </SafeAreaView>
         </View>

@@ -18,6 +18,7 @@ export default function ResumoChurras() {
     const route = useRoute();
     const login1 = route.params.loginFranca;
     const login2 = route.params.loginJoao;
+    console.log("LOGIN:" + login2);
     const [churras, setChurras] = useState([]);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
@@ -73,7 +74,7 @@ export default function ResumoChurras() {
         setLoading(true);
 
         const response = await api.get(`/churras/${usuario_id}`, {
-            params: { usuario_id, page }
+            params: { page }
         });
 
         setChurras([...churras, ...response.data]);

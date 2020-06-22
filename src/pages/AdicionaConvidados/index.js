@@ -45,7 +45,7 @@ export default function AdicionaConvidados(){
 
   const [value, onChangeText] = React.useState('');
   const loginFranca = "0516f9fb26e6be70";
-  const loginJoao = "99d8830296d7c838";
+  const loginJoao = "dcca00a6fb1c45a8";
   const navigation = useNavigation();
 
   const inviteStandard = "Ola, Rafael esta te convidadando para o churrasco *Top dos 100*, o valor do churrasco por pessoa ficou 25 reais. Pague pelo app do Churrapp ou para ele pessoalmente."
@@ -65,18 +65,18 @@ export default function AdicionaConvidados(){
     navigation.push('OpenContactList')
   }
   
-    WhatsApp = (invite, phone) =>  {
-      Linking.canOpenURL(`whatsapp://send?text=${invite}`).then(supported => {
-        if (supported) {
-          if(invite === ''){
-            invite = inviteStandard;
-          }
-          return Linking.openURL(`whatsapp://send?text=${invite}&phone=+55${phone}`);
-        }else{
-          return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${phone}&text=${invite}`)
-        }
-      })
-    }
+    // WhatsApp = (invite, phone) =>  {
+    //   Linking.canOpenURL(`whatsapp://send?text=${invite}`).then(supported => {
+    //     if (supported) {
+    //       if(invite === ''){
+    //         invite = inviteStandard;
+    //       }
+    //       return Linking.openURL(`whatsapp://send?text=${invite}&phone=+55${phone}`);
+    //     }else{
+    //       return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${phone}&text=${invite}`)
+    //     }
+    //   })
+    // }
 
     return(
       <View style={style.container}>
