@@ -57,7 +57,6 @@ export default function TodosOsItensAdicionar({ route, navigation }){
     function setVisibility(isVisible, item){
         setIsVisivel(isVisible)
         setItemModal(item)
-
     }
 
     function addItem(isVisible, item , unidadeDrop, qtdNova){

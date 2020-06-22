@@ -34,76 +34,6 @@ import style from './styles';
 
 var pratoPrincipal = [
     {
-        id: '1',
-        item: 'picanha',
-        qtd: 100,
-        unidade: 'kg',
-        tipo: '1'
-    },
-    {
-        id: '2',
-        item: 'coração',
-        qtd: 50,
-        unidade: 'kg',
-        tipo: '3'
-    },
-    {
-        id: '3',
-        item: 'tulipa',
-        qtd: 50,
-        unidade: 'kg',
-        tipo: '3'
-    },
-    {
-        id: '4',
-        item: 'costela',
-        qtd: 100,
-        unidade: 'kg',
-        tipo: '2'
-    },
-    {
-        id: '5',
-        item: 'Arroz',
-        qtd: 0.5,
-        unidade: 'copos',
-        tipo: '6'
-    },
-    {
-        id: '6',
-        item: 'Farofa',
-        qtd: 50,
-        unidade: 'g',
-        tipo: '6'
-    },
-    {
-        id: '7',
-        item: 'Salpicão',
-        qtd: 20,
-        unidade: 'g',
-        tipo: '6'
-    },
-    {
-        id: '8',
-        item: 'Skol',
-        qtd: 20,
-        unidade: 'latas',
-        tipo: '8'
-    },
-    {
-        id: '9',
-        item: 'Brahma',
-        qtd: 20,
-        unidade: 'latas',
-        tipo: '8'
-    },
-    {
-        id: '10',
-        item: 'Absolut',
-        qtd: 20,
-        unidade: 'garrafa',
-        tipo: '8'
-    },
-    {
         id: '11',
         item: 'Coca Cola',
         qtd: 20,
@@ -144,8 +74,8 @@ export default function AdicionarExtras() {
         navigation.push('FinalCriaChurras');
     }
 
-    function escolherPratoPrincipal() {
-        navigation.push('EscolherPratoPrincipal')
+    function escolherPratoPrincipal(tela) {
+        navigation.push('EscolherNovosItens',{tela})
     }
 
     function backHome() {
@@ -209,7 +139,7 @@ export default function AdicionarExtras() {
                             style={style.listStyle} />
                     </View>
 
-                <ActionButton offsetX={10} offsetY={90} onPress={escolherPratoPrincipal} />
+                <ActionButton offsetX={10} offsetY={90} onPress={()=>escolherPratoPrincipal(4)} />
 
                 <View style={style.footer}>
                     <Text style={style.textFooter}>Etapa 6/6</Text>
