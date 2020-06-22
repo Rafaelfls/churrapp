@@ -95,8 +95,8 @@ export default function AdicionarAcompanhamento() {
         navigation.push('AdicionarBebidas');
     }
 
-    function escolherAcompanhamentos() {
-        navigation.push('EscolherPratoPrincipal')
+    function escolherAcompanhamentos(tela) {
+        navigation.push('EscolherNovosItens',{tela})
     }
 
     function backHome() {
@@ -160,7 +160,7 @@ export default function AdicionarAcompanhamento() {
                             style={style.listStyle} />
                     </View>
 
-                <ActionButton offsetX={10} offsetY={90} onPress={escolherAcompanhamentos} />
+                <ActionButton offsetX={10} offsetY={90} onPress={()=>escolherAcompanhamentos(2)} />
 
                 <View style={style.footer}>
                     <Text style={style.textFooter}>Etapa 4/6</Text>

@@ -123,8 +123,8 @@ export default function AdicionarPratoPrincipal() {
         navigation.push('AdicionarAcompanhamento');
     }
 
-    function escolherPratoPrincipal() {
-        navigation.push('EscolherPratoPrincipal')
+    function escolherPratoPrincipal(tela) {
+        navigation.push('EscolherNovosItens',{tela})
     }
 
     function backHome() {
@@ -196,7 +196,7 @@ export default function AdicionarPratoPrincipal() {
                         style={style.listStyle} />
                 </View>
 
-                <ActionButton offsetX={10} offsetY={90} onPress={escolherPratoPrincipal} />
+                <ActionButton offsetX={10} offsetY={90} onPress={() => escolherPratoPrincipal(1)} />
 
                 <View style={style.footer}>
                     <Text style={style.textFooter}>Etapa 3/6</Text>
