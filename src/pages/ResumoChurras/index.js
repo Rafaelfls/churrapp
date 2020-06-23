@@ -43,7 +43,7 @@ export default function ResumoChurras() {
         navigation.replace('Tabs',  {
             screen: 'Meu Churras', 
             params: {login}});
-            
+
         api.delete(`/churras/${churras.id}`, config);       
 
     }
@@ -146,7 +146,7 @@ export default function ResumoChurras() {
             />
 
             <ActionButton style={style.fabBtn} onPress={() => Vibration.vibrate(50)}>
-                <ActionButton.Item title="Criar Churras" style={style.fabBtn} onPress={() => inicioCriarChurras(login2)}>
+                <ActionButton.Item title="Criar Churras" style={style.fabBtn} onPress={() => inicioCriarChurras(login)}>
                     <Icon name="plus" style={style.fabBtnIcon} />
                 </ActionButton.Item>
                 <ActionButton.Item title="Participar do Churras" style={style.fabBtn} onPress={ParticiparChurras}>
