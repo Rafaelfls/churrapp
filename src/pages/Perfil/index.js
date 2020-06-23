@@ -44,6 +44,7 @@ export default function Perfil() {
 
     return (
         <View style={style.container}>
+
             <FlatList
                 data={perfil}
                 style={style.churrasList}

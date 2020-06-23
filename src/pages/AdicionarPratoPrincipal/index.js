@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Flat
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import NumericInput from 'react-native-numeric-input';
+import api from '../../services/api';
+
 
 //Icones imports
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -113,18 +115,30 @@ var pratoPrincipal = [
 
 ]
 
-export default function AdicionarPratoPrincipal() {
+export default function AdicionarPratoPrincipal({ route, navigation }) {
 
-    const navigation = useNavigation();
+    const { convidadosQtd } = route.params;
     const loginFranca = "0516f9fb26e6be70";
     const loginJoao = "bdadea9527f65f1f";
+    const [sugestaoList, setSugestao] = React.useState([])
+
+    async function carregaSugestao() {
+        const response = await api.get('/sugestao');
+
+        setSugestao([...sugestaoList, ...response.data]);
+
+    }
+
+    useEffect(() => {
+        carregaSugestao();
+    }, []);
 
     function next() {
         navigation.push('AdicionarAcompanhamento');
     }
 
     function escolherPratoPrincipal(tela) {
-        navigation.push('EscolherNovosItens',{tela})
+        navigation.push('EscolherNovosItens', { tela })
     }
 
     function backHome() {
@@ -133,6 +147,11 @@ export default function AdicionarPratoPrincipal() {
             params: { loginFranca, loginJoao }
         });
     }
+
+    function updateValue(qtdSugestao){
+        return (qtdSugestao*convidadosQtd)
+    }
+
 
     function onChangeVar(text, varivael) {
         console.log("Var " + varivael + " text " + text)
@@ -157,40 +176,30 @@ export default function AdicionarPratoPrincipal() {
 
                 <View style={style.formGroup}>
                     <FlatList
-                        data={pratoPrincipal}
-                        keyExtractor={pratoPrincipal => String(pratoPrincipal.id)}
+                        data={sugestaoList}
+                        keyExtractor={sugestaoList => String(sugestaoList.id)}
                         showsVerticalScrollIndicator={false}
-                        renderItem={({ item: pratoPrincipal }) => (
+                        renderItem={({ item: sugestaoList }) => (
                             <View>
-                                {pratoPrincipal.tipo <= 5 &&
-                                    <View style={style.componentPicker}>
-                                        {pratoPrincipal.tipo == 1 &&
-                                            <MaterialCommunityIcons style={style.iconTipo} name="cow" size={15} color="black" />
-                                        }
-                                        {pratoPrincipal.tipo == 2 &&
-                                            <Icon style={style.iconTipo} name="piggy-bank" size={15} />
-                                        }
-                                        {pratoPrincipal.tipo == 3 &&
-                                            <Icon style={style.iconTipo} name="feather" size={15} />
-                                        }
-                                        <Text style={style.textLabel}>{pratoPrincipal.item + " (" + pratoPrincipal.unidade + ")"}</Text>
-                                        <View style={style.picker}>
-                                            <NumericInput
-                                                onChange={text => onChangeVar(text, pratoPrincipal.qtd)}
-                                                onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-                                                totalWidth={150}
-                                                totalHeight={30}
-                                                iconSize={15}
-                                                initValue={pratoPrincipal.qtd}
-                                                step={5}
-                                                valueType='real'
-                                                rounded
-                                                textColor='brown'
-                                                iconStyle={{ color: 'brown' }}
-                                                style={style.quantidadeInput} />
-                                        </View>
+                                <View style={style.componentPicker}>                                    
+                                    <Icon style={style.iconTipo} name="feather" size={15} />
+                                    <Text style={style.textLabel}>{sugestaoList.nomeItem + " (" + sugestaoList.unidade + ")"}</Text>
+                                    <View style={style.picker}>
+                                        <NumericInput
+                                            onChange={text => onChangeVar(text, sugestaoList.quantidade)}
+                                            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+                                            totalWidth={150}
+                                            totalHeight={30}
+                                            iconSize={15}
+                                            initValue={updateValue(sugestaoList.quantidade)}
+                                            step={5}
+                                            valueType='real'
+                                            rounded
+                                            textColor='brown'
+                                            iconStyle={{ color: 'brown' }}
+                                            style={style.quantidadeInput} />
                                     </View>
-                                }
+                                </View>
                             </View>
                         )}
                         style={style.listStyle} />

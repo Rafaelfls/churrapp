@@ -66,80 +66,33 @@ var tiposDeExtras = [
     },
 ]
 
-var pratoPrincipal = [
-    {
-        id: '1',
-        item: 'picanha',
-        qtd: 0.5,
-        unidade: 'kg',
-        tipo: '1'
-    },
-    {
-        id: '5',
-        item: 'alcatra',
-        qtd: 0.5,
-        unidade: 'kg',
-        tipo: '1'
-    },
-    {
-        id: '2',
-        item: 'coração',
-        qtd: 50,
-        unidade: 'kg',
-        tipo: '3'
-    },
-    {
-        id: '3',
-        item: 'tulipa',
-        qtd: 50,
-        unidade: 'kg',
-        tipo: '3'
-    },
-    {
-        id: '4',
-        item: 'costela',
-        qtd: 100,
-        unidade: 'kg',
-        tipo: '2'
-    },
-    {
-        id: '6',
-        item: 'Narguile',
-        qtd: 1,
-        unidade: 'unidade',
-        tipo: '12'
-    },
-
-]
-
 export default function EscolherNovosItens({ route, navigation }) {
 
     const [item, setItem] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [unidades, setUnidades] = useState([]);
+    const [tipo, setTipo] = useState([]);
     const { tela } = route.params;
     const [visivel, setIsVisivel] = React.useState(false);
     const [itemModal, setItemModal] = React.useState('');
     const [selectedUnidade, setSelectedUnidade] = useState("Selecione...");
     const [tipomin, setTipoMin] = useState(null)
     const [tipomax, setTipoMax] = useState(null)
+    const [pratoQuantidade, setPratoQuantidade] = useState([{item: null, quantidade: 0, unidade:null}])
+    const [quantidadeModal, setQuantidadeModal] = useState(null)
 
-    async function carregarItem() {
-        if (loading) {
-            return;
-        }
+    async function firstLoad() {
+        const responseItem = await api.get(`/item`);
+        const responseUnidade = await api.get(`/unidade`);
+        const responseTipos = await api.get(`/tipo`);
 
-        setLoading(true);
-
-        const response = await api.get(`/item`);
-
-        setItem([...item, ...response.data]);
-        setLoading(false);
-
+        setUnidades([...unidades, ...responseUnidade.data]);
+        setItem([...item, ...responseItem.data]);
+        setTipo([...tipo, ...responseTipo.data]);
     }
 
     useEffect(() => {
         escolherTipos()
-        carregarItem();
+        firstLoad();
     }, []);
 
     function setVisibility(isVisible, item) {
@@ -167,11 +120,9 @@ export default function EscolherNovosItens({ route, navigation }) {
 
     function addItem(isVisible, item, unidadeDrop, qtdNova) {
         setIsVisivel(isVisible)
-        setItemModal(item)
-    }
-
-    function onChangeVar(text, varivael) {
-        varivael = text;
+        console.log(item, qtdNova, unidadeDrop)
+        setPratoQuantidade({item:item, quantidade:qtdNova, unidade:unidadeDrop})
+        console.log(pratoQuantidade)
     }
 
     function backHome() {
@@ -181,6 +132,10 @@ export default function EscolherNovosItens({ route, navigation }) {
     function nextFiltering(tipo) {
         navigation.push('TodosOsItensAdicionar', { tipo })
     }
+
+    listaUnidades = unidades.map(unity => (
+        <Picker.Item label={unity.unidade} value={unity.id} />
+      ));
 
 
     return (
@@ -211,15 +166,15 @@ export default function EscolherNovosItens({ route, navigation }) {
                 {tela == 1 &&
                     <View style={style.filtro}>
                         <FlatList
-                            data={tiposDeCarnes}
+                            data={tipo}
                             horizontal
-                            keyExtractor={tiposDeCarnes => String(tiposDeCarnes.id)}
+                            keyExtractor={tipo => String(tipo.id)}
                             showsVerticalScrollIndicator={false}
                             showsHorisontalScrollIndicator={false}
-                            renderItem={({ item: tiposDeCarnes }) => (
+                            renderItem={({ item: tipo }) => (
                                 <View style={style.tiposDeCarnes}>
                                     <TouchableOpacity style={style.tiposDeItenscard} >
-                                        <Text style={style.tiposDeItenstextCard}>{tiposDeCarnes.nome}</Text>
+                                        <Text style={style.tiposDeItenstextCard}>{tipo.tipo}</Text>
                                     </TouchableOpacity>
                                 </View>
                             )}
@@ -229,9 +184,9 @@ export default function EscolherNovosItens({ route, navigation }) {
                 {tela == 3 &&
                     <View style={style.filtro}>
                         <FlatList
-                            data={tiposDeBebidas}
+                            data={tipo}
                             horizontal
-                            keyExtractor={tiposDeBebidas => String(tiposDeBebidas.id)}
+                            keyExtractor={tipo => String(tipo.id)}
                             showsVerticalScrollIndicator={false}
                             showsHorisontalScrollIndicator={false}
                             renderItem={({ item: tiposDeBebidas }) => (
@@ -264,16 +219,15 @@ export default function EscolherNovosItens({ route, navigation }) {
                 }
 
                 <FlatList
-                    data={pratoPrincipal}
-                    keyExtractor={pratoPrincipal => String(pratoPrincipal.id)}
+                    data={item}
+                    keyExtractor={item => String(item.id)}
                     showsVerticalScrollIndicator={false}
-                    renderItem={({ item: pratoPrincipal }) => (
+                    renderItem={({ item: item }) => (
                         <View style={style.listaConvidados}>
-                            {pratoPrincipal.tipo <= tipomax && pratoPrincipal.tipo >= tipomin &&
-                                <TouchableOpacity style={style.card} onPress={() => setVisibility(true, pratoPrincipal.item)}>
-                                    <Text style={style.textCard}>{pratoPrincipal.item}</Text>
+                                <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem)}>
+                                    <Text style={style.textCard}>{item.nomeItem}</Text>
                                 </TouchableOpacity>
-                            }
+                            
                         </View>
                     )}
                     style={style.listStyle} />
@@ -291,12 +245,12 @@ export default function EscolherNovosItens({ route, navigation }) {
                             <Text style={style.modalText}>Quanto de {itemModal} deseja adicionar?</Text>
                             <View style={style.selectionForm}>
                                 <NumericInput
-                                    onChange={text => onChangeVar(text, pratoPrincipal.qtd)}
+                                    onChange={quantNova => setQuantidadeModal(quantNova)}
                                     onLimitReached={(isMax, msg) => console.log(isMax, msg)}
                                     totalWidth={150}
                                     totalHeight={30}
                                     iconSize={15}
-                                    initValue={pratoPrincipal.qtd}
+                                    initValue={0}
                                     step={5}
                                     valueType='real'
                                     rounded
@@ -308,16 +262,12 @@ export default function EscolherNovosItens({ route, navigation }) {
                                     style={style.boxDropdown}
                                     itemStyle={style.itemDropdown}
                                     mode="dropdown"
-                                    onValueChange={(itemValue, itemIndex) => setSelectedUnidade(itemValue)}
+                                    onValueChange={itemValue => setSelectedUnidade(itemValue)}
                                 >
-                                    <Picker.Item label="g" value="g" />
-                                    <Picker.Item label="kg" value="kg" />
-                                    <Picker.Item label="unidade" value="unidade" />
-                                    <Picker.Item label="pedaço" value="pedaço" />
-                                    <Picker.Item label="fatia" value="fatia" />
+                                    {listaUnidades}
                                 </Picker>
                             </View>
-                            <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, "", selectedUnidade, /* adicionar variavel que guarde a quantidade */)}>
+                            <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, itemModal, selectedUnidade ,quantidadeModal )}>
                                 <Icon style={style.iconSalvarBtn} name="check" size={20} />
                                 <Text style={style.textSalvarBtn}>Confirmar</Text>
                             </TouchableOpacity>
@@ -325,7 +275,6 @@ export default function EscolherNovosItens({ route, navigation }) {
                     </View>
                 </Modal>
 
-                <ActionButton offsetX={10} offsetY={90}/>
 
             </SafeAreaView>
         </View>
