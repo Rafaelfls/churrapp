@@ -67,8 +67,7 @@ var pratoPrincipal = [
 export default function AdicionarExtras() {
 
     const navigation = useNavigation();
-    const loginFranca = "0516f9fb26e6be70";
-    const loginJoao = "bdadea9527f65f1f";
+    const login = "dcca00a6fb1c45a8";
 
     function next() {
         navigation.push('FinalCriaChurras');
@@ -81,7 +80,7 @@ export default function AdicionarExtras() {
     function backHome() {
         navigation.replace('Tabs', {
             screen: 'Meu Churras',
-            params: { loginFranca, loginJoao }
+            params: { login }
         });
     }
 
@@ -100,7 +99,7 @@ export default function AdicionarExtras() {
                         <Text style={style.textHeader}>Vamos escolher </Text>
                         <Text style={style.textHeader}>outros itens?</Text>
                     </View>
-                    <TouchableOpacity style={style.exitBtn} onPress={() => backHome(loginJoao)}>
+                    <TouchableOpacity style={style.exitBtn} onPress={() => backHome(login)}>
                         <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
                         <Text style={style.textHeaderBtn}>Sair</Text>
                     </TouchableOpacity>

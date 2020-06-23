@@ -43,9 +43,9 @@ export default function CompartilharChurrasco({ route, navigation }) {
                     <Text style={style.churrasData}>{churras.data} - {churras.hrInicio}</Text>
                 </View>
 
-                <Text style={style.codigo}>{churras.churrasCode}</Text>
+                <Text style={style.codigo}>#{churras.id}</Text>
                 <View style={style.qrCode}>
-                    <QRCode content={churras.churrasCode}/>
+                    <QRCode content={churras.id}/>
                 </View>
 
                 <TouchableOpacity onPress={goBack} style={style.shareBtn}>

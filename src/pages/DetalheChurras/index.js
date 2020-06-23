@@ -23,10 +23,12 @@ export default function DetalheChurras() {
   const route = useRoute();
   const login = route.params.login;
   const [itens, setItens] = useState([]);
+  const [itensTotal, setItensTotal] = useState(0);
 
   const churras = route.params.churras;
   const [modalVisivel, setModalVisivel] = useState(false);
   const [churrasCode , setChurrasCode] = useState(churras.id);
+  
 
   console.log(churrasCode)
   const navigation = useNavigation();
@@ -47,6 +49,7 @@ export default function DetalheChurras() {
     const response = await api.get(`/listadochurras/${churras.id}`);
 
     setItens([...itens, ...response.data]);
+    setItensTotal(itens.length);
   }
 
   useEffect(() => {
@@ -128,7 +131,7 @@ export default function DetalheChurras() {
 
         <View style={style.cabecalhoItens}>
           <View style={style.containerTituloItens}>
-            <Text style={style.tituloItens}>Itens</Text>
+          <Text style={style.tituloItens}>Itens {itensTotal}</Text>
           </View>
           <TouchableOpacity onPress={() => setModalVisivel(true)}>
             <Text style={style.verTodos}>ver todos</Text>
