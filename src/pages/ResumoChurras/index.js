@@ -16,7 +16,6 @@ import style from './styles';
 
 export default function ResumoChurras() {
     const route = useRoute();
-    const login1 = route.params.loginFranca;
     const login = route.params.login;
     const [churras, setChurras] = useState([]);
     const [total, setTotal] = useState(0);

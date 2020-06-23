@@ -15,14 +15,13 @@ import logo from '../../assets/logo.jpg'
 export default function Calculadora(){
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
-  const loginFranca = "88ae629399a72419";
   const login = "dcca00a6fb1c45a8";
   const [usuarios, setUsuarios] = useState([]);
 
   function navigateToResumo() {
     navigation.replace('Tabs', {
       screen: 'Meu Churras', 
-      params: {loginFranca}});
+      params: {login}});
   }
   function navegarParaResumo() {
     navigation.replace('Tabs', {
@@ -60,7 +59,7 @@ export default function Calculadora(){
           {listadeUsuario}
             
         </Picker>
-            <TouchableOpacity style = {style.fbBtn} onPress={() => navigateToResumo(loginFranca)}>
+            <TouchableOpacity style = {style.fbBtn} onPress={navigateToResumo}>
               <Icon             name  = "facebook" size = {35}/>
               <Text style={style.textBtn}>Facebook</Text>
             </TouchableOpacity>

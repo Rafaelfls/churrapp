@@ -40,7 +40,7 @@ export default function CriarChurrasco() {
   function backHome(){
     navigation.replace('Tabs', {
       screen: 'Meu Churras', 
-      params: {loginFranca, loginJoao}});
+      params: {login}});
   }
 
   const pickImage = async () => {
