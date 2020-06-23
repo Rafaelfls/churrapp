@@ -35,9 +35,6 @@ export default StyleSheet.create({
   signOutIcon:{
     color: 'gray',
   },
-  slideBtn:{
-    flexDirection:'row',
-  },
 
   //cards
   churrasList: {
@@ -51,6 +48,9 @@ export default StyleSheet.create({
     backgroundColor: 'white',
     marginBottom: 15,
     marginLeft: 0,
+  },
+  slideBtn:{
+    flexDirection:'row',
   },
 
   //cardContent
