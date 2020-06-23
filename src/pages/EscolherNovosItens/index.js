@@ -87,7 +87,7 @@ export default function EscolherNovosItens({ route, navigation }) {
 
         setUnidades([...unidades, ...responseUnidade.data]);
         setItem([...item, ...responseItem.data]);
-        setTipo([...tipo, ...responseTipo.data]);
+        setTipo([...tipo, ...responseTipos.data]);
     }
 
     useEffect(() => {
