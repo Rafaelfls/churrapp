@@ -52,7 +52,9 @@ export default function AdicionaConvidados(){
   const phone = "12996281340";
 
   function next() {
-      navigation.navigate('AdicionarPratoPrincipal');
+      const convidadosQtd = convidadosList.length
+      console.log(convidadosQtd);
+      navigation.navigate('AdicionarPratoPrincipal',{convidadosQtd});
     }
     
   function backHome(){
