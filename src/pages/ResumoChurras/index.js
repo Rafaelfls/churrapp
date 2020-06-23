@@ -40,6 +40,10 @@ export default function ResumoChurras() {
             ]
         );
         Vibration.vibrate(60);
+        navigation.replace('Tabs',  {
+            screen: 'Meu Churras', 
+            params: {login}});
+            
         api.delete(`/churras/${churras.id}`, config);       
 
     }
@@ -77,10 +81,9 @@ export default function ResumoChurras() {
         });
 
         setChurras([...churras, ...response.data]);
-        setTotal(response.headers['total-meu']);
+        setTotal(churras.length);
         setPage(page + 1);
         setLoading(false);
-
     }
 
     useEffect(() => {
