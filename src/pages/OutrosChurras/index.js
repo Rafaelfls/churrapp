@@ -4,14 +4,17 @@ import { ScrollableTabView, DefaultTabBar, ScrollableTabBar, } from '@valdio/rea
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconEnt from 'react-native-vector-icons/Entypo';
+import IconFea from 'react-native-vector-icons/Feather';
+import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
 
-import logoImg from '../../assets/logo.jpg';
+import churrasPhoto from '../../assets/fundoDescricao.jpg';
 
 import style from './styles';
 
 export default function OutrosChurras() {
     
-
     const [churrasPassado, setChurrasPassados] = useState([]);
     const [churrasFuturo, setChurrasFuturo] = useState([]);
     const [total, setTotal] = useState(0);
@@ -73,12 +76,20 @@ export default function OutrosChurras() {
     }
 
     return (
+        <View style={style.container}>
+
+            <View style={style.header}>
+                <View style={style.titulo}>
+                    <Text style={style.textHeader}>Outros churras</Text>
+                </View>
+            </View>
+
         <ScrollableTabView
-            style={style.container}
-            tabBarPosition="top" tabBarActiveTextColor="orange" tabBarInactiveTextColor="dimgray"
-            tabBarTextStyle={{ fontWeight: 'bold', fontSize: 16 }}
+            style={style.tabView}
+            tabBarPosition="top" tabBarActiveTextColor="maroon" tabBarInactiveTextColor="dimgray"
+            tabBarTextStyle={{ fontWeight: 'normal', fontFamily: 'poppins-semi-bold', fontSize: 15 }}
             tabBarBackgroundColor='white'
-            tabBarUnderlineStyle={{backgroundColor:'orange', height:2, }}
+            tabBarUnderlineStyle={{backgroundColor:'maroon', height:2, }}
             renderTabBar={() => <DefaultTabBar />}
             ref={(tabView) => { tabView = tabView; }}
             initialPage={1}
@@ -94,24 +105,34 @@ export default function OutrosChurras() {
                 onEndReachedThreshold={0.2}
                 renderItem={({ item: churras }) => (
 
-                    <View style={style.churras}>
-                        <View style={style.churrasTitleView}>
-                            <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
-                        </View>
-                        <View style={style.churrasDescricao}>
-                            <Image source={logoImg} style={style.churrasFoto} />
-                            <View style={style.churrasInfosView}>
-                                <Text style={style.churrasLocal}>{churras.local}</Text>
-                                <Text style={style.churrasData}>{churras.data} - {churras.hrFim} às {churras.hrFim}</Text>
-                                <Text style={style.churrasDono}>{churras.nome} </Text>
+                    <View>
+                    <TouchableOpacity onPress={() => detalheChurras(churras, login)}>
+                        <View style={style.churras}>
+                            <View style={style.churrasDescricao}>
+                                <RNSlidingButton
+                                    style={{ backgroundColor: 'white', width: "100%" }}
+                                    height={90}
+                                    onSlidingSuccess={() => deletar(churras)}
+                                    slideDirection={SlideDirection.LEFT}>
+                                    <View style={style.slideBtn}>
+                                        <Image source={churrasPhoto} style={style.churrasFoto} />
+                                        <View style={style.churrasInfosView}>
+                                            <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
+                                            <Text style={style.churrasDono}>{churras.nome} </Text>
+                                            <View style={style.churrasLocDat}>
+                                                <IconEnt style={style.localIcon} name="location-pin" size={15} />
+                                                <Text style={style.churrasLocal}> {churras.local}</Text>
+                                                <Text style={style.locDatSeparator}>  |  </Text>
+                                                <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                                <Text style={style.churrasData}> {churras.data}</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </RNSlidingButton>
                             </View>
                         </View>
-                        <View style={style.verMaisView}>
-                            <TouchableOpacity onPress={() => detalheChurras(churras)}>
-                                <Text style={style.verMais} >ver mais</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+                    </TouchableOpacity>
+                </View>
 
                 )}
             />
@@ -125,27 +146,40 @@ export default function OutrosChurras() {
                 onEndReachedThreshold={0.2}
                 renderItem={({ item: churras }) => (
 
-                    <View style={style.churras}>
-                        <View style={style.churrasTitleView}>
-                        <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
-                        </View>
-                        <View style={style.churrasDescricao}>
-                            <Image source={logoImg} style={style.churrasFoto} />
-                            <View style={style.churrasInfosView}>
-                                <Text style={style.churrasLocal}>{churras.local}</Text>
-                                <Text style={style.churrasData}>{churras.data} - {churras.hrFim} às {churras.hrFim}</Text>
-                                <Text style={style.churrasDono}>{churras.nome} </Text>
+                    <View>
+                    <TouchableOpacity onPress={() => detalheChurras(churras, login)}>
+                        <View style={style.churras}>
+                            <View style={style.churrasDescricao}>
+                                <RNSlidingButton
+                                    style={{ backgroundColor: 'white', width: "100%" }}
+                                    height={90}
+                                    onSlidingSuccess={() => deletar(churras)}
+                                    slideDirection={SlideDirection.LEFT}>
+                                    <View style={style.slideBtn}>
+                                        <Image source={churrasPhoto} style={style.churrasFoto} />
+                                        <View style={style.churrasInfosView}>
+                                            <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
+                                            <Text style={style.churrasDono}>{churras.nome} </Text>
+                                            <View style={style.churrasLocDat}>
+                                                <IconEnt style={style.localIcon} name="location-pin" size={15} />
+                                                <Text style={style.churrasLocal}> {churras.local}</Text>
+                                                <Text style={style.locDatSeparator}>  |  </Text>
+                                                <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                                <Text style={style.churrasData}> {churras.data}</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </RNSlidingButton>
                             </View>
                         </View>
-                        <View style={style.verMaisView}>
-                            <TouchableOpacity onPress={() => detalheChurras(churras)}>
-                                <Text style={style.verMais} >ver mais</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+                    </TouchableOpacity>
+                </View>
 
                 )}
             />
         </ScrollableTabView>
+
+        </View>
+
     )
 }
