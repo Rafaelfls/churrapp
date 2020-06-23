@@ -17,15 +17,14 @@ import style from './styles';
 export default function ResumoChurras() {
     const route = useRoute();
     const login1 = route.params.loginFranca;
-    const login2 = route.params.loginJoao;
-    console.log("LOGIN:" + login2);
+    const login = route.params.login;
     const [churras, setChurras] = useState([]);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
-    const [usuario_id, setUsuarioId] = useState(login2);
+    const [usuario_id, setUsuarioId] = useState(login);
     const config = {
-        headers: { 'Authorization': login2 }
+        headers: { 'Authorization': login }
     };
 
     const navigation = useNavigation();
@@ -49,16 +48,16 @@ export default function ResumoChurras() {
         navigation.replace('Login');
     }
 
-    function inicioCriarChurras() {
-        navigation.replace('InicioCriaChurras');
+    function inicioCriarChurras(login) {
+        navigation.replace('InicioCriaChurras', {login});
     }
 
     function ParticiparChurras() {
         navigation.replace('ParticiparChurrasco');
     }
 
-    function detalheChurras(churras) {
-        navigation.navigate('DetalheChurras', { churras });
+    function detalheChurras(churras, login) {
+        navigation.navigate('DetalheChurras', { churras, login});
     }
 
 
@@ -113,7 +112,7 @@ export default function ResumoChurras() {
                 onEndReachedThreshold={0.2}
                 renderItem={({ item: churras }) => (
                     <View>
-                        <TouchableOpacity onPress={() => detalheChurras(churras)}>
+                        <TouchableOpacity onPress={() => detalheChurras(churras, login)}>
                             <View style={style.churras}>
                                 <View style={style.churrasDescricao}>
                                     <RNSlidingButton
@@ -144,7 +143,7 @@ export default function ResumoChurras() {
             />
 
             <ActionButton style={style.fabBtn} onPress={() => Vibration.vibrate(50)}>
-                <ActionButton.Item title="Criar Churras" style={style.fabBtn} onPress={inicioCriarChurras}>
+                <ActionButton.Item title="Criar Churras" style={style.fabBtn} onPress={() => inicioCriarChurras(login2)}>
                     <Icon name="plus" style={style.fabBtnIcon} />
                 </ActionButton.Item>
                 <ActionButton.Item title="Participar do Churras" style={style.fabBtn} onPress={ParticiparChurras}>
