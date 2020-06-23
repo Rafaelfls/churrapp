@@ -122,8 +122,7 @@ export default StyleSheet.create({
       color:'gold',
       paddingHorizontal: 5,
     },
-    filto:{
-      marginVertical: 100,
-      backgroundColor: 'black'
+    filtro:{
+      marginBottom:25
     }
 })

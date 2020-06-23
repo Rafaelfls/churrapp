@@ -75,10 +75,10 @@ export default function EscolherNovosItens({ route, navigation }) {
     const [visivel, setIsVisivel] = React.useState(false);
     const [itemModal, setItemModal] = React.useState('');
     const [selectedUnidade, setSelectedUnidade] = useState("Selecione...");
-    const [tipomin, setTipoMin] = useState(null)
-    const [tipomax, setTipoMax] = useState(null)
-    const [pratoQuantidade, setPratoQuantidade] = useState([{item: null, quantidade: 0, unidade:null}])
     const [quantidadeModal, setQuantidadeModal] = useState(null)
+    const [unidadeModal, setUnidadeModal] = useState(null)
+    const [idItem, setIdItem] = useState(null)
+    const [filtro, setFiltro] = useState(1)
 
     async function firstLoad() {
         const responseItem = await api.get(`/item`);
@@ -87,55 +87,40 @@ export default function EscolherNovosItens({ route, navigation }) {
 
         setUnidades([...unidades, ...responseUnidade.data]);
         setItem([...item, ...responseItem.data]);
-        setTipo([...tipo, ...responseTipo.data]);
+        setTipo([...tipo, ...responseTipos.data]);
     }
 
     useEffect(() => {
-        escolherTipos()
         firstLoad();
     }, []);
 
-    function setVisibility(isVisible, item) {
+    function setVisibility(isVisible, item, unidade, id) {
         setIsVisivel(isVisible)
         setItemModal(item)
-    }
-
-    function escolherTipos() {
-        if (tela == 1) {
-            setTipoMin(1)
-            setTipoMax(5)
-        }
-        if (tela == 2) {
-            setTipoMin(6)
-        }
-        if (tela == 3) {
-            setTipoMin(7)
-            setTipoMax(8)
-        }
-        if (tela == 4) {
-            setTipoMin(9)
-            setTipoMax(13)
-        }
+        setQuantidadeModal(unidade)
+        setIdItem(id)
     }
 
     function addItem(isVisible, item, unidadeDrop, qtdNova) {
         setIsVisivel(isVisible)
-        console.log(item, qtdNova, unidadeDrop)
-        setPratoQuantidade({item:item, quantidade:qtdNova, unidade:unidadeDrop})
-        console.log(pratoQuantidade)
+        console.log(item, unidadeDrop, qtdNova)
     }
 
     function backHome() {
         navigation.goBack()
     }
 
-    function nextFiltering(tipo) {
-        navigation.push('TodosOsItensAdicionar', { tipo })
+    function setFiltroTipo(idFiltro) {
+        if (filtro == idFiltro) {
+            setFiltro(null)
+        } else {
+            setFiltro(idFiltro)
+        }
     }
 
     listaUnidades = unidades.map(unity => (
         <Picker.Item label={unity.unidade} value={unity.id} />
-      ));
+    ));
 
 
     return (
@@ -163,60 +148,33 @@ export default function EscolherNovosItens({ route, navigation }) {
                     </TouchableOpacity>
                 </View>
 
-                {tela == 1 &&
-                    <View style={style.filtro}>
-                        <FlatList
-                            data={tipo}
-                            horizontal
-                            keyExtractor={tipo => String(tipo.id)}
-                            showsVerticalScrollIndicator={false}
-                            showsHorisontalScrollIndicator={false}
-                            renderItem={({ item: tipo }) => (
-                                <View style={style.tiposDeCarnes}>
-                                    <TouchableOpacity style={style.tiposDeItenscard} >
-                                        <Text style={style.tiposDeItenstextCard}>{tipo.tipo}</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            )}
-                            style={style.listStyle} />
-                    </View>
-                }
-                {tela == 3 &&
-                    <View style={style.filtro}>
-                        <FlatList
-                            data={tipo}
-                            horizontal
-                            keyExtractor={tipo => String(tipo.id)}
-                            showsVerticalScrollIndicator={false}
-                            showsHorisontalScrollIndicator={false}
-                            renderItem={({ item: tiposDeBebidas }) => (
-                                <View style={style.tiposDeBebidas}>
-                                    <TouchableOpacity style={style.tiposDeItenscard} >
-                                        <Text style={style.tiposDeItenstextCard}>{tiposDeBebidas.nome}</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            )}
-                            style={style.listStyle} />
-                    </View>
-                }
-                {tela == 4 &&
-                    <View style={style.filtro}>
-                        <FlatList
-                            data={tiposDeExtras}
-                            horizontal
-                            keyExtractor={tiposDeExtras => String(tiposDeExtras.id)}
-                            showsVerticalScrollIndicator={false}
-                            showsHorisontalScrollIndicator={false}
-                            renderItem={({ item: tiposDeExtras }) => (
-                                <View style={style.tiposDeExtras}>
-                                    <TouchableOpacity style={style.tiposDeItenscard} >
-                                        <Text style={style.tiposDeItenstextCard}>{tiposDeExtras.nome}</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            )}
-                            style={style.listStyle} />
-                    </View>
-                }
+                <FlatList
+                    data={tipo}
+                    horizontal
+                    keyExtractor={tipo => String(tipo.id)}
+                    showsVerticalScrollIndicator={false}
+                    showsHorisontalScrollIndicator={false}
+                    renderItem={({ item: tipo }) => (
+                        <View style={style.filtro}>
+                            {tela == 1 && tipo.id >= 1 && tipo.id <= 5 ? (
+                                <TouchableOpacity style={style.tiposDeItenscard} onPress={() => setFiltroTipo(tipo.id)}>
+                                    <Text style={style.tiposDeItenstextCard}>{tipo.tipo}</Text>
+                                </TouchableOpacity>
+                            ) : null}
+                            {tela == 3 && tipo.id >= 7 && tipo.id <= 8 ? (
+                                <TouchableOpacity style={style.tiposDeItenscard} onPress={() => setFiltroTipo(tipo.id)}>
+                                    <Text style={style.tiposDeItenstextCard}>{tipo.tipo}</Text>
+                                </TouchableOpacity>
+                            ) : null}
+                            {tela == 4 && tipo.id >= 9 && tipo.id <= 13 ? (
+                                <TouchableOpacity style={style.tiposDeItenscard} onPress={() => setFiltroTipo(tipo.id)}>
+                                    <Text style={style.tiposDeItenstextCard}>{tipo.tipo}</Text>
+                                </TouchableOpacity>
+                            ) : null}
+                        </View>
+                    )}
+                />
+
 
                 <FlatList
                     data={item}
@@ -224,10 +182,58 @@ export default function EscolherNovosItens({ route, navigation }) {
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item: item }) => (
                         <View style={style.listaConvidados}>
-                                <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem)}>
-                                    <Text style={style.textCard}>{item.nomeItem}</Text>
-                                </TouchableOpacity>
-                            
+                            {tela == 1 ? (
+                                <View>
+                                    {filtro == null && item.tipo_id >= 1 ? (
+                                        <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
+                                            <Text style={style.textCard}>{item.nomeItem}</Text>
+                                        </TouchableOpacity>
+                                    ) : filtro == item.tipo_id ? (
+                                        <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
+                                            <Text style={style.textCard}>{item.nomeItem}</Text>
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </View>
+                            ) : null
+                            }
+                            {tela == 2 ? (
+                                <View>
+                                    {item.tipo_id == 6 ? (
+                                        <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
+                                            <Text style={style.textCard}>{item.nomeItem}</Text>
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </View>
+                            ) : null
+                            }
+                            {tela == 3 ? (
+                                <View>
+                                    {filtro == null && item.tipo_id >= 7 && item.tipo_id <= 8 ? (
+                                        <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.unidade_id, item.id)}>
+                                            <Text style={style.textCard}>{item.nomeItem}</Text>
+                                        </TouchableOpacity>
+                                    ) : filtro == item.tipo_id ? (
+                                        <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
+                                            <Text style={style.textCard}>{item.nomeItem}</Text>
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </View>
+                            ) : null
+                            }
+                            {tela == 4 ? (
+                                <View>
+                                    {filtro == null && item.tipo_id >= 9 && item.tipo_id <= 13 ? (
+                                        <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
+                                            <Text style={style.textCard}>{item.nomeItem}</Text>
+                                        </TouchableOpacity>
+                                    ) : filtro == item.tipo_id ? (
+                                        <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
+                                            <Text style={style.textCard}>{item.nomeItem}</Text>
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </View>
+                            ) : null
+                            }
                         </View>
                     )}
                     style={style.listStyle} />
@@ -238,7 +244,7 @@ export default function EscolherNovosItens({ route, navigation }) {
                 >
                     <View style={style.centeredView}>
                         <View style={style.modalView}>
-                            <TouchableOpacity style={style.exitBtn} onPress={() => setVisibility(false, "")}>
+                            <TouchableOpacity style={style.exitBtn} onPress={() => setVisibility(false, "", '', '')}>
                                 <Icon style={style.iconHeaderBtn} name="times" size={20} />
                                 <Text style={style.textHeaderBtn}>fechar</Text>
                             </TouchableOpacity>
@@ -267,13 +273,14 @@ export default function EscolherNovosItens({ route, navigation }) {
                                     {listaUnidades}
                                 </Picker>
                             </View>
-                            <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, itemModal, selectedUnidade ,quantidadeModal )}>
+                            <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal)}>
                                 <Icon style={style.iconSalvarBtn} name="check" size={20} />
                                 <Text style={style.textSalvarBtn}>Confirmar</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
+
 
             </SafeAreaView>
         </View>
