@@ -22,7 +22,7 @@ export default function Perfil() {
     const route = useRoute();
     const [loading, setLoading] = useState(false);
     const [perfil, setPerfil] = useState([]);
-    const [id, setId] = useState('99d8830296d7c838');
+    const [id, setId] = useState('dcca00a6fb1c45a8');
 
     async function loadPerfil() {
         if (loading) {
@@ -31,7 +31,7 @@ export default function Perfil() {
 
         setLoading(true);
 
-        const response = await api.get(`/usuarios?id=${id}`);
+        const response = await api.get(`/usuarios/${id}`);
 
         setPerfil([...perfil, ...response.data]);
         setLoading(false);

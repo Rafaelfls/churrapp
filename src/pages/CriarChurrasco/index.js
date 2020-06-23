@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../services/api';
 import DatePicker from 'react-native-datepicker';
 import * as ImagePicker from 'expo-image-picker';
@@ -9,9 +9,9 @@ import * as ImagePicker from 'expo-image-picker';
 import style from './styles';
 
 export default function CriarChurrasco() {
+  const route = useRoute();
   const [value, onChangeText] = React.useState('Useless Placeholder');
-  const loginFranca = "0516f9fb26e6be70";
-  const loginJoao = "dcca00a6fb1c45a8";
+  const login = route.params.login;
   const navigation = useNavigation();
   const [nomeChurras, setNomeChurras] = useState();
   const [local, setlocal] = useState();
@@ -22,7 +22,7 @@ export default function CriarChurrasco() {
   const [image, setImage] = useState(null);
 
   const config= {
-    headers: {'Authorization': loginJoao}
+    headers: {'Authorization': login}
   };
 
   function next() {
