@@ -21,13 +21,12 @@ import { Container } from 'native-base';
 
 export default function DetalheChurras() {
   const route = useRoute();
-  const loginFranca = "0516f9fb26e6be70";
-  const loginJoao = "99d8830296d7c838";
+  const login = route.params.login;
   const [itens, setItens] = useState([]);
 
   const churras = route.params.churras;
   const [modalVisivel, setModalVisivel] = useState(false);
-  const [churrasCode , setChurrasCode] = useState(churras.churrasCode)
+  const [churrasCode , setChurrasCode] = useState(churras.id);
 
   console.log(churrasCode)
   const navigation = useNavigation();
@@ -41,11 +40,11 @@ export default function DetalheChurras() {
   function backHome() {
     navigation.replace('Tabs',  {
       screen: 'Meu Churras', 
-      params: {loginFranca, loginJoao}});
+      params: {login}});
   }
   
   async function carregarItens() {
-    const response = await api.get(`/itemdochurras?churras_code=${churras.churrasCode}`);
+    const response = await api.get(`/listadochurras/${churras.id}`);
 
     setItens([...itens, ...response.data]);
   }
@@ -59,7 +58,7 @@ export default function DetalheChurras() {
       <View style={style.containerImg}>
         <Image source={backgroundImg} style={style.backgroundImg} />
         <Container style={style.cabecalho}>
-            <IconOct name="chevron-left" size={25} style={style.backBtn} onPress={backHome} />
+            <IconOct name="chevron-left" size={25} style={style.backBtn} onPress={() => backHome(login)} />
           <Text style={style.detalheTitle}>{churras.nomeChurras}</Text>
 
             <IconEnt name="share" size={25} style={style.shareBtn} onPress={() => CompartilharChurras(churras)}/>            

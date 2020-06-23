@@ -275,7 +275,6 @@ export default function EscolherNovosItens({ route, navigation }) {
                     </View>
                 </Modal>
 
-
             </SafeAreaView>
         </View>
     )
