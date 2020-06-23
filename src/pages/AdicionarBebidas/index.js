@@ -10,121 +10,30 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import style from './styles';
 
-
-// Prato principal
-// 1 -> Vaca
-// 2 -> Porco
-// 3 -> Frango
-// 4 -> Peixe
-// 5 -> Exótico
-
-// Acompanhamentos
-// 6 -> Acompanhamentos
-
-// Bebidas
-// 7 -> Bebidas
-// 8 -> Bebidas Alcoólicas
-
-// Extras
-// 9 -> Descartáveis
-// 10 -> Utensílios
-// 11 -> Utensílios Consumíveis
-// 12 -> Diversão
-// 13 -> Temperos
-
-var pratoPrincipal = [
-    {
-        id: '1',
-        item: 'picanha',
-        qtd: 100,
-        unidade: 'kg',
-        tipo: '1'
-    },
-    {
-        id: '2',
-        item: 'coração',
-        qtd: 50,
-        unidade: 'kg',
-        tipo: '3'
-    },
-    {
-        id: '3',
-        item: 'tulipa',
-        qtd: 50,
-        unidade: 'kg',
-        tipo: '3'
-    },
-    {
-        id: '4',
-        item: 'costela',
-        qtd: 100,
-        unidade: 'kg',
-        tipo: '2'
-    },
-    {
-        id: '5',
-        item: 'Arroz',
-        qtd: 0.5,
-        unidade: 'copos',
-        tipo: '6'
-    },
-    {
-        id: '6',
-        item: 'Farofa',
-        qtd: 50,
-        unidade: 'g',
-        tipo: '6'
-    },
-    {
-        id: '7',
-        item: 'Salpicão',
-        qtd: 20,
-        unidade: 'g',
-        tipo: '6'
-    },
-    {
-        id: '8',
-        item: 'Skol',
-        qtd: 20,
-        unidade: 'latas',
-        tipo: '8'
-    },
-    {
-        id: '9',
-        item: 'Brahma',
-        qtd: 20,
-        unidade: 'latas',
-        tipo: '8'
-    },
-    {
-        id: '10',
-        item: 'Absolut',
-        qtd: 20,
-        unidade: 'garrafa',
-        tipo: '8'
-    },
-    {
-        id: '11',
-        item: 'Coca Cola',
-        qtd: 20,
-        unidade: 'garrafa',
-        tipo: '7'
-    },
-
-]
-
 export default function AdicionarBebidas() {
 
     const navigation = useNavigation();
     const loginFranca = "0516f9fb26e6be70";
     const loginJoao = "bdadea9527f65f1f";
+    const [sugestaoList, setSugestao] = React.useState([])
+
+    async function carregaSugestao() {
+        const response = await api.get('/sugestao');
+
+        setSugestao([...sugestaoList, ...response.data]);
+
+    }
+
+    useEffect(() => {
+        carregaSugestao();
+    }, []);
 
     function next() {
         navigation.push('AdicionarExtras');
     }
 
     function escolherPratoPrincipal(tela) {
-        navigation.push('EscolherNovosItens',{tela})
+        navigation.push('EscolherNovosItens3', { tela })
     }
 
     function backHome() {
@@ -155,43 +64,38 @@ export default function AdicionarBebidas() {
                     </TouchableOpacity>
                 </View>
 
-                    <View style={style.formGroup}>
-                        <FlatList
-                            data={pratoPrincipal}
-                            keyExtractor={pratoPrincipal => String(pratoPrincipal.id)}
-                            showsVerticalScrollIndicator={false}
-                            renderItem={({ item: pratoPrincipal }) => (
-                                <View>
-                                    {(pratoPrincipal.tipo <= 8  && pratoPrincipal.tipo >= 7 )  &&
-                                        <View style={style.componentPicker}>
-                                            {pratoPrincipal.tipo == 8 &&
-                                                <MaterialCommunityIcons style={style.iconTipo} name="glass-mug"/>
-                                            }
-                                            {pratoPrincipal.tipo == 7 &&
-                                                <MaterialCommunityIcons style={style.iconTipo} name="glass-stange" />
-                                            }
-                                            <Text style={style.textLabel}>{pratoPrincipal.item + " (" + pratoPrincipal.unidade + ")"}</Text>
-                                            <View style={style.picker}>
-                                                <NumericInput
-                                                    onChange={text => onChangeVar(text, pratoPrincipal.qtd)}
-                                                    onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-                                                    totalWidth={150}
-                                                    totalHeight={30}
-                                                    iconSize={15}
-                                                    initValue={pratoPrincipal.qtd}
-                                                    step={5}
-                                                    valueType='real'
-                                                    rounded
-                                                    textColor='brown'
-                                                    iconStyle={{ color: 'brown' }}
-                                                    style={style.quantidadeInput} />
-                                            </View>
+                <View style={style.formGroup}>
+                    <FlatList
+                        data={sugestaoList}
+                        keyExtractor={sugestaoList => String(sugestaoList.id)}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({ item: sugestaoList }) => (
+                            <View>
+                                {sugestaoList.tipo_id >= 7 && sugestaoList.tipo_id <= 8 ? (
+                                    <View style={style.componentPicker}>
+                                        <Icon style={style.iconTipo} name="feather" size={15} />
+                                        <Text style={style.textLabel}>{sugestaoList.nomeItem + " (" + sugestaoList.unidade + ")"}</Text>
+                                        <View style={style.picker}>
+                                            <NumericInput
+                                                onChange={text => onChangeVar(text, sugestaoList.quantidade)}
+                                                onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+                                                totalWidth={150}
+                                                totalHeight={30}
+                                                iconSize={15}
+                                                initValue={updateValue(sugestaoList.quantidade)}
+                                                step={5}
+                                                valueType='real'
+                                                rounded
+                                                textColor='brown'
+                                                iconStyle={{ color: 'brown' }}
+                                                style={style.quantidadeInput} />
                                         </View>
-                                    }
-                                </View>
-                            )}
-                            style={style.listStyle} />
-                    </View>
+                                    </View>
+                                ) : null}
+                            </View>
+                        )}
+                        style={style.listStyle} />
+                </View>
 
                 <ActionButton offsetX={10} offsetY={90} onPress={() => escolherPratoPrincipal(3)} />
 

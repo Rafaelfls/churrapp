@@ -3,10 +3,7 @@ import {View, Image, Text, Button, Alert, TouchableOpacity, FlatList, Picker} fr
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Dropdown } from 'react-native-material-dropdown';
 import api from '../../services/api';
-
-
 
 import style from './styles';
 

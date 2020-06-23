@@ -21,6 +21,9 @@ import ParticiparChurrasco from './pages/ParticiparChurrasco';
 import CompartilharChurrasco from './pages/CompartilharChurrasco';
 import QRCodeLeitor from './pages/QRCodeLeitor';
 import EscolherNovosItens from './pages/EscolherNovosItens';
+import EscolherNovosItens2 from './pages/EscolherNovosItens2';
+import EscolherNovosItens3 from './pages/EscolherNovosItens3';
+import EscolherNovosItens4 from './pages/EscolherNovosItens4';
 import AdicionarAcompanhamento from './pages/AdicionarAcompanhamento';
 import AdicionarBebidas from './pages/AdicionarBebidas';
 import AdicionarExtras from './pages/AdicionarExtras';
@@ -82,6 +85,9 @@ export default function Routes(){
                 <AppStack.Screen name="ContactList" component={ContactList}/>
                 <AppStack.Screen name="AdicionarPratoPrincipal" component={AdicionarPratoPrincipal}/>
                 <AppStack.Screen name="EscolherNovosItens" component={EscolherNovosItens}/>
+                <AppStack.Screen name="EscolherNovosItens2" component={EscolherNovosItens2}/>
+                <AppStack.Screen name="EscolherNovosItens3" component={EscolherNovosItens3}/>
+                <AppStack.Screen name="EscolherNovosItens4" component={EscolherNovosItens4}/>
                 <AppStack.Screen name="AdicionarAcompanhamento" component={AdicionarAcompanhamento}/>
                 <AppStack.Screen name="AdicionarBebidas" component={AdicionarBebidas}/>
                 <AppStack.Screen name="AdicionarExtras" component={AdicionarExtras}/>

@@ -9,7 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import style from './styles';
 
-export default function EscolherNovosItens({ route, navigation }) {
+export default function EscolherNovosItens4({ route, navigation }) {
 
     const [item, setItem] = useState([]);
     const [unidades, setUnidades] = useState([]);
@@ -18,11 +18,12 @@ export default function EscolherNovosItens({ route, navigation }) {
     const [itemModal, setItemModal] = React.useState('');
     const [selectedUnidade, setSelectedUnidade] = useState("Selecione...");
     const [quantidadeModal, setQuantidadeModal] = useState(null)
+    const [unidadeModal, setUnidadeModal] = useState(null)
     const [idItem, setIdItem] = useState(null)
     const [filtro, setFiltro] = useState(null)
 
     async function firstLoad() {
-        const responseItem = await api.get(`/items?min=${1}&max=${5}`);
+        const responseItem = await api.get(`/items?min=${9}&max=${13}`);
         const responseUnidade = await api.get(`/unidade`);
         const responseTipos = await api.get(`/tipo`);
 
@@ -30,7 +31,7 @@ export default function EscolherNovosItens({ route, navigation }) {
         setItem([...item, ...responseItem.data]);
         setTipo([...tipo, ...responseTipos.data]);
     }
-    
+
     useEffect(() => {
         firstLoad();
     }, []);
@@ -59,14 +60,13 @@ export default function EscolherNovosItens({ route, navigation }) {
         }
     }
 
-
     return (
         <View style={style.container}>
             <SafeAreaView style={style.body}>
                 <View style={style.headerGroup}>
                     <View style={style.headerTextGroup}>
                         <Text style={style.textHeader}>Vamos adicionar mais</Text>
-                        <Text style={style.textHeader}>carnes?</Text>
+                        <Text style={style.textHeader}>itens extras?</Text>
                     </View>
                     <TouchableOpacity style={style.exitBtn} onPress={backHome}>
                         <Icon style={style.iconHeaderBtn} name="arrow-alt-circle-left" size={20} />
@@ -82,7 +82,7 @@ export default function EscolherNovosItens({ route, navigation }) {
                     showsHorisontalScrollIndicator={false}
                     renderItem={({ item: tipo }) => (
                         <View style={style.filtro}>
-                            {tipo.id >= 1 && tipo.id <= 5 ? (
+                            {tipo.id >= 9 && tipo.id <= 13 ? (
                                 <TouchableOpacity style={style.tiposDeItenscard} onPress={() => setFiltroTipo(tipo.id)}>
                                     <Text style={style.tiposDeItenstextCard}>{tipo.tipo}</Text>
                                 </TouchableOpacity>
@@ -143,10 +143,10 @@ export default function EscolherNovosItens({ route, navigation }) {
                                     mode="dropdown"
                                     onValueChange={itemValue => setSelectedUnidade(itemValue)}
                                 >
-                                    {unidades.map(unity => (
-                                        <Picker.Item label={unity.unidade} value={unity.id} />
-                                    ))}
-                                </Picker>
+                                {unidades.map(unity => (
+                                    <Picker.Item label={unity.unidade} value={unity.id} />
+                                ))}
+                            </Picker>
                             </View>
                             <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal)}>
                                 <Icon style={style.iconSalvarBtn} name="check" size={20} />

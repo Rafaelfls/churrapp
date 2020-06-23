@@ -12,109 +12,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import style from './styles';
 
-
-// Prato principal
-// 1 -> Vaca
-// 2 -> Porco
-// 3 -> Frango
-// 4 -> Peixe
-// 5 -> Exótico
-
-// Acompanhamentos
-// 6 -> Acompanhamentos
-
-// Bebidas
-// 7 -> Bebidas
-// 8 -> Bebidas Alcoólicas
-
-// Extras
-// 9 -> Descartáveis
-// 10 -> Utensílios
-// 11 -> Utensílios Consumíveis
-// 12 -> Diversão
-// 13 -> Temperos
-
-var pratoPrincipal = [
-    {
-        id: '1',
-        item: 'picanha',
-        qtd: 100,
-        unidade: 'kg',
-        tipo: '1'
-    },
-    {
-        id: '2',
-        item: 'coração',
-        qtd: 50,
-        unidade: 'kg',
-        tipo: '3'
-    },
-    {
-        id: '3',
-        item: 'tulipa',
-        qtd: 50,
-        unidade: 'kg',
-        tipo: '3'
-    },
-    {
-        id: '4',
-        item: 'costela',
-        qtd: 100,
-        unidade: 'kg',
-        tipo: '2'
-    },
-    {
-        id: '5',
-        item: 'Arroz',
-        qtd: 0.5,
-        unidade: 'copos',
-        tipo: '6'
-    },
-    {
-        id: '6',
-        item: 'Farofa',
-        qtd: 50,
-        unidade: 'g',
-        tipo: '6'
-    },
-    {
-        id: '7',
-        item: 'Salpicão',
-        qtd: 20,
-        unidade: 'g',
-        tipo: '6'
-    },
-    {
-        id: '8',
-        item: 'Skol',
-        qtd: 20,
-        unidade: 'g',
-        tipo: '8'
-    },
-    {
-        id: '9',
-        item: 'Brahma',
-        qtd: 20,
-        unidade: 'g',
-        tipo: '8'
-    },
-    {
-        id: '10',
-        item: 'Absolut',
-        qtd: 20,
-        unidade: 'g',
-        tipo: '8'
-    },
-    {
-        id: '11',
-        item: 'Coca Cola',
-        qtd: 20,
-        unidade: 'g',
-        tipo: '7'
-    },
-
-]
-
 export default function AdicionarPratoPrincipal({ route, navigation }) {
 
     const { convidadosQtd } = route.params;
@@ -148,8 +45,8 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
         });
     }
 
-    function updateValue(qtdSugestao){
-        return (qtdSugestao*convidadosQtd)
+    function updateValue(qtdSugestao) {
+        return (qtdSugestao * convidadosQtd)
     }
 
 
@@ -181,25 +78,27 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                         showsVerticalScrollIndicator={false}
                         renderItem={({ item: sugestaoList }) => (
                             <View>
-                                <View style={style.componentPicker}>                                    
-                                    <Icon style={style.iconTipo} name="feather" size={15} />
-                                    <Text style={style.textLabel}>{sugestaoList.nomeItem + " (" + sugestaoList.unidade + ")"}</Text>
-                                    <View style={style.picker}>
-                                        <NumericInput
-                                            onChange={text => onChangeVar(text, sugestaoList.quantidade)}
-                                            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-                                            totalWidth={150}
-                                            totalHeight={30}
-                                            iconSize={15}
-                                            initValue={updateValue(sugestaoList.quantidade)}
-                                            step={5}
-                                            valueType='real'
-                                            rounded
-                                            textColor='brown'
-                                            iconStyle={{ color: 'brown' }}
-                                            style={style.quantidadeInput} />
+                                {sugestaoList.tipo_id >= 1 && sugestaoList.tipo_id <= 5 ? (
+                                    <View style={style.componentPicker}>
+                                        <Icon style={style.iconTipo} name="feather" size={15} />
+                                        <Text style={style.textLabel}>{sugestaoList.nomeItem + " (" + sugestaoList.unidade + ")"}</Text>
+                                        <View style={style.picker}>
+                                            <NumericInput
+                                                onChange={text => onChangeVar(text, sugestaoList.quantidade)}
+                                                onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+                                                totalWidth={150}
+                                                totalHeight={30}
+                                                iconSize={15}
+                                                initValue={updateValue(sugestaoList.quantidade)}
+                                                step={5}
+                                                valueType='real'
+                                                rounded
+                                                textColor='brown'
+                                                iconStyle={{ color: 'brown' }}
+                                                style={style.quantidadeInput} />
+                                        </View>
                                     </View>
-                                </View>
+                                ) : null}
                             </View>
                         )}
                         style={style.listStyle} />
