@@ -52,8 +52,8 @@ export default StyleSheet.create({
   profileIdade:{
     fontSize: 20,
     color: 'white',
+    textAlign: 'center',
     fontFamily: 'poppins-regular',
-
   },
 
   //Meus Churrascos
@@ -119,7 +119,7 @@ export default StyleSheet.create({
   },
 
   infos:{
-    fontSize: 19,
+    fontSize: 13,
     marginHorizontal: 5,
     fontFamily: 'poppins-regular',
   },
@@ -127,7 +127,7 @@ export default StyleSheet.create({
   containerInfos:{
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 3,
+    paddingVertical: 6,
   },
 
 });

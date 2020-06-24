@@ -88,8 +88,6 @@ export default function Perfil() {
         });
     }
 
-  
-
     return (
         <View style={style.container}>
 
@@ -113,7 +111,6 @@ export default function Perfil() {
                                 <Text style={style.profileName}>{perfil.nome}</Text>
                                 <Text style={style.profileLocal}>{perfil.cidade} - {perfil.uf}</Text>
                                 <Text style={style.profileIdade}>{perfil.idade} anos</Text>
-                                <Text style={style.profileIdade}>Mais conhecido como: {perfil.apelido}</Text>
                             </View>
                         </View>
                             <View style={style.containerMyChurras}>

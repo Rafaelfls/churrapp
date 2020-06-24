@@ -38,6 +38,26 @@ export default function AdicionaConvidados({ route, navigation }) {
     navigation.push('OpenContactList')
   }
 
+    return(
+      <View style={style.container}>
+        <SafeAreaView style={style.body}>
+            <View style={style.headerGroup}>
+            <Text style={style.textHeader}>Convide a galera!</Text>
+              <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
+                <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
+                <Text style={style.textHeaderBtn}>Sair</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={style.formGroup}>
+                <Text style={style.textLabel}>Mensagem</Text>
+                <TextInput
+                  style={style.inputStandard}
+                  onChange = { text => onChangeText('') }
+                  onChangeText={text => onChangeText(text)}
+                  placeholder={inviteStandard}
+                />
+            </View>
+
   /* WhatsApp = (invite, telefoneContato) => {
      Linking.canOpenURL(`whatsapp://send?text=${invite}`).then(supported => {
        if (supported) {
@@ -50,6 +70,7 @@ export default function AdicionaConvidados({ route, navigation }) {
        }
      })
    }*/
+
 
   return (
     <View style={style.container}>
@@ -108,14 +129,11 @@ export default function AdicionaConvidados({ route, navigation }) {
 
         <ActionButton offsetX={10} offsetY={90} onPress={openContactList} />
 
-        <View style={style.footer}>
-          <Text style={style.textFooter}>Etapa 2/6</Text>
+          <View style={style.footer}>
           <TouchableOpacity style={style.continueBtn} onPress={next}>
-            <Icon style={style.iconBtn} name="angle-double-right" size={20} />
-            <Text style={style.textBtn}>Continuar</Text>
+            <Text style={style.textBtn}>Convidar</Text>
           </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    </View>
-  )
-}
+        </View>            
+        </SafeAreaView>    
+      </View>
+    )

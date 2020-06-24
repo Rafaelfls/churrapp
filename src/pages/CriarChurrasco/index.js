@@ -5,6 +5,8 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../services/api';
 import DatePicker from 'react-native-datepicker';
 import * as ImagePicker from 'expo-image-picker';
+import IconFea from 'react-native-vector-icons/Feather';
+import IconFA from 'react-native-vector-icons/FontAwesome';
 
 import style from './styles';
 
@@ -20,12 +22,12 @@ export default function CriarChurrasco() {
   const [date, setDate] = useState();
   const [image, setImage] = useState(null);
 
-  const config= {
-    headers: {'Authorization': USUARIOLOGADO}
+  const config = {
+    headers: { 'Authorization': USUARIOLOGADO }
   };
 
   function next() {
-    if(nomeChurras != null && hrInicio != null && date != null && local != null) {
+    if (nomeChurras != null && hrInicio != null && date != null && local != null) {
       criarChurras()
       navigation.navigate('AdicionaConvidados',{
         nomeContato:null ,
@@ -36,10 +38,10 @@ export default function CriarChurrasco() {
         'Digite todos os campos obrigatórios por favor!'
       )
     }
-    
+
   }
 
-  function backHome(){
+  function backHome() {
     navigation.replace('Tabs');
   }
 
@@ -49,7 +51,7 @@ export default function CriarChurrasco() {
       allowsEditing: true,
       aspect: [9, 16],
       quality: 1,
-    });    
+    });
 
     console.log(result);
 
@@ -57,11 +59,11 @@ export default function CriarChurrasco() {
       setImage(result.uri);
     }
   };
-  
-   function criarChurras() {
-    
-    
-    return  api.post('/churras', {
+
+  function criarChurras() {
+
+
+    return api.post('/churras', {
       nomeChurras: nomeChurras,
       local: local,
       hrInicio: hrInicio,
@@ -77,7 +79,10 @@ export default function CriarChurrasco() {
     <View style={style.container}>
       <SafeAreaView style={style.body}>
         <View style={style.headerGroup}>
-          <Text style={style.textHeader}>Vamos começar!</Text>
+          <View>
+            <Text style={style.textHeader}>Vamos começar!</Text>
+            <Text style={style.textSubHeader}>Insira as informações principais</Text>
+          </View>
           <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
             <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
             <Text style={style.textHeaderBtn}>Sair</Text>
@@ -85,19 +90,19 @@ export default function CriarChurrasco() {
         </View>
         <ScrollView style={style.scrollView}>
           <View style={style.formGroup}>
-            <Text style={style.textLabel}>Nome do churrasco:</Text>
+            <Text style={style.textLabel}>Nome do churras</Text>
             <TextInput
               style={style.inputStandard}
               onChangeText={text => setNomeChurras(text)}
               placeholder={'Churrasbom'}
             />
-            <Text style={style.textLabel}>Local do churrasco:</Text>
+            <Text style={style.textLabel}>Local</Text>
             <TextInput
               style={style.inputStandard}
               placeholder={"Alameda santos, 202"}
               onChangeText={text => setlocal(text)}
             />
-            <Text style={style.textLabel}>Descrição:</Text>
+            <Text style={style.textLabel}>Descrição</Text>
             <TextInput
               style={style.inputStandard}
               multiline={true}
@@ -105,22 +110,16 @@ export default function CriarChurrasco() {
               placeholder={"O melhor churras do ano"}
               onChangeText={text => setdescricao(text)}
             />
-            <View style={style.imagePicker}>
-              <TouchableOpacity style={style.inputDisplay} onPress={pickImage} >
-                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, paddingVertical: 10 }} />}
-              </TouchableOpacity>
-            </View>
             <View style={style.componentPicker}>
-              <Text style={style.textLabel}>Data:</Text>
+              <Text style={style.textLabel}>Data</Text>
               <View style={style.picker}>
                 <DatePicker
-                  style={{width: 200}}
+                  style={{ width: 200 }}
                   date={date}
                   mode="date"
-                  placeholder="Escolha a data"
+                  placeholder="DD/MM/AAAA"
                   format="DD/MM/YYYY"
                   minDate="01/05/2020"
-                  maxDate="01/05/2025"
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
                   customStyles={{
@@ -131,78 +130,88 @@ export default function CriarChurrasco() {
                       marginLeft: 0
                     },
                     dateInput: {
-                      borderRadius:8,
-                      marginLeft: 36
+                      borderBottomWidth: 1,
+                      borderWidth: 0,
+                      marginLeft: 36,
+                      fontFamily: 'poppins-regular',
                     },
                     // ... You can check the source to find the other keys.
                   }}
-                  onDateChange={(date) => {setDate(date)}}
+                  onDateChange={(date) => { setDate(date) }}
                 />
               </View>
             </View>
             <View style={style.componentPicker}>
-              <Text style={style.textLabel}>Início:</Text>
+              <Text style={style.textLabel}>Início</Text>
               <View style={style.picker}>
                 <DatePicker
-                    style={{width: 200}}
-                    date={hrInicio}
-                    mode="time"
-                    placeholder="Hora de Início"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
-                    customStyles={{
-                      dateIcon: {
-                        position: 'absolute',
-                        left: 0,
-                        top: 4,
-                        marginLeft: 0
-                      },
-                      dateInput: {
-                        borderRadius:8,
-                        marginLeft: 36
-                      },
-                      // ... You can check the source to find the other keys.
-                    }}
-                    onDateChange={(hrInicio) => {sethrInicio(hrInicio)}}
-                  />
+                  style={{ width: 200 }}
+                  date={hrInicio}
+                  mode="time"
+                  placeholder="00:00"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      position: 'absolute',
+                      left: 0,
+                      top: 4,
+                      marginLeft: 0
+                    },
+                    dateInput: {
+                      borderBottomWidth: 1,
+                      borderWidth: 0,
+                      marginLeft: 36,
+                      fontFamily: 'poppins-regular',
+                    },
+                    // ... You can check the source to find the other keys.
+                  }}
+                  onDateChange={(hrInicio) => { sethrInicio(hrInicio) }}
+                />
               </View>
             </View>
             <View style={style.componentPicker}>
-              <Text style={style.textLabel}>Término:</Text>
+              <Text style={style.textLabel}>Término</Text>
               <View style={style.picker}>
                 <DatePicker
-                    style={{width: 200}}
-                    date={hrFim}
-                    mode="time"
-                    placeholder="Hora de Início"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
-                    customStyles={{
-                      dateIcon: {
-                        position: 'absolute',
-                        left: 0,
-                        top: 4,
-                        marginLeft: 0
-                      },
-                      dateInput: {
-                        borderRadius:8,
-                        marginLeft: 36
-                      },
-                      // ... You can check the source to find the other keys.
-                    }}
-                    onDateChange={(hrFim) => {sethrFim(hrFim)}}
-                  />
+                  style={{ width: 200 }}
+                  date={hrFim}
+                  mode="time"
+                  placeholder="00:00"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      position: 'absolute',
+                      left: 0,
+                      top: 4,
+                      marginLeft: 0
+                    },
+                    dateInput: {
+                      borderBottomWidth: 1,
+                      borderWidth: 0,
+                      marginLeft: 36,
+                      fontFamily: 'poppins-regular',
+                    },
+                    // ... You can check the source to find the other keys.
+                  }}
+                  onDateChange={(hrFim) => { sethrFim(hrFim) }}
+                />
               </View>
             </View>
-          </View>          
+            <View style={style.imagePicker}>
+              <TouchableOpacity style={style.inputDisplay} onPress={pickImage} >
+                <IconFA style={style.addImgIcon} name="image" size={100} />
+                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, paddingVertical: 10 }} />}
+              </TouchableOpacity>
+            </View>
+          </View>
         </ScrollView>
         <View style={style.footer}>
-            <Text style={style.textFooter}>Etapa 1/6</Text>
-            <TouchableOpacity style={style.continueBtn} onPress={next}>
-              <Icon style={style.iconBtn} name="angle-double-right" size={20} />
-              <Text style={style.textBtn}>Continuar</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity style={style.continueBtn} onPress={next}>
+            <Text style={style.textBtn}>Criar churras</Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     </View>
   )
