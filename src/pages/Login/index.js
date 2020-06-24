@@ -30,9 +30,7 @@ export default function Calculadora() {
     carregarUsuarios();
   }, []);
 
-  listadeUsuario = usuarios.map(users => (
-    <Picker.Item label={users.nome} value={users.id} />
-  ));
+  
 
   return (
     <View style={style.container}>

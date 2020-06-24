@@ -28,11 +28,11 @@ export default function QRCodeLeitor() {
     function participarDoChurras(modal,churrasId){
         setIsVisivel(modal);
 
-        api.post('/convidadosChurras', {
-            churras_id: churrasId,
+        api.post(`/convidadosChurras/${USUARIOLOGADO}`, {
             valorPagar: "20,00",
-            usuario_id:USUARIOLOGADO,
-          }, config);
+            churras_id: churrasId
+            
+          });
           return navigation.replace('Tabs');
 
     }
