@@ -44,8 +44,6 @@ const convidadosList = [
 export default function AdicionaConvidados(){
 
   const [value, onChangeText] = React.useState('');
-  const loginFranca = "0516f9fb26e6be70";
-  const loginJoao = "dcca00a6fb1c45a8";
   const navigation = useNavigation();
 
   const inviteStandard = "Ola, Rafael esta te convidadando para o churrasco *Top dos 100*, o valor do churrasco por pessoa ficou 25 reais. Pague pelo app do Churrapp ou para ele pessoalmente."
@@ -53,14 +51,11 @@ export default function AdicionaConvidados(){
 
   function next() {
       const convidadosQtd = convidadosList.length
-      console.log(convidadosQtd);
       navigation.navigate('AdicionarPratoPrincipal',{convidadosQtd});
     }
     
   function backHome(){
-    navigation.replace('Tabs', {
-      screen: 'Meu Churras', 
-      params: {loginFranca, loginJoao}});
+    navigation.replace('Tabs');
   }
 
   function openContactList(){
@@ -85,7 +80,7 @@ export default function AdicionaConvidados(){
         <SafeAreaView style={style.body}>
             <View style={style.headerGroup}>
             <Text style={style.textHeader}>Convide seus amigos!</Text>
-              <TouchableOpacity style={style.exitBtn} onPress={() => backHome(loginJoao)}>
+              <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
                 <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
                 <Text style={style.textHeaderBtn}>Sair</Text>
               </TouchableOpacity>

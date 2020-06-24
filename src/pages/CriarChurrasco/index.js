@@ -11,7 +11,6 @@ import style from './styles';
 export default function CriarChurrasco() {
   const route = useRoute();
   const [value, onChangeText] = React.useState('Useless Placeholder');
-  const login = route.params.login;
   const navigation = useNavigation();
   const [nomeChurras, setNomeChurras] = useState();
   const [local, setlocal] = useState();
@@ -22,13 +21,13 @@ export default function CriarChurrasco() {
   const [image, setImage] = useState(null);
 
   const config= {
-    headers: {'Authorization': login}
+    headers: {'Authorization': USUARIOLOGADO}
   };
 
   function next() {
     if(nomeChurras != null && hrInicio != null && date != null && local != null) {
       criarChurras()
-      navigation.replace('AdicionaConvidados');
+      navigation.navigate('AdicionaConvidados');
     } else {
       Alert.alert(
         'Digite todos os campos obrigatórios por favor!'
@@ -38,9 +37,7 @@ export default function CriarChurrasco() {
   }
 
   function backHome(){
-    navigation.replace('Tabs', {
-      screen: 'Meu Churras', 
-      params: {login}});
+    navigation.replace('Tabs');
   }
 
   const pickImage = async () => {
@@ -78,7 +75,7 @@ export default function CriarChurrasco() {
       <SafeAreaView style={style.body}>
         <View style={style.headerGroup}>
           <Text style={style.textHeader}>Vamos começar!</Text>
-          <TouchableOpacity style={style.exitBtn} onPress={() => backHome(loginFranca)}>
+          <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
             <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
             <Text style={style.textHeaderBtn}>Sair</Text>
           </TouchableOpacity>

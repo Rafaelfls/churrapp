@@ -10,106 +10,36 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import style from './styles';
 
-
-// Prato principal
-// 1 -> Vaca
-// 2 -> Porco
-// 3 -> Frango
-// 4 -> Peixe
-// 5 -> Exótico
-
-// Acompanhamentos
-// 6 -> Acompanhamentos
-
-// Bebidas
-// 7 -> Bebidas
-// 8 -> Bebidas Alcoólicas
-
-// Extras
-// 9 -> Descartáveis
-// 10 -> Utensílios
-// 11 -> Utensílios Consumíveis
-// 12 -> Diversão
-// 13 -> Temperos
-
-var pratoPrincipal = [
-    {
-        id: '1',
-        item: 'picanha',
-        qtd: 100,
-        unidade: 'kg',
-        tipo: '1'
-    },
-    {
-        id: '2',
-        item: 'coração',
-        qtd: 50,
-        unidade: 'kg',
-        tipo: '3'
-    },
-    {
-        id: '3',
-        item: 'tulipa',
-        qtd: 50,
-        unidade: 'kg',
-        tipo: '3'
-    },
-    {
-        id: '4',
-        item: 'costela',
-        qtd: 100,
-        unidade: 'kg',
-        tipo: '2'
-    },
-    {
-        id: '5',
-        item: 'Arroz',
-        qtd: 0.5,
-        unidade: 'copos',
-        tipo: '6'
-    },
-    {
-        id: '6',
-        item: 'Farofa',
-        qtd: 50,
-        unidade: 'g',
-        tipo: '6'
-    },
-    {
-        id: '7',
-        item: 'Salpicão',
-        qtd: 20,
-        unidade: 'g',
-        tipo: '6'
-    },
-
-]
-
 export default function AdicionarAcompanhamento() {
 
     const navigation = useNavigation();
-    const loginFranca = "0516f9fb26e6be70";
-    const loginJoao = "bdadea9527f65f1f";
+    const [sugestaoList, setSugestao] = React.useState([])
 
-    function next() {
-        navigation.push('AdicionarBebidas');
+    async function carregaSugestao() {
+        const response = await api.get('/sugestao');
+
+        setSugestao([...sugestaoList, ...response.data]);
+
     }
 
-    function escolherAcompanhamentos(tela) {
-        navigation.push('EscolherNovosItens',{tela})
+    useEffect(() => {
+        carregaSugestao();
+    }, []);
+
+    function next() {
+        navigation.navigate('AdicionarBebidas');
+    }
+
+    function escolherAcompanhamentos() {
+        navigation.push('EscolherNovosItens2')
     }
 
     function backHome() {
-        navigation.replace('Tabs', {
-            screen: 'Meu Churras',
-            params: { loginFranca, loginJoao }
-        });
+        navigation.replace('Tabs');
     }
 
     function onChangeVar(text, varivael) {
-        console.log("Var " + varivael + " text " + text)
         varivael = text;
-        console.log("Var " + varivael + " text " + text)
     }
 
 
@@ -121,46 +51,46 @@ export default function AdicionarAcompanhamento() {
                         <Text style={style.textHeader}>Vamos escolher os</Text>
                         <Text style={style.textHeader}>acompanhamentos?</Text>
                     </View>
-                    <TouchableOpacity style={style.exitBtn} onPress={() => backHome(loginJoao)}>
+                    <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
                         <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
                         <Text style={style.textHeaderBtn}>Sair</Text>
                     </TouchableOpacity>
                 </View>
 
-                    <View style={style.formGroup}>
-                        <FlatList
-                            data={pratoPrincipal}
-                            keyExtractor={pratoPrincipal => String(pratoPrincipal.id)}
-                            showsVerticalScrollIndicator={false}
-                            renderItem={({ item: pratoPrincipal }) => (
-                                <View>
-                                    {pratoPrincipal.tipo == 6 &&
-                                        <View style={style.componentPicker}>                                    
-                                            <MaterialCommunityIcons style={style.iconTipo}  name="rice"/>
-                                            <Text style={style.textLabel}>{pratoPrincipal.item + " (" + pratoPrincipal.unidade + ")"}</Text>
-                                            <View style={style.picker}>
-                                                <NumericInput
-                                                    onChange={text => onChangeVar(text, pratoPrincipal.qtd)}
-                                                    onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-                                                    totalWidth={150}
-                                                    totalHeight={30}
-                                                    iconSize={15}
-                                                    initValue={pratoPrincipal.qtd}
-                                                    step={5}
-                                                    valueType='real'
-                                                    rounded
-                                                    textColor='brown'
-                                                    iconStyle={{ color: 'brown' }}
-                                                    style={style.quantidadeInput} />
-                                            </View>
+                <View style={style.formGroup}>
+                    <FlatList
+                        data={sugestaoList}
+                        keyExtractor={sugestaoList => String(sugestaoList.id)}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({ item: sugestaoList }) => (
+                            <View>
+                                {sugestaoList.tipo_id >= 6 && sugestaoList.tipo_id <= 6 ? (
+                                    <View style={style.componentPicker}>
+                                        <Icon style={style.iconTipo} name="feather" size={15} />
+                                        <Text style={style.textLabel}>{sugestaoList.nomeItem + " (" + sugestaoList.unidade + ")"}</Text>
+                                        <View style={style.picker}>
+                                            <NumericInput
+                                                onChange={text => onChangeVar(text, sugestaoList.quantidade)}
+                                                onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+                                                totalWidth={150}
+                                                totalHeight={30}
+                                                iconSize={15}
+                                                initValue={updateValue(sugestaoList.quantidade)}
+                                                step={5}
+                                                valueType='real'
+                                                rounded
+                                                textColor='brown'
+                                                iconStyle={{ color: 'brown' }}
+                                                style={style.quantidadeInput} />
                                         </View>
-                                    }
-                                </View>
-                            )}
-                            style={style.listStyle} />
-                    </View>
+                                    </View>
+                                ) : null}
+                            </View>
+                        )}
+                        style={style.listStyle} />
+                </View>
 
-                <ActionButton offsetX={10} offsetY={90} onPress={()=>escolherAcompanhamentos(2)} />
+                <ActionButton offsetX={10} offsetY={90} onPress={() => escolherAcompanhamentos()} />
 
                 <View style={style.footer}>
                     <Text style={style.textFooter}>Etapa 4/6</Text>

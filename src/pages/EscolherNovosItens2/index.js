@@ -9,7 +9,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import style from './styles';
 
-export default function EscolherNovosItens({ route, navigation }) {
+
+export default function EscolherNovosItens2({ route, navigation }) {
 
     const [item, setItem] = useState([]);
     const [unidades, setUnidades] = useState([]);
@@ -18,11 +19,12 @@ export default function EscolherNovosItens({ route, navigation }) {
     const [itemModal, setItemModal] = React.useState('');
     const [selectedUnidade, setSelectedUnidade] = useState("Selecione...");
     const [quantidadeModal, setQuantidadeModal] = useState(null)
+    const [unidadeModal, setUnidadeModal] = useState(null)
     const [idItem, setIdItem] = useState(null)
     const [filtro, setFiltro] = useState(null)
 
     async function firstLoad() {
-        const responseItem = await api.get(`/items?min=${1}&max=${5}`);
+        const responseItem = await api.get(`/items?min=${6}&max=${6}`);
         const responseUnidade = await api.get(`/unidade`);
         const responseTipos = await api.get(`/tipo`);
 
@@ -30,7 +32,7 @@ export default function EscolherNovosItens({ route, navigation }) {
         setItem([...item, ...responseItem.data]);
         setTipo([...tipo, ...responseTipos.data]);
     }
-    
+
     useEffect(() => {
         firstLoad();
     }, []);
@@ -51,22 +53,13 @@ export default function EscolherNovosItens({ route, navigation }) {
         navigation.goBack()
     }
 
-    function setFiltroTipo(idFiltro) {
-        if (filtro == idFiltro) {
-            setFiltro(null)
-        } else {
-            setFiltro(idFiltro)
-        }
-    }
-
-
     return (
         <View style={style.container}>
             <SafeAreaView style={style.body}>
                 <View style={style.headerGroup}>
                     <View style={style.headerTextGroup}>
                         <Text style={style.textHeader}>Vamos adicionar mais</Text>
-                        <Text style={style.textHeader}>carnes?</Text>
+                        <Text style={style.textHeader}>acompanhamentos?</Text>
                     </View>
                     <TouchableOpacity style={style.exitBtn} onPress={backHome}>
                         <Icon style={style.iconHeaderBtn} name="arrow-alt-circle-left" size={20} />
@@ -75,34 +68,12 @@ export default function EscolherNovosItens({ route, navigation }) {
                 </View>
 
                 <FlatList
-                    data={tipo}
-                    horizontal
-                    keyExtractor={tipo => String(tipo.id)}
-                    showsVerticalScrollIndicator={false}
-                    showsHorisontalScrollIndicator={false}
-                    renderItem={({ item: tipo }) => (
-                        <View style={style.filtro}>
-                            {tipo.id >= 1 && tipo.id <= 5 ? (
-                                <TouchableOpacity style={style.tiposDeItenscard} onPress={() => setFiltroTipo(tipo.id)}>
-                                    <Text style={style.tiposDeItenstextCard}>{tipo.tipo}</Text>
-                                </TouchableOpacity>
-                            ) : null}
-                        </View>
-                    )}
-                />
-
-
-                <FlatList
                     data={item}
                     keyExtractor={item => String(item.id)}
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item: item }) => (
                         <View style={style.listaConvidados}>
-                            {filtro == null ? (
-                                <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
-                                    <Text style={style.textCard}>{item.nomeItem}</Text>
-                                </TouchableOpacity>
-                            ) : filtro == item.tipo_id ? (
+                            {item.tipo_id == 6 ? (
                                 <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
                                     <Text style={style.textCard}>{item.nomeItem}</Text>
                                 </TouchableOpacity>
@@ -143,10 +114,10 @@ export default function EscolherNovosItens({ route, navigation }) {
                                     mode="dropdown"
                                     onValueChange={itemValue => setSelectedUnidade(itemValue)}
                                 >
-                                    {unidades.map(unity => (
-                                        <Picker.Item label={unity.unidade} value={unity.id} />
-                                    ))}
-                                </Picker>
+                                {unidades.map(unity => (
+                                    <Picker.Item label={unity.unidade} value={unity.id} />
+                                ))}
+                            </Picker>
                             </View>
                             <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal)}>
                                 <Icon style={style.iconSalvarBtn} name="check" size={20} />
@@ -155,8 +126,6 @@ export default function EscolherNovosItens({ route, navigation }) {
                         </View>
                     </View>
                 </Modal>
-
-
             </SafeAreaView>
         </View>
     )
