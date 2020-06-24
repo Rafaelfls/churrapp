@@ -79,14 +79,14 @@ export default function AdicionaConvidados(){
       <View style={style.container}>
         <SafeAreaView style={style.body}>
             <View style={style.headerGroup}>
-            <Text style={style.textHeader}>Convide seus amigos!</Text>
+            <Text style={style.textHeader}>Convide a galera!</Text>
               <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
                 <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
                 <Text style={style.textHeaderBtn}>Sair</Text>
               </TouchableOpacity>
             </View>
             <View style={style.formGroup}>
-                <Text style={style.textLabel}>Convite:</Text>
+                <Text style={style.textLabel}>Mensagem</Text>
                 <TextInput
                   style={style.inputStandard}
                   onChange = { text => onChangeText('') }
@@ -133,12 +133,10 @@ export default function AdicionaConvidados(){
           <ActionButton offsetX={10} offsetY={90} onPress={openContactList}/>  
 
           <View style={style.footer}>
-              <Text style={style.textFooter}>Etapa 2/6</Text>
-              <TouchableOpacity style = {style.continueBtn} onPress={next}>
-                <Icon style={style.iconBtn} name  = "angle-double-right" size = {20}/>
-                <Text style={style.textBtn}>Continuar</Text>
-              </TouchableOpacity>
-            </View>             
+          <TouchableOpacity style={style.continueBtn} onPress={next}>
+            <Text style={style.textBtn}>Convidar</Text>
+          </TouchableOpacity>
+        </View>            
         </SafeAreaView>    
       </View>
     )

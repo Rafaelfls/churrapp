@@ -6,69 +6,70 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Constants.statusBarHeight + 15,
-  },  
+  },
+
+  //Header
+  headerGroup:{
+    flexDirection:'row',
+    marginHorizontal: 20,
+  },
   textHeader: {
     fontSize: 25,
-    color: '#fb2',
-    marginLeft: 15,
+    color: 'black',
+    fontFamily: 'poppins-semi-bold',
   },
-  stepHeader:{
-    position:'absolute',
-    right: 20,
-    top:0,
-  },   
+ 
   body:{
     flex: 1,
   },
+
   footer:{    
-    height: 70,
+    height: 90,
     flexDirection: "row",
-    justifyContent: "flex-start",
-    alignContent: 'center',
-    backgroundColor: 'brown',
-    bottom:0,
+    alignItems: 'center',
+    justifyContent: "center",
+    borderTopColor: 'lightgray',
+    borderTopWidth: 1,
+    backgroundColor: 'white',
   },
-  textFooter:{
-    alignSelf: 'center',
-    fontSize: 20,
-    color: 'yellow',
-    marginLeft: 15
+  continueBtn:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: '85%',
+    paddingVertical: 5,
   },
-continueBtn:{
-  alignSelf: 'center',
-  position: 'absolute',
-  right: 20,
-  flexDirection:'row-reverse',
-  borderRadius:8,
-  backgroundColor: 'black',
-  paddingHorizontal: 10,
-  paddingVertical: 5,
-},
-textBtn:{
-  marginRight: 10,
-  color: 'yellow',
-},
-iconBtn:{
-  color:"yellow",
-},
+  textBtn:{
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
+
+
 formGroup:{
   marginHorizontal:20,
   marginTop: 15,
   justifyContent: "center",
 },
+
+
 textLabel:{
   fontSize: 20,
-  color:"brown",
-  marginBottom: 10,
+  color:"black",
+  fontFamily: 'poppins-medium',
+  marginBottom: 0,
 },
 inputStandard:{ 
   height: 40, 
   borderColor: 'gray', 
-  borderWidth: 1 ,
   paddingHorizontal: 10,
-  borderRadius:8,
-  marginBottom: 10,
+  borderBottomWidth: 1,
+  marginBottom: 20,
 },
+
 listaConvidados:{
   backgroundColor:'lightgray',
   marginHorizontal: 25,
@@ -97,9 +98,7 @@ listaConvidadosLabelNOK:{
   color: 'red',
   marginLeft: 10,
 },
-headerGroup:{
-  flexDirection:'row',
-},
+
 exitBtn:{
   flexDirection:'row-reverse',
   position:"absolute",
