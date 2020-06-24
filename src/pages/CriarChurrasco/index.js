@@ -27,7 +27,10 @@ export default function CriarChurrasco() {
   function next() {
     if(nomeChurras != null && hrInicio != null && date != null && local != null) {
       criarChurras()
-      navigation.navigate('AdicionaConvidados');
+      navigation.navigate('AdicionaConvidados',{
+        nomeContato:null ,
+        telefoneContato: null,
+      });
     } else {
       Alert.alert(
         'Digite todos os campos obrigatórios por favor!'
