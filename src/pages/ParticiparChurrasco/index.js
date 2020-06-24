@@ -11,7 +11,14 @@ import style from './styles';
 export default function ParticiparChurrasco() {
 
     const navigation = useNavigation();
-    const [text, onChangeText] = useState()
+
+    const [text, onChangeText] = useState();
+    const [churras_id, setChurras_id] = useState();
+    
+    const config = {
+        headers: { 'Authorization': USUARIOLOGADO }
+    };
+
 
     function backHome() {
         navigation.goBack()
@@ -21,11 +28,13 @@ export default function ParticiparChurrasco() {
         navigation.push('QRCodeLeitor');
     }
 
-    function entrarChurrasco(churrasId) {
+
+    function entrarChurrasco() {
         api.post(`/convidadosChurras/${USUARIOLOGADO}`, {
-            churras_id: churrasId,
-            valorPagar: "20,00",
-        })
+            valorPagar: 30,
+            churras_id: churras_id
+        });
+        console.log("POSTADO " + USUARIOLOGADO + " - " + churras_id)
 
         onChangeText(null)
         return navigation.replace('Tabs')
@@ -44,11 +53,11 @@ export default function ParticiparChurrasco() {
                 <Text style={style.inserirText}>Insira o código do churras</Text>
                 <TextInput
                     style={style.inputStandard}
-                    onChangeText={text => onChangeText(text)}
+                    onChangeText={text => setChurras_id(text)}
                     value={text}
                     placeholder={'#XXXXXX'}
                 />
-                <TouchableOpacity style={style.enterBtn} onPress={() => entrarChurrasco(text)}>
+                <TouchableOpacity style={style.enterBtn} onPress={entrarChurrasco}>
                     <Text style={style.textBtn}>Entrar</Text>
                 </TouchableOpacity>
                 <Text style={style.ou}>ou</Text>

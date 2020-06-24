@@ -27,9 +27,13 @@ export default function QRCodeLeitor() {
         console.log(churrasId+ "    " + USUARIOLOGADO)
 
         api.post(`/convidadosChurras/${USUARIOLOGADO}`, {
-            churras_id: churrasId,
+
             valorPagar: "20,00",
-        })
+            churras_id: churrasId
+            
+          });
+          return navigation.replace('Tabs');
+
 
         return navigation.replace('Tabs');
     }
