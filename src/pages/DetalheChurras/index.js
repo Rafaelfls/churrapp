@@ -23,6 +23,8 @@ export default function DetalheChurras() {
   const route = useRoute();
   const [itens, setItens] = useState([]);
   const [itensTotal, setItensTotal] = useState(0);
+  const [convidados, setConvidados] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
 
   const churras = route.params.churras;
   const [modalVisivel, setModalVisivel] = useState(false);
@@ -49,8 +51,17 @@ export default function DetalheChurras() {
     setItensTotal(itens.length);
   }
 
+  async function carregarConvidados() {
+    const response = await api.get(`/convidados/${churras.id}`);
+
+    setConvidados([...convidados, ...response.data]);
+  }
+
+
+
   useEffect(() => {
         carregarItens();
+        carregarConvidados();
     }, []);
 
   return (
@@ -97,32 +108,27 @@ export default function DetalheChurras() {
           </TouchableOpacity>
         </View>
 
-        <ScrollView horizontal={true} nestedScrollEnabled={true} style={style.containerConvidados}>
-          <View style={style.convidado}>
-            <Image source={donoImg} style={style.profileImg} />
-            <Text style={style.nomeConvidado}>Rafael</Text>
-          </View>
-          <View style={style.convidado}>
-            <Image source={profileImg} style={style.profileImg} />
-            <Text style={style.nomeConvidado}>Julio</Text>
-          </View>
-          <View style={style.convidado}>
-            <Image source={profileImg} style={style.profileImg} />
-            <Text style={style.nomeConvidado}>Jefferson</Text>
-          </View>
-          <View style={style.convidado}>
-            <Image source={profileImg} style={style.profileImg} />
-            <Text style={style.nomeConvidado}>Josicleiton</Text>
-          </View>
-          <View style={style.convidado}>
-            <Image source={profileImg} style={style.profileImg} />
-            <Text style={style.nomeConvidado}>Juremo</Text>
-          </View>
-          <View style={style.convidado}>
-            <Image source={profileImg} style={style.profileImg} />
-            <Text style={style.nomeConvidado}>Jerson</Text>
-          </View>
-        </ScrollView>
+        <FlatList
+                data={convidados}
+                horizontal
+                pagingEnabled={true}
+                style={{height: 200, width: "100%"}}
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={convidados => String(convidados.id)}
+                renderItem={({ item: convidados }) => (
+
+                    <View style = {{ width: 140, height: 'auto', flexDirection:'row'}}>
+                      <TouchableOpacity>
+                          <View style={style.item}>
+                            <Image source={frango} style={style.itemImg} />
+                            <Text style={style.nomeItem}>{convidados.nome}</Text>
+                            <Text style={style.qtdItem}>{convidados.celular}</Text>
+                          </View> 
+                        </TouchableOpacity>
+                    </View>
+
+                )}
+            />
 
         <View style={style.linhaDeSeparacao} />
 
