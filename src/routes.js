@@ -28,7 +28,6 @@ import AdicionarAcompanhamento from './pages/AdicionarAcompanhamento';
 import AdicionarBebidas from './pages/AdicionarBebidas';
 import AdicionarExtras from './pages/AdicionarExtras';
 import FinalCriaChurras from './pages/FinalCriaChurras';
-import ContactList from './components/ContactList';
 
 const Tab = createBottomTabNavigator();
 
@@ -82,7 +81,6 @@ export default function Routes(){
                 <AppStack.Screen name="AdicionaConvidados" component={AdicionaConvidados}/>
                 <AppStack.Screen name="DetalheChurras" component={DetalheChurras}/>
                 <AppStack.Screen name="OpenContactList" component={OpenContactList}/>
-                <AppStack.Screen name="ContactList" component={ContactList}/>
                 <AppStack.Screen name="AdicionarPratoPrincipal" component={AdicionarPratoPrincipal}/>
                 <AppStack.Screen name="EscolherNovosItens" component={EscolherNovosItens}/>
                 <AppStack.Screen name="EscolherNovosItens2" component={EscolherNovosItens2}/>

@@ -12,10 +12,6 @@ export default function ParticiparChurrasco() {
 
     const navigation = useNavigation();
     const [text, onChangeText] = useState()
-    
-    const config = {
-        headers: { 'Authorization': USUARIOLOGADO }
-    };
 
     function backHome() {
         navigation.goBack()
@@ -26,11 +22,10 @@ export default function ParticiparChurrasco() {
     }
 
     function entrarChurrasco(churrasId) {
-        api.post('/convidadosChurras', {
+        api.post(`/convidadosChurras/${USUARIOLOGADO}`, {
             churras_id: churrasId,
             valorPagar: "20,00",
-            usuario_id: USUARIOLOGADO,
-        }, config)
+        })
 
         onChangeText(null)
         return navigation.replace('Tabs')

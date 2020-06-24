@@ -27,23 +27,24 @@ export default function DetalheChurras() {
   const [usuarios, setUsuarios] = useState([]);
 
   const churras = route.params.churras;
+  const allowShare = route.params.allowShare;
   const [modalVisivel, setModalVisivel] = useState(false);
-  const [churrasCode , setChurrasCode] = useState(churras.id);
-  
+  const [churrasCode, setChurrasCode] = useState(churras.id);
+
 
   console.log(churrasCode)
   const navigation = useNavigation();
 
 
   function CompartilharChurras(churras) {
-    navigation.push('CompartilharChurrasco',{churras});
+    navigation.push('CompartilharChurrasco', { churras });
 
   }
 
   function backHome() {
     navigation.goBack()
   }
-  
+
   async function carregarItens() {
     const response = await api.get(`/listadochurras/${churras.id}`);
 
@@ -60,20 +61,22 @@ export default function DetalheChurras() {
 
 
   useEffect(() => {
-        carregarItens();
-        carregarConvidados();
-    }, []);
+    carregarItens();
+    carregarConvidados();
+  }, []);
 
   return (
     <View style={style.container}>
       <View style={style.containerImg}>
         <Image source={backgroundImg} style={style.backgroundImg} />
         <Container style={style.cabecalho}>
-            <IconOct name="chevron-left" size={25} style={style.backBtn} onPress={() => backHome()} />
+          <IconOct name="chevron-left" size={25} style={style.backBtn} onPress={() => backHome()} />
           <Text style={style.detalheTitle}>{churras.nomeChurras}</Text>
-
-            <IconEnt name="share" size={25} style={style.shareBtn} onPress={() => CompartilharChurras(churras)}/>            
-
+          <View>
+            {allowShare &&
+              <IconEnt name="share" size={25} style={style.shareBtn} onPress={() => CompartilharChurras(churras)} />
+            }
+          </View>
         </Container>
       </View>
 
@@ -109,32 +112,32 @@ export default function DetalheChurras() {
         </View>
 
         <FlatList
-                data={convidados}
-                horizontal
-                pagingEnabled={true}
-                style={{height: 200, width: "100%"}}
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={convidados => String(convidados.id)}
-                renderItem={({ item: convidados }) => (
+          data={convidados}
+          horizontal
+          pagingEnabled={true}
+          style={{ height: 200, width: "100%" }}
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={convidados => String(convidados.id)}
+          renderItem={({ item: convidados }) => (
 
-                    <View style = {{ width: 140, height: 'auto', flexDirection:'row'}}>
-                      <TouchableOpacity>
-                          <View style={style.item}>
-                            <Image source={frango} style={style.itemImg} />
-                            <Text style={style.nomeItem}>{convidados.nome}</Text>
-                            <Text style={style.qtdItem}>{convidados.celular}</Text>
-                          </View> 
-                        </TouchableOpacity>
-                    </View>
+            <View style={{ width: 140, height: 'auto', flexDirection: 'row' }}>
+              <TouchableOpacity>
+                <View style={style.item}>
+                  <Image source={frango} style={style.itemImg} />
+                  <Text style={style.nomeItem}>{convidados.nome}</Text>
+                  <Text style={style.qtdItem}>{convidados.celular}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
 
-                )}
-            />
+          )}
+        />
 
         <View style={style.linhaDeSeparacao} />
 
         <View style={style.cabecalhoItens}>
           <View style={style.containerTituloItens}>
-          <Text style={style.tituloItens}>Itens {itensTotal}</Text>
+            <Text style={style.tituloItens}>Itens {itensTotal}</Text>
           </View>
           <TouchableOpacity onPress={() => setModalVisivel(true)}>
             <Text style={style.verTodos}>ver todos</Text>
@@ -142,26 +145,26 @@ export default function DetalheChurras() {
         </View>
 
         <FlatList
-                data={itens}
-                horizontal
-                pagingEnabled={true}
-                style={{height: 200, width: "100%"}}
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={itens => String(itens.id)}
-                renderItem={({ item: itens }) => (
+          data={itens}
+          horizontal
+          pagingEnabled={true}
+          style={{ height: 200, width: "100%" }}
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={itens => String(itens.id)}
+          renderItem={({ item: itens }) => (
 
-                    <View style = {{ width: 140, height: 'auto', flexDirection:'row'}}>
-                      <TouchableOpacity>
-                          <View style={style.item}>
-                            <Image source={frango} style={style.itemImg} />
-                            <Text style={style.nomeItem}>{itens.nomeItem}</Text>
-                            <Text style={style.qtdItem}>{itens.quantidade}{itens.unidade}</Text>
-                          </View> 
-                        </TouchableOpacity>
-                    </View>
+            <View style={{ width: 140, height: 'auto', flexDirection: 'row' }}>
+              <TouchableOpacity>
+                <View style={style.item}>
+                  <Image source={frango} style={style.itemImg} />
+                  <Text style={style.nomeItem}>{itens.nomeItem}</Text>
+                  <Text style={style.qtdItem}>{itens.quantidade}{itens.unidade}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
 
-                )}
-            />
+          )}
+        />
 
       </ScrollView>
 
