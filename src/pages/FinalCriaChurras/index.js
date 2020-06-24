@@ -6,17 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 import style from './styles';
 
 export default function FinalCriaChurras(){
-    const [onChangeText] = React.useState('');
     
     const navigation = useNavigation();
-    const loginFranca = "0516f9fb26e6be70";
-    const loginJoao = "bdadea9527f65f1f";
 
     function next() {
-        navigation.replace('Tabs', {
-            screen: 'Meu Churras',
-            params: { loginFranca, loginJoao }
-        });
+        navigation.replace('Tabs');
     }
 
     return(

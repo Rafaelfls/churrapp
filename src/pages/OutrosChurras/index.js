@@ -106,7 +106,7 @@ export default function OutrosChurras() {
                 renderItem={({ item: churras }) => (
 
                     <View>
-                    <TouchableOpacity onPress={() => detalheChurras(churras, login)}>
+                    <TouchableOpacity onPress={() => detalheChurras(churras)}>
                         <View style={style.churras}>
                             <View style={style.churrasDescricao}>
                                 <RNSlidingButton
@@ -147,7 +147,7 @@ export default function OutrosChurras() {
                 renderItem={({ item: churras }) => (
 
                     <View>
-                    <TouchableOpacity onPress={() => detalheChurras(churras, login)}>
+                    <TouchableOpacity onPress={() => detalheChurras(churras)}>
                         <View style={style.churras}>
                             <View style={style.churrasDescricao}>
                                 <RNSlidingButton

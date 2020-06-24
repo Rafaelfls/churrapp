@@ -13,8 +13,6 @@ import style from './styles';
 export default function AdicionarBebidas() {
 
     const navigation = useNavigation();
-    const loginFranca = "0516f9fb26e6be70";
-    const loginJoao = "bdadea9527f65f1f";
     const [sugestaoList, setSugestao] = React.useState([])
 
     async function carregaSugestao() {
@@ -29,24 +27,19 @@ export default function AdicionarBebidas() {
     }, []);
 
     function next() {
-        navigation.push('AdicionarExtras');
+        navigation.navigate('AdicionarExtras');
     }
 
-    function escolherPratoPrincipal(tela) {
-        navigation.push('EscolherNovosItens3', { tela })
+    function escolherPratoPrincipal() {
+        navigation.push('EscolherNovosItens3')
     }
 
     function backHome() {
-        navigation.replace('Tabs', {
-            screen: 'Meu Churras',
-            params: { loginFranca, loginJoao }
-        });
+        navigation.replace('Tabs');
     }
 
     function onChangeVar(text, varivael) {
-        console.log("Var " + varivael + " text " + text)
         varivael = text;
-        console.log("Var " + varivael + " text " + text)
     }
 
 
@@ -58,7 +51,7 @@ export default function AdicionarBebidas() {
                         <Text style={style.textHeader}>Vamos escolher as</Text>
                         <Text style={style.textHeader}>bebidas?</Text>
                     </View>
-                    <TouchableOpacity style={style.exitBtn} onPress={() => backHome(loginJoao)}>
+                    <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
                         <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
                         <Text style={style.textHeaderBtn}>Sair</Text>
                     </TouchableOpacity>
@@ -97,7 +90,7 @@ export default function AdicionarBebidas() {
                         style={style.listStyle} />
                 </View>
 
-                <ActionButton offsetX={10} offsetY={90} onPress={() => escolherPratoPrincipal(3)} />
+                <ActionButton offsetX={10} offsetY={90} onPress={() => escolherPratoPrincipal()} />
 
                 <View style={style.footer}>
                     <Text style={style.textFooter}>Etapa 5/6</Text>

@@ -16,14 +16,12 @@ import style from './styles';
 
 export default function ResumoChurras() {
     const route = useRoute();
-    const login = route.params.login;
     const [churras, setChurras] = useState([]);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
-    const [usuario_id, setUsuarioId] = useState(login);
     const config = {
-        headers: { 'Authorization': login }
+        headers: { 'Authorization': USUARIOLOGADO }
     };
 
     const navigation = useNavigation();
@@ -39,9 +37,7 @@ export default function ResumoChurras() {
             ]
         );
         Vibration.vibrate(60);
-        navigation.replace('Tabs',  {
-            screen: 'Meu Churras', 
-            params: {login}});
+        navigation.replace('Tabs');
 
         api.delete(`/churras/${churras.id}`, config);       
 
@@ -51,16 +47,16 @@ export default function ResumoChurras() {
         navigation.replace('Login');
     }
 
-    function inicioCriarChurras(login) {
-        navigation.replace('InicioCriaChurras', {login});
+    function inicioCriarChurras() {
+        navigation.navigate('InicioCriaChurras');
     }
 
     function ParticiparChurras() {
-        navigation.replace('ParticiparChurrasco');
+        navigation.push('ParticiparChurrasco');
     }
 
-    function detalheChurras(churras, login) {
-        navigation.navigate('DetalheChurras', { churras, login});
+    function detalheChurras(churras) {
+        navigation.navigate('DetalheChurras', { churras});
     }
 
 
@@ -75,7 +71,7 @@ export default function ResumoChurras() {
 
         setLoading(true);
 
-        const response = await api.get(`/churras/${usuario_id}`, {
+        const response = await api.get(`/churras/${USUARIOLOGADO}`, {
             params: { page }
         });
 
@@ -114,7 +110,7 @@ export default function ResumoChurras() {
                 onEndReachedThreshold={0.2}
                 renderItem={({ item: churras }) => (
                     <View>
-                        <TouchableOpacity onPress={() => detalheChurras(churras, login)}>
+                        <TouchableOpacity onPress={() => detalheChurras(churras)}>
                             <View style={style.churras}>
                                 <View style={style.churrasDescricao}>
                                     <RNSlidingButton
@@ -145,7 +141,7 @@ export default function ResumoChurras() {
             />
 
             <ActionButton style={style.fabBtn} onPress={() => Vibration.vibrate(50)}>
-                <ActionButton.Item title="Criar Churras" style={style.fabBtn} onPress={() => inicioCriarChurras(login)}>
+                <ActionButton.Item title="Criar Churras" style={style.fabBtn} onPress={inicioCriarChurras}>
                     <Icon name="plus" style={style.fabBtnIcon} />
                 </ActionButton.Item>
                 <ActionButton.Item title="Participar do Churras" style={style.fabBtn} onPress={ParticiparChurras}>

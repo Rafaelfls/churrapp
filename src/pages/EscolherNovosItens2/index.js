@@ -53,16 +53,6 @@ export default function EscolherNovosItens2({ route, navigation }) {
         navigation.goBack()
     }
 
-    function setFiltroTipo(idFiltro) {
-        if (filtro == idFiltro) {
-            setFiltro(null)
-        } else {
-            setFiltro(idFiltro)
-        }
-    }
-
-
-
     return (
         <View style={style.container}>
             <SafeAreaView style={style.body}>

@@ -13,7 +13,6 @@ import style from './styles';
 export default function AdicionarExtras() {
 
     const navigation = useNavigation();
-    const login = "dcca00a6fb1c45a8";
     const [sugestaoList, setSugestao] = React.useState([])
 
     async function carregaSugestao() {
@@ -28,24 +27,19 @@ export default function AdicionarExtras() {
     }, []);
 
     function next() {
-        navigation.push('FinalCriaChurras');
+        navigation.navigate('FinalCriaChurras');
     }
 
-    function escolherPratoPrincipal(tela) {
-        navigation.push('EscolherNovosItens4', { tela })
+    function escolherPratoPrincipal() {
+        navigation.push('EscolherNovosItens4')
     }
 
     function backHome() {
-        navigation.replace('Tabs', {
-            screen: 'Meu Churras',
-            params: { login }
-        });
+        navigation.replace('Tabs');
     }
 
     function onChangeVar(text, varivael) {
-        console.log("Var " + varivael + " text " + text)
         varivael = text;
-        console.log("Var " + varivael + " text " + text)
     }
 
 
@@ -57,7 +51,7 @@ export default function AdicionarExtras() {
                         <Text style={style.textHeader}>Vamos escolher </Text>
                         <Text style={style.textHeader}>outros itens?</Text>
                     </View>
-                    <TouchableOpacity style={style.exitBtn} onPress={() => backHome(login)}>
+                    <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
                         <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
                         <Text style={style.textHeaderBtn}>Sair</Text>
                     </TouchableOpacity>
@@ -96,7 +90,7 @@ export default function AdicionarExtras() {
                         style={style.listStyle} />
                 </View>
 
-                <ActionButton offsetX={10} offsetY={90} onPress={() => escolherPratoPrincipal(4)} />
+                <ActionButton offsetX={10} offsetY={90} onPress={() => escolherPratoPrincipal()} />
 
                 <View style={style.footer}>
                     <Text style={style.textFooter}>Etapa 6/6</Text>

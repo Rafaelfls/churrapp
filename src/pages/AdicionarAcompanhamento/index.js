@@ -13,8 +13,6 @@ import style from './styles';
 export default function AdicionarAcompanhamento() {
 
     const navigation = useNavigation();
-    const loginFranca = "0516f9fb26e6be70";
-    const loginJoao = "bdadea9527f65f1f";
     const [sugestaoList, setSugestao] = React.useState([])
 
     async function carregaSugestao() {
@@ -29,24 +27,19 @@ export default function AdicionarAcompanhamento() {
     }, []);
 
     function next() {
-        navigation.push('AdicionarBebidas');
+        navigation.navigate('AdicionarBebidas');
     }
 
-    function escolherAcompanhamentos(tela) {
-        navigation.push('EscolherNovosItens2', { tela })
+    function escolherAcompanhamentos() {
+        navigation.push('EscolherNovosItens2')
     }
 
     function backHome() {
-        navigation.replace('Tabs', {
-            screen: 'Meu Churras',
-            params: { loginFranca, loginJoao }
-        });
+        navigation.replace('Tabs');
     }
 
     function onChangeVar(text, varivael) {
-        console.log("Var " + varivael + " text " + text)
         varivael = text;
-        console.log("Var " + varivael + " text " + text)
     }
 
 
@@ -58,7 +51,7 @@ export default function AdicionarAcompanhamento() {
                         <Text style={style.textHeader}>Vamos escolher os</Text>
                         <Text style={style.textHeader}>acompanhamentos?</Text>
                     </View>
-                    <TouchableOpacity style={style.exitBtn} onPress={() => backHome(loginJoao)}>
+                    <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
                         <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
                         <Text style={style.textHeaderBtn}>Sair</Text>
                     </TouchableOpacity>
@@ -97,7 +90,7 @@ export default function AdicionarAcompanhamento() {
                         style={style.listStyle} />
                 </View>
 
-                <ActionButton offsetX={10} offsetY={90} onPress={() => escolherAcompanhamentos(2)} />
+                <ActionButton offsetX={10} offsetY={90} onPress={() => escolherAcompanhamentos()} />
 
                 <View style={style.footer}>
                     <Text style={style.textFooter}>Etapa 4/6</Text>

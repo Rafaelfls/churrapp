@@ -14,7 +14,6 @@ import style from './styles';
 
 export default function CompartilharChurrasco({ route, navigation }) {
     const rota = useRoute();
-    console.log();
     const churras = rota.params.churras
 
     function goBack() {

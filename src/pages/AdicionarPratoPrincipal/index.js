@@ -15,8 +15,6 @@ import style from './styles';
 export default function AdicionarPratoPrincipal({ route, navigation }) {
 
     const { convidadosQtd } = route.params;
-    const loginFranca = "0516f9fb26e6be70";
-    const loginJoao = "bdadea9527f65f1f";
     const [sugestaoList, setSugestao] = React.useState([])
 
     async function carregaSugestao() {
@@ -34,15 +32,12 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
         navigation.push('AdicionarAcompanhamento');
     }
 
-    function escolherPratoPrincipal(tela) {
-        navigation.push('EscolherNovosItens', { tela })
+    function escolherPratoPrincipal() {
+        navigation.push('EscolherNovosItens')
     }
 
     function backHome() {
-        navigation.replace('Tabs', {
-            screen: 'Meu Churras',
-            params: { loginFranca, loginJoao }
-        });
+        navigation.replace('Tabs');
     }
 
     function updateValue(qtdSugestao) {
@@ -51,9 +46,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
 
 
     function onChangeVar(text, varivael) {
-        console.log("Var " + varivael + " text " + text)
         varivael = text;
-        console.log("Var " + varivael + " text " + text)
     }
 
 
@@ -65,7 +58,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                         <Text style={style.textHeader}>Vamos escolher as</Text>
                         <Text style={style.textHeader}>carnes?</Text>
                     </View>
-                    <TouchableOpacity style={style.exitBtn} onPress={() => backHome(loginJoao)}>
+                    <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
                         <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
                         <Text style={style.textHeaderBtn}>Sair</Text>
                     </TouchableOpacity>
@@ -104,7 +97,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                         style={style.listStyle} />
                 </View>
 
-                <ActionButton offsetX={10} offsetY={90} onPress={() => escolherPratoPrincipal(1)} />
+                <ActionButton offsetX={10} offsetY={90} onPress={() => escolherPratoPrincipal()} />
 
                 <View style={style.footer}>
                     <Text style={style.textFooter}>Etapa 3/6</Text>

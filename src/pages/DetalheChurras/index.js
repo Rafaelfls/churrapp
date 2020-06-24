@@ -21,7 +21,6 @@ import { Container } from 'native-base';
 
 export default function DetalheChurras() {
   const route = useRoute();
-  const login = route.params.login;
   const [itens, setItens] = useState([]);
   const [itensTotal, setItensTotal] = useState(0);
 
@@ -40,9 +39,7 @@ export default function DetalheChurras() {
   }
 
   function backHome() {
-    navigation.replace('Tabs',  {
-      screen: 'Meu Churras', 
-      params: {login}});
+    navigation.goBack()
   }
   
   async function carregarItens() {
@@ -61,7 +58,7 @@ export default function DetalheChurras() {
       <View style={style.containerImg}>
         <Image source={backgroundImg} style={style.backgroundImg} />
         <Container style={style.cabecalho}>
-            <IconOct name="chevron-left" size={25} style={style.backBtn} onPress={() => backHome(login)} />
+            <IconOct name="chevron-left" size={25} style={style.backBtn} onPress={() => backHome()} />
           <Text style={style.detalheTitle}>{churras.nomeChurras}</Text>
 
             <IconEnt name="share" size={25} style={style.shareBtn} onPress={() => CompartilharChurras(churras)}/>            

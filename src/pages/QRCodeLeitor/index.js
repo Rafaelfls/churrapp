@@ -5,6 +5,8 @@ import IconOct from 'react-native-vector-icons/Octicons';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
+import api from '../../services/api';
+
 import style from './styles';
 
 export default function QRCodeLeitor() {
@@ -14,19 +16,25 @@ export default function QRCodeLeitor() {
     const [scanned, setScanned] = useState(false);
     const [visivel, setIsVisivel] = React.useState(false);
     const [qrCodeValue, setQrCodeValue] = React.useState('');
-    const loginFranca = "0516f9fb26e6be70";
-    const loginJoao = "99d8830296d7c838";
+    const config = {
+        headers: { 'Authorization': USUARIOLOGADO }
+    };
 
-    function backHome(churras) {
-        navigation.replace('Tabs', {
-            screen: 'Meu Churras', 
-            params: {loginFranca, loginJoao},
-            churras: churras});
+    function goback() {
+        navigation.goBack();
     }
 
-    function participarDoChurras(modal, churrasCode){
+
+    function participarDoChurras(modal,churrasId){
         setIsVisivel(modal);
-        backHome(churrasCode);
+
+        api.post('/convidadosChurras', {
+            churras_id: churrasId,
+            valorPagar: "20,00",
+            usuario_id:USUARIOLOGADO,
+          }, config);
+          return navigation.replace('Tabs');
+
     }
 
     useEffect(() => {
@@ -46,7 +54,7 @@ export default function QRCodeLeitor() {
 
         <View style={style.container}>
             <View style={style.header}>
-                <TouchableOpacity onPress={backHome}>
+                <TouchableOpacity onPress={goback}>
                     <IconOct name="chevron-left" size={25} style={style.backBtn} />
                 </TouchableOpacity>
                 <Text style={style.titulo}>Ler QR</Text>
