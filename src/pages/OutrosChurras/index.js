@@ -3,18 +3,15 @@ import { View, Text, Image, TouchableOpacity, FlatList } from 'react-native';
 import { ScrollableTabView, DefaultTabBar, ScrollableTabBar, } from '@valdio/react-native-scrollable-tabview'
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconEnt from 'react-native-vector-icons/Entypo';
 import IconFea from 'react-native-vector-icons/Feather';
-import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
 
 import churrasPhoto from '../../assets/fundoDescricao.jpg';
 
 import style from './styles';
 
 export default function OutrosChurras() {
-    
+
     const [churrasPassado, setChurrasPassados] = useState([]);
     const [churrasFuturo, setChurrasFuturo] = useState([]);
     const [total, setTotal] = useState(0);
@@ -72,7 +69,7 @@ export default function OutrosChurras() {
     }, []);
 
     function detalheChurras(churras) {
-        navigation.push('DetalheChurras', { churras });
+        navigation.push('DetalheChurras', { churras:churras,allowShare:false });
     }
 
     return (
@@ -84,100 +81,88 @@ export default function OutrosChurras() {
                 </View>
             </View>
 
-        <ScrollableTabView
-            style={style.tabView}
-            tabBarPosition="top" tabBarActiveTextColor="maroon" tabBarInactiveTextColor="dimgray"
-            tabBarTextStyle={{ fontWeight: 'normal', fontFamily: 'poppins-semi-bold', fontSize: 15 }}
-            tabBarBackgroundColor='white'
-            tabBarUnderlineStyle={{backgroundColor:'maroon', height:2, }}
-            renderTabBar={() => <DefaultTabBar />}
-            ref={(tabView) => { tabView = tabView; }}
-            initialPage={1}
-        >
+            <ScrollableTabView
+                style={style.tabView}
+                tabBarPosition="top" tabBarActiveTextColor="maroon" tabBarInactiveTextColor="dimgray"
+                tabBarTextStyle={{ fontWeight: 'normal', fontFamily: 'poppins-semi-bold', fontSize: 15 }}
+                tabBarBackgroundColor='white'
+                tabBarUnderlineStyle={{ backgroundColor: 'maroon', height: 2, }}
+                renderTabBar={() => <DefaultTabBar />}
+                ref={(tabView) => { tabView = tabView; }}
+                initialPage={1}
+            >
 
-            <FlatList
-                tabLabel='Churras Passados'
-                data={churrasPassado}
-                style={style.churrasList}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={churras => String(churras.id)}
-                onEndReached={loadChurrasPassados}
-                onEndReachedThreshold={0.2}
-                renderItem={({ item: churras }) => (
+                <FlatList
+                    tabLabel='Churras Passados'
+                    data={churrasPassado}
+                    style={style.churrasList}
+                    showsVerticalScrollIndicator={false}
+                    keyExtractor={churras => String(churras.id)}
+                    onEndReached={loadChurrasPassados}
+                    onEndReachedThreshold={0.2}
+                    renderItem={({ item: churras }) => (
 
-                    <View>
-                    <TouchableOpacity onPress={() => detalheChurras(churras)}>
-                        <View style={style.churras}>
-                            <View style={style.churrasDescricao}>
-                                <RNSlidingButton
-                                    style={{ backgroundColor: 'white', width: "100%" }}
-                                    height={90}
-                                    onSlidingSuccess={() => deletar(churras)}
-                                    slideDirection={SlideDirection.LEFT}>
-                                    <View style={style.slideBtn}>
-                                        <Image source={churrasPhoto} style={style.churrasFoto} />
-                                        <View style={style.churrasInfosView}>
-                                            <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
-                                            <Text style={style.churrasDono}>{churras.nome} </Text>
-                                            <View style={style.churrasLocDat}>
-                                                <IconEnt style={style.localIcon} name="location-pin" size={15} />
-                                                <Text style={style.churrasLocal}> {churras.local}</Text>
-                                                <Text style={style.locDatSeparator}>  |  </Text>
-                                                <IconFea style={style.dataIcon} name="calendar" size={15} />
-                                                <Text style={style.churrasData}> {churras.data}</Text>
+                        <View>
+                            <TouchableOpacity onPress={() => detalheChurras(churras)}>
+                                <View style={style.churras}>
+                                    <View style={style.churrasDescricao}>
+                                        <View style={style.slideBtn}>
+                                            <Image source={churrasPhoto} style={style.churrasFoto} />
+                                            <View style={style.churrasInfosView}>
+                                                <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
+                                                <Text style={style.churrasDono}>{churras.nome} </Text>
+                                                <View style={style.churrasLocDat}>
+                                                    <IconEnt style={style.localIcon} name="location-pin" size={15} />
+                                                    <Text style={style.churrasLocal}> {churras.local}</Text>
+                                                    <Text style={style.locDatSeparator}>  |  </Text>
+                                                    <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                                    <Text style={style.churrasData}> {churras.data}</Text>
+                                                </View>
                                             </View>
                                         </View>
                                     </View>
-                                </RNSlidingButton>
-                            </View>
+                                </View>
+                            </TouchableOpacity>
                         </View>
-                    </TouchableOpacity>
-                </View>
 
-                )}
-            />
-            <FlatList
-                tabLabel='Próximos Churras'
-                data={churrasFuturo}
-                style={style.churrasList}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={churras => String(churras.id)}
-                onEndReached={loadChurrasFuturos}
-                onEndReachedThreshold={0.2}
-                renderItem={({ item: churras }) => (
+                    )}
+                />
+                <FlatList
+                    tabLabel='Próximos Churras'
+                    data={churrasFuturo}
+                    style={style.churrasList}
+                    showsVerticalScrollIndicator={false}
+                    keyExtractor={churras => String(churras.id)}
+                    onEndReached={loadChurrasFuturos}
+                    onEndReachedThreshold={0.2}
+                    renderItem={({ item: churras }) => (
 
-                    <View>
-                    <TouchableOpacity onPress={() => detalheChurras(churras)}>
-                        <View style={style.churras}>
-                            <View style={style.churrasDescricao}>
-                                <RNSlidingButton
-                                    style={{ backgroundColor: 'white', width: "100%" }}
-                                    height={90}
-                                    onSlidingSuccess={() => deletar(churras)}
-                                    slideDirection={SlideDirection.LEFT}>
-                                    <View style={style.slideBtn}>
-                                        <Image source={churrasPhoto} style={style.churrasFoto} />
-                                        <View style={style.churrasInfosView}>
-                                            <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
-                                            <Text style={style.churrasDono}>{churras.nome} </Text>
-                                            <View style={style.churrasLocDat}>
-                                                <IconEnt style={style.localIcon} name="location-pin" size={15} />
-                                                <Text style={style.churrasLocal}> {churras.local}</Text>
-                                                <Text style={style.locDatSeparator}>  |  </Text>
-                                                <IconFea style={style.dataIcon} name="calendar" size={15} />
-                                                <Text style={style.churrasData}> {churras.data}</Text>
+                        <View>
+                            <TouchableOpacity onPress={() => detalheChurras(churras)}>
+                                <View style={style.churras}>
+                                    <View style={style.churrasDescricao}>
+                                        <View style={style.slideBtn}>
+                                            <Image source={churrasPhoto} style={style.churrasFoto} />
+                                            <View style={style.churrasInfosView}>
+                                                <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
+                                                <Text style={style.churrasDono}>{churras.nome} </Text>
+                                                <View style={style.churrasLocDat}>
+                                                    <IconEnt style={style.localIcon} name="location-pin" size={15} />
+                                                    <Text style={style.churrasLocal}> {churras.local}</Text>
+                                                    <Text style={style.locDatSeparator}>  |  </Text>
+                                                    <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                                    <Text style={style.churrasData}> {churras.data}</Text>
+                                                </View>
                                             </View>
                                         </View>
                                     </View>
-                                </RNSlidingButton>
-                            </View>
+                                </View>
+                            </TouchableOpacity>
                         </View>
-                    </TouchableOpacity>
-                </View>
 
-                )}
-            />
-        </ScrollableTabView>
+                    )}
+                />
+            </ScrollableTabView>
 
         </View>
 

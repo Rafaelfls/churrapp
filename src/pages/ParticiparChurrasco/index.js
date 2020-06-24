@@ -11,12 +11,14 @@ import style from './styles';
 export default function ParticiparChurrasco() {
 
     const navigation = useNavigation();
+
     const [text, onChangeText] = useState();
     const [churras_id, setChurras_id] = useState();
     
     const config = {
         headers: { 'Authorization': USUARIOLOGADO }
     };
+
 
     function backHome() {
         navigation.goBack()
@@ -26,12 +28,14 @@ export default function ParticiparChurrasco() {
         navigation.push('QRCodeLeitor');
     }
 
+
     function entrarChurrasco() {
         api.post(`/convidadosChurras/${USUARIOLOGADO}`, {
             valorPagar: 30,
             churras_id: churras_id
         });
         console.log("POSTADO " + USUARIOLOGADO + " - " + churras_id)
+
         onChangeText(null)
         return navigation.replace('Tabs')
     }
