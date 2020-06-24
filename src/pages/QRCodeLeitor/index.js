@@ -16,9 +16,6 @@ export default function QRCodeLeitor() {
     const [scanned, setScanned] = useState(false);
     const [visivel, setIsVisivel] = React.useState(false);
     const [qrCodeValue, setQrCodeValue] = React.useState('');
-    const config = {
-        headers: { 'Authorization': USUARIOLOGADO }
-    };
 
     function goback() {
         navigation.goBack();
@@ -27,14 +24,18 @@ export default function QRCodeLeitor() {
 
     function participarDoChurras(modal,churrasId){
         setIsVisivel(modal);
+        console.log(churrasId+ "    " + USUARIOLOGADO)
 
-        api.post('/convidadosChurras', {
-            churras_id: churrasId,
+        api.post(`/convidadosChurras/${USUARIOLOGADO}`, {
+
             valorPagar: "20,00",
-            usuario_id:USUARIOLOGADO,
-          }, config);
+            churras_id: churrasId
+            
+          });
           return navigation.replace('Tabs');
 
+
+        return navigation.replace('Tabs');
     }
 
     useEffect(() => {
