@@ -3,34 +3,97 @@ import { View, Text, TouchableOpacity, TextInput, SafeAreaView, ScrollView, Flat
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
+import api from '../../services/api';
 
 import style from './styles';
 
+var convidadosList = []
+
 export default function AdicionaConvidados({ route, navigation }) {
 
-  const [value, onChangeText] = React.useState('');
-  const convidadosList = []
+  const [value, onChangeText] = React.useState(20.50);
+  const [novoUsuarioId, setNovoUsuarioId] = React.useState('');
+  const [encontrou, setEncontrou] = React.useState(false)
 
   const { nomeContato } = route.params;
+  const { sobrenomeContato } = route.params;
   const { telefoneContato } = route.params;
+  const { churrasCodeAtual } = route.params;
 
   if (nomeContato != null) {
-    convidadosList.push({
-      nome: nomeContato,
-      telefone: telefoneContato,
-      status: 2
-    })
+    if (sobrenomeContato != undefined) {
+      convidadosList.push({
+        nome: nomeContato,
+        sobrenome: sobrenomeContato,
+        telefone: telefoneContato,
+        email: "email@email.com",
+        cidade: "cidade",
+        uf: "uf",
+        idade: 0,
+        joined: '00/00/00',
+        apelido: nomeContato,
+        cadastrado: false
+      })
+    } else {
+      convidadosList.push({
+        nome: nomeContato,
+        sobrenome: "",
+        telefone: telefoneContato,
+        email: "email@email.com",
+        cidade: "cidade",
+        uf: "uf",
+        idade: 0,
+        joined: '00/00/00',
+        apelido: nomeContato,
+        cadastrado: false
+      })
+    }
   }
-  const inviteStandard = "Ola, Rafael esta te convidadando para o churrasco *Top dos 100*, o valor do churrasco por pessoa ficou 25 reais. Pague pelo app do Churrapp ou para ele pessoalmente."
 
+  const inviteStandard = `Ola, Rafael esta te convidadando para o churrasco *Top dos 100*, o valor do churrasco por pessoa ficou ${value} reais. Acesso o Churrapp para confirmar a sua presença.`
 
+  function criaListaConvidados(convid) {
+    console.log(convid)
 
-  function next() {
+    api.post('/usuario', {
+      nome: convid.nome,
+      sobrenome: convid.sobrenome,
+      email: "email@email.com",
+      cidade: "cidade",
+      uf: "uf",
+      idade: 0,
+      foto: null,
+      joined: '00/00/00',
+      celular: convid.telefone,
+      apelido: convid.nome,
+      cadastrado: false,
+      pontoCarne_id:false,
+      carnePreferida_id:false,
+      quantidadeCome_id:false,
+      bebidaPreferida_id:false,
+      acompanhamentoPreferido_id:false
+    })
+
+    /*await api.post(`/convidadosChurras?usuario_id=${novoUsuarioId}`, {
+      valorPagar: value,
+      churras_id: churrasCodeAtual
+    })*/
+
+  }
+
+  async function next() {
     const convidadosQtd = convidadosList.length
-    navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd });
+
+    await convidadosList.map(convid => criaListaConvidados(convid))
+
+      navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd });
+
+
+    convidadosList = []
   }
 
   function backHome() {
+    convidadosList = []
     navigation.replace('Tabs');
   }
 
@@ -38,38 +101,20 @@ export default function AdicionaConvidados({ route, navigation }) {
     navigation.push('OpenContactList')
   }
 
-    return(
-      <View style={style.container}>
-        <SafeAreaView style={style.body}>
-            <View style={style.headerGroup}>
-            <Text style={style.textHeader}>Convide a galera!</Text>
-              <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
-                <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
-                <Text style={style.textHeaderBtn}>Sair</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={style.formGroup}>
-                <Text style={style.textLabel}>Mensagem</Text>
-                <TextInput
-                  style={style.inputStandard}
-                  onChange = { text => onChangeText('') }
-                  onChangeText={text => onChangeText(text)}
-                  placeholder={inviteStandard}
-                />
-            </View>
 
-  /* WhatsApp = (invite, telefoneContato) => {
-     Linking.canOpenURL(`whatsapp://send?text=${invite}`).then(supported => {
-       if (supported) {
-         if (invite === '') {
-           invite = inviteStandard;
-         }
-         return Linking.openURL(`whatsapp://send?text=${invite}&phone=${telefoneContato}`);
-       } else {
-         return Linking.openURL(`https://api.whatsapp.com/send?phone=${telefoneContato}&text=${invite}`)
-       }
-     })
-   }*/
+
+  /*WhatsApp = (invite, telefoneContato) => {
+    Linking.canOpenURL(`whatsapp://send?text=${invite}`).then(supported => {
+      if (supported) {
+        if (invite === '') {
+          invite = inviteStandard;
+        }
+        return Linking.openURL(`whatsapp://send?text=${invite}&phone=${telefoneContato}`);
+      } else {
+        return Linking.openURL(`https://api.whatsapp.com/send?phone=${telefoneContato}&text=${invite}`)
+      }
+    })
+  }*/
 
 
   return (
@@ -99,29 +144,12 @@ export default function AdicionaConvidados({ route, navigation }) {
           renderItem={({ item: convidadosList }) => (
             <View style={style.listaConvidados}>
               <View style={style.listaConvidadosItem}>
-                <Text style={style.listaConvidadosLabel}>Nome:</Text>
-                <Text style={style.listaConvidadosLabel}>{convidadosList.nome}</Text>
+                <Text style={style.listaConvidadosLabel}>Nome: </Text>
+                <Text style={style.listaConvidadosLabel}>{convidadosList.nome} {convidadosList.sobrenome}</Text>
               </View>
               <View style={style.listaConvidadosItem}>
                 <Text style={style.listaConvidadosLabel}>Telefone:</Text>
                 <Text style={style.listaConvidadosLabel}>{convidadosList.telefone}</Text>
-              </View>
-              <View style={style.listaConvidadosItem}>
-                <Text style={style.listaConvidadosLabel}>Status:</Text>
-                <View style={style.listaConvidadosItem}>
-                  {convidadosList.status == 1 &&
-                    <Text style={style.listaConvidadosLabelOK}>Presença confirmada</Text>
-                  }
-                  {convidadosList.status == 1 &&
-                    <Icon style={style.listaConvidadosLabelOK} name="check" size={20} />
-                  }
-                  {convidadosList.status == 2 &&
-                    <Text style={style.listaConvidadosLabelNOK}>Aguardando confirmação</Text>
-                  }
-                  {convidadosList.status == 2 &&
-                    <Icon style={style.listaConvidadosLabelNOK} name="exclamation" size={20} />
-                  }
-                </View>
               </View>
             </View>
           )}
@@ -129,11 +157,12 @@ export default function AdicionaConvidados({ route, navigation }) {
 
         <ActionButton offsetX={10} offsetY={90} onPress={openContactList} />
 
-          <View style={style.footer}>
+        <View style={style.footer}>
           <TouchableOpacity style={style.continueBtn} onPress={next}>
             <Text style={style.textBtn}>Convidar</Text>
           </TouchableOpacity>
-        </View>            
-        </SafeAreaView>    
-      </View>
-    )
+        </View>
+      </SafeAreaView>
+    </View>
+  )
+}
