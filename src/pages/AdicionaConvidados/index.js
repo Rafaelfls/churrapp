@@ -20,6 +20,8 @@ export default function AdicionaConvidados({ route, navigation }) {
   const { telefoneContato } = route.params;
   const { churrasCodeAtual } = route.params;
 
+  console.log("Pagian conv "+churrasCodeAtual)
+
   if (nomeContato != null) {
     if (sobrenomeContato != undefined) {
       convidadosList.push({
@@ -63,10 +65,12 @@ export default function AdicionaConvidados({ route, navigation }) {
     })
     setNovoUsuario([...novoUsuario, ...response.data]);
 
-    await api.post(`/convidadosChurras?usuario_id=${novoUsuario.id}`, {
+    console.log(novoUsuario.id)
+    
+    /*await api.post(`/convidadosChurras?usuario_id=${novoUsuario.id}`, {
       valorPagar: value,
       churras_id: churrasCodeAtual
-    })
+    })*/
 
   }
 

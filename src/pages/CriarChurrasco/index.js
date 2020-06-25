@@ -30,6 +30,7 @@ export default function CriarChurrasco() {
   function next() {
     if (nomeChurras != null && hrInicio != null && date != null && local != null) {
       criarChurras()
+      console.log("AQUI2 " + churrasCodeCriado.id);
       navigation.navigate('AdicionaConvidados',{
         nomeContato:null ,
         sobrenomeContato:null,
@@ -63,10 +64,10 @@ export default function CriarChurrasco() {
     }
   };
 
-  function criarChurras() {
+  async function criarChurras() {
 
 
-    return api.post('/churras', {
+    const response = await api.post('/churras', {
       nomeChurras: nomeChurras,
       local: local,
       hrInicio: hrInicio,
@@ -75,6 +76,10 @@ export default function CriarChurrasco() {
       data: date,
       foto: image,
     }, config)
+
+    setChurrasCodeCriado(response.data);
+    
+
 
   }
 
