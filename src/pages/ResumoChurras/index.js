@@ -23,6 +23,7 @@ export default function ResumoChurras() {
     const config = {
         headers: { 'Authorization': USUARIOLOGADO }
     };
+    
 
     const navigation = useNavigation();
 

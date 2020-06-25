@@ -25,6 +25,7 @@ export default function CriarChurrasco() {
   const config = {
     headers: { 'Authorization': USUARIOLOGADO }
   };
+  
 
   function next() {
     if (nomeChurras != null && hrInicio != null && date != null && local != null) {
@@ -73,7 +74,7 @@ export default function CriarChurrasco() {
       descricao: descricao,
       data: date,
       foto: image,
-    }, config).then(response => setChurrasCodeCriado(response));
+    }, config)
 
   }
 
