@@ -44,9 +44,6 @@ export default function ParticiparChurrasco() {
 
         <View style={style.container}>
             <View style={style.header}>
-                <TouchableOpacity onPress={backHome}>
-                    <IconOct name="chevron-left" size={25} style={style.backBtn} />
-                </TouchableOpacity>
                 <Text style={style.titulo}>Participar do churras</Text>
             </View>
             <View style={style.conteudo}>
@@ -55,17 +52,18 @@ export default function ParticiparChurrasco() {
                     style={style.inputStandard}
                     onChangeText={text => setChurras_id(text)}
                     value={text}
-                    placeholder={'#XXXXXX'}
+                    placeholder={'000000'}
                 />
+            </View>
+                <View style={style.btnsContainer}>
                 <TouchableOpacity style={style.enterBtn} onPress={entrarChurrasco}>
                     <Text style={style.textBtn}>Entrar</Text>
                 </TouchableOpacity>
-                <Text style={style.ou}>ou</Text>
-                <TouchableOpacity style={style.enterBtn} onPress={LerQR}>
-                    <IconFA name="qrcode" size={40} style={style.qrBtn} />
+                <TouchableOpacity style={style.qrBtn} onPress={LerQR}>
+                    <IconFA name="qrcode" size={40} style={style.qrIcon} />
                     <Text style={style.textBtn}>Ler QR Code</Text>
                 </TouchableOpacity>
-            </View>
+                </View>
         </View>
 
     )
