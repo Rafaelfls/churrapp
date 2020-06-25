@@ -52,7 +52,7 @@ export default function AdicionaConvidados({ route, navigation }) {
 
   const inviteStandard = `Ola, Rafael esta te convidadando para o churrasco *Top dos 100*, o valor do churrasco por pessoa ficou ${value} reais. Acesso o Churrapp para confirmar a sua presença.`
 
-  function criaListaConvidados(convid) {
+  /*function criaListaConvidados(convid) {
     console.log(convid)
 
     api.post('/usuario', {
@@ -74,19 +74,19 @@ export default function AdicionaConvidados({ route, navigation }) {
       acompanhamentoPreferido_id:false
     })
 
-    /*await api.post(`/convidadosChurras?usuario_id=${novoUsuarioId}`, {
+    await api.post(`/convidadosChurras?usuario_id=${novoUsuarioId}`, {
       valorPagar: value,
       churras_id: churrasCodeAtual
-    })*/
+    })
 
-  }
+  }*/
 
-  async function next() {
+  function next() {
     const convidadosQtd = convidadosList.length
 
-    await convidadosList.map(convid => criaListaConvidados(convid))
+    //convidadosList.map(convid => criaListaConvidados(convid))
 
-      navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd });
+    navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd });
 
 
     convidadosList = []
