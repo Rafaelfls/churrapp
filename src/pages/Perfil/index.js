@@ -18,13 +18,14 @@ import profileImg from '../../assets/Perfil.jpg';
 import style from './styles';
 import { Container } from 'native-base';
 import styles from './styles';
+import { set } from 'react-native-reanimated';
 
 export default function Perfil() {
     const route = useRoute();
     const navigation = useNavigation();
     const [loading, setLoading] = useState(false);
     const [perfil, setPerfil] = useState([]);
-    const [id, setId] = useState('dcca00a6fb1c45a8');
+    const [id, setId] = useState(USUARIOLOGADO);
     const [visivel, setIsVisivel] = React.useState(false);
     const [nome, setNome] = useState(perfil.nome);
     const [sobrenome, setSobrenome] = useState(perfil.sobrenome);
@@ -41,6 +42,8 @@ export default function Perfil() {
     const [quantidadeCome_id, setQuantidadeCome_id] = useState(perfil.quantidadeCome_id);
     const [bebidaPreferida_id, setBebidaPreferida_id] = useState(perfil.bebidaPreferida_id);
     const [acompanhamentoPreferido_id, setAcompanhamentoPreferido_id] = useState(perfil.acompanhamentoPreferido_id);
+    const [pontoCarne, setPontoCarne] = useState([]);
+    const [quantidadeCome, setQuantidadeCome] = useState([]);
 
 
 
@@ -60,12 +63,25 @@ export default function Perfil() {
 
     useEffect(() => {
         loadPerfil();
+        carregarPonto();
+        carregarQuantidadeCome();
     }, []);
 
     function confirmar() {
         updatePerfil();        
     }
 
+    async function carregarPonto() {
+        const response = await api.get(`/pontoCarne`)
+
+        setPontoCarne([...pontoCarne, ...response.data]);
+    }
+
+    async function carregarQuantidadeCome() {
+        const response = await api.get(`/quantidadecome`)
+
+        setQuantidadeCome([...quantidadeCome, ...response.data]);
+    }
 
     async function updatePerfil() {
 
@@ -186,11 +202,28 @@ export default function Perfil() {
                             placeholder={'Sadocco'}
                             />
                             <Text style={style.modalText}>Qual seu novo ponto?</Text>
-                            <TextInput
-                            style={style.inputStandard}
-                            onChangeText={text => setPontoCarne_id(text)}
-                            placeholder={'Sadocco'}
-                            />
+                            <Picker
+                            mode="dropdown"
+                            selectedValue={pontoCarne_id}
+                            onValueChange={pontoCarne_id => setPontoCarne_id(pontoCarne_id)}
+                            >
+                                {pontoCarne.map(ponto => (
+                                <Picker.Item label={ponto.ponto} value={ponto.id} />
+                                ))}
+
+                            </Picker>
+                            <Text style={style.modalText}>Quantidade que come?</Text>
+                            <Picker
+                            mode="dropdown"
+                            selectedValue={quantidadeCome_id}
+                            onValueChange={quantidadeCome_id => setQuantidadeCome_id(quantidadeCome_id)}
+                            >
+                                {quantidadeCome.map(quantidadeCome => (
+                                <Picker.Item label={quantidadeCome.nomeQuantidadeCome + " (" + quantidadeCome.quantidade + "g)"} value={quantidadeCome.id} />
+                                ))}
+
+                            </Picker>
+                            
                             <View style={style.selectionForm}>
                             </View>
                             <TouchableOpacity style={style.salvarBtn}>

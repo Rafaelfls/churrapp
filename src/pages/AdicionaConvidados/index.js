@@ -12,7 +12,7 @@ var convidadosList = []
 export default function AdicionaConvidados({ route, navigation }) {
 
   const [value, onChangeText] = React.useState(20.50);
-  const [novoUsuarioId, setNovoUsuarioId] = React.useState('');
+  const [novoUsuario, setNovoUsuario] = React.useState([]);
   const [encontrou, setEncontrou] = React.useState(false)
 
   const { nomeContato } = route.params;
@@ -26,36 +26,24 @@ export default function AdicionaConvidados({ route, navigation }) {
         nome: nomeContato,
         sobrenome: sobrenomeContato,
         telefone: telefoneContato,
-        email: "email@email.com",
-        cidade: "cidade",
-        uf: "uf",
-        idade: 0,
-        joined: '00/00/00',
-        apelido: nomeContato,
-        cadastrado: false
+        
       })
     } else {
       convidadosList.push({
         nome: nomeContato,
         sobrenome: "",
         telefone: telefoneContato,
-        email: "email@email.com",
-        cidade: "cidade",
-        uf: "uf",
-        idade: 0,
-        joined: '00/00/00',
-        apelido: nomeContato,
-        cadastrado: false
+        
       })
     }
   }
 
   const inviteStandard = `Ola, Rafael esta te convidadando para o churrasco *Top dos 100*, o valor do churrasco por pessoa ficou ${value} reais. Acesso o Churrapp para confirmar a sua presença.`
 
-  /*function criaListaConvidados(convid) {
+  async function criaListaConvidados(convid) {
     console.log(convid)
 
-    api.post('/usuario', {
+    const response = await api.post('/usuario', {
       nome: convid.nome,
       sobrenome: convid.sobrenome,
       email: "email@email.com",
@@ -73,13 +61,14 @@ export default function AdicionaConvidados({ route, navigation }) {
       bebidaPreferida_id:false,
       acompanhamentoPreferido_id:false
     })
+    setNovoUsuario([...novoUsuario, ...response.data]);
 
-    await api.post(`/convidadosChurras?usuario_id=${novoUsuarioId}`, {
+    await api.post(`/convidadosChurras?usuario_id=${novoUsuario.id}`, {
       valorPagar: value,
       churras_id: churrasCodeAtual
     })
 
-  }*/
+  }
 
   function next() {
     const convidadosQtd = convidadosList.length
