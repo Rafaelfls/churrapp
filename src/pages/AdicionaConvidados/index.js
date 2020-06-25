@@ -1,7 +1,7 @@
 import React, { Component, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, SafeAreaView, ScrollView, FlatList, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
 
