@@ -5,74 +5,82 @@ export default StyleSheet.create({
 
     container: {
         flex: 1,
-        paddingTop: Constants.statusBarHeight,
-        backgroundColor: '#fff'
+        paddingTop: Constants.statusBarHeight + 15,
+        backgroundColor: '#fff',
+        justifyContent: 'space-between',
     },
 
     header: {
+        justifyContent: 'space-between',
+        alignItems: "flex-start",
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: 10,
-        paddingBottom: 10,
-        backgroundColor: 'lightgrey',
+        marginHorizontal: 20,
+        marginBottom: 15,
     },
-
-    backBtn:{
-        paddingRight: 30,
-    },
-
     titulo:{
-        paddingRight: 40,
-        fontSize: 25,
-        fontWeight: 'bold',
+        fontSize: 28,
+        color: 'black',
+        fontFamily: 'poppins-semi-bold',
     },
 
     conteudo: {
         alignItems: 'center',
-        paddingTop: 40,
+        paddingTop: '20%',
     },
-
     inserirText:{
-        fontSize: 22,
+        fontSize: 20,
         marginBottom: 20,
+        fontFamily: 'poppins-medium',
     },
-
     inputStandard:{ 
         height: 40, 
         borderColor: 'gray', 
-        borderWidth: 1 ,
-        paddingHorizontal: 50,
-        borderRadius:8,
-        marginBottom: 10,
+        borderBottomWidth: 1 ,
+        paddingHorizontal: 20,
         fontSize: 20,
-        marginBottom: 30,
         alignContent: 'center',
     },
 
+    //Buttons
+    btnsContainer:{   
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        borderTopColor: 'lightgray',
+        borderTopWidth: 1,
+        backgroundColor: 'white',
+      },
+
     enterBtn:{
-        backgroundColor: 'lightgray',
-        borderRadius: 10,
-        padding: 5,
-        paddingHorizontal: 20,
+        backgroundColor: 'maroon',
+        borderRadius: 8,
+        padding: 10,
+        width: '80%',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
+        marginVertical: 10,
     },
 
     textBtn:{
-        fontSize: 30,
-    },
-
-    ou:{
-        marginVertical: 40,
         fontSize: 20,
+        fontFamily: 'poppins-medium',
+        color: 'white',
     },
 
     qrBtn:{
-        marginRight: 15,
+        backgroundColor: 'maroon',
+        borderRadius: 8,
+        padding: 10,
+        width: '80%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 10,
     },
 
-
+    qrIcon:{
+        marginRight: 15,
+        color: 'white',
+    },
     
 });
