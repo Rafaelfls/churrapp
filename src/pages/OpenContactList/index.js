@@ -15,23 +15,22 @@ export default class ContactList extends React.Component {
   }
 
   loadContacts = async () => {
-    console.log("loadContacts")
     const { data } = await Contacts.getContactsAsync();
 
-    console.log(data);
     this.setState({ contacts: data, inMemoryContacts: data, isLoading: false });
   };
 
   componentDidMount() {
-    console.log("componentDidMount")
     this.setState({ isLoading: true });
     this.loadContacts();
   }
 
   renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => this.props.navigation.navigate('AdicionaConvidados',{
-      nomeContato:item.firstName + " " +item.lastName ,
+      nomeContato:item.firstName ,
+      sobrenomeContato:item.lastName ,
       telefoneContato: item.phoneNumbers[0].number,
+      churrasCodeAtual:null
     })} style={{ minHeight: 70, padding: 5 }}>
       <Text style={{ color: 'brown', fontWeight: 'bold', fontSize: 26 }}>
         {item.firstName + ' '}
@@ -44,7 +43,6 @@ export default class ContactList extends React.Component {
   );
 
   searchContacts = value => {
-    console.log("searchContacts")
     const filteredContacts = this.state.inMemoryContacts.filter(contact => {
       let contactLowercase = (
         contact.firstName +

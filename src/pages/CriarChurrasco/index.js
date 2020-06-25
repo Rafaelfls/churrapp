@@ -11,8 +11,7 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import style from './styles';
 
 export default function CriarChurrasco() {
-  const route = useRoute();
-  const [value, onChangeText] = React.useState('Useless Placeholder');
+  
   const navigation = useNavigation();
   const [nomeChurras, setNomeChurras] = useState();
   const [local, setlocal] = useState();
@@ -21,6 +20,7 @@ export default function CriarChurrasco() {
   const [descricao, setdescricao] = useState();
   const [date, setDate] = useState();
   const [image, setImage] = useState(null);
+  const [churrasCodeCriado, setChurrasCodeCriado] = useState()
 
   const config = {
     headers: { 'Authorization': USUARIOLOGADO }
@@ -31,7 +31,9 @@ export default function CriarChurrasco() {
       criarChurras()
       navigation.navigate('AdicionaConvidados',{
         nomeContato:null ,
+        sobrenomeContato:null,
         telefoneContato: null,
+        churrasCodeAtual:churrasCodeCriado,
       });
     } else {
       Alert.alert(
@@ -71,7 +73,7 @@ export default function CriarChurrasco() {
       descricao: descricao,
       data: date,
       foto: image,
-    }, config);
+    }, config).then(response => setChurrasCodeCriado(response));
 
   }
 
