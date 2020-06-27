@@ -25,7 +25,7 @@ export default function Perfil() {
     const navigation = useNavigation();
     const [loading, setLoading] = useState(false);
     const [perfil, setPerfil] = useState([]);
-    const [id, setId] = useState(USUARIOLOGADO);
+    const [id, setId] = useState(USUARIOLOGADO.id);
     const [visivel, setIsVisivel] = React.useState(false);
     const [nome, setNome] = useState(perfil.nome);
     const [sobrenome, setSobrenome] = useState(perfil.sobrenome);

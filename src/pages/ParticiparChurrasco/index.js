@@ -16,7 +16,7 @@ export default function ParticiparChurrasco() {
     const [churras_id, setChurras_id] = useState();
     
     const config = {
-        headers: { 'Authorization': USUARIOLOGADO }
+        headers: { 'Authorization': USUARIOLOGADO.id }
     };
 
 
@@ -30,11 +30,11 @@ export default function ParticiparChurrasco() {
 
 
     function entrarChurrasco() {
-        api.post(`/convidadosChurras/${USUARIOLOGADO}`, {
+        api.post(`/convidadosChurras/${USUARIOLOGADO.id}`, {
             valorPagar: 30,
             churras_id: churras_id
         });
-        console.log("POSTADO " + USUARIOLOGADO + " - " + churras_id)
+        console.log("POSTADO " + USUARIOLOGADO.id + " - " + churras_id)
 
         onChangeText(null)
         return navigation.replace('Tabs')

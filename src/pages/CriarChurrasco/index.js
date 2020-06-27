@@ -23,7 +23,7 @@ export default function CriarChurrasco() {
   const [churrasCodeCriado, setChurrasCodeCriado] = useState()
 
   const config = {
-    headers: { 'Authorization': USUARIOLOGADO }
+    headers: { 'Authorization': USUARIOLOGADO.id }
   };
   
 
@@ -35,7 +35,15 @@ export default function CriarChurrasco() {
         nomeContato:null ,
         sobrenomeContato:null,
         telefoneContato: null,
-        churrasCodeAtual:churrasCodeCriado,
+        churrasAtual:{
+          churrasCode: churrasCodeCriado,
+          nomeChurras: nomeChurras,
+          local: local,
+          hrInicio: hrInicio,
+          hrFim: hrFim,
+          descricao: descricao,
+          data: date,
+          foto: image,},
       });
     } else {
       Alert.alert(

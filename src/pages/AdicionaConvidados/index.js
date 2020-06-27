@@ -6,41 +6,46 @@ import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
 
 import style from './styles';
+import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
 
 var convidadosList = []
 
 export default function AdicionaConvidados({ route, navigation }) {
 
-  const [value, onChangeText] = React.useState(20.50);
+  const [value, onChangeValue] = React.useState("20,50");
+  const [convite, onChangeText] = React.useState('');
   const [novoUsuario, setNovoUsuario] = React.useState([]);
-  const [encontrou, setEncontrou] = React.useState(false)
 
   const { nomeContato } = route.params;
   const { sobrenomeContato } = route.params;
   const { telefoneContato } = route.params;
-  const { churrasCodeAtual } = route.params;
+  const { churrasAtual } = route.params;
 
-  console.log("Pagian conv "+churrasCodeAtual)
+  console.log("Pagian conv " + convidadosList)
 
-  if (nomeContato != null) {
-    if (sobrenomeContato != undefined) {
-      convidadosList.push({
-        nome: nomeContato,
-        sobrenome: sobrenomeContato,
-        telefone: telefoneContato,
-        
-      })
-    } else {
-      convidadosList.push({
-        nome: nomeContato,
-        sobrenome: "",
-        telefone: telefoneContato,
-        
-      })
-    }
-  }
+  useEffect(() => {
+    if (nomeContato != null) {
+      if (sobrenomeContato != undefined) {
+        convidadosList.push({
+          id: convidadosList.length,
+          nome: nomeContato,
+          sobrenome: sobrenomeContato,
+          telefone: telefoneContato,
+  
+        })
+      } else {
+        convidadosList.push({
+          id: convidadosList.length,
+          nome: nomeContato,
+          sobrenome: "",
+          telefone: telefoneContato,
+  
+        })
+      }
+    }  
+  }, [nomeContato]); 
 
-  const inviteStandard = `Ola, Rafael esta te convidadando para o churrasco *Top dos 100*, o valor do churrasco por pessoa ficou ${value} reais. Acesso o Churrapp para confirmar a sua presença.`
+  const inviteStandard = `Olá, estou te convidadando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença.`
 
   async function criaListaConvidados(convid) {
     console.log(convid)
@@ -57,16 +62,16 @@ export default function AdicionaConvidados({ route, navigation }) {
       celular: convid.telefone,
       apelido: convid.nome,
       cadastrado: false,
-      pontoCarne_id:false,
-      carnePreferida_id:false,
-      quantidadeCome_id:false,
-      bebidaPreferida_id:false,
-      acompanhamentoPreferido_id:false
+      pontoCarne_id: false,
+      carnePreferida_id: false,
+      quantidadeCome_id: false,
+      bebidaPreferida_id: false,
+      acompanhamentoPreferido_id: false
     })
     setNovoUsuario([...novoUsuario, ...response.data]);
 
     console.log(novoUsuario.id)
-    
+
     /*await api.post(`/convidadosChurras?usuario_id=${novoUsuario.id}`, {
       valorPagar: value,
       churras_id: churrasCodeAtual
@@ -74,13 +79,17 @@ export default function AdicionaConvidados({ route, navigation }) {
 
   }
 
+  function apagaConvidado(convidado){
+    var valueConvidado = convidadosList.indexOf(convidado.nome)
+    convidadosList = convidadosList.splice(1,1)
+  }
+
   function next() {
     const convidadosQtd = convidadosList.length
 
-    //convidadosList.map(convid => criaListaConvidados(convid))
+    convidadosList.map(convid => enviaMensagens(convid.telefone,convite))
 
     navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd });
-
 
     convidadosList = []
   }
@@ -94,21 +103,19 @@ export default function AdicionaConvidados({ route, navigation }) {
     navigation.push('OpenContactList')
   }
 
-
-
-  /*WhatsApp = (invite, telefoneContato) => {
-    Linking.canOpenURL(`whatsapp://send?text=${invite}`).then(supported => {
+  function enviaMensagens(telefone, convite) {
+    console.log("Telefone: "+ telefone + " convite: "+convite)
+    Linking.canOpenURL(`whatsapp://send?text=${convite}`).then(supported => {
       if (supported) {
-        if (invite === '') {
-          invite = inviteStandard;
+        if (convite === '') {
+          convite = inviteStandard;
         }
-        return Linking.openURL(`whatsapp://send?text=${invite}&phone=${telefoneContato}`);
+        return Linking.openURL(`whatsapp://send?text=${convite}&phone=${telefone}`);
       } else {
-        return Linking.openURL(`https://api.whatsapp.com/send?phone=${telefoneContato}&text=${invite}`)
+        return Linking.openURL(`https://api.whatsapp.com/send?phone=${telefone}&text=${convite}`)
       }
     })
-  }*/
-
+  }
 
   return (
     <View style={style.container}>
@@ -135,7 +142,7 @@ export default function AdicionaConvidados({ route, navigation }) {
           keyExtractor={convidadosList => String(convidadosList.id)}
           showsVerticalScrollIndicator={false}
           renderItem={({ item: convidadosList }) => (
-            <View style={style.listaConvidados}>
+            <TouchableOpacity style={style.listaConvidados} onPress={() => apagaConvidado(convidadosList)}>
               <View style={style.listaConvidadosItem}>
                 <Text style={style.listaConvidadosLabel}>Nome: </Text>
                 <Text style={style.listaConvidadosLabel}>{convidadosList.nome} {convidadosList.sobrenome}</Text>
@@ -144,7 +151,7 @@ export default function AdicionaConvidados({ route, navigation }) {
                 <Text style={style.listaConvidadosLabel}>Telefone:</Text>
                 <Text style={style.listaConvidadosLabel}>{convidadosList.telefone}</Text>
               </View>
-            </View>
+            </TouchableOpacity>
           )}
           style={style.listStyle} />
 

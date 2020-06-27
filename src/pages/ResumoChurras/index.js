@@ -21,9 +21,8 @@ export default function ResumoChurras() {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const config = {
-        headers: { 'Authorization': USUARIOLOGADO }
+        headers: { 'Authorization': USUARIOLOGADO.id }
     };
-    
 
     const navigation = useNavigation();
 
@@ -72,7 +71,7 @@ export default function ResumoChurras() {
 
         setLoading(true);
 
-        const response = await api.get(`/churras/${USUARIOLOGADO}`, {
+        const response = await api.get(`/churras/${USUARIOLOGADO.id}`, {
             params: { page }
         });
 
