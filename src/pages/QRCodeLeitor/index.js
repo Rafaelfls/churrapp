@@ -28,7 +28,7 @@ export default function QRCodeLeitor() {
 
         api.post(`/convidadosChurras/${USUARIOLOGADO.id}`, {
 
-            valorPagar: "20,00",
+            valorPagar: 20.50,
             churras_id: churrasId
             
           });

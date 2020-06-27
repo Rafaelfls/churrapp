@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
-import { Row } from 'native-base';
+import { Row, Right } from 'native-base';
 
 export default StyleSheet.create({
 
@@ -24,6 +24,46 @@ export default StyleSheet.create({
 
   editIcon: {
     color: 'white',
+  },
+  editLine:{
+    flexDirection: 'row',
+    marginVertical: 7,
+    alignItems:'center'
+  },
+  inputStandard:{
+    position: 'absolute',
+    right: 0,
+    height: 40, 
+    borderColor: 'gray', 
+    fontFamily: 'poppins-regular',
+    borderBottomWidth: 0.5,
+    paddingHorizontal: 5,
+    width:'40%'
+  },
+  modalText:{
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: 'absolute',
+    bottom: 0,
+    width:'100%',
+  },
+  modalView: {
+    backgroundColor: "white",
+    width:'100%',
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    padding: 35,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
   },
 
   containerProfile: {

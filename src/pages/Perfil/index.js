@@ -68,7 +68,7 @@ export default function Perfil() {
     }, []);
 
     function confirmar() {
-        updatePerfil();        
+        updatePerfil();
     }
 
     async function carregarPonto() {
@@ -118,7 +118,7 @@ export default function Perfil() {
                         <View style={style.backgroundProfile}>
                             <View style={style.editarContainer}>
                                 <TouchableOpacity>
-                                    <IconFea name="edit" size={25} style={style.editIcon} onPress={() => setIsVisivel(true)}/>
+                                    <IconFea name="edit" size={25} style={style.editIcon} onPress={() => setIsVisivel(true)} />
                                 </TouchableOpacity>
                             </View>
                             <View style={style.containerProfile}>
@@ -129,19 +129,19 @@ export default function Perfil() {
                                 <Text style={style.profileIdade}>{perfil.idade} anos</Text>
                             </View>
                         </View>
-                            <View style={style.containerMyChurras}>
-                                <View style={style.containerOrg}>
-                                    <IconMCI name="grill" size={28} />
-                                    <Text style={style.profileOrg}>Organizou</Text>
-                                    <Text style={style.profileOrgNumber}>3</Text>
-                                </View>
-                                <View style={style.linhaSeparaçãoHor}></View>
-                                <View style={style.containerPart}>
-                                    <IconMCI name="grill" size={28} />
-                                    <Text style={style.profilePart}>Participou</Text>
-                                    <Text style={style.profilePartNumber}>7</Text>
-                                </View>
-                            
+                        <View style={style.containerMyChurras}>
+                            <View style={style.containerOrg}>
+                                <IconMCI name="grill" size={28} />
+                                <Text style={style.profileOrg}>Organizou</Text>
+                                <Text style={style.profileOrgNumber}>3</Text>
+                            </View>
+                            <View style={style.linhaSeparaçãoHor}></View>
+                            <View style={style.containerPart}>
+                                <IconMCI name="grill" size={28} />
+                                <Text style={style.profilePart}>Participou</Text>
+                                <Text style={style.profilePartNumber}>7</Text>
+                            </View>
+
                         </View>
                         <View style={style.containerGeral}>
                             <View style={style.containerEsq}>
@@ -180,58 +180,67 @@ export default function Perfil() {
                 )}
             />
             <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={visivel}
-                >
-                    <View style={style.centeredView}>
-                        <View style={style.modalView}>
-                            <TouchableOpacity style={style.exitBtn} onPress={() => setIsVisivel(false)}>
-                                <Icon style={style.iconHeaderBtn} name="times" size={20} />
-                            </TouchableOpacity>
+                animationType="slide"
+                transparent={true}
+                visible={visivel}
+            >
+                <View style={style.centeredView}>
+                    <View style={style.modalView}>
+                        <TouchableOpacity style={style.exitBtn} onPress={() => setIsVisivel(false)}>
+                            <Icon style={style.iconHeaderBtn} name="times" size={20} />
+                        </TouchableOpacity>
+                        <View style={style.editLine}>
                             <Text style={style.modalText}>Qual seu novo apelido?</Text>
                             <TextInput
-                            style={style.inputStandard}
-                            onChangeText={text => setApelido(text)}
-                            placeholder={'Sadocco'}
+                                style={style.inputStandard}
+                                onChangeText={text => setApelido(text)}
+                                placeholder={'Sadocco'}
                             />
+                        </View>
+                        <View style={style.editLine}>
                             <Text style={style.modalText}>Qual seu novo nome?</Text>
                             <TextInput
-                            style={style.inputStandard}
-                            onChangeText={text => setNome(text)}
-                            placeholder={'Sadocco'}
+                                style={style.inputStandard}
+                                onChangeText={text => setNome(text)}
+                                placeholder={'Sadocco'}
                             />
+                        </View>
+                        <View style={style.editLine}>
                             <Text style={style.modalText}>Qual seu novo ponto?</Text>
                             <Picker
-                            mode="dropdown"
-                            selectedValue={pontoCarne_id}
-                            onValueChange={pontoCarne_id => setPontoCarne_id(pontoCarne_id)}
+                                mode="dropdown"
+                                style={style.inputStandard}
+                                selectedValue={pontoCarne_id}
+                                onValueChange={pontoCarne_id => setPontoCarne_id(pontoCarne_id)}
                             >
                                 {pontoCarne.map(ponto => (
-                                <Picker.Item label={ponto.ponto} value={ponto.id} />
+                                    <Picker.Item label={ponto.ponto} value={ponto.id} />
                                 ))}
 
                             </Picker>
+                        </View>
+                        <View style={style.editLine}>
                             <Text style={style.modalText}>Quantidade que come?</Text>
                             <Picker
-                            mode="dropdown"
-                            selectedValue={quantidadeCome_id}
-                            onValueChange={quantidadeCome_id => setQuantidadeCome_id(quantidadeCome_id)}
+                                mode="dropdown"
+                                style={style.inputStandard}
+                                selectedValue={quantidadeCome_id}
+                                onValueChange={quantidadeCome_id => setQuantidadeCome_id(quantidadeCome_id)}
                             >
                                 {quantidadeCome.map(quantidadeCome => (
-                                <Picker.Item label={quantidadeCome.nomeQuantidadeCome + " (" + quantidadeCome.quantidade + "g)"} value={quantidadeCome.id} />
+                                    <Picker.Item label={quantidadeCome.nomeQuantidadeCome + " (" + quantidadeCome.quantidade + "g)"} value={quantidadeCome.id} />
                                 ))}
 
                             </Picker>
-                            
-                            <View style={style.selectionForm}>
-                            </View>
-                            <TouchableOpacity style={style.salvarBtn}>
-                                <Icon style={style.iconSalvarBtn} name="check" size={20} onPress={confirmar}/>
-                            </TouchableOpacity>
                         </View>
+                        <View style={style.selectionForm}>
+                        </View>
+                        <TouchableOpacity style={style.salvarBtn}>
+                            <Icon style={style.iconSalvarBtn} name="check" size={20} onPress={confirmar} />
+                        </TouchableOpacity>
                     </View>
-                </Modal>
+                </View>
+            </Modal>
 
         </View>
     )
