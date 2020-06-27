@@ -30,7 +30,7 @@ export default function CriarChurrasco() {
   function next() {
     if (nomeChurras != null && hrInicio != null && date != null && local != null) {
       criarChurras()
-      console.log("AQUI2 " + churrasCodeCriado.id);
+      console.log("AQUI2 " + churrasCodeCriado);
       navigation.navigate('AdicionaConvidados',{
         nomeContato:null ,
         sobrenomeContato:null,
