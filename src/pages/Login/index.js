@@ -48,7 +48,7 @@ export default function Calculadora() {
             onValueChange={usuarioSelecionado => setUsuarioSelecionado(usuarioSelecionado)}
           >
             {usuarios.map(users => (
-              <Picker.Item label={users.nome} value={users.id} />
+              <Picker.Item label={users.nome} value={users} />
             ))}
 
           </Picker>

@@ -15,9 +15,12 @@ export default class ContactList extends React.Component {
   }
 
   loadContacts = async () => {
-    const { data } = await Contacts.getContactsAsync();
+    const { status } = await Contacts.requestPermissionsAsync();
 
-    this.setState({ contacts: data, inMemoryContacts: data, isLoading: false });
+    if (status === 'granted') {
+      const { data } = await Contacts.getContactsAsync();
+      this.setState({ contacts: data, inMemoryContacts: data, isLoading: false });
+    }
   };
 
   componentDidMount() {
