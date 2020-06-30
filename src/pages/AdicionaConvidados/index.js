@@ -1,6 +1,7 @@
 import React, { Component, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, SafeAreaView, ScrollView, FlatList, Linking } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Ionicons';
+import IconFA from 'react-native-vector-icons/FontAwesome';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
@@ -123,12 +124,11 @@ export default function AdicionaConvidados({ route, navigation }) {
         <View style={style.headerGroup}>
           <Text style={style.textHeader}>Convide seus amigos!</Text>
           <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
-            <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
-            <Text style={style.textHeaderBtn}>Sair</Text>
+            <Icon style={style.iconHeaderBtn} name="md-exit" size={22} />
           </TouchableOpacity>
         </View>
         <View style={style.formGroup}>
-          <Text style={style.textLabel}>Convite:</Text>
+          <Text style={style.textLabel}>Mensagem</Text>
           <TextInput
             style={style.inputStandard}
             onChange={text => onChangeText('')}
@@ -144,12 +144,11 @@ export default function AdicionaConvidados({ route, navigation }) {
           renderItem={({ item: convidadosList }) => (
             <TouchableOpacity style={style.listaConvidados} onPress={() => apagaConvidado(convidadosList)}>
               <View style={style.listaConvidadosItem}>
-                <Text style={style.listaConvidadosLabel}>Nome: </Text>
                 <Text style={style.listaConvidadosLabel}>{convidadosList.nome} {convidadosList.sobrenome}</Text>
               </View>
               <View style={style.listaConvidadosItem}>
-                <Text style={style.listaConvidadosLabel}>Telefone:</Text>
-                <Text style={style.listaConvidadosLabel}>{convidadosList.telefone}</Text>
+                <IconFA style={style.phoneIcon} name="phone" size={16} />
+                <Text style={style.listaConvidadosLabelNum}>{convidadosList.telefone}</Text>
               </View>
             </TouchableOpacity>
           )}

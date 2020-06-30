@@ -125,6 +125,8 @@ export default StyleSheet.create({
   },
   addImgIcon:{
     color: 'maroon',
+    opacity: 0.5,
+    position: 'absolute',
   },
 
   //Data e hora

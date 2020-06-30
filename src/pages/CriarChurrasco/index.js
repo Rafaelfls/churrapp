@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Image, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../services/api';
 import DatePicker from 'react-native-datepicker';
 import * as ImagePicker from 'expo-image-picker';
-import IconFea from 'react-native-vector-icons/Feather';
+
+import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
 import style from './styles';
@@ -61,7 +61,7 @@ export default function CriarChurrasco() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [9, 16],
+      aspect: [1, 1],
       quality: 1,
     });
 
@@ -100,8 +100,7 @@ export default function CriarChurrasco() {
             <Text style={style.textSubHeader}>Insira as informações principais</Text>
           </View>
           <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
-            <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
-            <Text style={style.textHeaderBtn}>Sair</Text>
+            <Icon style={style.iconHeaderBtn} name="md-exit" size={22} />
           </TouchableOpacity>
         </View>
         <ScrollView style={style.scrollView}>
@@ -218,11 +217,12 @@ export default function CriarChurrasco() {
             <View style={style.imagePicker}>
               <TouchableOpacity style={style.inputDisplay} onPress={pickImage} >
                 <IconFA style={style.addImgIcon} name="image" size={100} />
-                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, paddingVertical: 10 }} />}
+                {image && <Image source={{ uri: image }} style={{ width: 170, height: 170, paddingVertical: 10 }} />}
               </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
+
         <View style={style.footer}>
           <TouchableOpacity style={style.continueBtn} onPress={next}>
             <Text style={style.textBtn}>Criar churras</Text>

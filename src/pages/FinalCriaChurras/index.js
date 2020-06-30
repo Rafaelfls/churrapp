@@ -16,17 +16,16 @@ export default function FinalCriaChurras(){
     return(
         <View style={style.container}>
             <View style={style.textContainer}>
-                <Text style={style.textHeader10}>Pronto!</Text>
+                <Text style={style.textHeader10}>Pronto!</Text>                          
+                <Text style={style.textHeader2}>Seu churrasco foi criado!</Text>
+                <Text style={style.textHeader2}>Foi fácil, né?</Text>
             </View>
-            <Text style={style.textHeader2}>Você acabou de organizar um churrasco.</Text>
-            <Text style={style.textHeader3}>Foi facil né.</Text>
-            <Text style={style.textHeader4}>Boa curtição</Text>
-            
-            
-            <TouchableOpacity style = {style.continueBtn} onPress={next}>
-                <Icon style={style.iconBtn} name  = "angle-double-right" size = {30}/>
-                <Text style={style.textBtn}>Concluir</Text>
-            </TouchableOpacity>
+            <View style={style.btnContainer}>
+                <Text style={style.textHeader3}>Aproveita!</Text>
+                <TouchableOpacity style = {style.continueBtn} onPress={() => next()}>
+                    <Text style={style.textBtn}>Concluir</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
