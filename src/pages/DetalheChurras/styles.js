@@ -13,42 +13,30 @@ export default StyleSheet.create({
   },
 
   //header
-  containerImg: {
-    flex: 0.18,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  backgroundImg: {
-    opacity: 0.3,
-    height: '100%',
-    alignSelf: 'center',
-    resizeMode: 'cover',
-    position: 'relative',
-    backgroundColor: 'transparent',
-    width: '100%',
-  },
-
-  cabecalho: {
+  containerHeader:{
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    paddingHorizontal: '5%',
+    justifyContent: 'space-between',
     alignItems: 'flex-start',
-    backgroundColor: 'transparent',
-    position: 'absolute',
-    flex: 0.5,
-    paddingTop: Constants.statusBarHeight + 15,
+    paddingTop: Constants.statusBarHeight + 10,
+    paddingBottom: '2%',
+    backgroundColor: 'maroon',
   },
   backBtn:{
     marginTop: 10,
+    color: 'white',
   },
   detalheTitle: {
     fontSize: 30,
     marginBottom: 0,
     fontWeight: 'bold',
-    color: '#000',
-    paddingBottom: 15,  
+    color: 'white',
+    paddingBottom: 15, 
+    opacity: 0.9,
   },
   shareBtn: {
     marginTop: 10,
+    color: 'white',
   },
 
   //body
@@ -92,15 +80,13 @@ export default StyleSheet.create({
   churrasDonoContainer: {
     marginBottom: 0,
     alignItems: 'center',
-    borderColor: 'darkgrey',
-    borderWidth: 1,
+    backgroundColor: 'maroon',
     borderRadius: 10,
-    padding: 3,
+    padding: 10,
   },
   churrasDono: {
-    color: 'black',
-    fontSize: 15,
-    opacity: 0.7,
+    color: 'white',
+    fontSize: 13,
   },
   donoImg: {
     height: 60,
@@ -145,20 +131,25 @@ export default StyleSheet.create({
   convidado:{
     alignItems: 'center',
     justifyContent: 'center',
-    borderColor: 'lightgray',
-    borderWidth: 1,
-    borderRadius: 10,
+    backgroundColor: 'maroon',
+    borderRadius: 8,
     margin: 10,
-    padding: 8,
     height: 150,
   },
   profileImg:{
     height: 110,
     width: 100,
-    marginBottom: 3,
-    borderRadius: 2,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
   },
   nomeConvidado:{
+    color: 'white',
+    padding: 3,
+  },
+  foneConvidado:{
+    color: 'lightgray',
+    paddingBottom: 12,
+    fontSize: 12,
   },
 
   //Itens
@@ -188,24 +179,25 @@ export default StyleSheet.create({
   item:{
     alignItems: 'center',
     justifyContent: 'center',
-    borderColor: 'lightgray',
-    borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 8,
     margin: 10,
     padding: 8,
-    height: 170,
+    height: 150,
   },
   itemImg:{
     height: 110,
     width: 100,
-    marginBottom: 3,
-    borderRadius: 2,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
   },
   nomeItem:{
-    marginBottom: 3,
+    color: 'maroon',
+    padding: 3,
   },
   qtdItem:{
     color: 'gray',
+    paddingBottom: 12,
+    fontSize: 12,
   },
 
 
