@@ -5,8 +5,8 @@ import ActionButton from 'react-native-action-button';
 import NumericInput from 'react-native-numeric-input';
 
 //Icones imports
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Ionicons';
+import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import style from './styles';
 
@@ -48,16 +48,13 @@ export default function AdicionarAcompanhamento() {
             <SafeAreaView style={style.body}>
                 <View style={style.headerGroup}>
                     <View style={style.headerTextGroup}>
-                        <Text style={style.textHeader}>Vamos escolher os</Text>
-                        <Text style={style.textHeader}>acompanhamentos?</Text>
+                        <Text style={style.textHeader}>Escolha os acompanhamentos</Text>
                     </View>
                     <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
-                        <Icon style={style.iconHeaderBtn} name="times-circle" size={20} />
-                        <Text style={style.textHeaderBtn}>Sair</Text>
+                        <Icon style={style.iconHeaderBtn} name="md-exit" size={22} />
                     </TouchableOpacity>
                 </View>
 
-                <View style={style.formGroup}>
                     <FlatList
                         data={sugestaoList}
                         keyExtractor={sugestaoList => String(sugestaoList.id)}
@@ -66,21 +63,23 @@ export default function AdicionarAcompanhamento() {
                             <View>
                                 {sugestaoList.tipo_id >= 6 && sugestaoList.tipo_id <= 6 ? (
                                     <View style={style.componentPicker}>
-                                        <Icon style={style.iconTipo} name="feather" size={15} />
-                                        <Text style={style.textLabel}>{sugestaoList.nomeItem + " (" + sugestaoList.unidade + ")"}</Text>
+                                        <View style={style.textIcon}>
+                                            <IconMCI style={style.iconTipo} name="silverware-fork" size={20} />
+                                            <Text style={style.textLabel}>{sugestaoList.nomeItem + " (" + sugestaoList.unidade + ")"}</Text>
+                                        </View>
                                         <View style={style.picker}>
                                             <NumericInput
                                                 onChange={text => onChangeVar(text, sugestaoList.quantidade)}
                                                 onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-                                                totalWidth={150}
-                                                totalHeight={30}
-                                                iconSize={15}
+                                                totalWidth={120}
+                                                totalHeight={40}
+                                                iconSize={18}
                                                 initValue={updateValue(sugestaoList.quantidade)}
                                                 step={5}
                                                 valueType='real'
                                                 rounded
-                                                textColor='brown'
-                                                iconStyle={{ color: 'brown' }}
+                                                textColor='maroon'
+                                                iconStyle={{ color: 'black' }}
                                                 style={style.quantidadeInput} />
                                         </View>
                                     </View>
@@ -88,14 +87,11 @@ export default function AdicionarAcompanhamento() {
                             </View>
                         )}
                         style={style.listStyle} />
-                </View>
 
-                <ActionButton offsetX={10} offsetY={90} onPress={() => escolherAcompanhamentos()} />
+                <ActionButton offsetX={10} offsetY={100} onPress={() => escolherAcompanhamentos()} />
 
                 <View style={style.footer}>
-                    <Text style={style.textFooter}>Etapa 4/6</Text>
                     <TouchableOpacity style={style.continueBtn} onPress={next}>
-                        <Icon style={style.iconBtn} name="angle-double-right" size={20} />
                         <Text style={style.textBtn}>Continuar</Text>
                     </TouchableOpacity>
                 </View>

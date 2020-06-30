@@ -7,7 +7,7 @@ import api from '../../services/api';
 
 import style from './styles';
 
-import logo from '../../assets/logo.jpg'
+import logo from '../../assets/splash.png'
 
 export default function Calculadora() {
   const navigation = useNavigation();

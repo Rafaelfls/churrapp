@@ -104,7 +104,7 @@ export default function DetalheChurras() {
         <View style={style.cabecalhoConvidados}>
           <View style={style.containerTituloConvidados}>
             <Text style={style.tituloConvidados}>Convidados</Text>
-            <Text style={style.subtituloConvidados}>6 pessoas</Text>
+            <Text style={style.subtituloConvidados}>X pessoas</Text>
           </View>
           <TouchableOpacity onPress={() => setModalVisivel(true)}>
             <Text style={style.verTodos}>ver todos</Text>
@@ -123,7 +123,7 @@ export default function DetalheChurras() {
             <View style={{ width: 140, height: 'auto', flexDirection: 'row' }}>
               <TouchableOpacity>
                 <View style={style.item}>
-                  <Image source={frango} style={style.itemImg} />
+                  <Image source={profileImg} style={style.itemImg} />
                   <Text style={style.nomeItem}>{convidados.nome}</Text>
                   <Text style={style.qtdItem}>{convidados.celular}</Text>
                 </View>

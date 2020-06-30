@@ -6,121 +6,94 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Constants.statusBarHeight + 15,
-  },  
-  body:{
+    backgroundColor: 'white',
+  },
+  body: {
     flex: 1,
   },
-  headerGroup:{
-    flexDirection:'row',
+
+  headerGroup: {
+    flexDirection: 'row',
+    marginHorizontal: '5%',
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   textHeader: {
-    fontSize: 25,
-    color: '#fb2',
-    marginLeft: 15,
+    fontSize: 18,
+    color: 'black',
+    fontFamily: 'poppins-semi-bold',
   },
-  exitBtn:{
-    flexDirection:'row-reverse',
-    position:"absolute",
-    right: 10,
-    top: 20,
+
+  //body
+  listStyle: {
+    marginTop: 15,
   },
-  textHeaderBtn:{
-    fontSize: 15,
-    marginHorizontal: 7,
-  },
-  footer:{    
-    height: 70,
+
+  componentPicker: {
     flexDirection: "row",
-    justifyContent: "flex-start",
-    alignContent: 'center',
-    backgroundColor: 'brown',
-    position: 'absolute',
-    width: '100%',
-    bottom: 0,
+    alignItems: "center",
+    justifyContent: 'space-between',
+    marginHorizontal: '5%',
+    marginVertical: 10,
+    borderRadius: 8,
+    paddingHorizontal: '2%',
+    backgroundColor: 'white'
   },
-  textFooter:{
+
+  textIcon:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  iconTipo: {
     alignSelf: 'center',
-    fontSize: 20,
-    color: 'yellow',
-    marginLeft: 15
+    color: 'maroon',
   },
-continueBtn:{
-  alignSelf: 'center',
-  position: 'absolute',
-  right: 20,
-  flexDirection:'row-reverse',
-  borderRadius:8,
-  backgroundColor: 'black',
-  paddingHorizontal: 10,
-  paddingVertical: 5,
-},
-textBtn:{
-  marginRight: 10,
-  color: 'yellow',
-},
-iconBtn:{
-  color:"yellow",
-},
-formGroup:{
-  marginHorizontal:20,
-  marginTop: 15,
-  justifyContent: "center",
-},
-textLabel:{
-  fontSize: 20,
-  color:"brown",
-  marginBottom: 10,
-},
-inputStandard:{ 
-  height: 40, 
-  borderColor: 'gray', 
-  borderWidth: 1 ,
-  paddingHorizontal: 10,
-  borderRadius:8,
-  marginBottom: 10,
-},
-componentPicker:{
-  flexDirection: "row",
-  alignContent: "center",
-  marginVertical: 10,
-  borderWidth: 1,
-  borderRadius: 8,
-  paddingHorizontal: 5,
-  paddingVertical: 10,
-  backgroundColor:'white'
-},   
-textLabel:{
-  fontSize: 15,
-  color:"brown",
-  marginBottom: 10,
-  marginLeft: 10
-},
-picker:{
-  position: 'absolute',
-  right: 5,
-  top:10,
-  flexDirection:'row',
-  borderWidth: 1,
-  borderRadius: 6,
-},
-icons:{
-    marginHorizontal: 5,
-    justifyContent: 'center',
-    textAlign: 'center'
-},
-quantidadeInput:{
-    paddingHorizontal: 30,
-    borderWidth: 0.2,
+  textLabel: {
+    fontSize: 16,
+    color: "maroon",
+    fontFamily: 'poppins-semi-bold',
+    marginLeft: 10
+  },
+
+  picker: {
+    flexDirection: 'row',
+    borderRadius: 6,
+  },
+
+  quantidadeInput: {
+    paddingHorizontal: 20,
     borderBottomWidth: 0,
     borderTopWidth: 0,
     borderRadius: 0,
-    width:100,
-},
-iconTipo:{
-    alignSelf:'center',
-    color: 'black',
-    top: -5,
+    backgroundColor: 'white',
+    width: 100,
+  },
+  
+
+  //footer
+  footer:{    
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    borderTopColor: 'lightgray',
+    borderTopWidth: 1,
+    backgroundColor: 'white',
+  },
+  continueBtn:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: '85%',
+    paddingVertical: 5,
+  },
+  textBtn:{
+    color: 'white',
     fontSize: 17,
-    color: 'brown'
-}
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
 })
