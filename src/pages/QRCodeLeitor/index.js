@@ -22,20 +22,17 @@ export default function QRCodeLeitor() {
     }
 
 
-    function participarDoChurras(modal,churrasId){
-        setIsVisivel(modal);
-        console.log(churrasId+ "    " + USUARIOLOGADO.id)
+    function participarDoChurras(){
+        setIsVisivel(false);
+        console.log(qrCodeValue+ "    " + USUARIOLOGADO.id)
 
         api.post(`/convidadosChurras/${USUARIOLOGADO.id}`, {
 
-            valorPagar: "20,00",
-            churras_id: churrasId
+            valorPagar: 20.00,
+            churras_id: qrCodeValue
             
           });
           return navigation.replace('Tabs');
-
-
-        return navigation.replace('Tabs');
     }
 
     useEffect(() => {
@@ -83,7 +80,7 @@ export default function QRCodeLeitor() {
                             <TouchableOpacity style={style.salvarBtn} onPress={() => setIsVisivel(false)}>
                                 <Text style={style.textSalvarBtn}>Cancelar</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={style.salvarBtn} onPress={() => participarDoChurras(false,qrCodeValue)}>
+                            <TouchableOpacity style={style.salvarBtn} onPress={participarDoChurras}>
                                 <Text style={style.textSalvarBtn}>Participar</Text>
                             </TouchableOpacity>
                         </View>
