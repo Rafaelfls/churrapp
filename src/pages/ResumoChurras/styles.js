@@ -115,4 +115,43 @@ export default StyleSheet.create({
     height: 22,
     color: 'white'
   },
+  modalView: {
+    backgroundColor: "white",
+    width:'100%',
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    padding: 35,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: 'absolute',
+    bottom: "50%",
+    width:'100%',
+  },
+  btnArea: {
+    flexDirection: 'row',
+    alignSelf: 'center'
+  },
+  btnSair: {
+    paddingTop: 50,
+    flexDirection: 'row',
+    marginHorizontal: '8%'
+  },
+  btnDeletar: {
+    paddingTop: 50,
+    flexDirection: 'row',
+  },
+  btnText: {
+    marginHorizontal: 8
+  },
 });

@@ -34,12 +34,12 @@ export default class ContactList extends React.Component {
       sobrenomeContato:item.lastName ,
       telefoneContato: item.phoneNumbers[0].number,
       churrasCodeAtual:null
-    })} style={{ minHeight: 70, padding: 5 }}>
-      <Text style={{ color: 'brown', fontWeight: 'bold', fontSize: 26 }}>
+    })} style={{ minHeight: 70, padding: 5, paddingHorizontal: 20 }}>
+      <Text style={{ color: 'black', fontFamily: 'poppins-semi-bold', fontSize: 18 }}>
         {item.firstName + ' '}
         {item.lastName}
       </Text>
-      <Text style={{ color: 'gold', fontWeight: 'bold' }}>
+      <Text style={{ color: 'gray', fontWeight: 'poppins-medium' }}>
         {item.phoneNumbers[0].number}
       </Text>
     </TouchableOpacity>
@@ -67,18 +67,17 @@ export default class ContactList extends React.Component {
           <Text style={style.textHeader}>Adicione os seus convidados!</Text>
           <TextInput
             placeholder="Buscar"
-            placeholderTextColor="gold"
+            placeholderTextColor="gray"
             style={{
-              backgroundColor: 'brown',
-              height: 60,
-              fontSize: 25,
-              padding: 5,
-              paddingLeft: 10,
-              color: 'gold',
-              borderBottomWidth: 3,
-              borderBottomColor: 'gold',
-              borderTopWidth: 3,
-              borderTopColor: 'gold',
+              backgroundColor: 'white',
+              height: 40,
+              fontFamily: 'poppins-medium',
+              fontSize: 15,
+              paddingLeft: 5,
+              marginHorizontal: 20,
+              marginBottom: 10,
+              borderBottomWidth: 1,
+              borderBottomColor: 'gray',
             }}
             onChangeText={value => this.searchContacts(value)}
           />
@@ -88,10 +87,11 @@ export default class ContactList extends React.Component {
                 style={{
                   ...StyleSheet.absoluteFill,
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  marginLeft: 30,
                 }}
               >
-                <ActivityIndicator size="large" color="brown" />
+                <ActivityIndicator size="large" color="black" />
               </View>
             ) : null}
             <FlatList
@@ -104,10 +104,10 @@ export default class ContactList extends React.Component {
                     flex: 1,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginTop: 50
+                    marginTop: 50,
                   }}
                 >
-                  <Text style={{ color: 'brown' }}>No Contacts Found</Text>
+                  <Text style={{ color: 'black', fontFamily: 'poppins-medium', fontSize: 20 }}>No Contacts Found</Text>
                 </View>
               )}
             />

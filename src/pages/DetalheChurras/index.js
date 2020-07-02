@@ -67,9 +67,7 @@ export default function DetalheChurras() {
 
   return (
     <View style={style.container}>
-      <View style={style.containerImg}>
-        <Image source={backgroundImg} style={style.backgroundImg} />
-        <Container style={style.cabecalho}>
+      <View style={style.containerHeader}>
           <IconOct name="chevron-left" size={25} style={style.backBtn} onPress={() => backHome()} />
           <Text style={style.detalheTitle}>{churras.nomeChurras}</Text>
           <View>
@@ -77,7 +75,6 @@ export default function DetalheChurras() {
               <IconEnt name="share" size={25} style={style.shareBtn} onPress={() => CompartilharChurras(churras)} />
             }
           </View>
-        </Container>
       </View>
 
       <ScrollView nestedScrollEnabled={true} style={style.scroll}>
@@ -104,7 +101,7 @@ export default function DetalheChurras() {
         <View style={style.cabecalhoConvidados}>
           <View style={style.containerTituloConvidados}>
             <Text style={style.tituloConvidados}>Convidados</Text>
-            <Text style={style.subtituloConvidados}>6 pessoas</Text>
+            <Text style={style.subtituloConvidados}>X pessoas</Text>
           </View>
           <TouchableOpacity onPress={() => setModalVisivel(true)}>
             <Text style={style.verTodos}>ver todos</Text>
@@ -122,10 +119,10 @@ export default function DetalheChurras() {
 
             <View style={{ width: 140, height: 'auto', flexDirection: 'row' }}>
               <TouchableOpacity>
-                <View style={style.item}>
-                  <Image source={frango} style={style.itemImg} />
-                  <Text style={style.nomeItem}>{convidados.nome}</Text>
-                  <Text style={style.qtdItem}>{convidados.celular}</Text>
+                <View style={style.convidado}>
+                  <Image source={profileImg} style={style.profileImg} />
+                  <Text style={style.nomeConvidado}>{convidados.nome}</Text>
+                  <Text style={style.foneConvidado}>{convidados.celular}</Text>
                 </View>
               </TouchableOpacity>
             </View>

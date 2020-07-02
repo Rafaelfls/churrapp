@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, Alert, Vibration, ToastAndroid } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, Alert, Vibration, ToastAndroid, Modal } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -20,6 +20,8 @@ export default function ResumoChurras() {
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [visivel, setVisivel] = useState(false)
+    const [churrasDeletar, setChurrasDeletar] = useState([]);
     const config = {
         headers: { 'Authorization': USUARIOLOGADO.id }
     };
@@ -27,19 +29,10 @@ export default function ResumoChurras() {
     const navigation = useNavigation();
 
     function deletar(churras) {
-        Alert.alert(
-            `Churras deletado`,
-            churras.nomeChurras,
-            [
-                {
-                    text: "Beleza"
-                }
-            ]
-        );
-        Vibration.vibrate(60);
-        navigation.replace('Tabs');
 
-        api.delete(`/churras/${churras.id}`, config);       
+        console.log(churras.id);
+        navigation.replace('Tabs');
+        api.delete(`/churras/${churras.id}`, config);  
 
     }
 
@@ -116,7 +109,7 @@ export default function ResumoChurras() {
                                     <RNSlidingButton
                                         style={{ backgroundColor: 'white', width: "100%" }}
                                         height={90}
-                                        onSlidingSuccess={() => deletar(churras)}
+                                        onSlidingSuccess={() => {setVisivel(true); setChurrasDeletar(churras)}}
                                         slideDirection={SlideDirection.LEFT}>
                                         <View style={style.slideBtn}>
                                             <Image source={churrasPhoto} style={style.churrasFoto} />
@@ -148,6 +141,28 @@ export default function ResumoChurras() {
                     <Icon name="users" style={style.fabBtnIcon} />
                 </ActionButton.Item>
             </ActionButton>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={visivel}
+            >
+                <View style={style.centeredView}>
+                    <View style={style.modalView}>
+                    <Text>Não vai mais armar esse churras? {churrasDeletar.nomeChurras}</Text>
+                        <View style={style.btnArea}>
+                            <TouchableOpacity style={style.btnSair} onPress={() => setVisivel(false)}>
+                                <Icon style={style.iconHeaderBtn} name="times" size={20} />
+                                <Text style={style.btnText}>Pensando bem</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={style.btnDeletar} onPress={() => deletar(churrasDeletar)}>
+                                <Icon style={style.iconHeaderBtn} name="check" size={20} />
+                                <Text style={style.btnText}>Melhor não</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
 
         </View>
 

@@ -6,6 +6,7 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Constants.statusBarHeight + 15,
+    backgroundColor: 'white',
   },    
   body:{
     flex: 1,
@@ -24,8 +25,9 @@ export default StyleSheet.create({
     marginHorizontal: 7,
   },
   textHeader: {
-    fontSize: 25,
-    color: '#fb2',
-    marginLeft: 15,
+    fontSize: 20,
+    fontFamily: 'poppins-semi-bold',
+    color: 'black',
+    marginHorizontal: 20,
   },
 })
