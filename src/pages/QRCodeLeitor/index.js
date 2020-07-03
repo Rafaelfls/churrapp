@@ -65,6 +65,7 @@ export default function QRCodeLeitor() {
                     flex: 1,
                     flexDirection: 'column',
                     justifyContent: 'flex-end',
+                    marginVertical:"20%",
                 }}>
                 <BarCodeScanner
                     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}

@@ -68,13 +68,17 @@ export default function DetalheChurras() {
   return (
     <View style={style.container}>
       <View style={style.containerHeader}>
-          <IconOct name="chevron-left" size={25} style={style.backBtn} onPress={() => backHome()} />
-          <Text style={style.detalheTitle}>{churras.nomeChurras}</Text>
-          <View>
-            {allowShare &&
-              <IconEnt name="share" size={25} style={style.shareBtn} onPress={() => CompartilharChurras(churras)} />
-            }
+        <TouchableOpacity style={style.backBtn} onPress={() => backHome()} >
+          <IconOct name="chevron-left" size={25} color={"white"} />
+        </TouchableOpacity>
+          <View style={style.title}>
+            <Text style={style.detalheTitle}>{churras.nomeChurras}</Text>
           </View>
+            {allowShare &&
+              <TouchableOpacity style={style.shareBtn} onPress={() => CompartilharChurras(churras)} >
+                <IconEnt name="share" size={25} color={"white"}/>
+              </TouchableOpacity>
+            }
       </View>
 
       <ScrollView nestedScrollEnabled={true} style={style.scroll}>

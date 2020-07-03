@@ -19,6 +19,8 @@ export default StyleSheet.create({
     marginBottom: 15,
   },
   titulo: {
+    width:"100%",
+    paddingHorizontal:40
   },
   textHeader: {
     fontSize: 30,

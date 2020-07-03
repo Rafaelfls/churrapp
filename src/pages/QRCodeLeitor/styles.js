@@ -5,7 +5,7 @@ export default StyleSheet.create({
 
   container: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight,
+    paddingTop: Constants.statusBarHeight+15,
     backgroundColor: '#fff'
   },
 
@@ -15,17 +15,19 @@ export default StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 10,
     paddingBottom: 10,
-    backgroundColor: 'lightgrey',
+    backgroundColor: '#800000',
   },
 
   backBtn: {
     paddingRight: 100,
+    color:"white",
   },
 
   titulo: {
     paddingRight: 110,
     fontSize: 25,
     fontWeight: 'bold',
+    color:"white",
   },
   centeredView: {
     flex: 1,
@@ -58,6 +60,7 @@ export default StyleSheet.create({
     position: "absolute",
     right: 10,
     top: 10,
+    color:"white",
   },
   textHeaderBtn: {
     fontSize: 15,
