@@ -17,6 +17,7 @@ export default StyleSheet.create({
     marginBottom: 15,
   },
   titulo: {
+    paddingHorizontal: 40
   },
   textHeader: {
     fontSize: 30,
@@ -29,8 +30,9 @@ export default StyleSheet.create({
     fontFamily: 'poppins-medium',
   },
   signOutBtn:{
-    paddingTop: 10,
-    justifyContent: 'center',
+    position:"absolute",
+    right: 0,
+    top: 10,
   },
   signOutIcon:{
     color: 'gray',

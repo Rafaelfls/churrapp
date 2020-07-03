@@ -16,14 +16,9 @@ export default StyleSheet.create({
   },
 
   editarContainer:{
-    marginTop: Constants.statusBarHeight + 15,
-    marginLeft: 15,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-
-  editIcon: {
-    color: 'white',
+    position:'absolute',
+    top:Constants.statusBarHeight +15,
+    left:10
   },
   editLine:{
     flexDirection: 'row',
@@ -51,10 +46,10 @@ export default StyleSheet.create({
     width:'100%',
   },
   modalView: {
-    backgroundColor: "white",
+    backgroundColor: "#f2f2f2" ,
     width:'100%',
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     padding: 35,
     shadowColor: "#000",
     shadowOffset: {
@@ -63,11 +58,14 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5
+    elevation: 5,
+    borderTopColor:"#d3d3d3",
+    borderTopWidth:1,
   },
 
   containerProfile: {
     alignItems: 'center',
+    marginTop: Constants.statusBarHeight +15,
   },
 
   profileImg:{
@@ -94,6 +92,31 @@ export default StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontFamily: 'poppins-regular',
+  },
+  footerModal:{
+    marginTop:10,
+    flexDirection:'row',
+    justifyContent:'space-evenly'
+  },
+  exitBtn:{
+    flexDirection:'row-reverse',
+    backgroundColor:'#800000',
+    paddingHorizontal:10,
+    paddingVertical:2,
+    borderRadius:8,
+    alignItems:'center',
+  },
+  salvarBtn:{
+    flexDirection:'row-reverse',
+    backgroundColor:'#800000',
+    paddingHorizontal:10,
+    paddingVertical:2,
+    borderRadius:8,
+    alignItems:'center',
+  },
+  iconSalvarBtn:{
+    marginLeft:5,
+    color:'white'
   },
 
   //Meus Churrascos

@@ -44,7 +44,7 @@ export default function CompartilharChurrasco({ route, navigation }) {
 
                 <Text style={style.codigo}>#{churras.id}</Text>
                 <View style={style.qrCode}>
-                    <QRCode content={churras.id}/>
+                    <QRCode size={200} content={churras.id}/>
                 </View>
 
                 <TouchableOpacity onPress={goBack} style={style.shareBtn}>

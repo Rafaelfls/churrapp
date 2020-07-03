@@ -15,16 +15,24 @@ export default StyleSheet.create({
   //header
   containerHeader:{
     flexDirection: 'row',
-    paddingHorizontal: '5%',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
     paddingTop: Constants.statusBarHeight + 10,
     paddingBottom: '2%',
     backgroundColor: 'maroon',
   },
   backBtn:{
     marginTop: 10,
-    color: 'white',
+    position:"absolute",
+    top:Constants.statusBarHeight +20,
+    left:20,
+    height:30,
+    width:30,
+    textAlign:"center",
+  },
+  title:{
+    alignItems:'center',
+    alignItems:"center",
+    width:"100%",
+    marginTop:10
   },
   detalheTitle: {
     fontSize: 30,
@@ -33,10 +41,16 @@ export default StyleSheet.create({
     color: 'white',
     paddingBottom: 15, 
     opacity: 0.9,
+    width:"85%",
+    textAlign:"center",
   },
   shareBtn: {
     marginTop: 10,
-    color: 'white',
+    position:"absolute",
+    top:Constants.statusBarHeight + 20,
+    right:20,
+    height:30,
+    width:30,
   },
 
   //body

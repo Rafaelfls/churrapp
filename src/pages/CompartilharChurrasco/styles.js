@@ -15,17 +15,19 @@ export default StyleSheet.create({
         justifyContent: 'center',
         paddingTop: 10,
         paddingBottom: 10,
-        backgroundColor: 'lightgrey',
+        backgroundColor: '#800000',
     },
 
     backBtn: {
         paddingRight: 60,
+        color:"white",
     },
 
     titulo: {
         paddingRight: 70,
         fontSize: 25,
         fontWeight: 'bold',
+        color:"white",
     },
 
     conteudoContainer: {
@@ -73,8 +75,6 @@ export default StyleSheet.create({
     },
 
     qrCode:{
-        height: 220,
-        width: 220,
         marginBottom: 20,
     },
 

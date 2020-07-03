@@ -67,10 +67,6 @@ export default function Perfil() {
         carregarQuantidadeCome();
     }, []);
 
-    function confirmar() {
-        updatePerfil();
-    }
-
     async function carregarPonto() {
         const response = await api.get(`/pontoCarne`)
 
@@ -101,7 +97,11 @@ export default function Perfil() {
             quantidadeCome_id: quantidadeCome_id,
             bebidaPreferida_id: bebidaPreferida_id,
             acompanhamentoPreferido_id: acompanhamentoPreferido_id
-        });
+        }).then(
+            navigation.replace("Tabs",{
+                screen:"Perfil"
+            })
+        );
     }
 
     return (
@@ -116,11 +116,9 @@ export default function Perfil() {
 
                     <View>
                         <View style={style.backgroundProfile}>
-                            <View style={style.editarContainer}>
-                                <TouchableOpacity>
-                                    <IconFea name="edit" size={25} style={style.editIcon} onPress={() => setIsVisivel(true)} />
-                                </TouchableOpacity>
-                            </View>
+                            <TouchableOpacity style={style.editarContainer} onPress={() => setIsVisivel(true)}>
+                                <IconFea name="edit" size={25} color={'white'} />
+                            </TouchableOpacity>
                             <View style={style.containerProfile}>
                                 <View style={style.background} />
                                 <Image source={profileImg} style={style.profileImg} />
@@ -153,22 +151,18 @@ export default function Perfil() {
                                     <IconMCI name="silverware-fork-knife" size={18} />
                                     <Text style={styles.infos}>{perfil.nomeQuantidadeCome}</Text>
                                 </View>
-                                <View style={styles.containerInfos}>
-                                    <IconEnt name="drink" size={18} />
-                                    <Text style={styles.infos}>Pinguço</Text>
-                                </View>
                             </View >
                             <View style={style.containerDir}>
                                 <View style={styles.containerInfos}>
-                                    <Text style={styles.infos}>Panceta</Text>
+                                    <Text style={styles.infos}>Carne preferida</Text>
                                     <IconMCI name="pig" size={18} />
                                 </View>
                                 <View style={styles.containerInfos}>
-                                    <Text style={styles.infos}>Pão de Alho</Text>
+                                    <Text style={styles.infos}>Acompanhamento preferido</Text>
                                     <IconFA5 name="bread-slice" size={18} />
                                 </View>
                                 <View style={styles.containerInfos}>
-                                    <Text style={styles.infos}>Heineken</Text>
+                                    <Text style={styles.infos}>Bebida Preferida</Text>
                                     <IconFA5 name="beer" size={18} />
                                 </View>
                             </View>
@@ -186,23 +180,30 @@ export default function Perfil() {
             >
                 <View style={style.centeredView}>
                     <View style={style.modalView}>
-                        <TouchableOpacity style={style.exitBtn} onPress={() => setIsVisivel(false)}>
-                            <Icon style={style.iconHeaderBtn} name="times" size={20} />
-                        </TouchableOpacity>
                         <View style={style.editLine}>
                             <Text style={style.modalText}>Qual seu novo apelido?</Text>
                             <TextInput
                                 style={style.inputStandard}
                                 onChangeText={text => setApelido(text)}
-                                placeholder={'Sadocco'}
+                                placeholder={'john'}
                             />
                         </View>
                         <View style={style.editLine}>
-                            <Text style={style.modalText}>Qual seu novo nome?</Text>
+                            <Text style={style.modalText}>Qual sua nova cidade?</Text>
                             <TextInput
                                 style={style.inputStandard}
-                                onChangeText={text => setNome(text)}
-                                placeholder={'Sadocco'}
+                                onChangeText={text => setCidade(text)}
+                                placeholder={'Campinas'}
+                            />
+                        </View>
+                        <View style={style.editLine}>
+                            <Text style={style.modalText}>Qual seu novo uf?</Text>
+                            <TextInput
+                                style={style.inputStandard}
+                                onChangeText={text => setUf(text)}
+                                maxLength={2}
+                                autoCapitalize={"characters"}
+                                placeholder={'SP'}
                             />
                         </View>
                         <View style={style.editLine}>
@@ -233,11 +234,16 @@ export default function Perfil() {
 
                             </Picker>
                         </View>
-                        <View style={style.selectionForm}>
+                        <View style={style.footerModal}>
+                            <TouchableOpacity style={style.exitBtn} onPress={() => setIsVisivel(false)}>
+                                <Icon style={style.iconSalvarBtn} name="times" size={15} />
+                                <Text style={style.iconSalvarBtn}>Cancelar</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={style.salvarBtn}>
+                                <Icon style={style.iconSalvarBtn} name="check" size={15} onPress={updatePerfil} />
+                                <Text style={style.iconSalvarBtn}>Salvar</Text>
+                            </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={style.salvarBtn}>
-                            <Icon style={style.iconSalvarBtn} name="check" size={20} onPress={confirmar} />
-                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
