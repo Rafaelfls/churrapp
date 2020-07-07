@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, Alert, Vibration, ToastAndroid, Modal } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, Alert, Vibration, ToastAndroid, Modal, RefreshControl } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -22,17 +22,21 @@ export default function ResumoChurras() {
     const [loading, setLoading] = useState(false);
     const [visivel, setVisivel] = useState(false)
     const [churrasDeletar, setChurrasDeletar] = useState([]);
+    const [refreshChurras, setRefreshChurras] = useState([]);
     const config = {
         headers: { 'Authorization': USUARIOLOGADO.id }
     };
 
     const navigation = useNavigation();
 
-    function deletar(churras) {
+    function deletar(churrass) {
 
-        console.log(churras.id);
-        navigation.replace('Tabs');
-        api.delete(`/churras/${churras.id}`, config);  
+        console.log(churrass.id);
+        churras.length = total  - 1;
+        api.delete(`/churras/${churrass.id}`, config).then(
+            setVisivel(!visivel)
+        );  
+        
 
     }
 
@@ -73,6 +77,26 @@ export default function ResumoChurras() {
         setPage(page + 1);
         setLoading(false);
     }
+    async function onRefresh() {
+        if (loading) {
+            return;
+        }
+
+        if (total > 0 && churras.length === total) {
+            return;
+        }
+
+        setLoading(true);
+
+        const response = await api.get(`/churras/${USUARIOLOGADO.id}`, {
+            params: { page }
+        });
+
+        setChurras([...refreshChurras, ...response.data]);
+        setTotal(churras.length);
+        setPage(1);
+        setLoading(false);
+    }
 
     useEffect(() => {
         loadChurras();
@@ -101,6 +125,7 @@ export default function ResumoChurras() {
                 keyExtractor={churras => String(churras.id)}
                 onEndReached={loadChurras}
                 onEndReachedThreshold={0.2}
+                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => onRefresh()}/>}
                 renderItem={({ item: churras }) => (
                     <View>
                         <TouchableOpacity onPress={() => detalheChurras(churras)}>

@@ -193,6 +193,7 @@ export default StyleSheet.create({
   item:{
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: "#000",
     borderRadius: 8,
     margin: 10,
     padding: 8,
@@ -205,7 +206,7 @@ export default StyleSheet.create({
     borderTopRightRadius: 8,
   },
   nomeItem:{
-    color: 'maroon',
+    color: '#f00',
     padding: 3,
   },
   qtdItem:{
