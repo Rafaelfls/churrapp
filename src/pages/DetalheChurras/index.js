@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, ScrollView, HorizontalScrollView, Modal, TouchableHighlight, Alert } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, ScrollView, HorizontalScrollView, Modal, TouchableHighlight, Alert, RefreshControl } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import ActionButton from 'react-native-action-button';
 import IconEnt from 'react-native-vector-icons/Entypo';
@@ -25,6 +25,10 @@ export default function DetalheChurras() {
   const [itensTotal, setItensTotal] = useState(0);
   const [convidados, setConvidados] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
+  const [todosItens, setTodosItens] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [refreshItens, setRefreshItens] = useState([]);
+  const [refreshConvidados, setRefreshConvidados] = useState([]);
 
   const churras = route.params.churras;
   const allowShare = route.params.allowShare;
@@ -51,11 +55,41 @@ export default function DetalheChurras() {
     setItens([...itens, ...response.data]);
     setItensTotal(itens.length);
   }
+  async function carregarTodosItens() {
+    const response = await api.get(`/item`);
 
+    setTodosItens([...todosItens, ...response.data]);
+  }
+  async function onRefresh() {
+
+    setLoading(true);
+
+    const response = await api.get(`/convidados/${churras.id}`);
+    const response2 = await api.get(`/listadochurras/${churras.id}`);
+
+    setConvidados([...refreshConvidados, ...response.data]);
+    setItens([...refreshItens, ...response2.data]);
+    setItensTotal(itens.length);
+    setLoading(false);
+    
+  }
   async function carregarConvidados() {
     const response = await api.get(`/convidados/${churras.id}`);
 
     setConvidados([...convidados, ...response.data]);
+  }
+
+ 
+
+  async function addItem(item) {
+    const response = await api.post('/listadochurras', {
+      quantidade: 10,
+      unidade_id: item.unidade_id,
+      item_id: item.id,
+      churras_id: churras.id
+    })
+    setModalVisivel(!modalVisivel);
+
   }
 
 
@@ -63,6 +97,7 @@ export default function DetalheChurras() {
   useEffect(() => {
     carregarItens();
     carregarConvidados();
+    carregarTodosItens();
   }, []);
 
   return (
@@ -107,7 +142,7 @@ export default function DetalheChurras() {
             <Text style={style.tituloConvidados}>Convidados</Text>
             <Text style={style.subtituloConvidados}>X pessoas</Text>
           </View>
-          <TouchableOpacity onPress={() => setModalVisivel(true)}>
+          <TouchableOpacity >
             <Text style={style.verTodos}>ver todos</Text>
           </TouchableOpacity>
         </View>
@@ -117,6 +152,7 @@ export default function DetalheChurras() {
           horizontal
           pagingEnabled={true}
           style={{ height: 200, width: "100%" }}
+          refreshControl={<RefreshControl refreshing={loading} onRefresh={() => onRefresh()}/>}
           showsHorizontalScrollIndicator={false}
           keyExtractor={convidados => String(convidados.id)}
           renderItem={({ item: convidados }) => (
@@ -141,7 +177,7 @@ export default function DetalheChurras() {
             <Text style={style.tituloItens}>Itens {itensTotal}</Text>
           </View>
           <TouchableOpacity onPress={() => setModalVisivel(true)}>
-            <Text style={style.verTodos}>ver todos</Text>
+            <Text style={style.verTodos}>Adicionar item</Text>
           </TouchableOpacity>
         </View>
 
@@ -176,21 +212,26 @@ export default function DetalheChurras() {
         onRequestClose={() => {
           Alert.alert('Modal has been closed.');
         }}>
-        <View style={style.detalheChurras}>
-          <Text style={style.churrasTitle}>Organizador: <Text style={style.churrasData}>{churras.nome}</Text></Text>
-          <Text style={style.churrasSubTitle}>Data do Churras: <Text style={style.churrasData}>{churras.data}</Text></Text>
-          <Text style={style.churrasData}>Horário de início: {churras.hrInicio}</Text>
-          <Text style={style.churrasData}>Horário de término: {churras.hrFim}</Text>
-          <Text style={style.churrasData}>Número de convidados: {churras.convidados} </Text>
-          <Text style={style.churrasData}>Local: {churras.local}</Text>
-        </View>
         <View>
-          <TouchableHighlight
-            onPress={() => {
-              setModalVisivel(!modalVisivel);
-            }}>
-            <Text>Fechar</Text>
-          </TouchableHighlight>
+        <TouchableHighlight
+              onPress={() => {
+                setModalVisivel(!modalVisivel);
+              }}>
+              <Text style={{fontSize: 15}}>Fechar</Text>
+            </TouchableHighlight>
+          <FlatList
+            data={todosItens}
+            keyExtractor={todosItens => String(todosItens.id)}
+            renderItem={({ item: todosItens }) => (
+
+              <View style={style.item}>
+                <TouchableOpacity onPress={() => addItem(todosItens)}>
+                    <Text style={style.nomeItem}>{todosItens.nomeItem}</Text>
+                </TouchableOpacity>
+              </View>
+
+            )}
+          />
         </View>
       </Modal>
     </View>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ActionButton, SafeAreaView, FlatList, Modal, Picker, Image, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, ActionButton, SafeAreaView, FlatList, Modal, Picker, Image, TextInput, RefreshControl } from 'react-native';
 import { ScrollableTabView, DefaultTabBar, ScrollableTabBar, } from '@valdio/react-native-scrollable-tabview'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../services/api';
@@ -44,6 +44,9 @@ export default function Perfil() {
     const [acompanhamentoPreferido_id, setAcompanhamentoPreferido_id] = useState(perfil.acompanhamentoPreferido_id);
     const [pontoCarne, setPontoCarne] = useState([]);
     const [quantidadeCome, setQuantidadeCome] = useState([]);
+    const [cadastro, setCadastro] = useState(perfil.cadastrado);
+    const [page, setPage] = useState(1);
+    const [refreshPerfil, setRefreshPerfil] = useState([]);
 
 
 
@@ -54,9 +57,26 @@ export default function Perfil() {
 
         setLoading(true);
 
-        const response = await api.get(`/usuarios/${id}`);
+        const response = await api.get(`/usuarios/${id}`,{
+            params: { page }
+        });
 
         setPerfil([...perfil, ...response.data]);
+        setPage(1);
+        setLoading(false);
+
+    }
+    async function onRefresh() {
+        setLoading(true);
+
+        const response = await api.get(`/usuarios/${id}`,{
+            params: { page }
+        });
+
+ 
+
+        setPerfil([...refreshPerfil, ...response.data]);
+        setPage(1);
         setLoading(false);
 
     }
@@ -96,12 +116,10 @@ export default function Perfil() {
             carnePreferida_id: carnePreferida_id,
             quantidadeCome_id: quantidadeCome_id,
             bebidaPreferida_id: bebidaPreferida_id,
-            acompanhamentoPreferido_id: acompanhamentoPreferido_id
-        }).then(
-            navigation.replace("Tabs",{
-                screen:"Perfil"
-            })
-        );
+            acompanhamentoPreferido_id: acompanhamentoPreferido_id,
+            cadastrado: cadastro
+            
+        })
     }
 
     return (
@@ -111,7 +129,9 @@ export default function Perfil() {
                 data={perfil}
                 style={style.churrasList}
                 showsVerticalScrollIndicator={false}
+                extraData={perfil.apelido}
                 keyExtractor={perfil => String(perfil.id)}
+                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => onRefresh()}/>}
                 renderItem={({ item: perfil }) => (
 
                     <View>
@@ -122,7 +142,7 @@ export default function Perfil() {
                             <View style={style.containerProfile}>
                                 <View style={style.background} />
                                 <Image source={profileImg} style={style.profileImg} />
-                                <Text style={style.profileName}>{perfil.nome}</Text>
+                                <Text style={style.profileName}>{perfil.apelido}</Text>
                                 <Text style={style.profileLocal}>{perfil.cidade} - {perfil.uf}</Text>
                                 <Text style={style.profileIdade}>{perfil.idade} anos</Text>
                             </View>
@@ -239,8 +259,8 @@ export default function Perfil() {
                                 <Icon style={style.iconSalvarBtn} name="times" size={15} />
                                 <Text style={style.iconSalvarBtn}>Cancelar</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={style.salvarBtn}>
-                                <Icon style={style.iconSalvarBtn} name="check" size={15} onPress={updatePerfil} />
+                            <TouchableOpacity style={style.salvarBtn} onPress={updatePerfil}>
+                                <Icon style={style.iconSalvarBtn} name="check" size={15}  />
                                 <Text style={style.iconSalvarBtn}>Salvar</Text>
                             </TouchableOpacity>
                         </View>
