@@ -32,11 +32,11 @@ export default function ResumoChurras() {
     function deletar(churrass) {
 
         console.log(churrass.id);
-        churras.length = total  - 1;
+        churras.length = total - 1;
         api.delete(`/churras/${churrass.id}`, config).then(
             setVisivel(!visivel)
-        );  
-        
+        );
+
 
     }
 
@@ -53,7 +53,7 @@ export default function ResumoChurras() {
     }
 
     function detalheChurras(churras) {
-        navigation.navigate('DetalheChurras', { churras,allowShare:true});
+        navigation.navigate('DetalheChurras', { churras, allowShare: true });
     }
 
 
@@ -125,17 +125,21 @@ export default function ResumoChurras() {
                 keyExtractor={churras => String(churras.id)}
                 onEndReached={loadChurras}
                 onEndReachedThreshold={0.2}
-                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => onRefresh()}/>}
+                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => onRefresh()} />}
                 renderItem={({ item: churras }) => (
                     <View>
-                        <TouchableOpacity onPress={() => detalheChurras(churras)}>
-                            <View style={style.churras}>
-                                <View style={style.churrasDescricao}>
-                                    <RNSlidingButton
-                                        style={{ backgroundColor: 'white', width: "100%" }}
-                                        height={90}
-                                        onSlidingSuccess={() => {setVisivel(true); setChurrasDeletar(churras)}}
-                                        slideDirection={SlideDirection.LEFT}>
+                        <View style={style.churras}>
+                            <View style={style.churrasDescricao}>
+                                <RNSlidingButton
+                                    style={{ backgroundColor: 'white', width: "95%"}}
+                                    height={90}
+                                    onSlidingSuccessLeft={() => { setVisivel(true); setChurrasDeletar(churras) }}
+                                    onSlidingSuccessRight={() => detalheChurras(churras)}
+                                    slideDirection={SlideDirection.ANY}>
+                                    <View style={{flexDirection:"row"}}>
+                                        <View style={style.detalheSlide}>
+                                            <Text>Detalhes</Text>
+                                        </View>
                                         <View style={style.slideBtn}>
                                             <Image source={churrasPhoto} style={style.churrasFoto} />
                                             <View style={style.churrasInfosView}>
@@ -150,10 +154,13 @@ export default function ResumoChurras() {
                                                 </View>
                                             </View>
                                         </View>
-                                    </RNSlidingButton>
-                                </View>
+                                        <View style={style.deletarSlide}>
+                                            <Text>Deletar</Text>
+                                        </View>
+                                    </View>
+                                </RNSlidingButton>
                             </View>
-                        </TouchableOpacity>
+                        </View>
                     </View>
                 )}
             />
@@ -174,15 +181,15 @@ export default function ResumoChurras() {
             >
                 <View style={style.centeredView}>
                     <View style={style.modalView}>
-                    <Text>Não vai mais armar esse churras? {churrasDeletar.nomeChurras}</Text>
+                        <Text>Desistiu de armar o churras {churrasDeletar.nomeChurras}? </Text>
                         <View style={style.btnArea}>
                             <TouchableOpacity style={style.btnSair} onPress={() => setVisivel(false)}>
                                 <Icon style={style.iconHeaderBtn} name="times" size={20} />
-                                <Text style={style.btnText}>Pensando bem</Text>
+                                <Text style={style.btnText}>Claro que não</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={style.btnDeletar} onPress={() => deletar(churrasDeletar)}>
                                 <Icon style={style.iconHeaderBtn} name="check" size={20} />
-                                <Text style={style.btnText}>Melhor não</Text>
+                                <Text style={style.btnText}>Desisti</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

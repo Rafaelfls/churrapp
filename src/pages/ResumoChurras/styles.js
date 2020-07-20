@@ -53,7 +53,17 @@ export default StyleSheet.create({
   },
   slideBtn:{
     flexDirection:'row',
+    width:"80%",
   },
+  detalheSlide:{
+    backgroundColor:"gray",
+    width:100
+  },
+  deletarSlide:{
+    backgroundColor:"red",
+    width:100
+  },  
+  
 
   //cardContent
   churrasDescricao:{
@@ -117,21 +127,21 @@ export default StyleSheet.create({
     height: 22,
     color: 'white'
   },
-  modalView: {
-    backgroundColor: "white",
-    width:'100%',
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-    padding: 35,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
+    modalView: {
+      margin: 20,
+      backgroundColor: "white",
+      borderRadius: 8,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5
-  },
   centeredView: {
     flex: 1,
     justifyContent: "center",
