@@ -9,7 +9,7 @@ import style from './styles';
 
 import logo from '../../assets/splash.png'
 
-export default function Calculadora() {
+export default function Login() {
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
   const [usuarios, setUsuarios] = useState([]);
@@ -20,6 +20,11 @@ export default function Calculadora() {
     USUARIOLOGADO = usuarioSelecionado
     navigation.replace('Tabs');
   }
+
+  function navigateToCelular(){
+    navigation.push('LoginCelular');
+  }
+
   async function carregarUsuarios() {
     const response = await api.get(`/usuarios`);
 
@@ -60,7 +65,7 @@ export default function Calculadora() {
             <Icon name="google" size={35} />
             <Text style={style.textBtnGoogle}>Google</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={style.celularBtn} onPress={navigateToResumo}>
+          <TouchableOpacity style={style.celularBtn} onPress={navigateToCelular}>
             <Icon name="phone" size={35} />
             <Text style={style.textBtn}>Celular</Text>
           </TouchableOpacity>

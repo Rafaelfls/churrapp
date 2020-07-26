@@ -9,6 +9,7 @@ const AppStack =  createStackNavigator();
 // Import pages
 import Perfil from './pages/Perfil';
 import Login from './pages/Login';
+import LoginCelular from './pages/LoginCelular';
 import ResumoChurras from './pages/ResumoChurras';
 import OutrosChurras from './pages/OutrosChurras';
 import CriarChurrasco from './pages/CriarChurrasco';
@@ -66,6 +67,7 @@ export default function Routes(){
         <NavigationContainer>
             <AppStack.Navigator screenOptions={{headerShown: false}}>
                 <AppStack.Screen name="Login" component={Login}/>
+                <AppStack.Screen name="LoginCelular" component={LoginCelular}/>
                 <AppStack.Screen name="Tabs" component={CriarTabs}/>
                 <AppStack.Screen name="Perfil" component={Perfil}/>
                 <AppStack.Screen name="ResumoChurras" component={ResumoChurras}/>
