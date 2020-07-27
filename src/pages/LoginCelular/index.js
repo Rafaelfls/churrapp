@@ -18,12 +18,14 @@ export default function LoginCelular() {
     async function navigateToResumo() {
         var celular = "0" + celularUser;
         console.log(celular)
-        const response = await api.get(`/usuarios/${celular}`);
+        const response = await api.get(`/usuarios?${celular}`);
 
-        setUsuarioLogado(response.data);
+        //setUsuarioLogado([...usuarioLogado, ...response.data]);
         
         USUARIOLOGADO = usuarioLogado
+        console.log(usuarioLogado)
         console.log(response)
+        console.log(response.data)
         //navigation.replace('Tabs');
     }
 
