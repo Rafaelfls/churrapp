@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Image, Text, TextInput, TouchableOpacity, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native'
 import { TextInputMask } from 'react-native-masked-text'
@@ -13,20 +13,23 @@ export default function LoginCelular() {
     const navigation = useNavigation();
     const [celularUser, setCelularUser] = useState();
     const [usuarioLogado, setUsuarioLogado] = useState();
+    const [visivel, setVisivel] = useState(false)
     global.USUARIOLOGADO = null;
 
     async function navigateToResumo() {
         var celular = "0" + celularUser;
-        console.log(celular)
-        const response = await api.get(`/usuarios?${celular}`);
 
-        //setUsuarioLogado([...usuarioLogado, ...response.data]);
-        
+        const response = await api.get(`/usuariosCel/${celular}`);
+
+        await setUsuarioLogado(response.data[0]);
+
         USUARIOLOGADO = usuarioLogado
-        console.log(usuarioLogado)
-        console.log(response)
-        console.log(response.data)
-        //navigation.replace('Tabs');
+        navigation.replace('Tabs');
+    }
+
+    function okModal() {
+        setCelularUser('')
+        setVisivel(false)
     }
 
     function backHome() {
@@ -59,15 +62,32 @@ export default function LoginCelular() {
                     placeholder={'(xx)xxxxx-xxxx'}
                     value={celularUser}
                     includeRawValueInChangeText={true}
-                    onChangeText={(text, rawText )=> setCelularUser(rawText)}
+                    onChangeText={(text, rawText) => setCelularUser(rawText)}
                 />
                 <TouchableOpacity style={style.continueBtn} onPress={navigateToResumo}>
                     <Text style={style.textBtn}>Entrar</Text>
                 </TouchableOpacity>
             </View>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={visivel}
+            >
+                <View style={style.centeredView}>
+                    <View style={style.modalView}>
+                        <Text style={style.modalTitle}>Ops!</Text>
+                        <Text style={style.modalText}>Telefone incorreto!</Text>
+                        <View style={style.footerModal}>
+                            <TouchableOpacity style={style.continueBtn} onPress={okModal}>
+                                <Text style={style.textBtn}>Ok</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
             <View style={style.cadastreSe}>
                 <Text>Novo no Churrapp?</Text>
-                <TouchableOpacity><Text style={style.cadastreSeBtn}>Cadastre-se.</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => { navigation.replace('CadastroUsuario'); }}><Text style={style.cadastreSeBtn}>Cadastre-se.</Text></TouchableOpacity>
             </View>
         </View>
     );
