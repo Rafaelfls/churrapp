@@ -110,7 +110,7 @@ export default function Perfil() {
             idade: idade,
             joined: joined,
             celular: celular,
-            foto: foto,
+            foto_id: 0,
             apelido: apelido,
             pontoCarne_id: pontoCarne_id,
             carnePreferida_id: carnePreferida_id,

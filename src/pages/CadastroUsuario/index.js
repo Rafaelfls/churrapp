@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Image, Text, TextInput, TouchableOpacity, ScrollView, Picker, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import * as ImagePicker from 'expo-image-picker';
 import api from '../../services/api';
 import { TextInputMask } from 'react-native-masked-text'
+import * as ImagePicker from 'expo-image-picker';
 
 import style from './styles';
 
@@ -25,7 +25,6 @@ export default function CadastroUsuario() {
     const [quantidadeCome, setQuantidadeCome] = useState([]);
     const [pontoCarne_id, setPontoCarne_id] = useState(0);
     const [quantidadeCome_id, setQuantidadeCome_id] = useState(0);
-    const [novoUsuario, setNovoUsuario] = useState();
     const [borderColorRed1, setBorderColorRed1] = useState(style.formOk);
     const [borderColorRed2, setBorderColorRed2] = useState(style.formOk);
     const [borderColorRed3, setBorderColorRed3] = useState(style.formOk);
@@ -60,6 +59,7 @@ export default function CadastroUsuario() {
 
     async function navigateToResumo() {
         var celular = "0" + celularUsuario
+        var data = new FormData();
 
         if (nomeUsuario == '') {
             setBorderColorRed1(style.formNok)
@@ -112,14 +112,29 @@ export default function CadastroUsuario() {
             apelidoUsuario == '') {
             return setVisivel(true)
         } else {
-            const response = await api.post('/usuario', {
+
+            // Tentativa de fazer upload de imagem, ainda nao funciona
+
+            // let filename = image.uri.split('/').pop();
+            // console.log(filename)
+            // data.append('file', {uri:image.uri, name:filename})
+            // console.log(data)
+            // const response2 = await api.post('/fotosPerfil', data,{
+            //     headers: {
+            //          Accept: 'application/json',
+            //         'Content-Type': 'multipart/form-data',
+            //       },
+            // })
+
+
+            const response = await api.post('/usuarios', {
                 nome: nomeUsuario,
                 sobrenome: sobrenomeUsuario,
                 email: emailUsuario,
                 cidade: cidadeUsuario,
                 uf: ufUsuario,
                 idade: idadeUsuario,
-                foto: image,
+                foto_id: 0,
                 celular: celular,
                 cadastrado: true,
                 apelido: apelidoUsuario,
@@ -129,13 +144,11 @@ export default function CadastroUsuario() {
                 bebidaPreferida_id: 0,
                 acompanhamentoPreferido_id: 0
             })
-            //setNovoUsuario([...novoUsuario, ...response.data]);
-
-            console.log(response)
-
-            USUARIOLOGADO = novoUsuario
-            //navigation.replace('Tabs');
         }
+
+        USUARIOLOGADO = response.data
+        navigation.replace('Tabs');
+
     }
 
     const pickImage = async () => {
@@ -143,13 +156,12 @@ export default function CadastroUsuario() {
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [1, 1],
-            quality: 1,
         });
 
-        console.log(result);
+        console.log("res", result);
 
         if (!result.cancelled) {
-            setImage(result.uri);
+            setImage(result);
         }
     };
 
@@ -170,7 +182,7 @@ export default function CadastroUsuario() {
                     <View style={style.imagePicker}>
                         <TouchableOpacity style={style.inputDisplay} onPress={pickImage} >
                             <Icon style={style.addImgIcon} name="image" size={100} />
-                            {image && <Image source={{ uri: image }} style={{ width: 170, height: 170, paddingVertical: 10 }} />}
+                            {image && <Image source={{ uri: image.uri }} style={{ width: 170, height: 170, paddingVertical: 10 }} />}
                         </TouchableOpacity>
                     </View>
                     <Text style={style.textLabel}>Apelido</Text>

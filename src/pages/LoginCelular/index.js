@@ -3,7 +3,6 @@ import { View, Image, Text, TextInput, TouchableOpacity, Modal } from 'react-nat
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native'
 import { TextInputMask } from 'react-native-masked-text'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import api from '../../services/api';
 
 import style from './styles';
@@ -12,19 +11,20 @@ export default function LoginCelular() {
 
     const navigation = useNavigation();
     const [celularUser, setCelularUser] = useState();
-    const [usuarioLogado, setUsuarioLogado] = useState();
     const [visivel, setVisivel] = useState(false)
-    global.USUARIOLOGADO = null;
 
     async function navigateToResumo() {
         var celular = "0" + celularUser;
 
-        const response = await api.get(`/usuariosCel/${celular}`);
-
-        await setUsuarioLogado(response.data[0]);
-
-        USUARIOLOGADO = usuarioLogado
-        navigation.replace('Tabs');
+        await api.get(`/usuariosCel/${celular}`)
+        .then(function(response){
+            if(response.data[0] == undefined){
+                return setVisivel(true)
+            }else{
+                USUARIOLOGADO = response.data[0]
+                navigation.replace('Tabs');  
+            }
+        }) 
     }
 
     function okModal() {

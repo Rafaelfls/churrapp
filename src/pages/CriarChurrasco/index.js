@@ -43,7 +43,7 @@ export default function CriarChurrasco() {
           hrFim: hrFim,
           descricao: descricao,
           data: date,
-          foto: image,},
+          foto_id: 0,},
       });
     } else {
       Alert.alert(
