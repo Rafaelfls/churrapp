@@ -25,6 +25,8 @@ export default function CadastroUsuario() {
     const [quantidadeCome, setQuantidadeCome] = useState([]);
     const [pontoCarne_id, setPontoCarne_id] = useState(0);
     const [quantidadeCome_id, setQuantidadeCome_id] = useState(0);
+    const [visivel, setVisivel] = useState(false)
+
     const [borderColorRed1, setBorderColorRed1] = useState(style.formOk);
     const [borderColorRed2, setBorderColorRed2] = useState(style.formOk);
     const [borderColorRed3, setBorderColorRed3] = useState(style.formOk);
@@ -33,7 +35,7 @@ export default function CadastroUsuario() {
     const [borderColorRed6, setBorderColorRed6] = useState(style.formOk);
     const [borderColorRed7, setBorderColorRed7] = useState(style.formOk);
     const [borderColorRed8, setBorderColorRed8] = useState(style.formOk);
-    const [visivel, setVisivel] = useState(false)
+    
     global.USUARIOLOGADO = null;
 
     function backHome() {
@@ -117,14 +119,10 @@ export default function CadastroUsuario() {
 
             // let filename = image.uri.split('/').pop();
             // console.log(filename)
-            // data.append('file', {uri:image.uri, name:filename})
+            // data.append('file', image, filename)
             // console.log(data)
-            // const response2 = await api.post('/fotosPerfil', data,{
-            //     headers: {
-            //          Accept: 'application/json',
-            //         'Content-Type': 'multipart/form-data',
-            //       },
-            // })
+            // const response2 = await api.post('/fotosPerfil', data)
+            // console.log(response2)
 
 
             const response = await api.post('/usuarios', {
@@ -134,7 +132,7 @@ export default function CadastroUsuario() {
                 cidade: cidadeUsuario,
                 uf: ufUsuario,
                 idade: idadeUsuario,
-                foto_id: 0,
+                foto_id: 1,
                 celular: celular,
                 cadastrado: true,
                 apelido: apelidoUsuario,

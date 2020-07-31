@@ -136,9 +136,9 @@ export default function ResumoChurras() {
                                     onSlidingSuccessLeft={() => { setVisivel(true); setChurrasDeletar(churras) }}
                                     onSlidingSuccessRight={() => detalheChurras(churras)}
                                     slideDirection={SlideDirection.ANY}>
-                                    <View style={{flexDirection:"row"}}>
+                                    <View style={{flexDirection:"row", width:'100%'}}>
                                         <View style={style.detalheSlide}>
-                                            <Text>Detalhes</Text>
+                                            <Icon name="info" size={24} color="white" />
                                         </View>
                                         <View style={style.slideBtn}>
                                             <Image source={churrasPhoto} style={style.churrasFoto} />
@@ -155,7 +155,7 @@ export default function ResumoChurras() {
                                             </View>
                                         </View>
                                         <View style={style.deletarSlide}>
-                                            <Text>Deletar</Text>
+                                            <Icon name="trash-alt" size={24} color="white" />
                                         </View>
                                     </View>
                                 </RNSlidingButton>

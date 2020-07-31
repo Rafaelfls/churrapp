@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ActionButton, SafeAreaView, FlatList, Modal, Picker, Image, TextInput, RefreshControl } from 'react-native';
+import { View, Text, TouchableOpacity, ActionButton, ScrollView, FlatList, Modal, Picker, Image, TextInput, RefreshControl } from 'react-native';
 import { ScrollableTabView, DefaultTabBar, ScrollableTabBar, } from '@valdio/react-native-scrollable-tabview'
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { TextInputMask } from 'react-native-masked-text'
 import api from '../../services/api';
 import IconOct from 'react-native-vector-icons/Octicons';
 import IconEnt from 'react-native-vector-icons/Entypo';
@@ -35,7 +36,7 @@ export default function Perfil() {
     const [idade, setIdade] = useState(perfil.idade);
     const [joined, setJoined] = useState(perfil.joined);
     const [celular, setCelular] = useState(perfil.celular);
-    const [foto, setFoto] = useState(perfil.foto);
+    const [foto, setFoto] = useState(perfil.url);
     const [apelido, setApelido] = useState(perfil.apelido);
     const [pontoCarne_id, setPontoCarne_id] = useState(perfil.pontoCarne_id);
     const [carnePreferida_id, setCarnePreferida_id] = useState(perfil.carnePreferida_id);
@@ -57,7 +58,7 @@ export default function Perfil() {
 
         setLoading(true);
 
-        const response = await api.get(`/usuarios/${id}`,{
+        const response = await api.get(`/usuarios/${id}`, {
             params: { page }
         });
 
@@ -67,13 +68,14 @@ export default function Perfil() {
 
     }
     async function onRefresh() {
+        setIsVisivel(false)
         setLoading(true);
 
-        const response = await api.get(`/usuarios/${id}`,{
+        const response = await api.get(`/usuarios/${id}`, {
             params: { page }
         });
 
- 
+
 
         setPerfil([...refreshPerfil, ...response.data]);
         setPage(1);
@@ -110,7 +112,7 @@ export default function Perfil() {
             idade: idade,
             joined: joined,
             celular: celular,
-            foto_id: 0,
+            foto_id: 1,
             apelido: apelido,
             pontoCarne_id: pontoCarne_id,
             carnePreferida_id: carnePreferida_id,
@@ -118,7 +120,11 @@ export default function Perfil() {
             bebidaPreferida_id: bebidaPreferida_id,
             acompanhamentoPreferido_id: acompanhamentoPreferido_id,
             cadastrado: cadastro
-            
+
+        }).then(function (res) {
+            if (res.status == '200') {
+                onRefresh()
+            }
         })
     }
 
@@ -131,7 +137,7 @@ export default function Perfil() {
                 showsVerticalScrollIndicator={false}
                 extraData={perfil.apelido}
                 keyExtractor={perfil => String(perfil.id)}
-                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => onRefresh()}/>}
+                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => onRefresh()} />}
                 renderItem={({ item: perfil }) => (
 
                     <View>
@@ -141,10 +147,10 @@ export default function Perfil() {
                             </TouchableOpacity>
                             <View style={style.containerProfile}>
                                 <View style={style.background} />
-                                <Image source={profileImg} style={style.profileImg} />
+                                <Image source={{ uri: perfil.url }} style={style.profileImg} />
                                 <Text style={style.profileName}>{perfil.apelido}</Text>
                                 <Text style={style.profileLocal}>{perfil.cidade} - {perfil.uf}</Text>
-                                <Text style={style.profileIdade}>{perfil.idade} anos</Text>
+                                <Text style={style.profileIdade}> {perfil.idade} anos</Text>
                             </View>
                         </View>
                         <View style={style.containerMyChurras}>
@@ -165,24 +171,25 @@ export default function Perfil() {
                             <View style={style.containerEsq}>
                                 <View style={styles.containerInfos}>
                                     <IconMCI name="cow" size={18} />
-                                    <Text style={styles.infos}>{perfil.ponto}</Text>
+                                    <Text style={styles.infosLeft}>{perfil.ponto}</Text>
                                 </View>
                                 <View style={styles.containerInfos}>
                                     <IconMCI name="silverware-fork-knife" size={18} />
-                                    <Text style={styles.infos}>{perfil.nomeQuantidadeCome}</Text>
+                                    <Text style={styles.infosLeft}>{perfil.nomeQuantidadeCome}</Text>
                                 </View>
                             </View >
+                            <View style={style.linhaSeparaçãoHor}></View>
                             <View style={style.containerDir}>
                                 <View style={styles.containerInfos}>
-                                    <Text style={styles.infos}>Carne preferida</Text>
+                                    <Text style={styles.infosRight}>Carne preferida</Text>
                                     <IconMCI name="pig" size={18} />
                                 </View>
                                 <View style={styles.containerInfos}>
-                                    <Text style={styles.infos}>Acompanhamento preferido</Text>
+                                    <Text style={styles.infosRight}>Acompanhamento preferido</Text>
                                     <IconFA5 name="bread-slice" size={18} />
                                 </View>
                                 <View style={styles.containerInfos}>
-                                    <Text style={styles.infos}>Bebida Preferida</Text>
+                                    <Text style={styles.infosRight}>Bebida Preferida</Text>
                                     <IconFA5 name="beer" size={18} />
                                 </View>
                             </View>
@@ -200,67 +207,96 @@ export default function Perfil() {
             >
                 <View style={style.centeredView}>
                     <View style={style.modalView}>
-                        <View style={style.editLine}>
-                            <Text style={style.modalText}>Qual seu novo apelido?</Text>
-                            <TextInput
-                                style={style.inputStandard}
-                                onChangeText={text => setApelido(text)}
-                                placeholder={'john'}
-                            />
-                        </View>
-                        <View style={style.editLine}>
-                            <Text style={style.modalText}>Qual sua nova cidade?</Text>
-                            <TextInput
-                                style={style.inputStandard}
-                                onChangeText={text => setCidade(text)}
-                                placeholder={'Campinas'}
-                            />
-                        </View>
-                        <View style={style.editLine}>
-                            <Text style={style.modalText}>Qual seu novo uf?</Text>
-                            <TextInput
-                                style={style.inputStandard}
-                                onChangeText={text => setUf(text)}
-                                maxLength={2}
-                                autoCapitalize={"characters"}
-                                placeholder={'SP'}
-                            />
-                        </View>
-                        <View style={style.editLine}>
-                            <Text style={style.modalText}>Qual seu novo ponto?</Text>
-                            <Picker
-                                mode="dropdown"
-                                style={style.inputStandard}
-                                selectedValue={pontoCarne_id}
-                                onValueChange={pontoCarne_id => setPontoCarne_id(pontoCarne_id)}
-                            >
-                                {pontoCarne.map(ponto => (
-                                    <Picker.Item label={ponto.ponto} value={ponto.id} />
-                                ))}
+                        <ScrollView>
+                            <View style={style.editLine}>
+                                <Text style={style.modalText}>Qual seu novo apelido?</Text>
+                                <TextInput
+                                    style={style.inputStandard}
+                                    onChangeText={text => setApelido(text)}
+                                    placeholder={'john'}
+                                />
+                            </View>
+                            <View style={style.editLine}>
+                                <Text style={style.modalText}>Qual sua nova cidade?</Text>
+                                <TextInput
+                                    style={style.inputStandard}
+                                    onChangeText={text => setCidade(text)}
+                                    placeholder={'Campinas'}
+                                />
+                            </View>
+                            <View style={style.editLine}>
+                                <Text style={style.modalText}>Qual seu novo uf?</Text>
+                                <TextInput
+                                    style={style.inputStandard}
+                                    onChangeText={text => setUf(text)}
+                                    maxLength={2}
+                                    autoCapitalize={"characters"}
+                                    placeholder={'SP'}
+                                />
+                            </View>
+                            <View style={style.editLine}>
+                                <Text style={style.modalText}>Qual seu novo email?</Text>
+                                <TextInput
+                                    style={style.inputStandard}
+                                    onChangeText={text => setEmail(text)}
+                                    maxLength={2}
+                                    autoCapitalize={"characters"}
+                                    placeholder={'email@123.com'}
+                                />
+                            </View>
+                            <View style={style.editLine}>
+                                <Text style={style.modalText}>Qual seu novo celular?</Text>
+                                <TextInputMask
+                                    style={style.inputStandard}
+                                    type={'cel-phone'}
+                                    options={{
+                                        maskType: 'BRL',
+                                        withDDD: true,
+                                        dddMask: '(99) '
+                                    }}
+                                    keyboardType={"phone-pad"}
+                                    placeholder={'(xx)xxxxx-xxxx'}
+                                    value={celular}
+                                    includeRawValueInChangeText={true}
+                                    onChangeText={(text, rawText) => setCelular(rawText)}
+                                />
+                            </View>
+                            <View style={style.editLine}>
+                                <Text style={style.modalText}>Qual seu novo ponto?</Text>
+                                <Picker
+                                    mode="dropdown"
+                                    style={style.inputStandard}
+                                    selectedValue={pontoCarne_id}
+                                    onValueChange={pontoCarne_id => setPontoCarne_id(pontoCarne_id)}
+                                >
+                                    {pontoCarne.map(ponto => (
+                                        <Picker.Item label={ponto.ponto} value={ponto.id} />
+                                    ))}
 
-                            </Picker>
-                        </View>
-                        <View style={style.editLine}>
-                            <Text style={style.modalText}>Quantidade que come?</Text>
-                            <Picker
-                                mode="dropdown"
-                                style={style.inputStandard}
-                                selectedValue={quantidadeCome_id}
-                                onValueChange={quantidadeCome_id => setQuantidadeCome_id(quantidadeCome_id)}
-                            >
-                                {quantidadeCome.map(quantidadeCome => (
-                                    <Picker.Item label={quantidadeCome.nomeQuantidadeCome + " (" + quantidadeCome.quantidade + "g)"} value={quantidadeCome.id} />
-                                ))}
+                                </Picker>
+                            </View>
+                            <View style={style.editLine}>
+                                <Text style={style.modalText}>Quantidade que come?</Text>
+                                <Picker
+                                    mode="dropdown"
+                                    style={style.inputStandard}
+                                    selectedValue={quantidadeCome_id}
+                                    onValueChange={quantidadeCome_id => setQuantidadeCome_id(quantidadeCome_id)}
+                                >
+                                    {quantidadeCome.map(quantidadeCome => (
+                                        <Picker.Item label={quantidadeCome.nomeQuantidadeCome + " (" + quantidadeCome.quantidade + "g)"} value={quantidadeCome.id} />
+                                    ))}
 
-                            </Picker>
-                        </View>
+                                </Picker>
+                            </View>
+                        </ScrollView>
                         <View style={style.footerModal}>
                             <TouchableOpacity style={style.exitBtn} onPress={() => setIsVisivel(false)}>
                                 <Icon style={style.iconSalvarBtn} name="times" size={15} />
                                 <Text style={style.iconSalvarBtn}>Cancelar</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={style.salvarBtn} onPress={updatePerfil}>
-                                <Icon style={style.iconSalvarBtn} name="check" size={15}  />
+                                <Icon style={style.iconSalvarBtn} name="check" size={15} />
                                 <Text style={style.iconSalvarBtn}>Salvar</Text>
                             </TouchableOpacity>
                         </View>

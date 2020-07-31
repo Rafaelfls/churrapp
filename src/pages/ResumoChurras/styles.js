@@ -53,15 +53,24 @@ export default StyleSheet.create({
   },
   slideBtn:{
     flexDirection:'row',
-    width:"80%",
+    width:"74%",
   },
   detalheSlide:{
-    backgroundColor:"gray",
-    width:100
+    backgroundColor:"darkgray",    
+    width:100,
+    marginRight:10,
+    justifyContent:'center',
+    alignItems:'center',
+    borderBottomLeftRadius:8,
+    borderTopLeftRadius:8,
   },
   deletarSlide:{
-    backgroundColor:"red",
-    width:100
+    backgroundColor:"#800000",
+    width:100,
+    justifyContent:'center',
+    alignItems:'center',
+    borderBottomRightRadius:8,
+    borderTopRightRadius:8,
   },  
   
 

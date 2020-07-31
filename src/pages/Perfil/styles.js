@@ -22,7 +22,7 @@ export default StyleSheet.create({
   },
   editLine:{
     flexDirection: 'row',
-    marginVertical: 7,
+    marginBottom: 30,
     alignItems:'center'
   },
   inputStandard:{
@@ -33,9 +33,10 @@ export default StyleSheet.create({
     fontFamily: 'poppins-regular',
     borderBottomWidth: 0.5,
     paddingHorizontal: 5,
-    width:'40%'
+    width:'45%'
   },
   modalText:{
+    width:'50%'
   },
   centeredView: {
     flex: 1,
@@ -44,6 +45,7 @@ export default StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width:'100%',
+    height:'40%',
   },
   modalView: {
     backgroundColor: "#f2f2f2" ,
@@ -174,15 +176,25 @@ export default StyleSheet.create({
   },
 
   containerEsq:{
+    width: '48%',
     alignItems: 'flex-start',
   },
 
   containerDir:{
+    width:'48%',
     alignItems: 'flex-end',
   },
 
-  infos:{
+  infosLeft:{
     fontSize: 13,
+    textAlign:'left',
+    marginHorizontal: 5,
+    fontFamily: 'poppins-regular',
+  },
+
+  infosRight:{
+    fontSize: 13,
+    textAlign:'right',
     marginHorizontal: 5,
     fontFamily: 'poppins-regular',
   },
