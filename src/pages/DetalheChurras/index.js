@@ -34,9 +34,6 @@ export default function DetalheChurras() {
   const allowShare = route.params.allowShare;
   const [modalVisivel, setModalVisivel] = useState(false);
   const [churrasCode, setChurrasCode] = useState(churras.id);
-
-
-  console.log(churrasCode)
   const navigation = useNavigation();
 
 
@@ -116,7 +113,7 @@ export default function DetalheChurras() {
             }
       </View>
 
-      <ScrollView nestedScrollEnabled={true} style={style.scroll}>
+      <ScrollView nestedScrollEnabled={true}>
 
         <View style={style.infosPrincipais}>
           <View style={style.infosLocDat}>
@@ -130,7 +127,7 @@ export default function DetalheChurras() {
             </View>
           </View>
           <View style={style.churrasDonoContainer}>
-            <Image source={donoImg} style={style.donoImg} />
+            <Image source={{uri:churras.url}} style={style.donoImg} />
             <Text style={style.churrasDono}>{churras.nome}</Text>
           </View>
         </View>

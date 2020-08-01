@@ -132,7 +132,7 @@ export default function ResumoChurras() {
                             <View style={style.churrasDescricao}>
                                 <RNSlidingButton
                                     style={{ backgroundColor: 'white', width: "95%"}}
-                                    height={90}
+                                    height={100}
                                     onSlidingSuccessLeft={() => { setVisivel(true); setChurrasDeletar(churras) }}
                                     onSlidingSuccessRight={() => detalheChurras(churras)}
                                     slideDirection={SlideDirection.ANY}>
@@ -181,15 +181,15 @@ export default function ResumoChurras() {
             >
                 <View style={style.centeredView}>
                     <View style={style.modalView}>
-                        <Text>Desistiu de armar o churras {churrasDeletar.nomeChurras}? </Text>
-                        <View style={style.btnArea}>
-                            <TouchableOpacity style={style.btnSair} onPress={() => setVisivel(false)}>
-                                <Icon style={style.iconHeaderBtn} name="times" size={20} />
-                                <Text style={style.btnText}>Claro que não</Text>
+                        <Text style={style.modalText}>Desistiu de armar o churras <Text style={{fontWeight:'bold'}}>{churrasDeletar.nomeChurras}</Text>? </Text>
+                        <View style={style.footerModal}>
+                            <TouchableOpacity style={style.exitBtn} onPress={() => setVisivel(false)}>
+                                <Icon style={style.iconSalvarBtn} name="times" size={20} />
+                                <Text style={style.iconSalvarBtn}>Nunca</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={style.btnDeletar} onPress={() => deletar(churrasDeletar)}>
-                                <Icon style={style.iconHeaderBtn} name="check" size={20} />
-                                <Text style={style.btnText}>Desisti</Text>
+                            <TouchableOpacity style={style.salvarBtn} onPress={() => deletar(churrasDeletar)}>
+                                <Icon style={style.iconSalvarBtn} name="check" size={20} />
+                                <Text style={style.iconSalvarBtn}>Desisti</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

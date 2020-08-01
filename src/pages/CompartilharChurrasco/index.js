@@ -25,10 +25,12 @@ export default function CompartilharChurrasco({ route, navigation }) {
         <View style={style.container}>
 
             <View style={style.header}>
-                <TouchableOpacity onPress={goBack}>
-                    <IconOct name="chevron-left" size={25} style={style.backBtn} />
+                <TouchableOpacity onPress={goBack} style={style.backBtn}>
+                    <IconOct name="chevron-left" size={25} color={'white'} />
                 </TouchableOpacity>
-                <Text style={style.titulo}>Compartilhar</Text>
+                <View>
+                    <Text style={style.titulo}>Compartilhar</Text>
+                </View>
             </View>
 
             <View style={style.conteudoContainer}>
@@ -44,14 +46,15 @@ export default function CompartilharChurrasco({ route, navigation }) {
 
                 <Text style={style.codigo}>#{churras.id}</Text>
                 <View style={style.qrCode}>
-                    <QRCode size={200} content={churras.id}/>
+                    <QRCode size={200} content={churras.id} />
                 </View>
+            </View>
 
+            <View style={style.footer}>
                 <TouchableOpacity onPress={goBack} style={style.shareBtn}>
                     <Text style={style.shareText}>Compartilhar</Text>
                 </TouchableOpacity>
             </View>
-
         </View>
 
     )

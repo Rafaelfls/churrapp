@@ -35,7 +35,7 @@ export default function CadastroUsuario() {
     const [borderColorRed6, setBorderColorRed6] = useState(style.formOk);
     const [borderColorRed7, setBorderColorRed7] = useState(style.formOk);
     const [borderColorRed8, setBorderColorRed8] = useState(style.formOk);
-    
+
     global.USUARIOLOGADO = null;
 
     function backHome() {
@@ -125,7 +125,7 @@ export default function CadastroUsuario() {
             // console.log(response2)
 
 
-            const response = await api.post('/usuarios', {
+            await api.post('/usuarios', {
                 nome: nomeUsuario,
                 sobrenome: sobrenomeUsuario,
                 email: emailUsuario,
@@ -141,11 +141,12 @@ export default function CadastroUsuario() {
                 quantidadeCome_id: quantidadeCome_id,
                 bebidaPreferida_id: 0,
                 acompanhamentoPreferido_id: 0
+            }).then(function (response) {
+                USUARIOLOGADO = response.data
+                navigation.replace('Tabs');
+
             })
         }
-
-        USUARIOLOGADO = response.data
-        navigation.replace('Tabs');
 
     }
 

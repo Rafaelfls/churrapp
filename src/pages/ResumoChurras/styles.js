@@ -99,6 +99,7 @@ export default StyleSheet.create({
   churrasLocDat: {
     flexDirection: 'row',
     alignItems: 'center',
+    width:'100%',
   },
   localIcon:{
     color: 'steelblue',
@@ -109,6 +110,7 @@ export default StyleSheet.create({
     color: 'steelblue',
     marginBottom: 2,
     fontFamily: 'poppins-medium',
+    width:'40%',
   },
   locDatSeparator: {
     fontSize: 13,
@@ -125,6 +127,7 @@ export default StyleSheet.create({
     color: 'orangered',
     marginBottom: 2,
     fontFamily: 'poppins-medium',
+    width:'45%',
   },
 
   //fabButton
@@ -136,11 +139,13 @@ export default StyleSheet.create({
     height: 22,
     color: 'white'
   },
+
+  //modal
     modalView: {
       margin: 20,
       backgroundColor: "white",
       borderRadius: 8,
-      padding: 35,
+      padding: 25,
       alignItems: "center",
       shadowColor: "#000",
       shadowOffset: {
@@ -156,23 +161,38 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: 'absolute',
-    bottom: "50%",
+    bottom: "35%",
     width:'100%',
   },
-  btnArea: {
-    flexDirection: 'row',
-    alignSelf: 'center'
+  modalText:{
+    fontSize: 18,
+    marginBottom:15
   },
-  btnSair: {
-    paddingTop: 50,
-    flexDirection: 'row',
-    marginHorizontal: '8%'
+  footerModal:{
+    marginTop:10,
+    flexDirection:'row',
+    justifyContent:'space-evenly'
   },
-  btnDeletar: {
-    paddingTop: 50,
-    flexDirection: 'row',
+  exitBtn:{
+    flexDirection:'row-reverse',
+    backgroundColor:'#800000',
+    paddingHorizontal:10,
+    paddingVertical:2,
+    borderRadius:8,
+    alignItems:'center',
+    marginHorizontal: 6,
   },
-  btnText: {
-    marginHorizontal: 8
+  salvarBtn:{
+    flexDirection:'row-reverse',
+    backgroundColor:'#800000',
+    paddingHorizontal:10,
+    paddingVertical:2,
+    borderRadius:8,
+    alignItems:'center',
+    marginHorizontal: 6,
+  },
+  iconSalvarBtn:{
+    marginLeft:5,
+    color:'white'
   },
 });

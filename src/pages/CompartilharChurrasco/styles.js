@@ -5,29 +5,28 @@ export default StyleSheet.create({
 
     container: {
         flex: 1,
-        paddingTop: Constants.statusBarHeight,
         backgroundColor: '#fff'
     },
 
     header: {
         flexDirection: 'row',
-        alignItems: 'center',
+        paddingTop: Constants.statusBarHeight + 20,
+        paddingBottom: '5%',
+        backgroundColor: 'maroon',
         justifyContent: 'center',
-        paddingTop: 10,
-        paddingBottom: 10,
-        backgroundColor: '#800000',
     },
-
     backBtn: {
-        paddingRight: 60,
-        color:"white",
+        position: "absolute",
+        top: Constants.statusBarHeight + 20,
+        left: 0,
+        justifyContent: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
     },
-
     titulo: {
-        paddingRight: 70,
         fontSize: 25,
         fontWeight: 'bold',
-        color:"white",
+        color: "white",
     },
 
     conteudoContainer: {
@@ -69,25 +68,38 @@ export default StyleSheet.create({
     },
     codigo: {
         fontWeight: "bold",
-        paddingVertical: 20,
+        paddingTop: 10,
+        paddingBottom: 10,
         opacity: 0.8,
         fontSize: 35,
     },
-
-    qrCode:{
-        marginBottom: 20,
+    //Rodapé
+    footer: {
+        position:'absolute',
+        bottom:0,
+        left:0,
+        right:0,
+        height: 90,
+        flexDirection: "row",
+        alignItems: 'center',
+        justifyContent: "center",
+        borderTopColor: 'lightgray',
+        borderTopWidth: 1,
+        backgroundColor: 'white',
     },
-
-    shareBtn:{
-        backgroundColor: 'lightgray',
-        borderRadius: 5,
-        padding: 7,
-        paddingHorizontal: 25,
+    shareBtn: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 8,
+        backgroundColor: 'maroon',
+        height: '60%',
+        width: '85%',
+        paddingVertical: 5,
     },
-
-    shareText:{
-        fontSize: 30,
+    shareText: {
+        color: 'white',
+        fontSize: 17,
+        fontFamily: 'poppins-medium',
+        textAlign: 'center',
     },
-
-
 });
