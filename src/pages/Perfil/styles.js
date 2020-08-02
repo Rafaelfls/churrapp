@@ -9,34 +9,34 @@ export default StyleSheet.create({
     backgroundColor: 'white',
   },
 
-  backgroundProfile:{
+  backgroundProfile: {
     backgroundColor: "maroon",
     marginBottom: 10,
     paddingBottom: 10,
   },
 
-  editarContainer:{
-    position:'absolute',
-    top:Constants.statusBarHeight +15,
-    left:10
+  editarContainer: {
+    position: 'absolute',
+    top: Constants.statusBarHeight + 15,
+    left: 10
   },
-  editLine:{
+  editLine: {
     flexDirection: 'row',
     marginBottom: 30,
-    alignItems:'center'
+    alignItems: 'center'
   },
-  inputStandard:{
+  inputStandard: {
     position: 'absolute',
     right: 0,
-    height: 40, 
-    borderColor: 'gray', 
+    height: 40,
+    borderColor: 'gray',
     fontFamily: 'poppins-regular',
     borderBottomWidth: 0.5,
     paddingHorizontal: 5,
-    width:'45%'
+    width: '45%'
   },
-  modalText:{
-    width:'50%'
+  modalText: {
+    width: '50%'
   },
   centeredView: {
     flex: 1,
@@ -44,12 +44,12 @@ export default StyleSheet.create({
     alignItems: "center",
     position: 'absolute',
     bottom: 0,
-    width:'100%',
-    height:'40%',
+    width: '100%',
+    height: '40%',
   },
   modalView: {
-    backgroundColor: "#f2f2f2" ,
-    width:'100%',
+    backgroundColor: "#f2f2f2",
+    width: '100%',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 35,
@@ -61,64 +61,64 @@ export default StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    borderTopColor:"#d3d3d3",
-    borderTopWidth:1,
+    borderTopColor: "#d3d3d3",
+    borderTopWidth: 1,
   },
 
   containerProfile: {
     alignItems: 'center',
-    marginTop: Constants.statusBarHeight +15,
+    marginTop: Constants.statusBarHeight + 15,
   },
 
-  profileImg:{
+  profileImg: {
     height: 140,
     width: 140,
     borderRadius: 70,
     marginBottom: 10,
   },
 
-  profileName:{
+  profileName: {
     fontFamily: 'poppins-medium',
     fontSize: 30,
     color: 'white',
   },
 
-  profileLocal:{
+  profileLocal: {
     fontSize: 20,
     color: 'white',
     fontFamily: 'poppins-regular',
   },
 
-  profileIdade:{
+  profileIdade: {
     fontSize: 20,
     color: 'white',
     textAlign: 'center',
     fontFamily: 'poppins-regular',
   },
-  footerModal:{
-    marginTop:10,
-    flexDirection:'row',
-    justifyContent:'space-evenly'
+  footerModal: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
   },
-  exitBtn:{
-    flexDirection:'row-reverse',
-    backgroundColor:'#800000',
-    paddingHorizontal:10,
-    paddingVertical:2,
-    borderRadius:8,
-    alignItems:'center',
+  exitBtn: {
+    flexDirection: 'row-reverse',
+    backgroundColor: '#800000',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 8,
+    alignItems: 'center',
   },
-  salvarBtn:{
-    flexDirection:'row-reverse',
-    backgroundColor:'#800000',
-    paddingHorizontal:10,
-    paddingVertical:2,
-    borderRadius:8,
-    alignItems:'center',
+  salvarBtn: {
+    flexDirection: 'row-reverse',
+    backgroundColor: '#800000',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 8,
+    alignItems: 'center',
   },
-  iconSalvarBtn:{
-    marginLeft:5,
-    color:'white'
+  iconSalvarBtn: {
+    marginLeft: 5,
+    color: 'white'
   },
 
   //Meus Churrascos
@@ -131,19 +131,19 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
 
-  profileOrg:{
+  profileOrg: {
     fontSize: 17,
     color: 'black',
     fontFamily: 'poppins-regular',
   },
 
-  profileOrgNumber:{
+  profileOrgNumber: {
     fontSize: 23,
     color: 'black',
     fontFamily: 'poppins-semi-bold',
   },
 
-  linhaSeparaçãoHor:{
+  linhaSeparaçãoHor: {
     height: "90%",
     width: 1,
     backgroundColor: 'gray',
@@ -153,20 +153,20 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
 
-  profilePart:{
+  profilePart: {
     fontSize: 17,
     color: 'black',
     fontFamily: 'poppins-regular',
   },
 
-  profilePartNumber:{
+  profilePartNumber: {
     fontSize: 23,
     color: 'black',
     fontFamily: 'poppins-semi-bold',
   },
 
   //Minhas Preferências
-  containerGeral:{
+  containerGeral: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
@@ -175,34 +175,51 @@ export default StyleSheet.create({
     paddingBottom: 10,
   },
 
-  containerEsq:{
+  containerEsq: {
     width: '48%',
     alignItems: 'flex-start',
   },
 
-  containerDir:{
-    width:'48%',
+  containerDir: {
+    width: '48%',
     alignItems: 'flex-end',
   },
 
-  infosLeft:{
+  infosLeft: {
     fontSize: 13,
-    textAlign:'left',
+    textAlign: 'left',
     marginHorizontal: 5,
     fontFamily: 'poppins-regular',
   },
 
-  infosRight:{
+  infosRight: {
     fontSize: 13,
-    textAlign:'right',
+    textAlign: 'right',
     marginHorizontal: 5,
     fontFamily: 'poppins-regular',
   },
 
-  containerInfos:{
+  containerInfos: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 6,
   },
 
+  //Loading modal
+  loadingBackground: {
+    flexDirection:"row",
+    position: 'relative',
+    width:'100%',
+    height:"100%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'gray',
+    opacity: 0.8
+  },
+  textLoading:{
+    fontSize: 20,
+    fontFamily: 'poppins-medium',
+    color: 'white',
+    marginLeft:7,
+  },
 });

@@ -91,7 +91,7 @@ export default class ContactList extends React.Component {
                   marginLeft: 30,
                 }}
               >
-                <ActivityIndicator size="large" color="black" />
+                <ActivityIndicator size="large" color="maroon" />
               </View>
             ) : null}
             <FlatList

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, Alert, Vibration, ToastAndroid, Modal, RefreshControl } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, Vibration, ActivityIndicator, Modal, RefreshControl } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -30,14 +30,13 @@ export default function ResumoChurras() {
     const navigation = useNavigation();
 
     function deletar(churrass) {
-
-        console.log(churrass.id);
+        setLoading(true)
         churras.length = total - 1;
         api.delete(`/churras/${churrass.id}`, config).then(
             setVisivel(!visivel)
         );
 
-
+        setLoading(false)
     }
 
     function logout() {
@@ -58,15 +57,12 @@ export default function ResumoChurras() {
 
 
     async function loadChurras() {
-        if (loading) {
-            return;
-        }
+        setLoading(true);
 
         if (total > 0 && churras.length === total) {
             return;
         }
 
-        setLoading(true);
 
         const response = await api.get(`/churras/${USUARIOLOGADO.id}`, {
             params: { page }
@@ -78,15 +74,12 @@ export default function ResumoChurras() {
         setLoading(false);
     }
     async function onRefresh() {
-        if (loading) {
-            return;
-        }
+        setLoading(true);
 
         if (total > 0 && churras.length === total) {
             return;
         }
 
-        setLoading(true);
 
         const response = await api.get(`/churras/${USUARIOLOGADO.id}`, {
             params: { page }
@@ -193,6 +186,19 @@ export default function ResumoChurras() {
                             </TouchableOpacity>
                         </View>
                     </View>
+                </View>
+            </Modal>
+                      
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={loading}
+            >
+                <View
+                    style={style.loadingBackground}
+                >
+                    <ActivityIndicator size="large" color="maroon" />
+                    <Text style={style.textLoading}>Carregando ...</Text>
                 </View>
             </Modal>
 

@@ -195,4 +195,23 @@ export default StyleSheet.create({
     marginLeft:5,
     color:'white'
   },
+
+  
+  //Loading modal
+  loadingBackground: {
+    flexDirection:"row",
+    position: 'relative',
+    width:'100%',
+    height:"100%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'gray',
+    opacity: 0.8
+  },
+  textLoading:{
+    fontSize: 20,
+    fontFamily: 'poppins-medium',
+    color: 'white',
+    marginLeft:7,
+  },
 });

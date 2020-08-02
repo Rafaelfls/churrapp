@@ -1,24 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ActionButton, ScrollView, FlatList, Modal, Picker, Image, TextInput, RefreshControl } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Modal, Picker, Image, TextInput } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { TextInputMask } from 'react-native-masked-text'
 import api from '../../services/api';
-import IconOct from 'react-native-vector-icons/Octicons';
-import IconEnt from 'react-native-vector-icons/Entypo';
 import IconFA5 from 'react-native-vector-icons/FontAwesome5';
 import IconMCI from '@expo/vector-icons/MaterialCommunityIcons';
 import IconFea from '@expo/vector-icons/Feather';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-// Variaveis: {id, nome, email, cidade, uf, idade, pontoCarne, carnePreferida, quantidadeCome, bebidaFavorita, acompanhamentoFavorito}
-
-import backgroundImg from '../../assets/fundoDescricao.jpg';
-import profileImg from '../../assets/Perfil.jpg';
-
 import style from './styles';
-import { Container } from 'native-base';
-import styles from './styles';
-import { set } from 'react-native-reanimated';
 
 export default function Perfil() {
     const route = useRoute();
@@ -61,10 +51,7 @@ export default function Perfil() {
 
 
     async function loadPerfil() {
-        console.log("load perfil "+id)
-        setIsVisivel(false)
-
-        setLoading(true);
+        setLoading(true)
 
         const response = await api.get(`/usuarios/${id}`, {
             params: { page }
@@ -72,7 +59,7 @@ export default function Perfil() {
             setCidade(response.data[0].cidade)
             setUf(response.data[0].uf)
             setIdade(response.data[0].idade)
-            setFoto(response.data[0].url)
+            setFoto(response.data[0].urlU)
             setApelido(response.data[0].apelido)
             setPontoCarne_id(response.data[0].pontoCarne_id)
             setCarnePreferida_id(response.data[0].carnePreferida_id)
@@ -81,11 +68,13 @@ export default function Perfil() {
             setAcompanhamentoPreferido_id(response.data[0].acompanhamentoPreferido_id)
             setPontoCarne(response.data[0].ponto)
             setQuantidadeCome(response.data[0].nomeQuantidadeCome)
+        }).then(function(){
+            setLoading(false)
         });
 
         setPerfil(response.data[0]);
-        setPage(1);
-        setLoading(false);
+        setPage(1);       
+
 
     }
 
@@ -108,7 +97,6 @@ export default function Perfil() {
     }
 
     async function updatePerfil() {
-
         setLoading(true)
 
         return api.put(`/usuarios/${id}`, {
@@ -158,27 +146,27 @@ export default function Perfil() {
                 </View>
                 <View style={style.containerGeral}>
                     <View style={style.containerEsq}>
-                        <View style={styles.containerInfos}>
+                        <View style={style.containerInfos}>
                             <IconMCI name="cow" size={18} />
-                            <Text style={styles.infosLeft}>{pontoCarne}</Text>
+                            <Text style={style.infosLeft}>{pontoCarne}</Text>
                         </View>
-                        <View style={styles.containerInfos}>
+                        <View style={style.containerInfos}>
                             <IconMCI name="silverware-fork-knife" size={18} />
-                            <Text style={styles.infosLeft}>{quantidadeCome}</Text>
+                            <Text style={style.infosLeft}>{quantidadeCome}</Text>
                         </View>
                     </View >
                     <View style={style.linhaSeparaçãoHor}></View>
                     <View style={style.containerDir}>
-                        <View style={styles.containerInfos}>
-                            <Text style={styles.infosRight}>Carne preferida</Text>
+                        <View style={style.containerInfos}>
+                            <Text style={style.infosRight}>Carne preferida</Text>
                             <IconMCI name="pig" size={18} />
                         </View>
-                        <View style={styles.containerInfos}>
-                            <Text style={styles.infosRight}>Acompanhamento preferido</Text>
+                        <View style={style.containerInfos}>
+                            <Text style={style.infosRight}>Acompanhamento preferido</Text>
                             <IconFA5 name="bread-slice" size={18} />
                         </View>
-                        <View style={styles.containerInfos}>
-                            <Text style={styles.infosRight}>Bebida Preferida</Text>
+                        <View style={style.containerInfos}>
+                            <Text style={style.infosRight}>Bebida Preferida</Text>
                             <IconFA5 name="beer" size={18} />
                         </View>
                     </View>
@@ -286,8 +274,19 @@ export default function Perfil() {
                         </View>
                     </View>
                 </View>
+            </Modal>            
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={loading}
+            >
+                <View
+                    style={style.loadingBackground}
+                >
+                    <ActivityIndicator size="large" color="maroon" />
+                    <Text style={style.textLoading}>Carregando ...</Text>
+                </View>
             </Modal>
-
         </View>
     )
 }

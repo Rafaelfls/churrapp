@@ -31,6 +31,7 @@ import AdicionarBebidas from './pages/AdicionarBebidas';
 import AdicionarExtras from './pages/AdicionarExtras';
 import FinalCriaChurras from './pages/FinalCriaChurras';
 
+
 const Tab = createBottomTabNavigator();
 
     function CriarTabs() {
