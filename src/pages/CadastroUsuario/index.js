@@ -60,7 +60,6 @@ export default function CadastroUsuario() {
     }
 
     async function navigateToResumo() {
-        var celular = "0" + celularUsuario
         var data = new FormData();
 
         if (nomeUsuario == '') {
@@ -133,7 +132,7 @@ export default function CadastroUsuario() {
                 uf: ufUsuario,
                 idade: idadeUsuario,
                 foto_id: 1,
-                celular: celular,
+                celular: celularUsuario,
                 cadastrado: true,
                 apelido: apelidoUsuario,
                 pontoCarne_id: pontoCarne_id,

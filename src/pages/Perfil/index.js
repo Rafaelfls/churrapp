@@ -52,6 +52,7 @@ export default function Perfil() {
 
     async function loadPerfil() {
         setLoading(true)
+        setIsVisivel(false)
 
         const response = await api.get(`/usuarios/${id}`, {
             params: { page }
@@ -68,14 +69,11 @@ export default function Perfil() {
             setAcompanhamentoPreferido_id(response.data[0].acompanhamentoPreferido_id)
             setPontoCarne(response.data[0].ponto)
             setQuantidadeCome(response.data[0].nomeQuantidadeCome)
-        }).then(function(){
+            setPerfil(response.data[0]);
+        }).then(function () {
             setLoading(false)
         });
-
-        setPerfil(response.data[0]);
-        setPage(1);       
-
-
+        setPage(1);
     }
 
     useEffect(() => {
@@ -96,10 +94,37 @@ export default function Perfil() {
         setQuantidadeComeLista([...quantidadeComeLista, ...response.data]);
     }
 
+
+    function checkInfo() {
+        if (emailNovo == null) {
+            setEmailNovo(perfil.email)
+        }
+        if (cidadeNova == null) {
+            setCidadeNova(perfil.cidade)
+        }
+        if (ufNovo == null) {
+            setUfNovo(perfil.uf)
+        }
+        if (celularNovo == null) {
+            setCelularNovo(perfil.celular)
+        }
+        if (apelidoNovo == null) {
+            setApelidoNovo(perfil.apelido)
+        }
+        if (pontoCarneNovo_id == null) {
+            setPontoCarneNovo_id(perfil.pontoCarne_id)
+        }
+        if (quantidadeComeNovo_id == null) {
+            setQuantidadeComeNovo_id(perfil.quantidadeCome_id)
+        }
+    }
+
     async function updatePerfil() {
         setLoading(true)
 
-        return api.put(`/usuarios/${id}`, {
+        await checkInfo()
+
+        return api.patch(`/usuarios/${id}`, {
             email: emailNovo,
             cidade: cidadeNova,
             uf: ufNovo,
@@ -107,7 +132,7 @@ export default function Perfil() {
             foto_id: 1,
             apelido: apelidoNovo,
             pontoCarne_id: pontoCarneNovo_id,
-            quantidadeComeNovo_id: quantidadeComeNovo_id,
+            quantidadeCome_id: quantidadeComeNovo_id,
 
         }).then(function (response) {
             if (response.status == 200) {
@@ -211,8 +236,7 @@ export default function Perfil() {
                                 <TextInput
                                     style={style.inputStandard}
                                     onChangeText={text => setEmailNovo(text)}
-                                    maxLength={2}
-                                    autoCapitalize={"characters"}
+                                    autoCapitalize={"none"}
                                     placeholder={'email@123.com'}
                                 />
                             </View>
@@ -238,7 +262,7 @@ export default function Perfil() {
                                 <Picker
                                     mode="dropdown"
                                     style={style.inputStandard}
-                                    selectedValue={pontoCarne_id}
+                                    selectedValue={pontoCarneNovo_id}
                                     onValueChange={pontoCarne_id => setPontoCarneNovo_id(pontoCarne_id)}
                                 >
                                     {pontoCarneLista.map(pontoLista => (
@@ -252,7 +276,7 @@ export default function Perfil() {
                                 <Picker
                                     mode="dropdown"
                                     style={style.inputStandard}
-                                    selectedValue={quantidadeCome_id}
+                                    selectedValue={quantidadeComeNovo_id}
                                     onValueChange={quantidadeCome_id => setQuantidadeComeNovo_id(quantidadeCome_id)}
                                 >
                                     {quantidadeComeLista.map(quantidadeComeLista => (
@@ -274,7 +298,7 @@ export default function Perfil() {
                         </View>
                     </View>
                 </View>
-            </Modal>            
+            </Modal>
             <Modal
                 animationType="fade"
                 transparent={true}
