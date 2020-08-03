@@ -8,31 +8,17 @@ export default StyleSheet.create({
     backgroundColor: '#fff'
   },
 
-  scroll:{
-    flex: 1,
-  },
-
   //header
   containerHeader:{
     flexDirection: 'row',
     paddingTop: Constants.statusBarHeight + 10,
     paddingBottom: '2%',
     backgroundColor: 'maroon',
-  },
-  backBtn:{
-    marginTop: 10,
-    position:"absolute",
-    top:Constants.statusBarHeight +20,
-    left:20,
-    height:30,
-    width:30,
-    textAlign:"center",
+
   },
   title:{
-    alignItems:'center',
-    alignItems:"center",
-    width:"100%",
-    marginTop:10
+    width:'70%',
+    marginTop:10,
   },
   detalheTitle: {
     fontSize: 30,
@@ -41,16 +27,20 @@ export default StyleSheet.create({
     color: 'white',
     paddingBottom: 15, 
     opacity: 0.9,
-    width:"85%",
     textAlign:"center",
   },
+  backBtn:{
+    position:"relative",
+    top:0,
+    justifyContent:'center',
+    paddingHorizontal: 20,
+  },
   shareBtn: {
-    marginTop: 10,
-    position:"absolute",
-    top:Constants.statusBarHeight + 20,
-    right:20,
-    height:30,
-    width:30,
+    position:"relative",
+    top:0,
+    right:0,
+    justifyContent:'center',
+    paddingHorizontal: 20,
   },
 
   //body

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, Alert, Vibration, ToastAndroid, Modal, RefreshControl } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, Vibration, ActivityIndicator, Modal, RefreshControl } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -30,14 +30,13 @@ export default function ResumoChurras() {
     const navigation = useNavigation();
 
     function deletar(churrass) {
-
-        console.log(churrass.id);
+        setLoading(true)
         churras.length = total - 1;
         api.delete(`/churras/${churrass.id}`, config).then(
             setVisivel(!visivel)
         );
 
-
+        setLoading(false)
     }
 
     function logout() {
@@ -58,15 +57,12 @@ export default function ResumoChurras() {
 
 
     async function loadChurras() {
-        if (loading) {
-            return;
-        }
+        setLoading(true);
 
         if (total > 0 && churras.length === total) {
             return;
         }
 
-        setLoading(true);
 
         const response = await api.get(`/churras/${USUARIOLOGADO.id}`, {
             params: { page }
@@ -78,15 +74,12 @@ export default function ResumoChurras() {
         setLoading(false);
     }
     async function onRefresh() {
-        if (loading) {
-            return;
-        }
+        setLoading(true);
 
         if (total > 0 && churras.length === total) {
             return;
         }
 
-        setLoading(true);
 
         const response = await api.get(`/churras/${USUARIOLOGADO.id}`, {
             params: { page }
@@ -132,13 +125,13 @@ export default function ResumoChurras() {
                             <View style={style.churrasDescricao}>
                                 <RNSlidingButton
                                     style={{ backgroundColor: 'white', width: "95%"}}
-                                    height={90}
+                                    height={100}
                                     onSlidingSuccessLeft={() => { setVisivel(true); setChurrasDeletar(churras) }}
                                     onSlidingSuccessRight={() => detalheChurras(churras)}
                                     slideDirection={SlideDirection.ANY}>
-                                    <View style={{flexDirection:"row"}}>
+                                    <View style={{flexDirection:"row", width:'100%'}}>
                                         <View style={style.detalheSlide}>
-                                            <Text>Detalhes</Text>
+                                            <Icon name="info" size={24} color="white" />
                                         </View>
                                         <View style={style.slideBtn}>
                                             <Image source={churrasPhoto} style={style.churrasFoto} />
@@ -155,7 +148,7 @@ export default function ResumoChurras() {
                                             </View>
                                         </View>
                                         <View style={style.deletarSlide}>
-                                            <Text>Deletar</Text>
+                                            <Icon name="trash-alt" size={24} color="white" />
                                         </View>
                                     </View>
                                 </RNSlidingButton>
@@ -181,18 +174,31 @@ export default function ResumoChurras() {
             >
                 <View style={style.centeredView}>
                     <View style={style.modalView}>
-                        <Text>Desistiu de armar o churras {churrasDeletar.nomeChurras}? </Text>
-                        <View style={style.btnArea}>
-                            <TouchableOpacity style={style.btnSair} onPress={() => setVisivel(false)}>
-                                <Icon style={style.iconHeaderBtn} name="times" size={20} />
-                                <Text style={style.btnText}>Claro que não</Text>
+                        <Text style={style.modalText}>Desistiu de armar o churras <Text style={{fontWeight:'bold'}}>{churrasDeletar.nomeChurras}</Text>? </Text>
+                        <View style={style.footerModal}>
+                            <TouchableOpacity style={style.exitBtn} onPress={() => setVisivel(false)}>
+                                <Icon style={style.iconSalvarBtn} name="times" size={20} />
+                                <Text style={style.iconSalvarBtn}>Nunca</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={style.btnDeletar} onPress={() => deletar(churrasDeletar)}>
-                                <Icon style={style.iconHeaderBtn} name="check" size={20} />
-                                <Text style={style.btnText}>Desisti</Text>
+                            <TouchableOpacity style={style.salvarBtn} onPress={() => deletar(churrasDeletar)}>
+                                <Icon style={style.iconSalvarBtn} name="check" size={20} />
+                                <Text style={style.iconSalvarBtn}>Desisti</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
+                </View>
+            </Modal>
+                      
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={loading}
+            >
+                <View
+                    style={style.loadingBackground}
+                >
+                    <ActivityIndicator size="large" color="maroon" />
+                    <Text style={style.textLoading}>Carregando ...</Text>
                 </View>
             </Modal>
 

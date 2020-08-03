@@ -10,6 +10,7 @@ const AppStack =  createStackNavigator();
 import Perfil from './pages/Perfil';
 import Login from './pages/Login';
 import LoginCelular from './pages/LoginCelular';
+import CadastroUsuario from './pages/CadastroUsuario';
 import ResumoChurras from './pages/ResumoChurras';
 import OutrosChurras from './pages/OutrosChurras';
 import CriarChurrasco from './pages/CriarChurrasco';
@@ -29,6 +30,7 @@ import AdicionarAcompanhamento from './pages/AdicionarAcompanhamento';
 import AdicionarBebidas from './pages/AdicionarBebidas';
 import AdicionarExtras from './pages/AdicionarExtras';
 import FinalCriaChurras from './pages/FinalCriaChurras';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -68,6 +70,7 @@ export default function Routes(){
             <AppStack.Navigator screenOptions={{headerShown: false}}>
                 <AppStack.Screen name="Login" component={Login}/>
                 <AppStack.Screen name="LoginCelular" component={LoginCelular}/>
+                <AppStack.Screen name="CadastroUsuario" component={CadastroUsuario}/>
                 <AppStack.Screen name="Tabs" component={CriarTabs}/>
                 <AppStack.Screen name="Perfil" component={Perfil}/>
                 <AppStack.Screen name="ResumoChurras" component={ResumoChurras}/>

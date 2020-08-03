@@ -87,4 +87,44 @@ export default StyleSheet.create({
     marginBottom: 10,
     fontSize:17,
   },
+
+  //modal
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 8,
+    paddingHorizontal: 35,
+    paddingVertical: 25,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  modalTitle:{
+    color:"#800000",
+    fontSize:30,
+    marginBottom:15,
+  },
+  modalText:{
+    fontSize:17,
+    textAlign:'center'
+  },
+  footerModal:{    
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    backgroundColor: 'white',
+  },
 });

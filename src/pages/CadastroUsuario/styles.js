@@ -1,45 +1,38 @@
-import { StyleSheet, YellowBox, RecyclerViewBackedScrollViewComponent } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
-import { ceil } from 'react-native-reanimated';
 
 export default StyleSheet.create({
+  //header
   container: {
     flex: 1,
     paddingTop: Constants.statusBarHeight + 15,
-    backgroundColor: '#fff',    
-  },   
+    backgroundColor: '#fff'
+  },  
   header: {
-    justifyContent: "flex-start",
-    alignItems: "center",
+    justifyContent: 'space-between',
+    alignItems: "flex-start",
     flexDirection: 'row',
-    borderBottomWidth:1,
-    borderBottomColor:"lightgray",
-    paddingLeft:10,
-    paddingBottom: 10,
-    zIndex: 1,
-    backgroundColor: '#fff',
-  },
-
-  //Header
-  headerGroup:{
-    flexDirection:'row',
     marginHorizontal: 20,
+    marginBottom: 15,
+  },
+  titulo: {
+    width:"100%",
+    paddingHorizontal:40
   },
   textHeader: {
-    fontSize: 25,
+    fontSize: 30,
     color: 'black',
     fontFamily: 'poppins-semi-bold',
   },
-  textSubHeader:{
-    fontSize: 15,
-    color: 'gray',
-    fontFamily: 'poppins-medium',
+  exitBtn:{
+    position:"absolute",
+    left: 3,
+    top: 10,
   },
 
-
+  // formulario
   formGroup:{
     marginHorizontal:20,
-    marginTop: 15,
     justifyContent: "center",
   },
   textLabel:{
@@ -54,67 +47,21 @@ export default StyleSheet.create({
     borderBottomWidth: 0.5,
     paddingHorizontal: 5,
     marginBottom: 10,
-  },  
+  },
   formOk:{
-    borderColor: 'darkgray', 
+    borderColor: 'gray', 
   },
   formNok:{
     borderColor: 'red', 
   },
-     
-  body:{
-    flex: 1,
-  },
-
-  //Rodapé
-  footer:{    
-    height: 90,
-    flexDirection: "row",
-    alignItems: 'center',
-    justifyContent: "center",
-    borderTopColor: 'lightgray',
-    borderTopWidth: 1,
-    backgroundColor: 'white',
-  },
-  continueBtn:{
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius:8,
-    backgroundColor: 'maroon',
-    height: '60%',
-    width: '85%',
-    paddingVertical: 5,
-  },
-  textBtn:{
-    color: 'white',
-    fontSize: 17,
-    fontFamily: 'poppins-medium',
-    textAlign: 'center',
-  },
-
-  stepHeader:{
-    position:'absolute',
-    right: 20,
-    top:0,
-  },
   
-  exitBtn:{
-    flexDirection:'row-reverse',
-    position:"absolute",
-    right: 0,
-    top: 10,
-  },
-  textHeaderBtn:{
-    fontSize: 15,
-    marginHorizontal: 7,
-  },
-
+  
   //imagem
   imagePicker:{
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignContent: "center",
-    marginVertical: 10,
+    marginBottom: 10,
   },
   inputDisplay:{ 
       flex: 0.7, 
@@ -125,7 +72,7 @@ export default StyleSheet.create({
       borderWidth: 1,
       borderRadius:8,
       paddingVertical: 10,
-      marginVertical: 20, 
+      marginBottom: 20, 
       height: 200,
   },
   addImgIcon:{
@@ -134,15 +81,21 @@ export default StyleSheet.create({
     position: 'absolute',
   },
 
-  //Data e hora
-  componentPicker:{
-    flexDirection: "row",
+  //CadastroBtn
+  continueBtn:{
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginVertical: 10,
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    width: '100%',
+    height:40,
+    paddingVertical: 5,
   },
-  picker:{
-    marginLeft: 10,
+  textBtn:{
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
   },
 
   //modal
@@ -185,4 +138,29 @@ export default StyleSheet.create({
     backgroundColor: 'white',
   },
 
+  //footer
+  footer:{    
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    borderTopColor: 'lightgray',
+    borderTopWidth: 1,
+    backgroundColor: 'white',
+  },
+  continueBtn:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: '85%',
+    paddingVertical: 5,
+  },
+  textBtn:{
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
 });

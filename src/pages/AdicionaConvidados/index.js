@@ -58,7 +58,7 @@ export default function AdicionaConvidados({ route, navigation }) {
       cidade: "cidade",
       uf: "uf",
       idade: 0,
-      foto: null,
+      foto_id: 0,
       joined: '00/00/00',
       celular: convid.telefone,
       apelido: convid.nome,
