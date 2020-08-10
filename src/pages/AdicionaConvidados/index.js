@@ -1,55 +1,52 @@
-import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, SafeAreaView, FlatList, Linking } from 'react-native';
+import React, { Component, useEffect } from 'react';
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView, ScrollView, FlatList, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
 
 import style from './styles';
-import { max } from 'react-native-reanimated';
+import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
+
+var convidadosList = []
 
 export default function AdicionaConvidados({ route, navigation }) {
 
   const [value, onChangeValue] = React.useState("20,50");
   const [convite, onChangeText] = React.useState('');
   const [novoUsuario, setNovoUsuario] = React.useState([]);
-  const [maxChar, setMaxChar]=React.useState(190);
-  var convidadosList = new FormData();
 
-  const { data } = route.params;
+  const { nomeContato } = route.params;
+  const { sobrenomeContato } = route.params;
+  const { telefoneContato } = route.params;
   const { churrasAtual } = route.params;
 
-console.log(data)
+  console.log("Pagian conv " + convidadosList)
 
-  // useEffect(() => {
-  //   if (nomeContato != null) {
-  //     if (sobrenomeContato != undefined) {
-  //       convidadosList.push({
-  //         id: convidadosList.length,
-  //         nome: nomeContato,
-  //         sobrenome: sobrenomeContato,
-  //         telefone: telefoneContato,
+  useEffect(() => {
+    if (nomeContato != null) {
+      if (sobrenomeContato != undefined) {
+        convidadosList.push({
+          id: convidadosList.length,
+          nome: nomeContato,
+          sobrenome: sobrenomeContato,
+          telefone: telefoneContato,
   
-  //       })
-  //     } else {
-  //       convidadosList.push({
-  //         id: convidadosList.length,
-  //         nome: nomeContato,
-  //         sobrenome: "",
-  //         telefone: telefoneContato,
+        })
+      } else {
+        convidadosList.push({
+          id: convidadosList.length,
+          nome: nomeContato,
+          sobrenome: "",
+          telefone: telefoneContato,
   
-  //       })
-  //     }
-  //   }  
-  // }, [nomeContato]); 
+        })
+      }
+    }  
+  }, [nomeContato]); 
 
   const inviteStandard = `Olá, estou te convidadando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença.`
-  
-  function updateMsg(text){
-    onChangeText(text)
-    var atual = 190-text.length
-    setMaxChar(atual)
-  }
 
   async function criaListaConvidados(convid) {
     console.log(convid)
@@ -61,6 +58,7 @@ console.log(data)
       cidade: "cidade",
       uf: "uf",
       idade: 0,
+      fotoUrlU:null,
       joined: '00/00/00',
       celular: convid.telefone,
       apelido: convid.nome,
@@ -130,14 +128,11 @@ console.log(data)
           </TouchableOpacity>
         </View>
         <View style={style.formGroup}>
-          <Text style={style.textLabel}>Mensagem ({maxChar})</Text>
+          <Text style={style.textLabel}>Mensagem</Text>
           <TextInput
-            style={[style.inputStandard,{height:100}]}
-            multiline={true}
-            numberOfLines= {2}
-            maxLength= {190}
+            style={style.inputStandard}
             onChange={text => onChangeText('')}
-            onChangeText={text => updateMsg(text)}
+            onChangeText={text => onChangeText(text)}
             placeholder={inviteStandard}
           />
         </View>
@@ -159,7 +154,7 @@ console.log(data)
           )}
           style={style.listStyle} />
 
-        <ActionButton offsetX={10} offsetY={95} onPress={openContactList} />
+        <ActionButton offsetX={10} offsetY={90} onPress={openContactList} />
 
         <View style={style.footer}>
           <TouchableOpacity style={style.continueBtn} onPress={next}>

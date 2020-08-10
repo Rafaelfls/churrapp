@@ -19,9 +19,10 @@ export default function CriarChurrasco() {
   const [hrFim, sethrFim] = useState();
   const [descricao, setdescricao] = useState();
   const [date, setDate] = useState('');
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState({cancelled:true});
   const [churrasCodeCriado, setChurrasCodeCriado] = useState()
   const [visivel, setVisivel] = useState(false)
+  const [url, setUrl] = useState('https://churrappuploadteste.s3.amazonaws.com/default/churrasco_default.png')
 
   const [borderColorRed1, setBorderColorRed1] = useState(style.formOk);
   const [borderColorRed2, setBorderColorRed2] = useState(style.formOk);
@@ -98,12 +99,39 @@ export default function CriarChurrasco() {
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      setImage(result);
     }
   };
 
   async function criarChurras() {
 
+    if (!image.cancelled) {
+      let apiUrl = 'https://pure-island-99817.herokuapp.com/fotosChurras';
+      let uriParts = image.uri.split('.');
+      let fileType = uriParts[uriParts.length - 1];
+      let uri = image.uri
+
+      let formData = new FormData();
+      formData.append('file', {
+        uri,
+        name: `photo.${fileType}`,
+        type: `image/${fileType}`,
+      });
+
+      let options = {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+
+      const res = await fetch(apiUrl, options);
+      const response = await res.json();
+      setUrl(response.location)
+      console.log(response.location)
+    }
 
     const response = await api.post('/churras', {
       nomeChurras: nomeChurras,
@@ -112,7 +140,7 @@ export default function CriarChurrasco() {
       hrFim: hrFim,
       descricao: descricao,
       data: date,
-      fotoUrlC: null,
+      fotoUrlC: url,
     }, config)
 
     setChurrasCodeCriado(response.data);
@@ -238,7 +266,7 @@ export default function CriarChurrasco() {
                       borderBottomWidth: 1,
                       borderWidth: 0,
                       marginLeft: 36,
-                      borderBottomColor:'darkgray',
+                      borderBottomColor: 'darkgray',
                       fontFamily: 'poppins-regular',
                     },
                     // ... You can check the source to find the other keys.
@@ -267,7 +295,7 @@ export default function CriarChurrasco() {
             <View style={style.imagePicker}>
               <TouchableOpacity style={style.inputDisplay} onPress={pickImage} >
                 <IconFA style={style.addImgIcon} name="image" size={100} />
-                {image && <Image source={{ uri: image }} style={{ width: 170, height: 170, paddingVertical: 10 }} />}
+                {image && <Image source={{ uri: image.uri }} style={{ width: 170, height: 170, paddingVertical: 10 }} />}
               </TouchableOpacity>
             </View>
           </View>
