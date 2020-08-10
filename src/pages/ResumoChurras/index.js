@@ -189,7 +189,7 @@ export default function ResumoChurras() {
                 </View>
             </Modal>
                       
-            <Modal
+            {/* <Modal
                 animationType="fade"
                 transparent={true}
                 visible={loading}
@@ -200,7 +200,7 @@ export default function ResumoChurras() {
                     <ActivityIndicator size="large" color="maroon" />
                     <Text style={style.textLoading}>Carregando ...</Text>
                 </View>
-            </Modal>
+            </Modal> */}
 
         </View>
 

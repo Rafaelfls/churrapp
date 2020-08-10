@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, FlatList, TextInput, TouchableOpacity, } from 'react-native';
+import { View, Text, Clipboard, Alert, TextInput, TouchableOpacity, } from 'react-native';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
@@ -19,6 +19,11 @@ export default function CompartilharChurrasco({ route, navigation }) {
     function goBack() {
         navigation.goBack()
     }
+
+    const copyToClipboard = () => {
+        Clipboard.setString(`${churras.id}`)
+    }
+
 
     return (
 
@@ -44,7 +49,7 @@ export default function CompartilharChurrasco({ route, navigation }) {
                     <Text style={style.churrasData}>{churras.data} - {churras.hrInicio}</Text>
                 </View>
 
-                <Text style={style.codigo}>#{churras.id}</Text>
+                <Text style={style.codigo} onPress={() => copyToClipboard()}>{churras.id}</Text>
                 <View style={style.qrCode}>
                     <QRCode size={200} content={churras.id} />
                 </View>

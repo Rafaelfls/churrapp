@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import api from '../../services/api';
 import { TextInputMask } from 'react-native-masked-text'
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 
 import style from './styles';
 
@@ -116,13 +117,14 @@ export default function CadastroUsuario() {
 
             // Tentativa de fazer upload de imagem, ainda nao funciona
 
-            // let filename = image.uri.split('/').pop();
-            // console.log(filename)
-            // data.append('file', image, filename)
-            // console.log(data)
-            // const response2 = await api.post('/fotosPerfil', data)
-            // console.log(response2)
-
+            // FileSystem.uploadAsync('https://pure-island-99817.herokuapp.com/fotosUsuarios', image.uri, {
+            //     headers: {
+            //         'content-type': 'multipart/form-data',
+            //     },
+            //     httpMethod: "POST",
+            //     uploadType : FileSystem.FileSystemUploadOptions.MULTIPART ,
+            //     fieldName: 'file',
+            // })
 
             await api.post('/usuarios', {
                 nome: nomeUsuario,

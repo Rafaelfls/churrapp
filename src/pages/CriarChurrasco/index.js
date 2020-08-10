@@ -112,7 +112,7 @@ export default function CriarChurrasco() {
       hrFim: hrFim,
       descricao: descricao,
       data: date,
-      foto: image,
+      foto_id: 1,
     }, config)
 
     setChurrasCodeCriado(response.data);

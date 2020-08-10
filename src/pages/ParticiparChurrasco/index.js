@@ -36,7 +36,6 @@ export default function ParticiparChurrasco() {
         });
         console.log("POSTADO " + USUARIOLOGADO.id + " - " + churras_id)
 
-        onChangeText(null)
         return navigation.replace('Tabs')
     }
 
@@ -51,7 +50,6 @@ export default function ParticiparChurrasco() {
                 <TextInput
                     style={style.inputStandard}
                     onChangeText={text => setChurras_id(text)}
-                    value={text}
                     placeholder={'000000'}
                 />
             </View>
