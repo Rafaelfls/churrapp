@@ -42,7 +42,6 @@ textLabel:{
   marginBottom: 0,
 },
 inputStandard:{ 
-  height: 40, 
   borderColor: 'gray', 
   paddingHorizontal: 5,
   borderBottomWidth: 1,

@@ -2,12 +2,13 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, SafeAreaView, FlatList, ActivityIndicator,TouchableOpacity } from 'react-native';
 import * as Contacts from 'expo-contacts';
 
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import style from './styles';
 
 export default class ContactList extends React.Component {
   constructor() {
     super();
+    var data = new FormData();
+    
     this.state = {
       isLoading: false,
       contacts: []
@@ -29,12 +30,16 @@ export default class ContactList extends React.Component {
   }
 
   renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => this.props.navigation.navigate('AdicionaConvidados',{
-      nomeContato:item.firstName ,
-      sobrenomeContato:item.lastName ,
-      telefoneContato: item.phoneNumbers[0].number,
-      churrasCodeAtual:null
-    })} style={{ minHeight: 70, padding: 5, paddingHorizontal: 20 }}>
+    <TouchableOpacity onPress={function teste(){
+      data.append(`${item.phoneNumbers[0].number}`,{
+        nomeContato:item.firstName ,
+        sobrenomeContato:item.lastName ,
+        telefoneContato: item.phoneNumbers[0].number,})
+      this.props.navigation.navigate('AdicionaConvidados',{
+        data,
+        churrasCodeAtual:null
+    })}
+    } style={{ minHeight: 70, padding: 5, paddingHorizontal: 20 }}>
       <Text style={{ color: 'black', fontFamily: 'poppins-semi-bold', fontSize: 18 }}>
         {item.firstName + ' '}
         {item.lastName}

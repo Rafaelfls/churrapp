@@ -61,7 +61,6 @@ export default function CadastroUsuario() {
     }
 
     async function navigateToResumo() {
-        var data = new FormData();
 
         if (nomeUsuario == '') {
             setBorderColorRed1(style.formNok)
@@ -115,16 +114,31 @@ export default function CadastroUsuario() {
             return setVisivel(true)
         } else {
 
-            // Tentativa de fazer upload de imagem, ainda nao funciona
 
-            // FileSystem.uploadAsync('https://pure-island-99817.herokuapp.com/fotosUsuarios', image.uri, {
-            //     headers: {
-            //         'content-type': 'multipart/form-data',
-            //     },
-            //     httpMethod: "POST",
-            //     uploadType : FileSystem.FileSystemUploadOptions.MULTIPART ,
-            //     fieldName: 'file',
-            // })
+            let apiUrl = 'https://pure-island-99817.herokuapp.com/fotosUsuarios';
+            let uriParts = image.uri.split('.');
+            let fileType = uriParts[uriParts.length - 1];
+            let uri = image.uri
+
+            let formData = new FormData();
+            formData.append('file', {
+                uri,
+                name: `photo.${fileType}`,
+                type: `image/${fileType}`,
+            });
+
+            let options = {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+
+            const res = await fetch(apiUrl, options);
+            const response = await res.json();
+            console.log(response.location)
 
             await api.post('/usuarios', {
                 nome: nomeUsuario,
@@ -133,7 +147,7 @@ export default function CadastroUsuario() {
                 cidade: cidadeUsuario,
                 uf: ufUsuario,
                 idade: idadeUsuario,
-                foto_id: 1,
+                fotoUrlU: response.location,
                 celular: celularUsuario,
                 cadastrado: true,
                 apelido: apelidoUsuario,
