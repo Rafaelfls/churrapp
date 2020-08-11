@@ -33,9 +33,7 @@ export default function DetalheChurras() {
   const churras = route.params.churras;
   const allowShare = route.params.allowShare;
   const [modalVisivel, setModalVisivel] = useState(false);
-  const [churrasCode, setChurrasCode] = useState(churras.id);
   const navigation = useNavigation();
-
 
   function CompartilharChurras(churras) {
     navigation.push('CompartilharChurrasco', { churras });

@@ -9,6 +9,8 @@ import IconFea from '@expo/vector-icons/Feather';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import style from './styles';
+import { useChurrasCount } from '../../context/churrasCount';
+
 
 export default function Perfil() {
     const route = useRoute();
@@ -46,6 +48,9 @@ export default function Perfil() {
     const [quantidadeComeNovo_id, setQuantidadeComeNovo_id] = useState(null);
     // foto ainda nao em uso
     // const [fotoNova, setFotoNova] = useState(null);
+
+    const {churrasCount, setChurrasCount} = useChurrasCount();
+
 
 
 
@@ -160,7 +165,7 @@ export default function Perfil() {
                     <View style={style.containerOrg}>
                         <IconMCI name="grill" size={28} />
                         <Text style={style.profileOrg}>Organizou</Text>
-                        <Text style={style.profileOrgNumber}>3</Text>
+                        <Text style={style.profileOrgNumber}>{churrasCount}</Text>
                     </View>
                     <View style={style.linhaSeparaçãoHor}></View>
                     <View style={style.containerPart}>
