@@ -60,7 +60,7 @@ export default function Perfil() {
             setCidade(response.data[0].cidade)
             setUf(response.data[0].uf)
             setIdade(response.data[0].idade)
-            setFoto(response.data[0].urlU)
+            setFoto(response.data[0].fotoUrlU)
             setApelido(response.data[0].apelido)
             setPontoCarne_id(response.data[0].pontoCarne_id)
             setCarnePreferida_id(response.data[0].carnePreferida_id)
@@ -129,7 +129,7 @@ export default function Perfil() {
             cidade: cidadeNova,
             uf: ufNovo,
             celular: celularNovo,
-            foto_id: 1,
+            fotoUrlU: null,
             apelido: apelidoNovo,
             pontoCarne_id: pontoCarneNovo_id,
             quantidadeCome_id: quantidadeComeNovo_id,
