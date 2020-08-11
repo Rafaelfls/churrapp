@@ -1,55 +1,60 @@
-import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, SafeAreaView, FlatList, Linking } from 'react-native';
+import React, { Component, useEffect } from 'react';
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView, RefreshControl, FlatList, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
 
 import style from './styles';
-import { max } from 'react-native-reanimated';
+
+var convidadosList = [];
 
 export default function AdicionaConvidados({ route, navigation }) {
 
   const [value, onChangeValue] = React.useState("20,50");
   const [convite, onChangeText] = React.useState('');
   const [novoUsuario, setNovoUsuario] = React.useState([]);
-  const [maxChar, setMaxChar]=React.useState(190);
-  var convidadosList = new FormData();
+  const [loading, setLoading] = React.useState(false);
+  const [maxChar, setMaxChar] = React.useState(190);
 
-  const { data } = route.params;
+  const { nomeContato } = route.params;
+  const { sobrenomeContato } = route.params;
+  const { telefoneContato } = route.params;
   const { churrasAtual } = route.params;
 
-console.log(data)
+  useEffect(() => {
+    console.log(convidadosList)
+    if (nomeContato != null) {
+      if (sobrenomeContato != undefined) {
+        convidadosList.push({
+          id: convidadosList.length + 1,
+          nome: nomeContato,
+          sobrenome: sobrenomeContato,
+          telefone: telefoneContato,
 
-  // useEffect(() => {
-  //   if (nomeContato != null) {
-  //     if (sobrenomeContato != undefined) {
-  //       convidadosList.push({
-  //         id: convidadosList.length,
-  //         nome: nomeContato,
-  //         sobrenome: sobrenomeContato,
-  //         telefone: telefoneContato,
-  
-  //       })
-  //     } else {
-  //       convidadosList.push({
-  //         id: convidadosList.length,
-  //         nome: nomeContato,
-  //         sobrenome: "",
-  //         telefone: telefoneContato,
-  
-  //       })
-  //     }
-  //   }  
-  // }, [nomeContato]); 
+        })
+      } else {
+        convidadosList.push({
+          id: convidadosList.length + 1,
+          nome: nomeContato,
+          sobrenome: "",
+          telefone: telefoneContato,
+
+        })
+      }
+    }
+    console.log(convidadosList)
+  }, [telefoneContato]);
 
   const inviteStandard = `Olá, estou te convidadando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença.`
-  
-  function updateMsg(text){
+
+  function updateMsg(text) {
     onChangeText(text)
-    var atual = 190-text.length
+    var atual = 190 - text.length
     setMaxChar(atual)
   }
+
 
   async function criaListaConvidados(convid) {
     console.log(convid)
@@ -61,6 +66,7 @@ console.log(data)
       cidade: "cidade",
       uf: "uf",
       idade: 0,
+      fotoUrlU: null,
       joined: '00/00/00',
       celular: convid.telefone,
       apelido: convid.nome,
@@ -82,15 +88,15 @@ console.log(data)
 
   }
 
-  function apagaConvidado(convidado){
+  function apagaConvidado(convidado) {
     var valueConvidado = convidadosList.indexOf(convidado.nome)
-    convidadosList = convidadosList.splice(1,1)
+    convidadosList = convidadosList.splice(1, 1)
   }
 
   function next() {
     const convidadosQtd = convidadosList.length
 
-    convidadosList.map(convid => enviaMensagens(convid.telefone,convite))
+    convidadosList.map(convid => enviaMensagens(convid.telefone, convite))
 
     navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd });
 
@@ -107,7 +113,6 @@ console.log(data)
   }
 
   function enviaMensagens(telefone, convite) {
-    console.log("Telefone: "+ telefone + " convite: "+convite)
     Linking.canOpenURL(`whatsapp://send?text=${convite}`).then(supported => {
       if (supported) {
         if (convite === '') {
@@ -118,6 +123,10 @@ console.log(data)
         return Linking.openURL(`https://api.whatsapp.com/send?phone=${telefone}&text=${convite}`)
       }
     })
+  }
+
+  function onRefresh(){
+    
   }
 
   return (
@@ -132,10 +141,10 @@ console.log(data)
         <View style={style.formGroup}>
           <Text style={style.textLabel}>Mensagem ({maxChar})</Text>
           <TextInput
-            style={[style.inputStandard,{height:100}]}
+            style={[style.inputStandard, { height: 100 }]}
             multiline={true}
-            numberOfLines= {2}
-            maxLength= {190}
+            numberOfLines={2}
+            maxLength={190}
             onChange={text => onChangeText('')}
             onChangeText={text => updateMsg(text)}
             placeholder={inviteStandard}
@@ -146,6 +155,7 @@ console.log(data)
           data={convidadosList}
           keyExtractor={convidadosList => String(convidadosList.id)}
           showsVerticalScrollIndicator={false}
+          refreshControl={<RefreshControl refreshing={loading} onRefresh={() => onRefresh()} />}
           renderItem={({ item: convidadosList }) => (
             <TouchableOpacity style={style.listaConvidados} onPress={() => apagaConvidado(convidadosList)}>
               <View style={style.listaConvidadosItem}>
