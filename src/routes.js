@@ -31,11 +31,14 @@ import AdicionarBebidas from './pages/AdicionarBebidas';
 import AdicionarExtras from './pages/AdicionarExtras';
 import FinalCriaChurras from './pages/FinalCriaChurras';
 
+import ChurrasCountProvider from './context/churrasCount';
+
 
 const Tab = createBottomTabNavigator();
 
     function CriarTabs() {
         return(
+            
             <Tab.Navigator screenOptions={({ route }) => ({
                 tabBarIcon: ({focused, color, size}) => {
                     let iconName;
@@ -66,6 +69,7 @@ const Tab = createBottomTabNavigator();
 export default function Routes(){
 
     return(
+        <ChurrasCountProvider>
         <NavigationContainer>
             <AppStack.Navigator screenOptions={{headerShown: false}}>
                 <AppStack.Screen name="Login" component={Login}/>
@@ -100,5 +104,6 @@ export default function Routes(){
             </AppStack.Navigator>
  
         </NavigationContainer>
+        </ChurrasCountProvider>
     );
 }

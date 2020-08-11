@@ -14,7 +14,11 @@ import churrasPhoto from '../../assets/fundoDescricao.jpg';
 
 import style from './styles';
 
+import { useChurrasCount } from '../../context/churrasCount';
+
 export default function ResumoChurras() {
+    const {churrasCount, setChurrasCount} = useChurrasCount();
+
     const route = useRoute();
     const [churras, setChurras] = useState([]);
     const [total, setTotal] = useState(0);
@@ -31,7 +35,7 @@ export default function ResumoChurras() {
 
     function deletar(churrass) {
         setLoading(true)
-        churras.length = total - 1;
+        setChurrasCount( churrasCount - 1)
         api.delete(`/churras/${churrass.id}`, config).then(
             setVisivel(!visivel)
         );
@@ -59,7 +63,7 @@ export default function ResumoChurras() {
     async function loadChurras() {
         setLoading(true);
 
-        if (total > 0 && churras.length === total) {
+        if (churrasCount > 0 && churras.length === churrasCount) {
             return;
         }
 
@@ -69,14 +73,15 @@ export default function ResumoChurras() {
         });
 
         setChurras([...churras, ...response.data]);
-        setTotal(churras.length);
+        setChurrasCount(churras.length);
         setPage(page + 1);
         setLoading(false);
+        console.log("QNT = " + churrasCount + "Length = " + churras.length)
     }
     async function onRefresh() {
         setLoading(true);
 
-        if (total > 0 && churras.length === total) {
+        if (churrasCount > 0 && churras.length === churrasCount) {
             return;
         }
 
@@ -86,9 +91,11 @@ export default function ResumoChurras() {
         });
 
         setChurras([...refreshChurras, ...response.data]);
-        setTotal(churras.length);
+        setChurrasCount(churras.length);
         setPage(1);
         setLoading(false);
+        console.log("QNT2 = " + churrasCount +  "Length = " + churras.data.length)
+
     }
 
     useEffect(() => {
@@ -96,13 +103,12 @@ export default function ResumoChurras() {
     }, []);
 
     return (
-
         <View style={style.container}>
 
             <View style={style.header}>
                 <View style={style.titulo}>
                     <Text style={style.textHeader}>Meus churras</Text>
-                    <Text style={style.textSubHeader}>Você tem {total} churras criados</Text>
+                    <Text style={style.textSubHeader}>Você tem {churrasCount} churras criados</Text>
                 </View>
                 <View style={style.signOutBtn}>
                     <TouchableOpacity onPress={logout}>
