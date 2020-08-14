@@ -187,7 +187,23 @@ export default StyleSheet.create({
     borderRadius: 8,
     margin: 10,
     padding: 8,
-    height: 150,
+    height: "90%",
+  },
+  tiposDesign:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "#000",
+    borderRadius: 8,
+    margin: 20,
+    height: 70,
+  },
+  itensDesign:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "#000",
+    borderRadius: 8,
+    margin: 20,
+    height: 70,
   },
   itemImg:{
     height: 110,
@@ -233,6 +249,45 @@ export default StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     top: '92%',
-  }
+  },
+  modalView: {
+    backgroundColor: "#f2f2f2",
+    width: '100%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 35,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    borderTopColor: "#d3d3d3",
+    borderTopWidth: 1,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: '60%',
+  },
+  footerModal: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  exitBtn: {
+    flexDirection: 'row-reverse',
+    backgroundColor: '#800000',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
 
 });
