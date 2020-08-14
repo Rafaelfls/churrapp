@@ -7,6 +7,7 @@ import IconFA5 from 'react-native-vector-icons/FontAwesome5';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconOct from 'react-native-vector-icons/Octicons';
 import api from '../../services/api';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import backgroundImg from '../../assets/fundoDescricao.jpg';
 import profileImg from '../../assets/Perfil.jpg';
@@ -19,7 +20,11 @@ import pao from '../../assets/pao.jpg';
 import style from './styles';
 import { Container } from 'native-base';
 
+import {useConvidadosCount} from '../../context/churrasCount';
+
 export default function DetalheChurras() {
+  const {convidadosCount, setConvidadosCount} = useConvidadosCount();
+
   const route = useRoute();
   const [itens, setItens] = useState([]);
   const [itensTotal, setItensTotal] = useState(0);
@@ -29,10 +34,14 @@ export default function DetalheChurras() {
   const [loading, setLoading] = useState(false);
   const [refreshItens, setRefreshItens] = useState([]);
   const [refreshConvidados, setRefreshConvidados] = useState([]);
+  const [todosTipos, setTodosTipos] = useState([]);
+  const [subTipos, setSubTipos] = useState([]);
 
   const churras = route.params.churras;
   const allowShare = route.params.allowShare;
-  const [modalVisivel, setModalVisivel] = useState(false);
+  const [modalTipoVisivel, setModalTipoVisivel] = useState(false);
+  const [modalItemVisivel, setModalItemVisivel] = useState(false);
+  const [modalSubTipoVisivel, setModalSubTipoVisivel] = useState(false);
   const navigation = useNavigation();
 
   function CompartilharChurras(churras) {
@@ -48,12 +57,19 @@ export default function DetalheChurras() {
     const response = await api.get(`/listadochurras/${churras.id}`);
 
     setItens([...itens, ...response.data]);
-    setItensTotal(itens.length);
+    setItensTotal(response.data.length);
   }
-  async function carregarTodosItens() {
-    const response = await api.get(`/item`);
+  async function carregarSubTipos() {
+    const response = await api.get(`/subtipos`);
 
-    setTodosItens([...todosItens, ...response.data]);
+    setSubTipos([...subTipos, ...response.data]);
+  }
+  
+  async function carregarTodosTipos(subTipo) {
+    setModalTipoVisivel(!modalTipoVisivel);
+    const response = await api.get(`/tipoSubTipo?subTipo=${subTipo.id}`);
+
+    setTodosTipos([...todosTipos, ...response.data]);
   }
   async function onRefresh() {
 
@@ -64,7 +80,7 @@ export default function DetalheChurras() {
 
     setConvidados([...refreshConvidados, ...response.data]);
     setItens([...refreshItens, ...response2.data]);
-    setItensTotal(itens.length);
+    setItensTotal(response2.data.length);
     setLoading(false);
     
   }
@@ -72,27 +88,41 @@ export default function DetalheChurras() {
     const response = await api.get(`/convidados/${churras.id}`);
 
     setConvidados([...convidados, ...response.data]);
+    setConvidadosCount(response.data.length);
+    console.log("CONVIDADOS " + convidadosCount)
   }
 
  
 
   async function addItem(item) {
-    const response = await api.post('/listadochurras', {
+    await api.post('/listadochurras', {
       quantidade: 10,
       unidade_id: item.unidade_id,
       item_id: item.id,
       churras_id: churras.id
     })
-    setModalVisivel(!modalVisivel);
+    setModalItemVisivel(!modalItemVisivel);
+    setModalSubTipoVisivel(!modalSubTipoVisivel)
+    setModalTipoVisivel(!modalTipoVisivel)
+
+    onRefresh();
 
   }
 
+  async function pegarItemPorTipo(tipo){
+    
+
+    setModalItemVisivel(true);    
+    const response = await api.get(`/items?tipo=${tipo.id}`);
+
+    setTodosItens([...todosItens, ...response.data]);
+  }
 
 
   useEffect(() => {
     carregarItens();
     carregarConvidados();
-    carregarTodosItens();
+    carregarSubTipos();
   }, []);
 
   return (
@@ -135,7 +165,7 @@ export default function DetalheChurras() {
         <View style={style.cabecalhoConvidados}>
           <View style={style.containerTituloConvidados}>
             <Text style={style.tituloConvidados}>Convidados</Text>
-            <Text style={style.subtituloConvidados}>X pessoas</Text>
+            <Text style={style.subtituloConvidados}>{convidadosCount} pessoas</Text>
           </View>
           <TouchableOpacity >
             <Text style={style.verTodos}>ver todos</Text>
@@ -171,7 +201,7 @@ export default function DetalheChurras() {
           <View style={style.containerTituloItens}>
             <Text style={style.tituloItens}>Itens {itensTotal}</Text>
           </View>
-          <TouchableOpacity onPress={() => setModalVisivel(true)}>
+          <TouchableOpacity onPress={() => setModalSubTipoVisivel(true)}>
             <Text style={style.verTodos}>Adicionar item</Text>
           </TouchableOpacity>
         </View>
@@ -202,31 +232,113 @@ export default function DetalheChurras() {
 
       <Modal
         animationType="slide"
-        transparent={false}
-        visible={modalVisivel}
+        transparent={true}
+        visible={modalSubTipoVisivel}
         onRequestClose={() => {
           Alert.alert('Modal has been closed.');
         }}>
-        <View>
-        <TouchableHighlight
-              onPress={() => {
-                setModalVisivel(!modalVisivel);
-              }}>
-              <Text style={{fontSize: 15}}>Fechar</Text>
-            </TouchableHighlight>
-          <FlatList
-            data={todosItens}
-            keyExtractor={todosItens => String(todosItens.id)}
-            renderItem={({ item: todosItens }) => (
+          <View style={style.centeredView}>
+            <View style={style.modalView}>
+              <Text>Escolha uma categoria por favor</Text>
+              <FlatList
+                  data={subTipos}
+                  keyExtractor={subTipos => String(subTipos.id)}
+                  renderItem={({ item: subTipos }) => (
 
-              <View style={style.item}>
-                <TouchableOpacity onPress={() => addItem(todosItens)}>
-                    <Text style={style.nomeItem}>{todosItens.nomeItem}</Text>
-                </TouchableOpacity>
+                    <View style={style.tiposDesign}>
+                      <TouchableOpacity onPress={() =>{ carregarTodosTipos(subTipos)
+                     
+                      }}>
+                          <Text style={style.nomeItem}>{subTipos.subTipo}</Text>
+                      </TouchableOpacity>
+                    </View>
+
+                  )}
+                />
+                <View style={style.footerModal}>
+                  <TouchableHighlight style={style.exitBtn} onPress={() => {
+                    setModalSubTipoVisivel(!modalSubTipoVisivel);
+                  }}>
+                    {/* <Icon style={style.iconSalvarBtn} name="times" size={15} /> */}
+                    <Text style={style.iconSalvarBtn}>Cancelar</Text>
+                  </TouchableHighlight>
               </View>
+          </View>
+        </View>
+      </Modal>
 
-            )}
-          />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalTipoVisivel}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+        }}>
+          <View style={style.centeredView}>
+            <View style={style.modalView}>
+            <Text>Agora um tipo</Text>
+              <FlatList
+                  data={todosTipos}
+                  keyExtractor={todosTipos => String(todosTipos.id)}
+                  renderItem={({ item: todosTipos }) => (
+
+                    <View style={style.tiposDesign}>
+                      <TouchableOpacity onPress={() => pegarItemPorTipo(todosTipos)}>
+                          <Text style={style.nomeItem}>{todosTipos.tipo}</Text>
+                      </TouchableOpacity>
+                    </View>
+
+                  )}
+                />
+                <View style={style.footerModal}>
+                  <TouchableHighlight style={style.exitBtn} onPress={() => {
+                    setModalTipoVisivel(!modalTipoVisivel);
+                    setTodosTipos([]);
+                  }}>
+                    {/* <Icon style={style.iconSalvarBtn} name="times" size={15} /> */}
+                    <Text style={style.iconSalvarBtn}>Cancelar</Text>
+                  </TouchableHighlight>
+              </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalItemVisivel}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+        }}>
+        <View style={style.centeredView}>
+            <View style={style.modalView}>
+            <Text>E para finalizar, o que deseja adicionar?</Text>
+                <FlatList
+                  data={todosItens}
+                  keyExtractor={todosItens => String(todosItens.id)}
+                  renderItem={({ item: todosItens }) => (
+
+                    <View style={style.itensDesign}>
+                      <TouchableOpacity onPress={() => {addItem(todosItens)
+                      setTodosItens([]);
+                      setTodosTipos([]);
+                      }}>
+                          <Text style={style.nomeItem}>{todosItens.nomeItem}</Text>
+                      </TouchableOpacity>
+                    </View>
+
+                  )}
+                />
+              <View style={style.footerModal}>
+                <TouchableHighlight style={style.exitBtn}  onPress={() => {
+                    setModalItemVisivel(!modalItemVisivel);
+                    setTodosItens([]);
+                  }}>
+                  {/* <Icon style={style.iconSalvarBtn} name="times" size={15} /> */}
+                  <Text style={style.iconSalvarBtn}>Cancelar</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
         </View>
       </Modal>
     </View>
