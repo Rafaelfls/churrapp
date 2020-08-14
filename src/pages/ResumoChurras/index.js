@@ -140,7 +140,7 @@ export default function ResumoChurras() {
                                             <Icon name="info" size={24} color="white" />
                                         </View>
                                         <View style={style.slideBtn}>
-                                            <Image source={churrasPhoto} style={style.churrasFoto} />
+                                            <Image source={{uri:churras.fotoUrlC}} style={style.churrasFoto} />
                                             <View style={style.churrasInfosView}>
                                                 <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
                                                 <Text style={style.churrasDono}>{churras.nome} </Text>

@@ -14,9 +14,7 @@ export default function LoginCelular() {
     const [visivel, setVisivel] = useState(false)
 
     async function navigateToResumo() {
-        var celular = "0" + celularUser;
-
-        await api.get(`/usuariosCel/${celular}`)
+        await api.get(`/usuariosCel/${celularUser}`)
         .then(function(response){
             if(response.data[0] == undefined){
                 return setVisivel(true)
