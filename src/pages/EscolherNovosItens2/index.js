@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ActionButton, SafeAreaView, FlatList, Modal, Picker } from 'react-native';
+import { View, Text, TouchableOpacity, Image, SafeAreaView, FlatList, Modal, Picker } from 'react-native';
 import api from '../../services/api';
 import NumericInput from 'react-native-numeric-input';
 
 //Icones imports
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import IconEnt from 'react-native-vector-icons/Entypo';
+import IconFea from 'react-native-vector-icons/Feather';
+import IconMat from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import style from './styles';
-
 
 export default function EscolherNovosItens2({ route, navigation }) {
 
@@ -19,14 +20,15 @@ export default function EscolherNovosItens2({ route, navigation }) {
     const [itemModal, setItemModal] = React.useState('');
     const [selectedUnidade, setSelectedUnidade] = useState("Selecione...");
     const [quantidadeModal, setQuantidadeModal] = useState(null)
-    const [unidadeModal, setUnidadeModal] = useState(null)
     const [idItem, setIdItem] = useState(null)
     const [filtro, setFiltro] = useState(null)
 
     async function firstLoad() {
-        const responseItem = await api.get(`/items?min=${6}&max=${6}`);
+        const responseItem = await api.get(`/listItem?subTipo=${2}`);
         const responseUnidade = await api.get(`/unidade`);
-        const responseTipos = await api.get(`/tipo`);
+        const responseTipos = await api.get(`/tipoSubTipo?subTipo=${2}`);
+
+        console.log(responseItem)
 
         setUnidades([...unidades, ...responseUnidade.data]);
         setItem([...item, ...responseItem.data]);
@@ -58,8 +60,7 @@ export default function EscolherNovosItens2({ route, navigation }) {
             <SafeAreaView style={style.body}>
                 <View style={style.headerGroup}>
                     <View style={style.headerTextGroup}>
-                        <Text style={style.textHeader}>Vamos adicionar mais</Text>
-                        <Text style={style.textHeader}>acompanhamentos?</Text>
+                        <Text style={style.textHeader}>Adicionar acompanhamentos</Text>
                     </View>
                     <TouchableOpacity style={style.exitBtn} onPress={backHome}>
                         <Icon style={style.iconHeaderBtn} name="arrow-alt-circle-left" size={20} />
@@ -72,12 +73,23 @@ export default function EscolherNovosItens2({ route, navigation }) {
                     keyExtractor={item => String(item.id)}
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item: item }) => (
-                        <View style={style.listaConvidados}>
-                            {item.tipo_id == 6 ? (
-                                <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
-                                    <Text style={style.textCard}>{item.nomeItem}</Text>
-                                </TouchableOpacity>
-                            ) : null}
+                        <View >
+                            <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
+                                {item.fotoUrlI == null
+                                    ? <Image source={{ uri: "https://churrappuploadteste.s3.amazonaws.com/default/tipo_" + item.tipo_id + ".jpg" }} style={style.churrasFoto} />
+                                    : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
+                                <View style={style.churrasInfosView}>
+                                    <Text style={style.churrasTitle}>{item.nomeItem}</Text>
+                                    <Text style={style.churrasDono}>{item.descricao} </Text>
+                                    <View style={style.churrasLocDat}>
+                                        <Icon style={style.localIcon} name="coins" size={15} />
+                                        <Text style={style.churrasLocal}> {item.precoMedio == null ? '  -  ' : "  R$" + item.precoMedio}</Text>
+                                        <Text style={style.locDatSeparator}>  |  </Text>
+                                        <IconMat style={style.dataIcon} name="cow" size={15} />
+                                        <Text style={style.churrasData}> {item.tipo}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
                         </View>
                     )}
                     style={style.listStyle} />
@@ -88,10 +100,6 @@ export default function EscolherNovosItens2({ route, navigation }) {
                 >
                     <View style={style.centeredView}>
                         <View style={style.modalView}>
-                            <TouchableOpacity style={style.exitBtn} onPress={() => setVisibility(false, "", '', '')}>
-                                <Icon style={style.iconHeaderBtn} name="times" size={20} />
-                                <Text style={style.textHeaderBtn}>fechar</Text>
-                            </TouchableOpacity>
                             <Text style={style.modalText}>Quanto de {itemModal} deseja adicionar?</Text>
                             <View style={style.selectionForm}>
                                 <NumericInput
@@ -101,11 +109,11 @@ export default function EscolherNovosItens2({ route, navigation }) {
                                     totalHeight={30}
                                     iconSize={15}
                                     initValue={0}
-                                    step={5}
+                                    step={1}
                                     valueType='real'
                                     rounded
-                                    textColor='brown'
-                                    iconStyle={{ color: 'brown' }}
+                                    textColor='black'
+                                    iconStyle={{ color: 'maroon' }}
                                     style={style.quantidadeInput} />
                                 <Picker
                                     selectedValue={selectedUnidade}
@@ -114,18 +122,26 @@ export default function EscolherNovosItens2({ route, navigation }) {
                                     mode="dropdown"
                                     onValueChange={itemValue => setSelectedUnidade(itemValue)}
                                 >
-                                {unidades.map(unity => (
-                                    <Picker.Item label={unity.unidade} value={unity.id} />
-                                ))}
-                            </Picker>
+                                    {unidades.map(unity => (
+                                        <Picker.Item label={unity.unidade} value={unity.id} />
+                                    ))}
+                                </Picker>
                             </View>
-                            <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal)}>
-                                <Icon style={style.iconSalvarBtn} name="check" size={20} />
-                                <Text style={style.textSalvarBtn}>Confirmar</Text>
-                            </TouchableOpacity>
+                            <View style={style.footerModal}>
+                                <TouchableOpacity style={style.exitBtnFooter} onPress={() => setVisibility(false, "", '', '')}>
+                                    <Icon style={style.iconSalvarBtn} name="times" size={15} />
+                                    <Text style={style.iconSalvarBtn}>Cancelar</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal)}>
+                                    <Icon style={style.iconSalvarBtn} name="check" size={15} />
+                                    <Text style={style.iconSalvarBtn}>Confirmar</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </Modal>
+
+
             </SafeAreaView>
         </View>
     )

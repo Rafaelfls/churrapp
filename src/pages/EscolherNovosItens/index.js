@@ -22,13 +22,12 @@ export default function EscolherNovosItens({ route, navigation }) {
     const [quantidadeModal, setQuantidadeModal] = useState(null)
     const [idItem, setIdItem] = useState(null)
     const [filtro, setFiltro] = useState(null)
+    const { churrascode } = route.params;
 
     async function firstLoad() {
         const responseItem = await api.get(`/listItem?subTipo=${1}`);
         const responseUnidade = await api.get(`/unidade`);
         const responseTipos = await api.get(`/tipoSubTipo?subTipo=${1}`);
-
-        console.log(responseItem)
 
         setUnidades([...unidades, ...responseUnidade.data]);
         setItem([...item, ...responseItem.data]);
@@ -46,9 +45,16 @@ export default function EscolherNovosItens({ route, navigation }) {
         setIdItem(id)
     }
 
-    function addItem(isVisible, item, unidadeDrop, qtdNova) {
+    async function addItem(isVisible, item, unidadeDrop, qtdNova) {
         setIsVisivel(isVisible)
-        console.log(item, unidadeDrop, qtdNova)
+        console.log(isVisible, item, unidadeDrop, qtdNova)
+        // await api.post('/listadochurras', {
+        //     quantidade: qtdNova,
+        //     churras_id: churrascode,
+        //     unidade_id:unidadeDrop,
+        //     item_id:item,
+        // }).then(function(res){
+        // })
     }
 
     function backHome() {
@@ -81,7 +87,7 @@ export default function EscolherNovosItens({ route, navigation }) {
                     data={tipo}
                     horizontal={true}
                     keyExtractor={tipo => String(tipo.id)}
-                    showsHorisontalScrollIndicator={false}   
+                    showsHorisontalScrollIndicator={false}
                     renderItem={({ item: tipo }) => (
                         <View style={style.filtroL} >
                             <TouchableOpacity style={style.tiposDeItenscard} onPress={() => setFiltroTipo(tipo.id)}>
@@ -100,13 +106,15 @@ export default function EscolherNovosItens({ route, navigation }) {
                         <View >
                             {filtro == null ? (
                                 <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
-                                    <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />
+                                    {item.fotoUrlI == null
+                                        ? <Image source={{ uri: "https://churrappuploadteste.s3.amazonaws.com/default/tipo_" + item.tipo_id + ".jpg" }} style={style.churrasFoto} />
+                                        : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
                                     <View style={style.churrasInfosView}>
                                         <Text style={style.churrasTitle}>{item.nomeItem}</Text>
                                         <Text style={style.churrasDono}>{item.descricao} </Text>
                                         <View style={style.churrasLocDat}>
                                             <Icon style={style.localIcon} name="coins" size={15} />
-                                            <Text style={style.churrasLocal}> R${item.precoMedio}</Text>
+                                            <Text style={style.churrasLocal}> {item.precoMedio == null ? '  -  ' : "  R$" + item.precoMedio}</Text>
                                             <Text style={style.locDatSeparator}>  |  </Text>
                                             <IconMat style={style.dataIcon} name="cow" size={15} />
                                             <Text style={style.churrasData}> {item.tipo}</Text>
@@ -115,13 +123,15 @@ export default function EscolherNovosItens({ route, navigation }) {
                                 </TouchableOpacity>
                             ) : filtro == item.tipo_id ? (
                                 <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
-                                    <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />
+                                    {item.fotoUrlI == null
+                                        ? <Image source={{ uri: "https://churrappuploadteste.s3.amazonaws.com/default/tipo_" + item.tipo_id + ".jpg" }} style={style.churrasFoto} />
+                                        : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
                                     <View style={style.churrasInfosView}>
                                         <Text style={style.churrasTitle}>{item.nomeItem}</Text>
                                         <Text style={style.churrasDono}>{item.descricao} </Text>
                                         <View style={style.churrasLocDat}>
                                             <Icon style={style.localIcon} name="coins" size={15} />
-                                            <Text style={style.churrasLocal}> R${item.precoMedio}</Text>
+                                            <Text style={style.churrasLocal}>{item.precoMedio == null ? '  -  ' : "  R$" + item.precoMedio}</Text>
                                             <Text style={style.locDatSeparator}>  |  </Text>
                                             <IconMat style={style.dataIcon} name="cow" size={15} />
                                             <Text style={style.churrasData}> {item.tipo}</Text>
@@ -139,24 +149,20 @@ export default function EscolherNovosItens({ route, navigation }) {
                 >
                     <View style={style.centeredView}>
                         <View style={style.modalView}>
-                            <TouchableOpacity style={style.exitBtn} onPress={() => setVisibility(false, "", '', '')}>
-                                <Icon style={style.iconHeaderBtn} name="times" size={20} />
-                                <Text style={style.textHeaderBtn}>fechar</Text>
-                            </TouchableOpacity>
                             <Text style={style.modalText}>Quanto de {itemModal} deseja adicionar?</Text>
                             <View style={style.selectionForm}>
                                 <NumericInput
+                                    value={quantidadeModal}
                                     onChange={quantNova => setQuantidadeModal(quantNova)}
                                     onLimitReached={(isMax, msg) => console.log(isMax, msg)}
                                     totalWidth={150}
                                     totalHeight={30}
                                     iconSize={15}
                                     initValue={0}
-                                    step={5}
                                     valueType='real'
                                     rounded
-                                    textColor='brown'
-                                    iconStyle={{ color: 'brown' }}
+                                    textColor='black'
+                                    iconStyle={{ color: 'maroon' }}
                                     style={style.quantidadeInput} />
                                 <Picker
                                     selectedValue={selectedUnidade}
@@ -170,10 +176,16 @@ export default function EscolherNovosItens({ route, navigation }) {
                                     ))}
                                 </Picker>
                             </View>
-                            <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal)}>
-                                <Icon style={style.iconSalvarBtn} name="check" size={20} />
-                                <Text style={style.textSalvarBtn}>Confirmar</Text>
-                            </TouchableOpacity>
+                            <View style={style.footerModal}>
+                                <TouchableOpacity style={style.exitBtnFooter} onPress={() => setVisibility(false, "", '', '')}>
+                                    <Icon style={style.iconSalvarBtn} name="times" size={15} />
+                                    <Text style={style.iconSalvarBtn}>Cancelar</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal)}>
+                                    <Icon style={style.iconSalvarBtn} name="check" size={15} />
+                                    <Text style={style.iconSalvarBtn}>Confirmar</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </Modal>

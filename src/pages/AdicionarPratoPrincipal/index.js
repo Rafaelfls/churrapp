@@ -15,17 +15,30 @@ import style from './styles';
 export default function AdicionarPratoPrincipal({ route, navigation }) {
 
     const { convidadosQtd } = route.params;
-    const [sugestaoList, setSugestao] = React.useState([])
+    const [itemList, setItemList] = React.useState([])
+    const { churrascode } = route.params;
+    const [jaCarreguei, setJaCarreguei] = React.useState(false);
+    const [reload, setReload] = React.useState(false);
 
     async function carregaSugestao() {
         const response = await api.get('/sugestao');
-
-        setSugestao([...sugestaoList, ...response.data]);
-
+        setItemList([...itemList, ...response.data]);
     }
 
+    async function carregaMinhaLista() {
+        await api.get(`/listadochurras/${churrascode}`).then(
+            function (res) {
+                console.log(res)
+                setItemList([...itemList, ...res.data]);
+                setReload(!reload)
+            }
+        )
+    }
+
+    useEffect(() => { }, [reload])
+
     useEffect(() => {
-        carregaSugestao();
+            carregaMinhaLista();
     }, []);
 
     function next() {
@@ -33,7 +46,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     }
 
     function escolherPratoPrincipal() {
-        navigation.push('EscolherNovosItens')
+        navigation.push('EscolherNovosItens', { churrascode })
     }
 
     function backHome() {
@@ -62,39 +75,39 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                     </TouchableOpacity>
                 </View>
 
-                    <FlatList
-                        data={sugestaoList}
-                        keyExtractor={sugestaoList => String(sugestaoList.id)}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={({ item: sugestaoList }) => (
-                            <View>
-                                {sugestaoList.tipo_id >= 1 && sugestaoList.tipo_id <= 5 ? (
-                                    <View style={style.componentPicker}>
-                                        <View style={style.textIcon}>
-                                            <IconMCI style={style.iconTipo} name="silverware-fork" size={20} />
-                                            <Text style={style.textLabel}>{sugestaoList.nomeItem + " (" + sugestaoList.unidade + ")"}</Text>
-                                        </View>
-                                        <View style={style.picker}>
-                                            <NumericInput
-                                                onChange={text => onChangeVar(text, sugestaoList.quantidade)}
-                                                onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-                                                totalWidth={120}
-                                                totalHeight={40}
-                                                iconSize={18}    
-                                                initValue={updateValue(sugestaoList.quantidade)}
-                                                step={5}
-                                                valueType='real'
-                                                rounded
-                                                textColor='maroon'
-                                                iconStyle={{ color: 'black' }}
-                                                style={style.quantidadeInput}
-                                            />
-                                        </View>
+                <FlatList
+                    data={itemList}
+                    keyExtractor={itemList => itemList.id}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({ item: itemList }) => (
+                        <View>
+                            {itemList.tipo_id >= 1 && itemList.tipo_id <= 5 ? (
+                                <View style={style.componentPicker}>
+                                    <View style={style.textIcon}>
+                                        <IconMCI style={style.iconTipo} name="silverware-fork" size={20} />
+                                        <Text style={style.textLabel}>{itemList.nomeItem + " (" + itemList.unidade + ")"}</Text>
                                     </View>
-                                ) : null}
-                            </View>
-                        )}
-                        style={style.listStyle} />
+                                    <View style={style.picker}>
+                                        <NumericInput
+                                            onChange={text => onChangeVar(text, itemList.quantidade)}
+                                            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+                                            totalWidth={120}
+                                            totalHeight={40}
+                                            iconSize={18}
+                                            initValue={updateValue(itemList.quantidade)}
+                                            step={5}
+                                            valueType='real'
+                                            rounded
+                                            textColor='maroon'
+                                            iconStyle={{ color: 'black' }}
+                                            style={style.quantidadeInput}
+                                        />
+                                    </View>
+                                </View>
+                            ) : null}
+                        </View>
+                    )}
+                    style={style.listStyle} />
 
                 <ActionButton offsetX={10} offsetY={100} onPress={() => escolherPratoPrincipal()} />
 

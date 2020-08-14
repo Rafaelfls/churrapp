@@ -102,7 +102,8 @@ export default function AdicionaConvidados({ route, navigation }) {
     await convidadosList.map(convid => enviaMensagens(convid.telefone, convite))
     await convidadosList.map(convid => criaListaConvidados(convid))
 
-    navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd });
+    var churrascode = churrasAtual.churrasCode
+    navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd , churrascode});
 
     convidadosList = []
   }

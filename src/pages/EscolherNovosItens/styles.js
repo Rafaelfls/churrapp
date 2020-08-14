@@ -62,19 +62,27 @@ export default StyleSheet.create({
     alignSelf: 'center',
     color: 'gold',
     fontSize: 36,
+  },  
+  footerModal: {
+    marginVertical: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
   },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: '30%',
   },
   modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 8,
+    backgroundColor: "#f2f2f2",
+    width: '100%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     padding: 35,
-    alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -82,7 +90,29 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5
+    elevation: 5,
+    borderTopColor: "#d3d3d3",
+    borderTopWidth: 1,
+  },
+  iconSalvarBtn: {
+    marginLeft: 5,
+    color: 'white'
+  },  
+  exitBtnFooter: {
+    flexDirection: 'row-reverse',
+    backgroundColor: '#800000',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  salvarBtn: {
+    flexDirection: 'row-reverse',
+    backgroundColor: '#800000',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 8,
+    alignItems: 'center',
   },
   openButton: {
     backgroundColor: "#F194FF",
@@ -108,17 +138,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  salvarBtn: {
-    marginTop: 15,
-    flexDirection: 'row-reverse',
-    backgroundColor: 'black',
-    borderRadius: 8,
-    padding: 5,
-  },
-  iconSalvarBtn: {
-    color: 'gold',
-    paddingHorizontal: 5,
   },
   textSalvarBtn: {
     color: 'gold',
