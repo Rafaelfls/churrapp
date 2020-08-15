@@ -19,9 +19,11 @@ export default function EscolherNovosItens3({ route, navigation }) {
     const [visivel, setIsVisivel] = React.useState(false);
     const [itemModal, setItemModal] = React.useState('');
     const [selectedUnidade, setSelectedUnidade] = useState("Selecione...");
-    const [quantidadeModal, setQuantidadeModal] = useState(null)
+    const [quantidadeModal, setQuantidadeModal] = useState(0)
     const [idItem, setIdItem] = useState(null)
     const [filtro, setFiltro] = useState(null)
+    const { churrascode } = route.params;
+    const { convidadosQtd } = route.params;
 
     async function firstLoad() {
         const responseItem = await api.get(`/listItem?subTipo=${3}`);
@@ -40,19 +42,26 @@ export default function EscolherNovosItens3({ route, navigation }) {
     }, []);
 
     function setVisibility(isVisible, item, unidade, id) {
+        setQuantidadeModal(0)
         setIsVisivel(isVisible)
         setItemModal(item)
-        setQuantidadeModal(unidade)
         setIdItem(id)
     }
 
-    function addItem(isVisible, item, unidadeDrop, qtdNova) {
+    async function addItem(isVisible, item, unidadeDrop, qtdNova) {
         setIsVisivel(isVisible)
-        console.log(item, unidadeDrop, qtdNova)
+        await api.post('/listadochurras', {
+            quantidade: qtdNova,
+            churras_id: churrascode,
+            unidade_id: unidadeDrop,
+            item_id: item,
+        }).then(function (res) {
+            setQuantidadeModal(0)
+        })
     }
 
     function backHome() {
-        navigation.goBack()
+        navigation.push('AdicionarBebidas', { churrascode, convidadosQtd })
     }
 
     function setFiltroTipo(idFiltro) {
@@ -100,9 +109,9 @@ export default function EscolherNovosItens3({ route, navigation }) {
                         <View >
                             {filtro == null ? (
                                 <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
-                                    {item.fotoUrlI == null 
-                                    ? <Image source={{ uri: "https://churrappuploadteste.s3.amazonaws.com/default/tipo_" + item.tipo_id + ".jpg" }} style={style.churrasFoto} />
-                                    : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
+                                    {item.fotoUrlI == null
+                                        ? <Image source={{ uri: "https://churrappuploadteste.s3.amazonaws.com/default/tipo_" + item.tipo_id + ".jpg" }} style={style.churrasFoto} />
+                                        : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
                                     <View style={style.churrasInfosView}>
                                         <Text style={style.churrasTitle}>{item.nomeItem}</Text>
                                         <Text style={style.churrasDono}>{item.descricao} </Text>
@@ -117,9 +126,9 @@ export default function EscolherNovosItens3({ route, navigation }) {
                                 </TouchableOpacity>
                             ) : filtro == item.tipo_id ? (
                                 <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
-                                   {item.fotoUrlI == null 
-                                    ? <Image source={{ uri: "https://churrappuploadteste.s3.amazonaws.com/default/tipo_" + item.tipo_id + ".jpg" }} style={style.churrasFoto} />
-                                    : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
+                                    {item.fotoUrlI == null
+                                        ? <Image source={{ uri: "https://churrappuploadteste.s3.amazonaws.com/default/tipo_" + item.tipo_id + ".jpg" }} style={style.churrasFoto} />
+                                        : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
                                     <View style={style.churrasInfosView}>
                                         <Text style={style.churrasTitle}>{item.nomeItem}</Text>
                                         <Text style={style.churrasDono}>{item.descricao} </Text>
@@ -146,13 +155,13 @@ export default function EscolherNovosItens3({ route, navigation }) {
                             <Text style={style.modalText}>Quanto de {itemModal} deseja adicionar?</Text>
                             <View style={style.selectionForm}>
                                 <NumericInput
+                                    value={quantidadeModal}
                                     onChange={quantNova => setQuantidadeModal(quantNova)}
                                     onLimitReached={(isMax, msg) => console.log(isMax, msg)}
                                     totalWidth={150}
                                     totalHeight={30}
                                     iconSize={15}
-                                    initValue={0}
-                                    step={1}
+                                    initValue={quantidadeModal}
                                     valueType='real'
                                     rounded
                                     textColor='black'

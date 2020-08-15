@@ -17,32 +17,34 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     const { convidadosQtd } = route.params;
     const [itemList, setItemList] = React.useState([])
     const { churrascode } = route.params;
-    const [jaCarreguei, setJaCarreguei] = React.useState(false);
     const [reload, setReload] = React.useState(false);
 
-    async function carregaSugestao() {
-        const response = await api.get('/sugestao');
-        setItemList([...itemList, ...response.data]);
-    }
-
     async function carregaMinhaLista() {
-        await api.get(`/listadochurras/${churrascode}`).then(
-            function (res) {
-                console.log(res)
-                setItemList([...itemList, ...res.data]);
-                setReload(!reload)
+        console.log("carregaMinhaLista")
+        await api.get(`/listadochurras/subTipo/${churrascode}/${1}`)
+        .then( function (response) {
+            console.log("listadochurras")
+            setItemList([...itemList, ...response.data]);
             }
         )
+
+        console.log(itemList)
+        
+        // if(itemList.length == 0){
+        //     console.log("carregaSugestao")
+        //     setItemList([])
+        //     await api.get('/sugestao').then(function(response){
+        //         setItemList([...itemList, ...response.data]);
+        //     });
+        // }
     }
 
-    useEffect(() => { }, [reload])
-
     useEffect(() => {
-            carregaMinhaLista();
+        carregaMinhaLista();
     }, []);
 
     function next() {
-        navigation.push('AdicionarAcompanhamento');
+        navigation.push('AdicionarAcompanhamento',{churrascode});
     }
 
     function escolherPratoPrincipal() {
@@ -54,7 +56,11 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     }
 
     function updateValue(qtdSugestao) {
-        return (qtdSugestao * convidadosQtd)
+        if(convidadosQtd == null){
+            return (qtdSugestao )
+        }else{
+            return (qtdSugestao * convidadosQtd)
+        }
     }
 
 
@@ -80,31 +86,25 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                     keyExtractor={itemList => itemList.id}
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item: itemList }) => (
-                        <View>
-                            {itemList.tipo_id >= 1 && itemList.tipo_id <= 5 ? (
-                                <View style={style.componentPicker}>
-                                    <View style={style.textIcon}>
-                                        <IconMCI style={style.iconTipo} name="silverware-fork" size={20} />
-                                        <Text style={style.textLabel}>{itemList.nomeItem + " (" + itemList.unidade + ")"}</Text>
-                                    </View>
-                                    <View style={style.picker}>
-                                        <NumericInput
-                                            onChange={text => onChangeVar(text, itemList.quantidade)}
-                                            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-                                            totalWidth={120}
-                                            totalHeight={40}
-                                            iconSize={18}
-                                            initValue={updateValue(itemList.quantidade)}
-                                            step={5}
-                                            valueType='real'
-                                            rounded
-                                            textColor='maroon'
-                                            iconStyle={{ color: 'black' }}
-                                            style={style.quantidadeInput}
-                                        />
-                                    </View>
-                                </View>
-                            ) : null}
+                        <View style={style.componentPicker}>
+                            <View style={style.textIcon}>
+                                <Text style={style.textLabel}>{itemList.nomeItem + " (" + itemList.unidade + ")"}</Text>
+                            </View>
+                            <View style={style.picker}>
+                                <NumericInput
+                                    onChange={text => onChangeVar(text, itemList.quantidade)}
+                                    onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+                                    totalWidth={120}
+                                    totalHeight={40}
+                                    iconSize={18}
+                                    initValue={updateValue(itemList.quantidade)}
+                                    valueType='real'
+                                    rounded
+                                    textColor='maroon'
+                                    iconStyle={{ color: 'black' }}
+                                    style={style.quantidadeInput}
+                                />
+                            </View>
                         </View>
                     )}
                     style={style.listStyle} />

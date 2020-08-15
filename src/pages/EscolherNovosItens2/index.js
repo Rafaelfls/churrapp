@@ -19,16 +19,17 @@ export default function EscolherNovosItens2({ route, navigation }) {
     const [visivel, setIsVisivel] = React.useState(false);
     const [itemModal, setItemModal] = React.useState('');
     const [selectedUnidade, setSelectedUnidade] = useState("Selecione...");
-    const [quantidadeModal, setQuantidadeModal] = useState(null)
+    const [quantidadeModal, setQuantidadeModal] = useState(0)
     const [idItem, setIdItem] = useState(null)
     const [filtro, setFiltro] = useState(null)
+    const { churrascode } = route.params;
+    const { convidadosQtd } = route.params;
 
     async function firstLoad() {
         const responseItem = await api.get(`/listItem?subTipo=${2}`);
         const responseUnidade = await api.get(`/unidade`);
         const responseTipos = await api.get(`/tipoSubTipo?subTipo=${2}`);
 
-        console.log(responseItem)
 
         setUnidades([...unidades, ...responseUnidade.data]);
         setItem([...item, ...responseItem.data]);
@@ -40,19 +41,26 @@ export default function EscolherNovosItens2({ route, navigation }) {
     }, []);
 
     function setVisibility(isVisible, item, unidade, id) {
+        setQuantidadeModal(0)
         setIsVisivel(isVisible)
         setItemModal(item)
-        setQuantidadeModal(unidade)
         setIdItem(id)
     }
 
-    function addItem(isVisible, item, unidadeDrop, qtdNova) {
+    async function addItem(isVisible, item, unidadeDrop, qtdNova) {
         setIsVisivel(isVisible)
-        console.log(item, unidadeDrop, qtdNova)
+        await api.post('/listadochurras', {
+            quantidade: qtdNova,
+            churras_id: churrascode,
+            unidade_id:unidadeDrop,
+            item_id:item,
+        }).then(function(res){
+            setQuantidadeModal(0)
+        })
     }
 
     function backHome() {
-        navigation.goBack()
+        navigation.push('AdicionarAcompanhamento',{churrascode, convidadosQtd})
     }
 
     return (
@@ -102,14 +110,14 @@ export default function EscolherNovosItens2({ route, navigation }) {
                         <View style={style.modalView}>
                             <Text style={style.modalText}>Quanto de {itemModal} deseja adicionar?</Text>
                             <View style={style.selectionForm}>
-                                <NumericInput
+                            <NumericInput
+                                    value={quantidadeModal}
                                     onChange={quantNova => setQuantidadeModal(quantNova)}
                                     onLimitReached={(isMax, msg) => console.log(isMax, msg)}
                                     totalWidth={150}
                                     totalHeight={30}
                                     iconSize={15}
-                                    initValue={0}
-                                    step={1}
+                                    initValue={quantidadeModal}
                                     valueType='real'
                                     rounded
                                     textColor='black'

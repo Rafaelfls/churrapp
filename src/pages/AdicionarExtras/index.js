@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Flat
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import NumericInput from 'react-native-numeric-input';
+import api from '../../services/api';
 
 //Icones imports
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -11,20 +12,34 @@ import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import style from './styles';
 
-export default function AdicionarExtras() {
+export default function AdicionarExtras({ route }) {
 
-    const navigation = useNavigation();
-    const [sugestaoList, setSugestao] = React.useState([])
+    const navigation = useNavigation(); const { convidadosQtd } = route.params;
+    const [itemList, setItemList] = React.useState([])
+    const { churrascode } = route.params;
 
-    async function carregaSugestao() {
-        const response = await api.get('/sugestao');
+    async function carregaMinhaLista() {
+        console.log("carregaMinhaLista")
+        await api.get(`/listadochurras/subTipo/${churrascode}/${4}`)
+            .then(function (response) {
+                console.log("listadochurras")
+                setItemList([...itemList, ...response.data]);
+            }
+            )
 
-        setSugestao([...sugestaoList, ...response.data]);
+        console.log(itemList)
 
+        // if(itemList.length == 0){
+        //     console.log("carregaSugestao")
+        //     setItemList([])
+        //     await api.get('/sugestao').then(function(response){
+        //         setItemList([...itemList, ...response.data]);
+        //     });
+        // }
     }
 
     useEffect(() => {
-        carregaSugestao();
+        carregaMinhaLista();
     }, []);
 
     function next() {
@@ -32,11 +47,19 @@ export default function AdicionarExtras() {
     }
 
     function escolherPratoPrincipal() {
-        navigation.push('EscolherNovosItens4')
+        navigation.push('EscolherNovosItens4', { churrascode })
     }
 
     function backHome() {
         navigation.replace('Tabs');
+    }
+
+    function updateValue(qtdSugestao) {
+        if (convidadosQtd == null) {
+            return (qtdSugestao)
+        } else {
+            return (qtdSugestao * convidadosQtd)
+        }
     }
 
     function onChangeVar(text, varivael) {
@@ -56,38 +79,33 @@ export default function AdicionarExtras() {
                     </TouchableOpacity>
                 </View>
 
-                    <FlatList
-                        data={sugestaoList}
-                        keyExtractor={sugestaoList => String(sugestaoList.id)}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={({ item: sugestaoList }) => (
-                            <View>
-                                {sugestaoList.tipo_id >= 9 && sugestaoList.tipo_id <= 13 ? (
-                                    <View style={style.componentPicker}>
-                                        <View style={style.textIcon}>
-                                            <IconMCI style={style.iconTipo} name="silverware-fork" size={20} />
-                                            <Text style={style.textLabel}>{sugestaoList.nomeItem + " (" + sugestaoList.unidade + ")"}</Text>
-                                        </View>
-                                        <View style={style.picker}>
-                                            <NumericInput
-                                                onChange={text => onChangeVar(text, sugestaoList.quantidade)}
-                                                onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-                                                totalWidth={120}
-                                                totalHeight={40}
-                                                iconSize={18}
-                                                initValue={updateValue(sugestaoList.quantidade)}
-                                                step={5}
-                                                valueType='real'
-                                                rounded
-                                                textColor='brown'
-                                                iconStyle={{ color: 'brown' }}
-                                                style={style.quantidadeInput} />
-                                        </View>
-                                    </View>
-                                ) : null}
+                <FlatList
+                    data={itemList}
+                    keyExtractor={itemList => itemList.id}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({ item: itemList }) => (
+                        <View style={style.componentPicker}>
+                            <View style={style.textIcon}>
+                                <Text style={style.textLabel}>{itemList.nomeItem + " (" + itemList.unidade + ")"}</Text>
                             </View>
-                        )}
-                        style={style.listStyle} />
+                            <View style={style.picker}>
+                            <NumericInput
+                                    onChange={text => onChangeVar(text, itemList.quantidade)}
+                                    onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+                                    totalWidth={120}
+                                    totalHeight={40}
+                                    iconSize={18}
+                                    initValue={updateValue(itemList.quantidade)}
+                                    valueType='real'
+                                    rounded
+                                    textColor='maroon'
+                                    iconStyle={{ color: 'black' }}
+                                    style={style.quantidadeInput}
+                                />
+                            </View>
+                        </View>
+                    )}
+                    style={style.listStyle} />
 
                 <ActionButton offsetX={10} offsetY={100} onPress={() => escolherPratoPrincipal()} />
 

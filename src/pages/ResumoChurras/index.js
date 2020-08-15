@@ -36,9 +36,9 @@ export default function ResumoChurras() {
     function deletar(churrass) {
         setLoading(true)
         setChurrasCount( churrasCount - 1)
-        api.delete(`/churras/${churrass.id}`, config).then(
+        api.delete(`/churras/${churrass.id}`, config).then(function(){
             setVisivel(!visivel)
-        );
+        });
 
         setLoading(false)
     }
