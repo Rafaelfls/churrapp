@@ -5,6 +5,7 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
+import * as Crypto from 'expo-crypto';
 
 import style from './styles';
 
@@ -17,6 +18,10 @@ export default function AdicionaConvidados({ route, navigation }) {
   const [loading, setLoading] = React.useState(false);
   const [maxChar, setMaxChar] = React.useState(190);
   const [updatePage, setUpdatePage] = React.useState(false)
+
+  const config = {
+    headers: { 'Authorization': USUARIOLOGADO.id }
+  };
 
   const { nomeContato } = route.params;
   const { sobrenomeContato } = route.params;
@@ -42,6 +47,7 @@ export default function AdicionaConvidados({ route, navigation }) {
       id: convidadosList.length,
       nome: $nome,
       sobrenome: $sobrenome,
+      senha: null,
       telefone: $telefone,
     })
     setUpdatePage(!updatePage)
@@ -56,35 +62,44 @@ export default function AdicionaConvidados({ route, navigation }) {
   }
 
   console.log(churrasAtual)
+  async function criaSenha(convid) {
+    const senha = Math.random() * (9999 - 0) + 0;
+    convid.senha = await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA512,
+        senha+"churrapp"
+    );
+    console.log(convid)
+}
 
   async function criaListaConvidados(convid) {
-    convid.telefone = convid.telefone.replace("+55","");
-    convid.telefone = convid.telefone.replace(/-/g,"");
-    convid.telefone = convid.telefone.replace(/\s/g,"");
+    convid.telefone = convid.telefone.replace("+55", "");
+    convid.telefone = convid.telefone.replace(/-/g, "");
+    convid.telefone = convid.telefone.replace(/\s/g, "");
 
     const response = await api.post('/usuarios', {
       nome: convid.nome,
       sobrenome: convid.sobrenome,
-      email: convid.nome+"@churrapp",
+      email: convid.nome + "@churrapp",
       cidade: "cidade",
       uf: "uf",
-      idade: 20,
+      idade: "20/02/2002",
       fotoUrlU: null,
       celular: convid.telefone,
       cadastrado: false,
       apelido: convid.nome,
+      senha:convid.telefone,
       pontoCarne_id: 0,
       carnePreferida_id: 0,
       quantidadeCome_id: 0,
       bebidaPreferida_id: 0,
       acompanhamentoPreferido_id: 0
     }).then(async function (response) {
-      console.log(response.data.id)
-      await api.post(`/convidadosChurras/${response.data.id}`, {
+      console.log(response.data[0].id)
+      await api.post(`/convidadosChurras/${response.data[0].id}`, {
         valorPagar: value,
         churras_id: churrasAtual.churrasCode
       })
-    })  
+    })
 
   }
 
@@ -99,18 +114,22 @@ export default function AdicionaConvidados({ route, navigation }) {
   async function next() {
     const convidadosQtd = convidadosList.length
 
-    await convidadosList.map(convid => enviaMensagens(convid.telefone, convite))
+    await convidadosList.map(convid => criaSenha(convid))
     await convidadosList.map(convid => criaListaConvidados(convid))
+    await convidadosList.map(convid => enviaMensagens(convid.telefone, convite))
 
     var churrascode = churrasAtual.churrasCode
-    navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd , churrascode});
+    navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd, churrascode });
 
     convidadosList = []
   }
 
   function backHome() {
     convidadosList = []
-    navigation.replace('Tabs');
+    api.delete(`/churras/${churrasAtual.churrasCode}`, config)
+    .then(function(response){
+        navigation.replace('Tabs');
+    })
   }
 
   function openContactList() {
@@ -118,16 +137,18 @@ export default function AdicionaConvidados({ route, navigation }) {
   }
 
   function enviaMensagens(telefone, convite) {
+    console.log("telefone",telefone)
     Linking.canOpenURL(`whatsapp://send?text=${convite}`).then(supported => {
       if (supported) {
         if (convite === '') {
           convite = inviteStandard;
         }
-        return Linking.openURL(`whatsapp://send?text=${convite}&phone=${telefone}`);
+        return Linking.openURL(`whatsapp://send?text=${convite}&phone=+55${telefone}`);
       } else {
-        return Linking.openURL(`https://api.whatsapp.com/send?phone=${telefone}&text=${convite}`)
+        return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${telefone}&text=${convite}`)
       }
     })
+    
   }
 
   return (

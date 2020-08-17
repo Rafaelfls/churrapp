@@ -17,26 +17,27 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     const { convidadosQtd } = route.params;
     const [itemList, setItemList] = React.useState([])
     const { churrascode } = route.params;
-    const [reload, setReload] = React.useState(false);
+
+    const config = {
+        headers: { 'Authorization': USUARIOLOGADO.id }
+    };
 
     async function carregaMinhaLista() {
         console.log("carregaMinhaLista")
         await api.get(`/listadochurras/subTipo/${churrascode}/${1}`)
-        .then( function (response) {
-            console.log("listadochurras")
-            setItemList([...itemList, ...response.data]);
-            }
-        )
-
-        console.log(itemList)
-        
-        // if(itemList.length == 0){
-        //     console.log("carregaSugestao")
-        //     setItemList([])
-        //     await api.get('/sugestao').then(function(response){
-        //         setItemList([...itemList, ...response.data]);
-        //     });
-        // }
+            .then(async function (response) {
+                setItemList([])
+                console.log("listadochurras", response.data)
+                if (response.data == 0) {
+                    console.log("carregaSugestao")
+                    await api.get(`/sugestao/${1}`).then(function (response) {
+                        setItemList(response.data);
+                    });
+                }else{
+                console.log("carregaLista",response.data.length)
+                setItemList(response.data);
+                }
+            })        
     }
 
     useEffect(() => {
@@ -44,7 +45,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     }, []);
 
     function next() {
-        navigation.push('AdicionarAcompanhamento',{churrascode});
+        navigation.push('AdicionarAcompanhamento', { churrascode, convidadosQtd });
     }
 
     function escolherPratoPrincipal() {
@@ -52,13 +53,17 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     }
 
     function backHome() {
-        navigation.replace('Tabs');
+        api.delete(`/churras/${churrascode}`, config)
+            .then(function () {
+                navigation.replace('Tabs');
+            })
     }
 
     function updateValue(qtdSugestao) {
-        if(convidadosQtd == null){
-            return (qtdSugestao )
-        }else{
+        console.log(qtdSugestao, convidadosQtd)
+        if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
+            return (qtdSugestao)
+        } else {
             return (qtdSugestao * convidadosQtd)
         }
     }

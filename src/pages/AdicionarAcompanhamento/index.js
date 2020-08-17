@@ -17,25 +17,28 @@ export default function AdicionarAcompanhamento({ route }) {
     const [itemList, setItemList] = React.useState([])
     const { convidadosQtd } = route.params;
     const { churrascode } = route.params;
+    
+    const config = {
+        headers: { 'Authorization': USUARIOLOGADO.id }
+    };
 
 
     async function carregaMinhaLista() {
         console.log("carregaMinhaLista")
         await api.get(`/listadochurras/subTipo/${churrascode}/${2}`)
-            .then(function (response) {
-                console.log("listadochurras")
-                setItemList([...itemList, ...response.data]);
-            })
-
-        console.log(itemList)
-
-        // if(itemList.length == 0){
-        //     console.log("carregaSugestao")
-        //     setItemList([])
-        //     await api.get('/sugestao').then(function(response){
-        //         setItemList([...itemList, ...response.data]);
-        //     });
-        // }
+            .then(async function (response) {
+                setItemList([])
+                console.log("listadochurras", response.data)
+                if (response.data == 0) {
+                    console.log("carregaSugestao")
+                    await api.get(`/sugestao/${2}`).then(function (response) {
+                        setItemList(response.data);
+                    });
+                }else{
+                console.log("carregaLista",response.data.length)
+                setItemList(response.data);
+                }
+            })        
     }
 
     useEffect(() => {
@@ -43,7 +46,7 @@ export default function AdicionarAcompanhamento({ route }) {
     }, []);
 
     function next() {
-        navigation.navigate('AdicionarBebidas', { churrascode });
+        navigation.navigate('AdicionarBebidas', { churrascode, convidadosQtd });
     }
 
     function escolherAcompanhamentos() {
@@ -51,11 +54,15 @@ export default function AdicionarAcompanhamento({ route }) {
     }
 
     function backHome() {
-        navigation.replace('Tabs');
+        api.delete(`/churras/${churrascode}`, config)
+        .then(function(response){
+            navigation.replace('Tabs');
+        })
     }
 
     function updateValue(qtdSugestao) {
-        if (convidadosQtd == null) {
+        console.log(qtdSugestao, convidadosQtd)
+        if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
             return (qtdSugestao)
         } else {
             return (qtdSugestao * convidadosQtd)
