@@ -66,11 +66,14 @@ export default function AdicionarAcompanhamento({ route,navigation }) {
     }
 
     function updateValue(qtdSugestao) {
-        if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
-            return (qtdSugestao)
-        } else {
-            return (qtdSugestao * convidadosQtd)
+        if(isSugestao){
+            if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
+                return (qtdSugestao)
+            } else {
+                return (qtdSugestao * convidadosQtd)
+            }
         }
+        return qtdSugestao
     }
 
     function onChangeVar(text, varivael) {

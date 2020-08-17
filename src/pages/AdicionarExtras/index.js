@@ -75,12 +75,14 @@ export default function AdicionarExtras({ route,navigation }) {
     }
 
     function updateValue(qtdSugestao) {
-        console.log(qtdSugestao, convidadosQtd)
-        if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
-            return (qtdSugestao)
-        } else {
-            return (qtdSugestao * convidadosQtd)
+        if(isSugestao){
+            if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
+                return (qtdSugestao)
+            } else {
+                return (qtdSugestao * convidadosQtd)
+            }
         }
+        return qtdSugestao
     }
 
     function onChangeVar(text, varivael) {
