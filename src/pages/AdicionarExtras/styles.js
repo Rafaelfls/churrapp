@@ -96,4 +96,61 @@ export default StyleSheet.create({
     fontFamily: 'poppins-medium',
     textAlign: 'center',
   },
+  
+  //modal
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 25,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: 'absolute',
+    bottom: "35%",
+    width: '100%',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 15
+  },
+  footerModal: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
+  },
+  exitBtnModal: {
+    flexDirection: 'row-reverse',
+    backgroundColor: '#800000',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginHorizontal: 6,
+  },
+  salvarBtnModal: {
+    flexDirection: 'row-reverse',
+    backgroundColor: '#800000',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginHorizontal: 6,
+  },
+  iconSalvarBtnModal: {
+    marginLeft: 5,
+    color: 'white'
+  },
+
 })

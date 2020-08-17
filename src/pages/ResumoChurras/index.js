@@ -10,8 +10,6 @@ import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
 
 import api from '../../services/api';
 
-import churrasPhoto from '../../assets/fundoDescricao.jpg';
-
 import style from './styles';
 
 import { useChurrasCount } from '../../context/churrasCount';

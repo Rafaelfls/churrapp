@@ -51,15 +51,15 @@ export default function EscolherNovosItens({ route, navigation }) {
         await api.post('/listadochurras', {
             quantidade: qtdNova,
             churras_id: churrascode,
-            unidade_id:unidadeDrop,
-            item_id:item,
-        }).then(function(res){
+            unidade_id: unidadeDrop,
+            item_id: item,
+        }).then(function (res) {
             setQuantidadeModal(0)
         })
     }
 
     function backHome() {
-        navigation.push('AdicionarPratoPrincipal',{churrascode, convidadosQtd})
+        navigation.push('AdicionarPratoPrincipal', { churrascode, convidadosQtd })
     }
 
     function setFiltroTipo(idFiltro) {
@@ -80,7 +80,6 @@ export default function EscolherNovosItens({ route, navigation }) {
                     </View>
                     <TouchableOpacity style={style.exitBtn} onPress={backHome}>
                         <Icon style={style.iconHeaderBtn} name="arrow-alt-circle-left" size={20} />
-                        <Text style={style.textHeaderBtn}>Voltar</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -114,11 +113,11 @@ export default function EscolherNovosItens({ route, navigation }) {
                                         <Text style={style.churrasTitle}>{item.nomeItem}</Text>
                                         <Text style={style.churrasDono}>{item.descricao} </Text>
                                         <View style={style.churrasLocDat}>
-                                            <Icon style={style.localIcon} name="coins" size={15} />
-                                            <Text style={style.churrasLocal}> {item.precoMedio == null ? '  -  ' : "  R$" + item.precoMedio}</Text>
-                                            <Text style={style.locDatSeparator}>  |  </Text>
                                             <IconMat style={style.dataIcon} name="cow" size={15} />
                                             <Text style={style.churrasData}> {item.tipo}</Text>
+                                            <Text style={style.locDatSeparator}>  |  </Text>
+                                            <Icon style={style.localIcon} name="coins" size={15} />
+                                            <Text style={style.churrasLocal}> {item.precoMedio == null ? '  -  ' : "  R$" + item.precoMedio}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
