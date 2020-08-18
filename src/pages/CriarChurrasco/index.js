@@ -9,7 +9,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
 import style from './styles';
-import { updateContact } from 'react-native-contacts';
 
 export default function CriarChurrasco() {
 
@@ -21,9 +20,9 @@ export default function CriarChurrasco() {
   const [descricao, setdescricao] = useState();
   const [date, setDate] = useState('');
   const [image, setImage] = useState({ cancelled: true });
-  const [churrasCodeCriado, setChurrasCodeCriado] = useState()
+  const [churrasCodeCriado, setChurrasCodeCriado] = useState('')
   const [visivel, setVisivel] = useState(false)
-  const [url, setUrl] = useState('https://churrappuploadteste.s3.amazonaws.com/default/churrasco_default.png')
+  const [url] = useState("https://churrappuploadteste.s3.amazonaws.com/default/churrasco_default.png")
 
   const [borderColorRed1, setBorderColorRed1] = useState(style.formOk);
   const [borderColorRed2, setBorderColorRed2] = useState(style.formOk);
@@ -33,52 +32,6 @@ export default function CriarChurrasco() {
   const config = {
     headers: { 'Authorization': USUARIOLOGADO.id }
   };
-
-  // var convidadosList = []
-  // convidadosList.push({
-  //   id:0,
-  //   nome: "nomeContato",
-  //   sobrenome: "sobrenomeContato",
-  //   telefone: "telefoneContato",
-  // })
-  // convidadosList.push({
-  //   id:1,
-  //   nome: "nomeContato2",
-  //   sobrenome: "sobrenomeContato2",
-  //   telefone: "telefoneContato2",
-  // })
-  // convidadosList.push({
-  //   id:2,
-  //   nome: "nomeContato2",
-  //   sobrenome: "sobrenomeContato2",
-  //   telefone: "telefoneContato2",
-  // })
-  // convidadosList.push({
-  //   id:3,
-  //   nome: "nomeContato2",
-  //   sobrenome: "sobrenomeContato2",
-  //   telefone: "telefoneContato2",
-  // })
-  // convidadosList.push({
-  //   id:4,
-  //   nome: "nomeContato2",
-  //   sobrenome: "sobrenomeContato2",
-  //   telefone: "telefoneContato2",
-  // })
-  // convidadosList.push({
-  //   id:5,
-  //   nome: "nomeContato2",
-  //   sobrenome: "sobrenomeContato2",
-  //   telefone: "telefoneContato2",
-  // })
-  // console.log("antes ")
-  // console.log(convidadosList)
-  // console.log(convidadosList.splice(2,1,convidadosList[3] ))
-  // console.log(convidadosList.splice(3,1,convidadosList[4] ))
-  // console.log(convidadosList.splice(4,1,convidadosList[5] ))
-  // console.log(convidadosList.pop())
-  // console.log("depois ")
-  // console.log(convidadosList)
 
   async function next() {
 
@@ -110,22 +63,6 @@ export default function CriarChurrasco() {
       return setVisivel(true)
     } else {
       await criarChurras()
-      console.log("AQUI2 " + churrasCodeCriado);
-      navigation.navigate('AdicionaConvidados', {
-        nomeContato: null,
-        sobrenomeContato: null,
-        telefoneContato: null,
-        churrasAtual: {
-          churrasCode: churrasCodeCriado,
-          nomeChurras: nomeChurras,
-          local: local,
-          hrInicio: hrInicio,
-          hrFim: hrFim,
-          descricao: descricao,
-          data: date,
-          foto_id: 0,
-        },
-      });
     }
 
   }
@@ -184,9 +121,8 @@ export default function CriarChurrasco() {
   async function criarChurras() {
 
     const novaUrl = await ulpoadImagem()
-    console.log(novaUrl)
-    
-    const response = await api.post('/churras', {
+
+    await api.post('/churras', {
       nomeChurras: nomeChurras,
       local: local,
       hrInicio: hrInicio,
@@ -194,169 +130,183 @@ export default function CriarChurrasco() {
       descricao: descricao,
       data: date,
       fotoUrlC: novaUrl,
-    }, config)
+    }, config).then(function (response) {      
+      navigation.navigate('AdicionaConvidados', {
+        nomeContato: null,
+        sobrenomeContato: null,
+        telefoneContato: null,
+        churrasAtual: {
+          churrasCode: response.data.id,
+          nomeChurras: nomeChurras,
+          local: local,
+          hrInicio: hrInicio,
+          hrFim: hrFim,
+          descricao: descricao,
+          data: date,
+        },
+      });
+    })
 
-    setChurrasCodeCriado(response.data);
-}
+  }
 
-return (
-  <View style={style.container}>
-    <SafeAreaView style={style.body}>
-      <View style={style.headerGroup}>
-        <View>
-          <Text style={style.textHeader}>Vamos começar!</Text>
-          <Text style={style.textSubHeader}>Insira as informações principais</Text>
+  return (
+    <View style={style.container}>
+      <SafeAreaView style={style.body}>
+        <View style={style.headerGroup}>
+          <View>
+            <Text style={style.textHeader}>Vamos começar!</Text>
+            <Text style={style.textSubHeader}>Insira as informações principais</Text>
+          </View>
+          <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
+            <Icon style={style.iconHeaderBtn} name="md-exit" size={22} />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
-          <Icon style={style.iconHeaderBtn} name="md-exit" size={22} />
-        </TouchableOpacity>
-      </View>
-      <ScrollView style={style.scrollView}>
-        <View style={style.formGroup}>
-          <Text style={style.textLabel}>Nome do churras</Text>
-          <TextInput
-            style={[style.inputStandard, borderColorRed1]}
-            onChangeText={text => setNomeChurras(text)}
-            placeholder={'Churrasbom'}
-          />
-          <Text style={style.textLabel}>Local</Text>
-          <TextInput
-            style={[style.inputStandard, borderColorRed2]}
-            placeholder={"Alameda santos, 202"}
-            onChangeText={text => setlocal(text)}
-          />
-          <Text style={style.textLabel}>Descrição</Text>
-          <TextInput
-            style={[style.inputStandard, style.formOk]}
-            multiline={true}
-            numberOfLines={3}
-            placeholder={"O melhor churras do ano"}
-            onChangeText={text => setdescricao(text)}
-          />
-          <View style={style.componentPicker}>
-            <Text style={style.textLabel}>Data</Text>
-            <View style={style.picker}>
-              <DatePicker
-                style={{ width: 200 }}
-                date={date}
-                mode="date"
-                placeholder="DD/MM/AAAA"
-                format="DD/MM/YYYY"
-                minDate="01/05/2020"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateIcon: {
-                    position: 'absolute',
-                    left: 0,
-                    top: 4,
-                    marginLeft: 0
-                  },
-                  dateInput: {
-                    borderBottomWidth: 1,
-                    borderWidth: 0,
-                    marginLeft: 36,
-                    borderBottomColor: borderColorRed3,
-                    fontFamily: 'poppins-regular',
-                  },
-                  // ... You can check the source to find the other keys.
-                }}
-                onDateChange={(date) => { setDate(date) }}
-              />
-            </View>
-          </View>
-          <View style={style.componentPicker}>
-            <Text style={style.textLabel}>Início</Text>
-            <View style={style.picker}>
-              <DatePicker
-                style={{ width: 200 }}
-                date={hrInicio}
-                mode="time"
-                placeholder="00:00"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateIcon: {
-                    position: 'absolute',
-                    left: 0,
-                    top: 4,
-                    marginLeft: 0
-                  },
-                  dateInput: {
-                    borderBottomWidth: 1,
-                    borderWidth: 0,
-                    marginLeft: 36,
-                    borderBottomColor: borderColorRed4,
-                    fontFamily: 'poppins-regular',
-                  },
-                  // ... You can check the source to find the other keys.
-                }}
-                onDateChange={(hrInicio) => { sethrInicio(hrInicio) }}
-              />
-            </View>
-          </View>
-          <View style={style.componentPicker}>
-            <Text style={style.textLabel}>Término</Text>
-            <View style={style.picker}>
-              <DatePicker
-                style={{ width: 200 }}
-                date={hrFim}
-                mode="time"
-                placeholder="00:00"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateIcon: {
-                    position: 'absolute',
-                    left: 0,
-                    top: 4,
-                    marginLeft: 0
-                  },
-                  dateInput: {
-                    borderBottomWidth: 1,
-                    borderWidth: 0,
-                    marginLeft: 36,
-                    borderBottomColor: 'darkgray',
-                    fontFamily: 'poppins-regular',
-                  },
-                  // ... You can check the source to find the other keys.
-                }}
-                onDateChange={(hrFim) => { sethrFim(hrFim) }}
-              />
-            </View>
-          </View>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={visivel}
-          >
-            <View style={style.centeredView}>
-              <View style={style.modalView}>
-                <Text style={style.modalTitle}>Ops!</Text>
-                <Text style={style.modalText}>Faltaram algumas informações!</Text>
-                <View style={style.footerModal}>
-                  <TouchableOpacity style={style.continueBtn} onPress={() => setVisivel(false)}>
-                    <Text style={style.textBtn}>Ok</Text>
-                  </TouchableOpacity>
-                </View>
+        <ScrollView style={style.scrollView}>
+          <View style={style.formGroup}>
+            <Text style={style.textLabel}>Nome do churras</Text>
+            <TextInput
+              style={[style.inputStandard, borderColorRed1]}
+              onChangeText={text => setNomeChurras(text)}
+              placeholder={'Churrasbom'}
+            />
+            <Text style={style.textLabel}>Local</Text>
+            <TextInput
+              style={[style.inputStandard, borderColorRed2]}
+              placeholder={"Alameda santos, 202"}
+              onChangeText={text => setlocal(text)}
+            />
+            <Text style={style.textLabel}>Descrição</Text>
+            <TextInput
+              style={[style.inputStandard, style.formOk]}
+              multiline={true}
+              numberOfLines={3}
+              placeholder={"O melhor churras do ano"}
+              onChangeText={text => setdescricao(text)}
+            />
+            <View style={style.componentPicker}>
+              <Text style={style.textLabel}>Data</Text>
+              <View style={style.picker}>
+                <DatePicker
+                  style={{ width: 200 }}
+                  date={date}
+                  mode="date"
+                  placeholder="DD/MM/AAAA"
+                  format="DD/MM/YYYY"
+                  minDate="01/05/2020"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      position: 'absolute',
+                      left: 0,
+                      top: 4,
+                      marginLeft: 0
+                    },
+                    dateInput: {
+                      borderBottomWidth: 1,
+                      borderWidth: 0,
+                      marginLeft: 36,
+                      borderBottomColor: borderColorRed3,
+                      fontFamily: 'poppins-regular',
+                    },
+                    // ... You can check the source to find the other keys.
+                  }}
+                  onDateChange={(date) => { setDate(date) }}
+                />
               </View>
             </View>
-          </Modal>
-          <View style={style.imagePicker}>
-            <TouchableOpacity style={style.inputDisplay} onPress={pickImage} >
-              <IconFA style={style.addImgIcon} name="image" size={100} />
-              {image && <Image source={{ uri: image.uri }} style={{ width: 170, height: 170, paddingVertical: 10 }} />}
-            </TouchableOpacity>
+            <View style={style.componentPicker}>
+              <Text style={style.textLabel}>Início</Text>
+              <View style={style.picker}>
+                <DatePicker
+                  style={{ width: 200 }}
+                  date={hrInicio}
+                  mode="time"
+                  placeholder="00:00"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      position: 'absolute',
+                      left: 0,
+                      top: 4,
+                      marginLeft: 0
+                    },
+                    dateInput: {
+                      borderBottomWidth: 1,
+                      borderWidth: 0,
+                      marginLeft: 36,
+                      borderBottomColor: borderColorRed4,
+                      fontFamily: 'poppins-regular',
+                    },
+                    // ... You can check the source to find the other keys.
+                  }}
+                  onDateChange={(hrInicio) => { sethrInicio(hrInicio) }}
+                />
+              </View>
+            </View>
+            <View style={style.componentPicker}>
+              <Text style={style.textLabel}>Término</Text>
+              <View style={style.picker}>
+                <DatePicker
+                  style={{ width: 200 }}
+                  date={hrFim}
+                  mode="time"
+                  placeholder="00:00"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      position: 'absolute',
+                      left: 0,
+                      top: 4,
+                      marginLeft: 0
+                    },
+                    dateInput: {
+                      borderBottomWidth: 1,
+                      borderWidth: 0,
+                      marginLeft: 36,
+                      borderBottomColor: 'darkgray',
+                      fontFamily: 'poppins-regular',
+                    },
+                    // ... You can check the source to find the other keys.
+                  }}
+                  onDateChange={(hrFim) => { sethrFim(hrFim) }}
+                />
+              </View>
+            </View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={visivel}
+            >
+              <View style={style.centeredView}>
+                <View style={style.modalView}>
+                  <Text style={style.modalTitle}>Ops!</Text>
+                  <Text style={style.modalText}>Faltaram algumas informações!</Text>
+                  <View style={style.footerModal}>
+                    <TouchableOpacity style={style.continueBtn} onPress={() => setVisivel(false)}>
+                      <Text style={style.textBtn}>Ok</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+            <View style={style.imagePicker}>
+              <TouchableOpacity style={style.inputDisplay} onPress={pickImage} >
+                <IconFA style={style.addImgIcon} name="image" size={100} />
+                {image && <Image source={{ uri: image.uri }} style={{ width: 170, height: 170, paddingVertical: 10 }} />}
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
 
-      <View style={style.footer}>
-        <TouchableOpacity style={style.continueBtn} onPress={next}>
-          <Text style={style.textBtn}>Criar churras</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  </View>
-)
+        <View style={style.footer}>
+          <TouchableOpacity style={style.continueBtn} onPress={next}>
+            <Text style={style.textBtn}>Criar churras</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </View>
+  )
 }

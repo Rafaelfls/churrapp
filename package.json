@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
-    "@react-native-community/datetimepicker": "^2.4.2",
     "@react-native-community/masked-view": "0.1.6",
     "@react-navigation/bottom-tabs": "^5.5.1",
     "@react-navigation/native": "^5.5.0",
@@ -48,7 +47,8 @@
     "react-native-vector-icons": "^6.6.0",
     "react-native-web": "^0.11.7",
     "rn-sliding-button": "^1.1.5",
-    "typeface-bree-serif": "0.0.72"
+    "typeface-bree-serif": "0.0.72",
+    "expo-crypto": "~8.1.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^8.1.0",

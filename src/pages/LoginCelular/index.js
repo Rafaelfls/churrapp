@@ -3,6 +3,7 @@ import { View, Image, Text, TextInput, TouchableOpacity, Modal } from 'react-nat
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native'
 import { TextInputMask } from 'react-native-masked-text'
+import * as Crypto from 'expo-crypto';
 import api from '../../services/api';
 
 import style from './styles';
@@ -11,14 +12,14 @@ export default function LoginCelular() {
 
     const navigation = useNavigation();
     const [celularUser, setCelularUser] = useState();
+    const [senhaUsuario, setSenhaUsuario] = useState('');
     const [visivel, setVisivel] = useState(false)
 
     async function navigateToResumo() {
-        var celular = "0" + celularUser;
-
-        await api.get(`/usuariosCel/${celular}`)
+        await api.get(`/usuariosCel/${celularUser}/${senhaUsuario}`)
         .then(function(response){
             if(response.data[0] == undefined){
+                console.log(response)
                 return setVisivel(true)
             }else{
                 USUARIOLOGADO = response.data[0]
@@ -27,8 +28,16 @@ export default function LoginCelular() {
         }) 
     }
 
+    async function criptoSenha(senha) {
+        const criptoSenha = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA512,
+            senha
+        );
+        console.log(criptoSenha)
+        setSenhaUsuario(criptoSenha)
+    }
+
     function okModal() {
-        setCelularUser('')
         setVisivel(false)
     }
 
@@ -64,6 +73,13 @@ export default function LoginCelular() {
                     includeRawValueInChangeText={true}
                     onChangeText={(text, rawText) => setCelularUser(rawText)}
                 />
+                <Text style={style.textLabel}>Senha:</Text>                
+                <TextInput
+                        style={style.inputStandard}
+                        placeholder={"8 ~ 16 caracteres"}
+                        maxLength={16}
+                        onChangeText={text => criptoSenha(text)}
+                    />
                 <TouchableOpacity style={style.continueBtn} onPress={navigateToResumo}>
                     <Text style={style.textBtn}>Entrar</Text>
                 </TouchableOpacity>
@@ -76,7 +92,7 @@ export default function LoginCelular() {
                 <View style={style.centeredView}>
                     <View style={style.modalView}>
                         <Text style={style.modalTitle}>Ops!</Text>
-                        <Text style={style.modalText}>Telefone incorreto!</Text>
+                        <Text style={style.modalText}>Informações incorretas!</Text>
                         <View style={style.footerModal}>
                             <TouchableOpacity style={style.continueBtn} onPress={okModal}>
                                 <Text style={style.textBtn}>Ok</Text>

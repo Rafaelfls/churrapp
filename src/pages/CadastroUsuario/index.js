@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import api from '../../services/api';
 import { TextInputMask } from 'react-native-masked-text'
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
+import * as Crypto from 'expo-crypto';
 
 import style from './styles';
 
@@ -13,7 +13,6 @@ export default function CadastroUsuario() {
 
     const navigation = useNavigation();
 
-    const [image, setImage] = useState(null);
     const [apelidoUsuario, setApelidoUsuario] = useState('');
     const [nomeUsuario, setNomeUsuario] = useState('');
     const [sobrenomeUsuario, setSobrenomeUsuario] = useState('');
@@ -22,11 +21,14 @@ export default function CadastroUsuario() {
     const [cidadeUsuario, setCidadeUsuario] = useState('');
     const [emailUsuario, setEmailUsuario] = useState('');
     const [celularUsuario, setCelularUsuario] = useState('');
+    const [senhaUsuario, setSenhaUsuario] = useState('');
     const [pontoCarne, setPontoCarne] = useState([]);
     const [quantidadeCome, setQuantidadeCome] = useState([]);
     const [pontoCarne_id, setPontoCarne_id] = useState(0);
     const [quantidadeCome_id, setQuantidadeCome_id] = useState(0);
     const [visivel, setVisivel] = useState(false)
+    const [url, setUrl] = useState(null)
+    const [image, setImage] = useState({ cancelled: true });
 
     const [borderColorRed1, setBorderColorRed1] = useState(style.formOk);
     const [borderColorRed2, setBorderColorRed2] = useState(style.formOk);
@@ -36,6 +38,7 @@ export default function CadastroUsuario() {
     const [borderColorRed6, setBorderColorRed6] = useState(style.formOk);
     const [borderColorRed7, setBorderColorRed7] = useState(style.formOk);
     const [borderColorRed8, setBorderColorRed8] = useState(style.formOk);
+    const [borderColorRed9, setBorderColorRed9] = useState(style.formOk);
 
     global.USUARIOLOGADO = null;
 
@@ -60,6 +63,45 @@ export default function CadastroUsuario() {
         setQuantidadeCome([...quantidadeCome, ...response.data]);
     }
 
+    async function criptoSenha(senha) {
+        const criptoSenha = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA512,
+            senha
+        );
+        setSenhaUsuario(criptoSenha)
+    }
+
+    async function uploadImage(){
+        if (!image.cancelled) {
+            let apiUrl = 'https://pure-island-99817.herokuapp.com/fotosUsuarios';
+            let uriParts = image.uri.split('.');
+            let fileType = uriParts[uriParts.length - 1];
+            let uri = image.uri
+
+            let formData = new FormData();
+            formData.append('file', {
+                uri,
+                name: `photo.${fileType}`,
+                type: `image/${fileType}`,
+            });
+
+            let options = {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+
+            const res = await fetch(apiUrl, options);
+            const response = await res.json();
+            console.log(response.location)
+            return response.location
+        } else {
+            return url
+        }
+    }
     async function navigateToResumo() {
 
         if (nomeUsuario == '') {
@@ -102,6 +144,11 @@ export default function CadastroUsuario() {
         } else {
             setBorderColorRed8(style.formOk)
         }
+        if (senhaUsuario == '') {
+            setBorderColorRed9(style.formNok)
+        } else {
+            setBorderColorRed9(style.formOk)
+        }
 
         if (nomeUsuario == '' ||
             sobrenomeUsuario == '' ||
@@ -110,35 +157,12 @@ export default function CadastroUsuario() {
             ufUsuario == '' ||
             idadeUsuario == '' ||
             celularUsuario == '' ||
+            senhaUsuario == '' ||
             apelidoUsuario == '') {
             return setVisivel(true)
         } else {
 
-
-            let apiUrl = 'https://pure-island-99817.herokuapp.com/fotosUsuarios';
-            let uriParts = image.uri.split('.');
-            let fileType = uriParts[uriParts.length - 1];
-            let uri = image.uri
-
-            let formData = new FormData();
-            formData.append('file', {
-                uri,
-                name: `photo.${fileType}`,
-                type: `image/${fileType}`,
-            });
-
-            let options = {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'multipart/form-data',
-                },
-            };
-
-            const res = await fetch(apiUrl, options);
-            const response = await res.json();
-            console.log(response.location)
+            const newUrl = await uploadImage()
 
             await api.post('/usuarios', {
                 nome: nomeUsuario,
@@ -147,10 +171,11 @@ export default function CadastroUsuario() {
                 cidade: cidadeUsuario,
                 uf: ufUsuario,
                 idade: idadeUsuario,
-                fotoUrlU: response.location,
+                fotoUrlU: newUrl,
                 celular: celularUsuario,
                 cadastrado: true,
                 apelido: apelidoUsuario,
+                senha: senhaUsuario,
                 pontoCarne_id: pontoCarne_id,
                 carnePreferida_id: 0,
                 quantidadeCome_id: quantidadeCome_id,
@@ -217,27 +242,16 @@ export default function CadastroUsuario() {
                         placeholder={"Alameda santos, 202"}
                         onChangeText={text => setSobrenomeUsuario(text)}
                     />
-                    <Text style={style.textLabel}>Idade</Text>
-                    <TextInput
+                    <Text style={style.textLabel}>Data de nascimento:</Text>
+                    <TextInputMask
+                        type={'datetime'}
                         style={[style.inputStandard, borderColorRed6]}
-                        placeholder={"Alameda santos, 202"}
-                        keyboardType={'numeric'}
-                        maxLength={2}
-                        onChangeText={text => setIdadeUsuario(text)}
-                    />
-                    <Text style={style.textLabel}>UF</Text>
-                    <TextInput
-                        style={[style.inputStandard, borderColorRed5]}
-                        placeholder={"Alameda santos, 202"}
-                        maxLength={2}
-                        autoCapitalize={'characters'}
-                        onChangeText={text => setUfUsuario(text)}
-                    />
-                    <Text style={style.textLabel}>Cidade</Text>
-                    <TextInput
-                        style={[style.inputStandard, borderColorRed4]}
-                        placeholder={"Alameda santos, 202"}
-                        onChangeText={text => setCidadeUsuario(text)}
+                        placeholder={"dd/mm/aaaa"}
+                        options={{
+                            format: 'DD/MM/YYYY'
+                        }}
+                        value={idadeUsuario}
+                        onChangeText={(text) => setIdadeUsuario(text)}
                     />
                     <Text style={style.textLabel}>Email</Text>
                     <TextInput
@@ -261,6 +275,27 @@ export default function CadastroUsuario() {
                         value={celularUsuario}
                         includeRawValueInChangeText={true}
                         onChangeText={(text, rawText) => setCelularUsuario(rawText)}
+                    />
+                    <Text style={style.textLabel}>Senha:</Text>
+                    <TextInput
+                        style={[style.inputStandard, borderColorRed9]}
+                        placeholder={"8 ~ 16 caracteres"}
+                        maxLength={16}
+                        onChangeText={text => criptoSenha(text)}
+                    />
+                    <Text style={style.textLabel}>Estado:</Text>
+                    <TextInput
+                        style={[style.inputStandard, borderColorRed5]}
+                        placeholder={"UF"}
+                        maxLength={2}
+                        autoCapitalize={'characters'}
+                        onChangeText={text => setUfUsuario(text)}
+                    />
+                    <Text style={style.textLabel}>Cidade</Text>
+                    <TextInput
+                        style={[style.inputStandard, borderColorRed4]}
+                        placeholder={"Campinas"}
+                        onChangeText={text => setCidadeUsuario(text)}
                     />
                     <Text style={style.textLabel}>Qual ponto você prefere?</Text>
                     <Picker

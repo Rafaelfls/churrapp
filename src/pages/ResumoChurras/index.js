@@ -10,8 +10,6 @@ import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
 
 import api from '../../services/api';
 
-import churrasPhoto from '../../assets/fundoDescricao.jpg';
-
 import style from './styles';
 
 import { useChurrasCount } from '../../context/churrasCount';
@@ -36,9 +34,9 @@ export default function ResumoChurras() {
     function deletar(churrass) {
         setLoading(true)
         setChurrasCount( churrasCount - 1)
-        api.delete(`/churras/${churrass.id}`, config).then(
+        api.delete(`/churras/${churrass.id}`, config).then(function(){
             setVisivel(!visivel)
-        );
+        });
 
         setLoading(false)
     }
@@ -140,7 +138,7 @@ export default function ResumoChurras() {
                                             <Icon name="info" size={24} color="white" />
                                         </View>
                                         <View style={style.slideBtn}>
-                                            <Image source={churrasPhoto} style={style.churrasFoto} />
+                                            <Image source={{uri:churras.fotoUrlC}} style={style.churrasFoto} />
                                             <View style={style.churrasInfosView}>
                                                 <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
                                                 <Text style={style.churrasDono}>{churras.nome} </Text>

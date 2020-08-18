@@ -107,7 +107,7 @@ export default function OutrosChurras() {
                                 <View style={style.churras}>
                                     <View style={style.churrasDescricao}>
                                         <View style={style.slideBtn}>
-                                            <Image source={churrasPhoto} style={style.churrasFoto} />
+                                            <Image source={{uri:churras.fotoUrlC}} style={style.churrasFoto} />
                                             <View style={style.churrasInfosView}>
                                                 <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
                                                 <Text style={style.churrasDono}>{churras.nome} </Text>
@@ -142,7 +142,7 @@ export default function OutrosChurras() {
                                 <View style={style.churras}>
                                     <View style={style.churrasDescricao}>
                                         <View style={style.slideBtn}>
-                                            <Image source={churrasPhoto} style={style.churrasFoto} />
+                                            <Image source={{uri:churras.fotoUrlC}} style={style.churrasFoto} />
                                             <View style={style.churrasInfosView}>
                                                 <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
                                                 <Text style={style.churrasDono}>{churras.nome} </Text>
