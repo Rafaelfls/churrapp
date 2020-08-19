@@ -21,6 +21,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     const [itemDeletar, setItemDeletar] = useState([]);
     const [isSugestao, setIsSugestao] = React.useState(false);
     const [isVisible, setIsVisible] = React.useState(false);
+    const [isFirstTime, setIsFirstTime] = React.useState(true);
     const { churrascode } = route.params;
 
     const config = {
@@ -52,10 +53,20 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     }, [reload]);
 
     function next() {
+        if (isSugestao) {
+            itemList.map(async item => {
+                await api.post('/listadochurras', {
+                    quantidade: item.quantidade,
+                    churras_id: churrascode,
+                    unidade_id: item.unidade_id,
+                    item_id: item.item_id,
+                })
+            })
+        }
         navigation.push('AdicionarAcompanhamento', { churrascode, convidadosQtd });
     }
 
-    function escolherPratoPrincipal() {
+    function escolherNovosItens() {
         navigation.push('EscolherNovosItens', { churrascode })
     }
 
@@ -67,7 +78,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     }
 
     function updateValue(qtdSugestao) {
-        if(isSugestao){
+        if (isSugestao) {
             if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
                 return (qtdSugestao)
             } else {
@@ -95,7 +106,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
             <SafeAreaView style={style.body}>
                 <View style={style.headerGroup}>
                     <View style={style.headerTextGroup}>
-                        <Text style={style.textHeader}>Escolha as carnes</Text>
+                        <Text style={style.textHeader}>Carnes:</Text>
                     </View>
                     <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
                         <Icon style={style.iconHeaderBtn} name="md-exit" size={22} />
@@ -112,50 +123,26 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                                 // Caso seja seja sujestão o item não pode ser deletado
                                 ? (<View style={style.componentPicker}>
                                     <View style={style.textIcon}>
-                                        <Text style={style.textLabel}>{itemList.nomeItem + " (" + itemList.unidade + ")"}</Text>
+                                        <Text style={style.textLabel}>{itemList.nomeItem}</Text>
                                     </View>
                                     <View style={style.picker}>
-                                        <NumericInput
-                                            onChange={text => onChangeVar(text, itemList.quantidade)}
-                                            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-                                            totalWidth={120}
-                                            totalHeight={40}
-                                            iconSize={18}
-                                            initValue={updateValue(itemList.quantidade)}
-                                            valueType='real'
-                                            rounded
-                                            textColor='maroon'
-                                            iconStyle={{ color: 'black' }}
-                                            style={style.quantidadeInput}
-                                        />
+                                        <Text style={style.textLabel}>{updateValue(itemList.quantidade) + " " + itemList.unidade}</Text>
                                     </View>
                                 </View>)
                                 // Caso nao seja sujestão o item pode ser deletado
                                 : (<TouchableOpacity style={style.componentPicker} onPress={() => { setIsVisible(true); setItemDeletar(itemList) }}>
                                     <View style={style.textIcon}>
-                                        <Text style={style.textLabel}>{itemList.nomeItem + " (" + itemList.unidade + ")"}</Text>
+                                        <Text style={style.textLabel}>{itemList.nomeItem}</Text>
                                     </View>
                                     <View style={style.picker}>
-                                        <NumericInput
-                                            onChange={text => onChangeVar(text, itemList.quantidade)}
-                                            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-                                            totalWidth={120}
-                                            totalHeight={40}
-                                            iconSize={18}
-                                            initValue={updateValue(itemList.quantidade)}
-                                            valueType='real'
-                                            rounded
-                                            textColor='maroon'
-                                            iconStyle={{ color: 'black' }}
-                                            style={style.quantidadeInput}
-                                        />
+                                        <Text style={style.textLabel}>{updateValue(itemList.quantidade) + " " + itemList.unidade}</Text>
                                     </View>
                                 </TouchableOpacity>)}
                         </View>
                     )}
                     style={style.listStyle} />
 
-                <ActionButton offsetX={10} offsetY={100} onPress={() => escolherPratoPrincipal()} />
+                <ActionButton offsetX={10} offsetY={100} onPress={() => escolherNovosItens()} />
 
                 <Modal
                     animationType="slide"
@@ -173,6 +160,26 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                                 <TouchableOpacity style={style.salvarBtnModal} onPress={() => deleteItem(itemDeletar)}>
                                     <IconF5 style={style.iconSalvarBtnModal} name="check" size={20} />
                                     <Text style={style.iconSalvarBtnModal}>Sim</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={isFirstTime}
+                >
+                    <View style={style.centeredView}>
+                        <View style={style.modalView}>
+                            <Text style={style.modalText}>A seguir o Churrapp preparou para vocês uma sugestão de itens para seu churrasco.</Text>
+                            <Text style={style.modalText}>Essa sugestão leva em conta quantos convidados você convidou para seu churras.</Text>
+                            <Text style={style.modalText}>Se não gostar da sugestão é so adicionar itens de sua preferencia com as quantidades que preferir.</Text>
+                            <View style={style.footerModal}>
+                                <TouchableOpacity style={style.salvarBtnModal} onPress={() => setIsFirstTime(false)}>
+                                    <IconF5 style={style.iconSalvarBtnModal} name="check" size={20} />
+                                    <Text style={style.iconSalvarBtnModal}>Ok</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

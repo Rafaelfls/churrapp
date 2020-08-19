@@ -14,7 +14,7 @@ export default StyleSheet.create({
 
   headerGroup: {
     flexDirection: 'row',
-    marginHorizontal: '5%',
+    paddingHorizontal: '5%',
     alignItems: "center",
     justifyContent: "space-between",
   },
@@ -40,7 +40,7 @@ export default StyleSheet.create({
     backgroundColor: 'white'
   },
 
-  textIcon: {
+  textIcon:{
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -50,15 +50,29 @@ export default StyleSheet.create({
     color: 'maroon',
   },
   textLabel: {
-    fontSize: 18,
+    fontSize: 16,
     color: "maroon",
     fontFamily: 'poppins-semi-bold',
     marginLeft: 10
   },
 
+  picker: {
+    flexDirection: 'row',
+    borderRadius: 6,
+  },
+
+  quantidadeInput: {
+    paddingHorizontal: 20,
+    borderBottomWidth: 0,
+    borderTopWidth: 0,
+    borderRadius: 0,
+    backgroundColor: 'white',
+    width: 100,
+  },
+  
 
   //footer
-  footer: {
+  footer:{    
     height: 90,
     flexDirection: "row",
     alignItems: 'center',
@@ -67,22 +81,22 @@ export default StyleSheet.create({
     borderTopWidth: 1,
     backgroundColor: 'white',
   },
-  continueBtn: {
+  continueBtn:{
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
+    borderRadius:8,
     backgroundColor: 'maroon',
     height: '60%',
     width: '85%',
     paddingVertical: 5,
   },
-  textBtn: {
+  textBtn:{
     color: 'white',
     fontSize: 17,
     fontFamily: 'poppins-medium',
     textAlign: 'center',
   },
-
+  
   //modal
   modalView: {
     margin: 20,
