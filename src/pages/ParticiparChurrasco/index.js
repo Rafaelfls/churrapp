@@ -3,7 +3,7 @@ import { View, Text, Image, FlatList, TextInput, TouchableOpacity, } from 'react
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import IconFA from 'react-native-vector-icons/FontAwesome';
-import IconOct from 'react-native-vector-icons/Octicons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import api from '../../services/api';
 
 import style from './styles';
@@ -14,14 +14,14 @@ export default function ParticiparChurrasco() {
 
     const [text, onChangeText] = useState();
     const [churras_id, setChurras_id] = useState();
-    
+
     const config = {
         headers: { 'Authorization': USUARIOLOGADO.id }
     };
 
 
     function backHome() {
-        navigation.goBack()
+        navigation.replace('Tabs')
     }
 
     function LerQR() {
@@ -43,25 +43,27 @@ export default function ParticiparChurrasco() {
 
         <View style={style.container}>
             <View style={style.header}>
-                <Text style={style.titulo}>Participar do churras</Text>
+                <TouchableOpacity style={style.qrBtn} onPress={backHome}>
+                    <Icon name="arrow-alt-circle-left" size={20} style={style.backIcon} />
+                </TouchableOpacity>
+                <Text style={style.titulo}>Entrar no churras</Text>
+                <TouchableOpacity style={style.qrBtn} onPress={LerQR}>
+                    <IconFA name="qrcode" size={30} style={style.qrIcon} />
+                </TouchableOpacity>
             </View>
             <View style={style.conteudo}>
                 <Text style={style.inserirText}>Insira o código do churras</Text>
                 <TextInput
                     style={style.inputStandard}
                     onChangeText={text => setChurras_id(text)}
-                    placeholder={'000000'}
+                    placeholder={'000000000000000'}
                 />
             </View>
-                <View style={style.btnsContainer}>
+            <View style={style.btnsContainer}>
                 <TouchableOpacity style={style.enterBtn} onPress={entrarChurrasco}>
                     <Text style={style.textBtn}>Entrar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={style.qrBtn} onPress={LerQR}>
-                    <IconFA name="qrcode" size={40} style={style.qrIcon} />
-                    <Text style={style.textBtn}>Ler QR Code</Text>
-                </TouchableOpacity>
-                </View>
+            </View>
         </View>
 
     )
