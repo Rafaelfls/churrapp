@@ -10,9 +10,10 @@ import IconF5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
+
 import style from './styles';
 
-export default function AdicionarBebidas({ route,navigation }) {
+export default function AdicionarSobremesas({ route,navigation }) {
 
     const { convidadosQtd } = route.params;
     const [itemList, setItemList] = React.useState([])
@@ -28,13 +29,13 @@ export default function AdicionarBebidas({ route,navigation }) {
 
     async function carregaMinhaLista() {
         console.log("carregaMinhaLista")
-        await api.get(`/listadochurras/subTipo/${churrascode}/${3}`)
+        await api.get(`/listadochurras/subTipo/${churrascode}/${5}`)
             .then(async function (response) {
                 setItemList([])
                 console.log("listadochurras", response.data)
                 if (response.data == 0) {
                     console.log("carregaSugestao")
-                    await api.get(`/sugestao/${3}`).then(function (response) {
+                    await api.get(`/sugestao/${5}`).then(function (response) {
                         setItemList(response.data);
                         setIsSugestao(true)
                     });
@@ -51,27 +52,25 @@ export default function AdicionarBebidas({ route,navigation }) {
     }, [reload]);
 
     function next() {
-        if (isSugestao) {
-            itemList.map(async item => {
-                await api.post('/listadochurras', {
-                    quantidade: item.quantidade,
-                    churras_id: churrascode,
-                    unidade_id: item.unidade_id,
-                    item_id: item.item_id,
-                })
-            })
-        }
-        navigation.push('AdicionarSobremesas', { churrascode, convidadosQtd });
+        navigation.push('AdicionarExtras', { churrascode, convidadosQtd });
     }
 
     function escolherNovosItens() {
-        navigation.push('EscolherNovosItens3', { churrascode })
+        navigation.push('EscolherNovosItens5', { churrascode })
     }
 
     function backHome() {
         api.delete(`/churras/${churrascode}`, config)
             .then(function (response) {
                 navigation.replace('Tabs');
+            })
+    }
+
+    async function deleteItem(item) {
+        await api.delete(`/listadochurras/${item.id}`)
+            .then(function () {
+                setReload(!reload)
+                setIsVisible(false)
             })
     }
 
@@ -90,21 +89,13 @@ export default function AdicionarBebidas({ route,navigation }) {
         varivael = text;
     }
 
-    async function deleteItem(item) {
-        await api.delete(`/listadochurras/${item.id}`)
-            .then(function () {
-                setReload(!reload)
-                setIsVisible(false)
-            })
-    }
-
 
     return (
         <View style={style.container}>
             <SafeAreaView style={style.body}>
                 <View style={style.headerGroup}>
                     <View style={style.headerTextGroup}>
-                        <Text style={style.textHeader}>Bebidas:</Text>
+                        <Text style={style.textHeader}>Sobremesas:</Text>
                     </View>
                     <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
                         <Icon style={style.iconHeaderBtn} name="md-exit" size={22} />

@@ -26,9 +26,11 @@ import EscolherNovosItens from './pages/EscolherNovosItens';
 import EscolherNovosItens2 from './pages/EscolherNovosItens2';
 import EscolherNovosItens3 from './pages/EscolherNovosItens3';
 import EscolherNovosItens4 from './pages/EscolherNovosItens4';
+import EscolherNovosItens5 from './pages/EscolherNovosItens5';
 import AdicionarAcompanhamento from './pages/AdicionarAcompanhamento';
 import AdicionarBebidas from './pages/AdicionarBebidas';
 import AdicionarExtras from './pages/AdicionarExtras';
+import AdicionarSobremesas from './pages/AdicionarSobremesas';
 import FinalCriaChurras from './pages/FinalCriaChurras';
 
 import ChurrasCountProvider from './context/churrasCount';
@@ -95,9 +97,11 @@ export default function Routes(){
                 <AppStack.Screen name="EscolherNovosItens2" component={EscolherNovosItens2}/>
                 <AppStack.Screen name="EscolherNovosItens3" component={EscolherNovosItens3}/>
                 <AppStack.Screen name="EscolherNovosItens4" component={EscolherNovosItens4}/>
+                <AppStack.Screen name="EscolherNovosItens5" component={EscolherNovosItens5}/>
                 <AppStack.Screen name="AdicionarAcompanhamento" component={AdicionarAcompanhamento}/>
                 <AppStack.Screen name="AdicionarBebidas" component={AdicionarBebidas}/>
                 <AppStack.Screen name="AdicionarExtras" component={AdicionarExtras}/>
+                <AppStack.Screen name="AdicionarSobremesas" component={AdicionarSobremesas}/>
                 <AppStack.Screen name="FinalCriaChurras" component={FinalCriaChurras}/>
                 {/* Fim telas de criação do churrasco */}
 

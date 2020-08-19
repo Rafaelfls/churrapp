@@ -52,10 +52,20 @@ export default function AdicionarExtras({ route,navigation }) {
     }, [reload]);
 
     function next() {
+        if (isSugestao) {
+            itemList.map(async item => {
+                await api.post('/listadochurras', {
+                    quantidade: item.quantidade,
+                    churras_id: churrascode,
+                    unidade_id: item.unidade_id,
+                    item_id: item.item_id,
+                })
+            })
+        }
         navigation.navigate('FinalCriaChurras');
     }
 
-    function escolherPratoPrincipal() {
+    function escolherNovosItens() {
         navigation.push('EscolherNovosItens4', { churrascode })
     }
 
@@ -95,7 +105,7 @@ export default function AdicionarExtras({ route,navigation }) {
             <SafeAreaView style={style.body}>
                 <View style={style.headerGroup}>
                     <View style={style.headerTextGroup}>
-                        <Text style={style.textHeader}>Escolha outros itens</Text>
+                        <Text style={style.textHeader}>Outros itens:</Text>
                     </View>
                     <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
                         <Icon style={style.iconHeaderBtn} name="md-exit" size={22} />
@@ -112,50 +122,26 @@ export default function AdicionarExtras({ route,navigation }) {
                                 // Caso seja seja sujestão o item não pode ser deletado
                                 ? (<View style={style.componentPicker}>
                                     <View style={style.textIcon}>
-                                        <Text style={style.textLabel}>{itemList.nomeItem + " (" + itemList.unidade + ")"}</Text>
+                                        <Text style={style.textLabel}>{itemList.nomeItem}</Text>
                                     </View>
                                     <View style={style.picker}>
-                                        <NumericInput
-                                            onChange={text => onChangeVar(text, itemList.quantidade)}
-                                            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-                                            totalWidth={120}
-                                            totalHeight={40}
-                                            iconSize={18}
-                                            initValue={updateValue(itemList.quantidade)}
-                                            valueType='real'
-                                            rounded
-                                            textColor='maroon'
-                                            iconStyle={{ color: 'black' }}
-                                            style={style.quantidadeInput}
-                                        />
+                                        <Text style={style.textLabel}>{updateValue(itemList.quantidade)+" "+itemList.unidade}</Text> 
                                     </View>
                                 </View>)
                                 // Caso nao seja sujestão o item pode ser deletado
                                 : (<TouchableOpacity style={style.componentPicker} onPress={() => { setIsVisible(true); setItemDeletar(itemList) }}>
                                     <View style={style.textIcon}>
-                                        <Text style={style.textLabel}>{itemList.nomeItem + " (" + itemList.unidade + ")"}</Text>
+                                        <Text style={style.textLabel}>{itemList.nomeItem}</Text>
                                     </View>
                                     <View style={style.picker}>
-                                        <NumericInput
-                                            onChange={text => onChangeVar(text, itemList.quantidade)}
-                                            onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-                                            totalWidth={120}
-                                            totalHeight={40}
-                                            iconSize={18}
-                                            initValue={updateValue(itemList.quantidade)}
-                                            valueType='real'
-                                            rounded
-                                            textColor='maroon'
-                                            iconStyle={{ color: 'black' }}
-                                            style={style.quantidadeInput}
-                                        />
+                                        <Text style={style.textLabel}>{updateValue(itemList.quantidade)+" "+itemList.unidade}</Text> 
                                     </View>
                                 </TouchableOpacity>)}
                         </View>
                     )}
                     style={style.listStyle} />
 
-                <ActionButton offsetX={10} offsetY={100} onPress={() => escolherPratoPrincipal()} />
+                <ActionButton offsetX={10} offsetY={100} onPress={() => escolherNovosItens()} />
                 <Modal
                     animationType="slide"
                     transparent={true}
