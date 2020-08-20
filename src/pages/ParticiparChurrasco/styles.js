@@ -11,8 +11,10 @@ export default StyleSheet.create({
     },
 
     header: {
-        alignItems: "center",
-        justifyContent:'space-between',
+
+        justifyContent: 'center',
+        alignItems: "flex-start",
+
         flexDirection: 'row',
         marginHorizontal: 20,
         marginBottom: 15,
@@ -80,5 +82,11 @@ export default StyleSheet.create({
     backIcon:{
         color: 'black',
     },
+    exitBtn:{
+        justifyContent:'center',
+        paddingRight: 20,
+        alignSelf: 'center',
+        paddingBottom: 10
+      },
     
 });

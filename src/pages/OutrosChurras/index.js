@@ -69,7 +69,7 @@ export default function OutrosChurras() {
     }, []);
 
     function detalheChurras(churras) {
-        navigation.push('DetalheChurras', { churras:churras,allowShare:false });
+        navigation.push('DetalheChurras', { churras:churras,allowShare:false, editavel: false });
     }
 
     return (

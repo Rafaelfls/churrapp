@@ -16,7 +16,7 @@ export default function Perfil() {
     const route = useRoute();
     const navigation = useNavigation();
     const [loading, setLoading] = useState(false);
-    const [perfil, setPerfil] = useState(null);
+    const [perfil, setPerfil] = useState([]);
     const [id, setId] = useState(USUARIOLOGADO.id);
     const [visivel, setIsVisivel] = React.useState(false);
     const [page, setPage] = useState(1);
@@ -59,9 +59,7 @@ export default function Perfil() {
         setLoading(true)
         setIsVisivel(false)
 
-        const response = await api.get(`/usuarios/${id}`, {
-            params: { page }
-        }).then(function (response) {
+        const response = await api.get(`/usuarios/${id}`).then(function (response) {
             setCidade(response.data[0].cidade)
             setUf(response.data[0].uf)
             setIdade(response.data[0].idade)
@@ -78,7 +76,7 @@ export default function Perfil() {
         }).then(function () {
             setLoading(false)
         });
-        setPage(1);
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -90,7 +88,7 @@ export default function Perfil() {
     async function carregarPonto() {
         const response = await api.get(`/pontoCarne`)
 
-        setPontoCarneLista([...pontoCarneLista, ...response.data]);
+        setPontoCarneLista(response.data);
     }
 
     async function carregarQuantidadeCome() {
@@ -100,7 +98,7 @@ export default function Perfil() {
     }
 
 
-    function checkInfo() {
+    async function checkInfo() {
         if (emailNovo == null) {
             setEmailNovo(perfil.email)
         }

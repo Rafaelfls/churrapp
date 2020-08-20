@@ -36,9 +36,11 @@ export default function DetalheChurras() {
   const [refreshConvidados, setRefreshConvidados] = useState([]);
   const [todosTipos, setTodosTipos] = useState([]);
   const [subTipos, setSubTipos] = useState([]);
+  const [cancelBtn, setCancelBtn] = useState();
 
   const churras = route.params.churras;
   const allowShare = route.params.allowShare;
+  const editavel = route.params.editavel;
   const [modalTipoVisivel, setModalTipoVisivel] = useState(false);
   const [modalItemVisivel, setModalItemVisivel] = useState(false);
   const [modalSubTipoVisivel, setModalSubTipoVisivel] = useState(false);
@@ -109,6 +111,19 @@ export default function DetalheChurras() {
 
   }
 
+  function addItemVisivel() {
+    if (editavel) {
+      return(
+        <TouchableOpacity onPress={() => setModalSubTipoVisivel(true)}>
+            <Text style={style.verTodos}>Adicionar item</Text>
+          </TouchableOpacity>
+      );
+    } else {
+      return null
+    }
+  }
+
+
   async function pegarItemPorTipo(tipo){
     
 
@@ -155,7 +170,7 @@ export default function DetalheChurras() {
             </View>
           </View>
           <View style={style.churrasDonoContainer}>
-            <Image source={{uri:churras.url}} style={style.donoImg} />
+            <Image source={{uri:churras.fotoUrlU}} style={style.donoImg} />
             <Text style={style.churrasDono}>{churras.nome}</Text>
           </View>
         </View>
@@ -201,9 +216,7 @@ export default function DetalheChurras() {
           <View style={style.containerTituloItens}>
             <Text style={style.tituloItens}>Itens {itensTotal}</Text>
           </View>
-          <TouchableOpacity onPress={() => setModalSubTipoVisivel(true)}>
-            <Text style={style.verTodos}>Adicionar item</Text>
-          </TouchableOpacity>
+          {addItemVisivel()}
         </View>
 
         <FlatList
@@ -237,17 +250,18 @@ export default function DetalheChurras() {
         onRequestClose={() => {
           Alert.alert('Modal has been closed.');
         }}>
-          <View style={style.centeredView}>
+          <View style={style.centeredSubTipoView}>
             <View style={style.modalView}>
               <Text>Escolha uma categoria por favor</Text>
               <FlatList
                   data={subTipos}
+                  style={{width:"100%"}}
+                  horizontal
                   keyExtractor={subTipos => String(subTipos.id)}
                   renderItem={({ item: subTipos }) => (
 
-                    <View style={style.tiposDesign}>
+                    <View style={style.subTiposDesign}>
                       <TouchableOpacity onPress={() =>{ carregarTodosTipos(subTipos)
-                     
                       }}>
                           <Text style={style.nomeItem}>{subTipos.subTipo}</Text>
                       </TouchableOpacity>
