@@ -192,8 +192,17 @@ export default StyleSheet.create({
   tiposDesign:{
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: "#000",
+    backgroundColor: "maroon",
     borderRadius: 8,
+    margin: 20,
+    height: 70,
+  },
+  subTiposDesign:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "maroon",
+    borderRadius: 8,
+    width: 200,
     margin: 20,
     height: 70,
   },
@@ -212,7 +221,7 @@ export default StyleSheet.create({
     borderTopRightRadius: 8,
   },
   nomeItem:{
-    color: '#f00',
+    color: '#fff',
     padding: 3,
   },
   qtdItem:{
@@ -273,6 +282,15 @@ export default StyleSheet.create({
     alignItems: "center",
     position: 'absolute',
     bottom: 0,
+    width: '100%',
+    height: '60%',
+  },
+  centeredSubTipoView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: 'absolute',
+    bottom: "45.5%",
     width: '100%',
     height: '60%',
   },

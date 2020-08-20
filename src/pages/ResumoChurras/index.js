@@ -20,7 +20,6 @@ export default function ResumoChurras() {
     const route = useRoute();
     const [churras, setChurras] = useState([]);
     const [total, setTotal] = useState(0);
-    const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [visivel, setVisivel] = useState(false)
     const [churrasDeletar, setChurrasDeletar] = useState([]);
@@ -54,45 +53,31 @@ export default function ResumoChurras() {
     }
 
     function detalheChurras(churras) {
-        navigation.navigate('DetalheChurras', { churras, allowShare: true });
+        navigation.navigate('DetalheChurras', { churras, allowShare: true, editavel: true });
     }
 
 
     async function loadChurras() {
         setLoading(true);
 
-        if (churrasCount > 0 && churras.length === churrasCount) {
-            return;
-        }
 
 
-        const response = await api.get(`/churras/${USUARIOLOGADO.id}`, {
-            params: { page }
-        });
+        const response = await api.get(`/churras/${USUARIOLOGADO.id}`);
 
-        setChurras([...churras, ...response.data]);
-        setChurrasCount(churras.length);
-        setPage(page + 1);
+        setChurras(response.data);
+        setChurrasCount(response.data.length);
         setLoading(false);
-        console.log("QNT = " + churrasCount + "Length = " + churras.length)
     }
     async function onRefresh() {
         setLoading(true);
 
-        if (churrasCount > 0 && churras.length === churrasCount) {
-            return;
-        }
 
 
-        const response = await api.get(`/churras/${USUARIOLOGADO.id}`, {
-            params: { page }
-        });
+        const response = await api.get(`/churras/${USUARIOLOGADO.id}`);
 
-        setChurras([...refreshChurras, ...response.data]);
-        setChurrasCount(churras.length);
-        setPage(1);
+        setChurras(response.data);
+        setChurrasCount(response.data.length);
         setLoading(false);
-        console.log("QNT2 = " + churrasCount +  "Length = " + churras.data.length)
 
     }
 
@@ -120,7 +105,6 @@ export default function ResumoChurras() {
                 style={style.churrasList}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={churras => String(churras.id)}
-                onEndReached={loadChurras}
                 onEndReachedThreshold={0.2}
                 refreshControl={<RefreshControl refreshing={loading} onRefresh={() => onRefresh()} />}
                 renderItem={({ item: churras }) => (

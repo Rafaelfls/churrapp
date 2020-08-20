@@ -4,7 +4,9 @@ import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconOct from 'react-native-vector-icons/Octicons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import api from '../../services/api';
+
 
 import style from './styles';
 
@@ -43,6 +45,11 @@ export default function ParticiparChurrasco() {
 
         <View style={style.container}>
             <View style={style.header}>
+                <View style={style.exitBtn}>
+                    <TouchableOpacity onPress={() => backHome()}>
+                        <Icon name="arrow-left" size={25}/>
+                    </TouchableOpacity>
+                </View>
                 <Text style={style.titulo}>Participar do churras</Text>
             </View>
             <View style={style.conteudo}>

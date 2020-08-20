@@ -11,7 +11,7 @@ export default StyleSheet.create({
     },
 
     header: {
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: "flex-start",
         flexDirection: 'row',
         marginHorizontal: 20,
@@ -82,5 +82,11 @@ export default StyleSheet.create({
         marginRight: 15,
         color: 'white',
     },
+    exitBtn:{
+        justifyContent:'center',
+        paddingRight: 20,
+        alignSelf: 'center',
+        paddingBottom: 10
+      },
     
 });
