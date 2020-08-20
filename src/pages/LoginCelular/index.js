@@ -13,10 +13,12 @@ export default function LoginCelular() {
     const navigation = useNavigation();
     const [celularUser, setCelularUser] = useState();
     const [senhaUsuario, setSenhaUsuario] = useState('');
+    const [valueCelular, setValueCelular] = useState('');
     const [visivel, setVisivel] = useState(false)
 
     async function navigateToResumo() {
-        await api.get(`/usuariosCel/${celularUser}/${senhaUsuario}`)
+        let criptoSenhaVar = await criptoSenha(senhaUsuario)
+        await api.get(`/usuariosCel/${celularUser}/${criptoSenhaVar}`)
         .then(function(response){
             if(response.data[0] == undefined){
                 console.log(response)
@@ -29,12 +31,10 @@ export default function LoginCelular() {
     }
 
     async function criptoSenha(senha) {
-        const criptoSenha = await Crypto.digestStringAsync(
+        return await Crypto.digestStringAsync(
             Crypto.CryptoDigestAlgorithm.SHA512,
             senha
         );
-        console.log(criptoSenha)
-        setSenhaUsuario(criptoSenha)
     }
 
     function okModal() {
@@ -69,16 +69,16 @@ export default function LoginCelular() {
                     autoFocus={true}
                     keyboardType={"phone-pad"}
                     placeholder={'(xx)xxxxx-xxxx'}
-                    value={celularUser}
+                    value={valueCelular}
                     includeRawValueInChangeText={true}
-                    onChangeText={(text, rawText) => setCelularUser(rawText)}
+                    onChangeText={(text, rawText) => {setCelularUser(rawText);setValueCelular(text)}}
                 />
                 <Text style={style.textLabel}>Senha:</Text>                
                 <TextInput
                         style={style.inputStandard}
                         placeholder={"8 ~ 16 caracteres"}
                         maxLength={16}
-                        onChangeText={text => criptoSenha(text)}
+                        onChangeText={text => setSenhaUsuario(text)}
                     />
                 <TouchableOpacity style={style.continueBtn} onPress={navigateToResumo}>
                     <Text style={style.textBtn}>Entrar</Text>
