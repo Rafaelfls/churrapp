@@ -47,13 +47,15 @@ export default function ParticiparChurrasco() {
 
         <View style={style.container}>
             <View style={style.header}>
-
                 <View style={style.exitBtn}>
                     <TouchableOpacity onPress={() => backHome()}>
                         <Icon name="arrow-left" size={25}/>
                     </TouchableOpacity>
                 </View>
                 <Text style={style.titulo}>Participar do churras</Text>
+                <TouchableOpacity style={style.qrBtn} onPress={LerQR}>
+                    <IconFA name="qrcode" size={30} style={style.qrIcon} />
+                </TouchableOpacity>
 
             </View>
             <View style={style.conteudo}>
