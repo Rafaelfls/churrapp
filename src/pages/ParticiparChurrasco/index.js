@@ -3,7 +3,9 @@ import { View, Text, Image, FlatList, TextInput, TouchableOpacity, } from 'react
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import IconFA from 'react-native-vector-icons/FontAwesome';
+
 import IconOct from 'react-native-vector-icons/Octicons';
+
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import api from '../../services/api';
 
@@ -54,6 +56,7 @@ export default function ParticiparChurrasco() {
                 <TouchableOpacity style={style.qrBtn} onPress={LerQR}>
                     <IconFA name="qrcode" size={30} style={style.qrIcon} />
                 </TouchableOpacity>
+
             </View>
             <View style={style.conteudo}>
                 <Text style={style.inserirText}>Insira o código do churras</Text>

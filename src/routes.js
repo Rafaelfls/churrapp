@@ -3,8 +3,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {Linking} from 'expo';
 
 const AppStack =  createStackNavigator();
+const prefix = Linking.makeUrl('/');
 
 // Import pages
 import Perfil from './pages/Perfil';
@@ -70,9 +72,13 @@ const Tab = createBottomTabNavigator();
 
 export default function Routes(){
 
+    const linking = {
+        prefixes: [prefix],
+      };
+
     return(
         <ChurrasCountProvider>
-        <NavigationContainer>
+        <NavigationContainer  linking={linking} fallback={<Text>Carregando...</Text>}>
             <AppStack.Navigator screenOptions={{headerShown: false}}>
                 <AppStack.Screen name="Login" component={Login}/>
                 <AppStack.Screen name="LoginCelular" component={LoginCelular}/>
