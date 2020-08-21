@@ -9,13 +9,12 @@ import IconFea from '@expo/vector-icons/Feather';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import style from './styles';
-import { useChurrasCount } from '../../context/churrasCount';
+import { useChurrasCount, useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 
 export default function Perfil() {
     const route = useRoute();
     const navigation = useNavigation();
-    const [loading, setLoading] = useState(false);
     const [perfil, setPerfil] = useState([]);
     const [id, setId] = useState(USUARIOLOGADO.id);
     const [visivel, setIsVisivel] = React.useState(false);
@@ -50,6 +49,8 @@ export default function Perfil() {
     // const [fotoNova, setFotoNova] = useState(null);
 
     const {churrasCount, setChurrasCount} = useChurrasCount();
+    const {loading, setLoading} = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
 
 
 
@@ -302,18 +303,7 @@ export default function Perfil() {
                     </View>
                 </View>
             </Modal>
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={loading}
-            >
-                <View
-                    style={style.loadingBackground}
-                >
-                    <ActivityIndicator size="large" color="maroon" />
-                    <Text style={style.textLoading}>Carregando ...</Text>
-                </View>
-            </Modal>
+            {criarModal}
         </View>
     )
 }

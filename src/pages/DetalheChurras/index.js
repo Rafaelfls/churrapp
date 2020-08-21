@@ -20,7 +20,7 @@ import pao from '../../assets/pao.jpg';
 import style from './styles';
 import { Container } from 'native-base';
 
-import {useConvidadosCount} from '../../context/churrasCount';
+import {useConvidadosCount} from '../../context/churrasContext';
 
 export default function DetalheChurras() {
   const {convidadosCount, setConvidadosCount} = useConvidadosCount();
