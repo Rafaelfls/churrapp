@@ -12,7 +12,7 @@ import api from '../../services/api';
 
 import style from './styles';
 
-import { useChurrasCount } from '../../context/churrasCount';
+import { useChurrasCount } from '../../context/churrasContext';
 
 export default function ResumoChurras() {
     const {churrasCount, setChurrasCount} = useChurrasCount();

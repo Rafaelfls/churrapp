@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -35,7 +36,7 @@ import AdicionarExtras from './pages/AdicionarExtras';
 import AdicionarSobremesas from './pages/AdicionarSobremesas';
 import FinalCriaChurras from './pages/FinalCriaChurras';
 
-import ChurrasCountProvider from './context/churrasCount';
+import ChurrasProvider from './context/churrasContext';
 
 
 const Tab = createBottomTabNavigator();
@@ -77,7 +78,7 @@ export default function Routes(){
       };
 
     return(
-        <ChurrasCountProvider>
+        <ChurrasProvider>
         <NavigationContainer  linking={linking} fallback={<Text>Carregando...</Text>}>
             <AppStack.Navigator screenOptions={{headerShown: false}}>
                 <AppStack.Screen name="Login" component={Login}/>
@@ -114,6 +115,6 @@ export default function Routes(){
             </AppStack.Navigator>
  
         </NavigationContainer>
-        </ChurrasCountProvider>
+        </ChurrasProvider>
     );
 }

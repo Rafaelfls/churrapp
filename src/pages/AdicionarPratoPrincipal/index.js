@@ -12,6 +12,7 @@ import IconF5 from 'react-native-vector-icons/FontAwesome5';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import style from './styles';
+import { useIsSugestao } from '../../context/churrasContext';
 
 export default function AdicionarPratoPrincipal({ route, navigation }) {
 
@@ -19,10 +20,11 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     const [itemList, setItemList] = React.useState([])
     const [reload, setReload] = React.useState(false);
     const [itemDeletar, setItemDeletar] = useState([]);
-    const [isSugestao, setIsSugestao] = React.useState(false);
     const [isVisible, setIsVisible] = React.useState(false);
     const [isFirstTime, setIsFirstTime] = React.useState(true);
     const { churrascode } = route.params;
+    
+    const {isSugestao, setIsSugestao} = useIsSugestao();
 
     const config = {
         headers: { 'Authorization': USUARIOLOGADO.id }
