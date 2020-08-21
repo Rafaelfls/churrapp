@@ -12,7 +12,7 @@ export default StyleSheet.create({
 
     header: {
         justifyContent: 'center',
-        alignItems: "flex-start",
+        alignItems: "center",
         flexDirection: 'row',
         marginHorizontal: 20,
         marginBottom: 15,
@@ -25,7 +25,6 @@ export default StyleSheet.create({
 
     conteudo: {
         alignItems: 'center',
-        paddingTop: '20%',
     },
     inserirText:{
         fontSize: 20,
@@ -68,19 +67,17 @@ export default StyleSheet.create({
     },
 
     qrBtn:{
-        backgroundColor: 'maroon',
-        borderRadius: 8,
-        padding: 10,
-        width: '80%',
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 10,
+        paddingLeft: 8
+        
     },
 
     qrIcon:{
-        marginRight: 15,
-        color: 'white',
+        color: 'maroon',
+    },
+
+    backIcon:{
+        color: 'black',
     },
     exitBtn:{
         justifyContent:'center',
