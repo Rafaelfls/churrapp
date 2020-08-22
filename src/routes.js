@@ -4,9 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {Linking} from 'expo';
+import { Linking } from 'expo';
 
-const AppStack =  createStackNavigator();
+const AppStack = createStackNavigator();
 const prefix = Linking.makeUrl('/');
 
 // Import pages
@@ -41,80 +41,85 @@ import ChurrasProvider from './context/churrasContext';
 
 const Tab = createBottomTabNavigator();
 
-    function CriarTabs() {
-        return(
-            
-            <Tab.Navigator screenOptions={({ route }) => ({
-                tabBarIcon: ({focused, color, size}) => {
-                    let iconName;
-                    if (route.name === "Outros Churras") {
-                        iconName = focused 
+function CriarTabs() {
+    return (
+
+        <Tab.Navigator screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
+                if (route.name === "Outros Churras") {
+                    iconName = focused
                         ? 'glass-cheers'
                         : 'glass-cheers';
-                    } else if (route.name === "Meu Churras") {
-                        iconName = focused
+                } else if (route.name === "Meu Churras") {
+                    iconName = focused
                         ? 'home'
                         : 'home';
-                    } else if (route.name === "Perfil") {
-                        iconName = focused
+                } else if (route.name === "Perfil") {
+                    iconName = focused
                         ? 'creative-commons-by'
                         : 'creative-commons-by';
-                    }
-                    return <Icon name={iconName} size={size} color={color} />;
-
                 }
-            })} initialRouteName={'Meu Churras'} tabBarOptions={{activeTintColor: "maroon", inactiveTintColor: "gray"}}>
-                <Tab.Screen name="Outros Churras" component={OutrosChurras}/>
-                <Tab.Screen name="Meu Churras" component={ResumoChurras}/>
-                <Tab.Screen name="Perfil" component={Perfil}/>
-            </Tab.Navigator>
-        );
-    }
+                return <Icon name={iconName} size={size} color={color} />;
 
-export default function Routes(){
+            }
+        })} initialRouteName={'Meu Churras'} tabBarOptions={{ activeTintColor: "maroon", inactiveTintColor: "gray" }}>
+            <Tab.Screen name="Outros Churras" component={OutrosChurras} />
+            <Tab.Screen name="Meu Churras" component={ResumoChurras} />
+            <Tab.Screen name="Perfil" component={Perfil} />
+        </Tab.Navigator>
+    );
+}
+
+export default function Routes() {
 
     const linking = {
         prefixes: [prefix],
-      };
+    };
 
-    return(
+    return (
         <ChurrasProvider>
-        <NavigationContainer  linking={linking} fallback={<Text>Carregando...</Text>}>
-            <AppStack.Navigator screenOptions={{headerShown: false}}>
-                <AppStack.Screen name="Login" component={Login}/>
-                <AppStack.Screen name="LoginCelular" component={LoginCelular}/>
-                <AppStack.Screen name="CadastroUsuario" component={CadastroUsuario}/>
-                <AppStack.Screen name="Tabs" component={CriarTabs}/>
-                <AppStack.Screen name="Perfil" component={Perfil}/>
-                <AppStack.Screen name="ResumoChurras" component={ResumoChurras}/>
-                <AppStack.Screen name="OutrosChurras" component={OutrosChurras}/>
+            <NavigationContainer linking={linking} fallback={<Text>Carregando...</Text>}>
+                <AppStack.Navigator screenOptions={{ headerShown: false }}>
+                    {/* Telas fora do app */}
+                    <AppStack.Screen name="Login" component={Login} />
+                    <AppStack.Screen name="LoginCelular" component={LoginCelular} />
+                    <AppStack.Screen name="CadastroUsuario" component={CadastroUsuario} />
+                    {/* Fim telas fora do app */}
 
-                <AppStack.Screen name="ParticiparChurrasco" component={ParticiparChurrasco}/>
-                <AppStack.Screen name="CompartilharChurrasco" component={CompartilharChurrasco}/>
-                <AppStack.Screen name="QRCodeLeitor" component={QRCodeLeitor}/>
+                    {/* Paginas principais */}
+                    <AppStack.Screen name="Tabs" component={CriarTabs} />
+                    <AppStack.Screen name="Perfil" component={Perfil} />
+                    <AppStack.Screen name="ResumoChurras" component={ResumoChurras} />
+                    <AppStack.Screen name="OutrosChurras" component={OutrosChurras} />
+                    {/* Fim paginas principais */}
 
-                {/* Inicio telas de criação do churrasco */}
-                <AppStack.Screen name="InicioCriaChurras" component={InicioCriaChurras}/>
-                <AppStack.Screen name="CriarChurrasco" component={CriarChurrasco}/>
-                <AppStack.Screen name="AdicionaConvidados" component={AdicionaConvidados}/>
-                <AppStack.Screen name="DetalheChurras" component={DetalheChurras}/>
-                <AppStack.Screen name="OpenContactList" component={OpenContactList}/>
-                <AppStack.Screen name="AdicionarPratoPrincipal" component={AdicionarPratoPrincipal}/>
-                <AppStack.Screen name="EscolherNovosItens" component={EscolherNovosItens}/>
-                <AppStack.Screen name="EscolherNovosItens2" component={EscolherNovosItens2}/>
-                <AppStack.Screen name="EscolherNovosItens3" component={EscolherNovosItens3}/>
-                <AppStack.Screen name="EscolherNovosItens4" component={EscolherNovosItens4}/>
-                <AppStack.Screen name="EscolherNovosItens5" component={EscolherNovosItens5}/>
-                <AppStack.Screen name="AdicionarAcompanhamento" component={AdicionarAcompanhamento}/>
-                <AppStack.Screen name="AdicionarBebidas" component={AdicionarBebidas}/>
-                <AppStack.Screen name="AdicionarExtras" component={AdicionarExtras}/>
-                <AppStack.Screen name="AdicionarSobremesas" component={AdicionarSobremesas}/>
-                <AppStack.Screen name="FinalCriaChurras" component={FinalCriaChurras}/>
-                {/* Fim telas de criação do churrasco */}
+                    {/* Paginas de comparilhamento do churrasco */}
+                    <AppStack.Screen name="ParticiparChurrasco" component={ParticiparChurrasco} />
+                    <AppStack.Screen name="CompartilharChurrasco" component={CompartilharChurrasco} />
+                    <AppStack.Screen name="QRCodeLeitor" component={QRCodeLeitor} />
+                    {/* Fim telas de compartilhamento do churrasco */}
 
-            </AppStack.Navigator>
- 
-        </NavigationContainer>
+                    {/* Inicio telas de criação do churrasco */}
+                    <AppStack.Screen name="InicioCriaChurras" component={InicioCriaChurras} />
+                    <AppStack.Screen name="CriarChurrasco" component={CriarChurrasco} />
+                    <AppStack.Screen name="AdicionaConvidados" component={AdicionaConvidados} />
+                    <AppStack.Screen name="DetalheChurras" component={DetalheChurras} />
+                    <AppStack.Screen name="OpenContactList" component={OpenContactList} />
+                    <AppStack.Screen name="AdicionarPratoPrincipal" component={AdicionarPratoPrincipal} />
+                    <AppStack.Screen name="EscolherNovosItens" component={EscolherNovosItens} />
+                    <AppStack.Screen name="EscolherNovosItens2" component={EscolherNovosItens2} />
+                    <AppStack.Screen name="EscolherNovosItens3" component={EscolherNovosItens3} />
+                    <AppStack.Screen name="EscolherNovosItens4" component={EscolherNovosItens4} />
+                    <AppStack.Screen name="EscolherNovosItens5" component={EscolherNovosItens5} />
+                    <AppStack.Screen name="AdicionarAcompanhamento" component={AdicionarAcompanhamento} />
+                    <AppStack.Screen name="AdicionarBebidas" component={AdicionarBebidas} />
+                    <AppStack.Screen name="AdicionarExtras" component={AdicionarExtras} />
+                    <AppStack.Screen name="AdicionarSobremesas" component={AdicionarSobremesas} />
+                    <AppStack.Screen name="FinalCriaChurras" component={FinalCriaChurras} />
+                    {/* Fim telas de criação do churrasco */}
+                </AppStack.Navigator>
+            </NavigationContainer>
         </ChurrasProvider>
     );
 }

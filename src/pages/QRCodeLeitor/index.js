@@ -15,24 +15,25 @@ export default function QRCodeLeitor() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [visivel, setIsVisivel] = React.useState(false);
+    const [qrCode, setQrCode] = useState(true);
     const [qrCodeValue, setQrCodeValue] = React.useState('');
 
-    function goback() {
-        navigation.goBack();
+    function goBack() {
+        setQrCode(false)
+        navigation.replace('ParticiparChurrasco')
     }
 
 
-    function participarDoChurras(){
+    function participarDoChurras() {
         setIsVisivel(false);
-        console.log(qrCodeValue+ "    " + USUARIOLOGADO.id)
+        console.log(qrCodeValue + "    " + USUARIOLOGADO.id)
 
         api.post(`/convidadosChurras/${USUARIOLOGADO.id}`, {
-
             valorPagar: 20.50,
             churras_id: churrasId
-            
-          });
-          return navigation.replace('Tabs');
+        });
+        setQrCode(false)
+        return navigation.replace('Tabs');
     }
 
     useEffect(() => {
@@ -51,24 +52,28 @@ export default function QRCodeLeitor() {
     return (
 
         <View style={style.container}>
-            <View style={style.header}>
-                <TouchableOpacity onPress={goback}>
-                    <IconOct name="chevron-left" size={25} style={style.backBtn} />
-                </TouchableOpacity>
-                <Text style={style.titulo}>Ler QR</Text>
-            </View>
-            <View
-                style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'flex-end',
-                    marginVertical:"20%",
-                }}>
-                <BarCodeScanner
-                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                    style={StyleSheet.absoluteFillObject}
-                />
-            </View>
+            <BarCodeScanner
+                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                style={[StyleSheet.absoluteFill, style.cameraContainer]}
+            />
+            <Modal
+                animationType="none"
+                transparent={true}
+                visible={qrCode}
+            >
+
+                <View style={style.header}>
+                    <Text style={style.titulo}>Ler QR code</Text>
+                    <TouchableOpacity onPress={() => goBack()} style={style.backBtnTo}>
+                        <IconOct name="chevron-left" size={25} style={style.backBtn} />
+                    </TouchableOpacity>
+                </View>
+                <View style={style.centeredViewQr}>
+                    <View style={style.modalViewQr}>
+                    </View>
+                </View>
+            </Modal>
+
             <Modal
                 animationType="slide"
                 transparent={true}

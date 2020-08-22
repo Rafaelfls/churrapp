@@ -61,21 +61,25 @@ export default function AdicionaConvidados({ route, navigation }) {
     setMaxChar(atual)
   }
 
-  console.log(churrasAtual)
-  async function criaSenha(convid) {
-    const senha = Math.random() * (9999 - 0) + 0;
+  async function criaSenha(convid,telefone) {
     convid.senha = await Crypto.digestStringAsync(
-        Crypto.CryptoDigestAlgorithm.SHA512,
-        senha+"churrapp"
+      Crypto.CryptoDigestAlgorithm.SHA512,
+       telefone
     );
-    console.log(convid)
-}
+    console.log("Senha= ",telefone )
+  }
 
   async function criaListaConvidados(convid) {
-    convid.telefone = convid.telefone.replace("+55", "");
-    convid.telefone = convid.telefone.replace(/-/g, "");
-    convid.telefone = convid.telefone.replace(/\s/g, "");
+    convid.telefone = convid.telefone.replace("+55", "").replace(/-/g, "").replace(/\s/g, "").replace(/[()]/g, "");
 
+    if(convid.telefone.length > 11){
+      convid.telefone = convid.telefone.substring(convid.telefone.length-11)
+    }
+    
+    let senhaProvisoria = convid.telefone.substring(convid.telefone.length-9)
+    console.log(convid)
+    await criaSenha(convid, senhaProvisoria)
+    
     const response = await api.post('/usuarios', {
       nome: convid.nome,
       sobrenome: convid.sobrenome,
@@ -83,11 +87,11 @@ export default function AdicionaConvidados({ route, navigation }) {
       cidade: "cidade",
       uf: "uf",
       idade: "20/02/2002",
-      fotoUrlU: null,
+      fotoUrlU: "https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png",
       celular: convid.telefone,
       cadastrado: false,
       apelido: convid.nome,
-      senha:convid.telefone,
+      senha: convid.senha,
       pontoCarne_id: 0,
       carnePreferida_id: 0,
       quantidadeCome_id: 0,
@@ -114,7 +118,6 @@ export default function AdicionaConvidados({ route, navigation }) {
   async function next() {
     const convidadosQtd = convidadosList.length
 
-    await convidadosList.map(convid => criaSenha(convid))
     await convidadosList.map(convid => criaListaConvidados(convid))
     await convidadosList.map(convid => enviaMensagens(convid.telefone, convite))
 
@@ -127,9 +130,9 @@ export default function AdicionaConvidados({ route, navigation }) {
   function backHome() {
     convidadosList = []
     api.delete(`/churras/${churrasAtual.churrasCode}`, config)
-    .then(function(response){
+      .then(function (response) {
         navigation.replace('Tabs');
-    })
+      })
   }
 
   function openContactList() {
@@ -137,7 +140,7 @@ export default function AdicionaConvidados({ route, navigation }) {
   }
 
   function enviaMensagens(telefone, convite) {
-    console.log("telefone",telefone)
+    console.log("telefone", telefone)
     Linking.canOpenURL(`whatsapp://send?text=${convite}`).then(supported => {
       if (supported) {
         if (convite === '') {
@@ -148,7 +151,7 @@ export default function AdicionaConvidados({ route, navigation }) {
         return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${telefone}&text=${convite}`)
       }
     })
-    
+
   }
 
   return (

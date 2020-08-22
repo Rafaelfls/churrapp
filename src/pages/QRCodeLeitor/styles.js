@@ -5,26 +5,40 @@ export default StyleSheet.create({
 
   container: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight+15,
-    backgroundColor: '#fff'
+    backgroundColor: '#800000'
   },
 
   header: {
     flexDirection: 'row',
+    paddingTop: Constants.statusBarHeight,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 10,
     paddingBottom: 10,
     backgroundColor: '#800000',
+    zIndex:1,
   },
 
   backBtn: {
-    paddingRight: 100,
     color:"white",
   },
+  
+  backBtnTo: {
+    position:"absolute",
+    left:0,
+    paddingHorizontal:25,
+    top:Constants.statusBarHeight + 5,
+  },
+
+  cameraContainer: {
+    marginHorizontal: 0, marginLeft: 0, marginStart: 0,
+    paddingHorizontal: 0, paddingLeft: 0, paddingStart: 0,
+    marginTop:40,
+    height: '109%',
+    padding: 0,
+    backgroundColor:'maroon'
+},
 
   titulo: {
-    paddingRight: 110,
     fontSize: 25,
     fontWeight: 'bold',
     color:"white",
@@ -67,24 +81,43 @@ export default StyleSheet.create({
     marginHorizontal: 7,
   },
   salvarBtn: {
-    marginTop: 15,
     flexDirection: 'row-reverse',
-    backgroundColor: 'black',
+    backgroundColor: '#800000',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
     borderRadius: 8,
-    padding: 5,
+    alignItems: 'center',
   },
   iconSalvarBtn: {
-    color: 'gold',
+    color: 'white',
     paddingHorizontal: 5,
   },
   textSalvarBtn: {
-    color: 'gold',
+    color: 'white',
     paddingHorizontal: 5,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     width: '100%',
-  }
+  },
+
+  //qrCode modal
+  centeredViewQr: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalViewQr: {
+    margin: 20,
+    backgroundColor: "transparent",
+    borderRadius: 8,
+    padding: 100,
+    marginTop:0,
+    alignItems: "center",
+    borderColor:'maroon',
+    borderStyle:'dotted',
+    borderWidth:2,  
+  },
 
 });

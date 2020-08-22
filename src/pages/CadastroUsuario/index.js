@@ -27,7 +27,7 @@ export default function CadastroUsuario() {
     const [pontoCarne_id, setPontoCarne_id] = useState(0);
     const [quantidadeCome_id, setQuantidadeCome_id] = useState(0);
     const [visivel, setVisivel] = useState(false)
-    const [url, setUrl] = useState(null)
+    const [url, setUrl] = useState("https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png")
     const [image, setImage] = useState({ cancelled: true });
 
     const [borderColorRed1, setBorderColorRed1] = useState(style.formOk);
@@ -64,14 +64,18 @@ export default function CadastroUsuario() {
     }
 
     async function criptoSenha(senha) {
-        const criptoSenha = await Crypto.digestStringAsync(
-            Crypto.CryptoDigestAlgorithm.SHA512,
-            senha
-        );
-        setSenhaUsuario(criptoSenha)
+        if (senha.length < 8) {
+            setSenhaUsuario('')
+        }else{
+            const criptoSenha = await Crypto.digestStringAsync(
+                Crypto.CryptoDigestAlgorithm.SHA512,
+                senha
+            );
+            setSenhaUsuario(criptoSenha)
+        }
     }
 
-    async function uploadImage(){
+    async function uploadImage() {
         if (!image.cancelled) {
             let apiUrl = 'https://pure-island-99817.herokuapp.com/fotosUsuarios';
             let uriParts = image.uri.split('.');

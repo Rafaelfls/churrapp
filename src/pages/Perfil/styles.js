@@ -94,6 +94,10 @@ export default StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontFamily: 'poppins-regular',
+    paddingHorizontal:5,
+  },
+  containerIdade:{
+    flexDirection:'row',
   },
   footerModal: {
     marginTop: 10,

@@ -15,7 +15,7 @@ import style from './styles';
 import { useChurrasCount } from '../../context/churrasContext';
 
 export default function ResumoChurras() {
-    const {churrasCount, setChurrasCount} = useChurrasCount();
+    const { churrasCount, setChurrasCount } = useChurrasCount();
 
     const route = useRoute();
     const [churras, setChurras] = useState([]);
@@ -23,7 +23,8 @@ export default function ResumoChurras() {
     const [loading, setLoading] = useState(false);
     const [visivel, setVisivel] = useState(false)
     const [churrasDeletar, setChurrasDeletar] = useState([]);
-    const [refreshChurras, setRefreshChurras] = useState([]);
+    const [refreshChurras, setRefreshChurras] = useState(true);
+    
     const config = {
         headers: { 'Authorization': USUARIOLOGADO.id }
     };
@@ -32,12 +33,13 @@ export default function ResumoChurras() {
 
     function deletar(churrass) {
         setLoading(true)
-        setChurrasCount( churrasCount - 1)
-        api.delete(`/churras/${churrass.id}`, config).then(function(){
+        setChurrasCount(churrasCount - 1)
+        api.delete(`/churras/${churrass.id}`, config).then(function () {
             setVisivel(!visivel)
+            setLoading(false)
+            setRefreshChurras(!refreshChurras)
         });
 
-        setLoading(false)
     }
 
     function logout() {
@@ -68,27 +70,31 @@ export default function ResumoChurras() {
         setChurrasCount(response.data.length);
         setLoading(false);
     }
-    async function onRefresh() {
-        setLoading(true);
 
-
-
-        const response = await api.get(`/churras/${USUARIOLOGADO.id}`);
-
-        setChurras(response.data);
-        setChurrasCount(response.data.length);
-        setLoading(false);
-
+    function formatData(data) {
+        var date = new Date(data).getDate()+1
+        var month = new Date(data).getMonth()+1
+        var year = new Date(data).getFullYear()
+        return date + '/' + month + '/' + year
     }
 
     useEffect(() => {
         loadChurras();
-    }, []);
+    }, [refreshChurras]);
+
+    function menu(){
+        console.log("abre menu lateral")
+    }
 
     return (
         <View style={style.container}>
 
             <View style={style.header}>
+                <View style={style.menuBtn}>
+                    <TouchableOpacity onPress={menu}>
+                        <IconMCI style={style.menuIcon} name="menu" size={25} />
+                    </TouchableOpacity>
+                </View>
                 <View style={style.titulo}>
                     <Text style={style.textHeader}>Meus churras</Text>
                     <Text style={style.textSubHeader}>Você tem {churrasCount} churras criados</Text>
@@ -106,32 +112,31 @@ export default function ResumoChurras() {
                 showsVerticalScrollIndicator={false}
                 keyExtractor={churras => String(churras.id)}
                 onEndReachedThreshold={0.2}
-                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => onRefresh()} />}
                 renderItem={({ item: churras }) => (
                     <View>
                         <View style={style.churras}>
                             <View style={style.churrasDescricao}>
                                 <RNSlidingButton
-                                    style={{ backgroundColor: 'white', width: "95%"}}
+                                    style={{ backgroundColor: 'white', width: "95%" }}
                                     height={100}
                                     onSlidingSuccessLeft={() => { setVisivel(true); setChurrasDeletar(churras) }}
                                     onSlidingSuccessRight={() => detalheChurras(churras)}
                                     slideDirection={SlideDirection.ANY}>
-                                    <View style={{flexDirection:"row", width:'100%'}}>
+                                    <View style={{ flexDirection: "row", width: '100%' }}>
                                         <View style={style.detalheSlide}>
                                             <Icon name="info" size={24} color="white" />
                                         </View>
                                         <View style={style.slideBtn}>
-                                            <Image source={{uri:churras.fotoUrlC}} style={style.churrasFoto} />
+                                            <Image source={{ uri: churras.fotoUrlC }} style={style.churrasFoto} />
                                             <View style={style.churrasInfosView}>
                                                 <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
                                                 <Text style={style.churrasDono}>{churras.nome} </Text>
                                                 <View style={style.churrasLocDat}>
+                                                <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                                    <Text style={style.churrasData}> {formatData(churras.data)}</Text>
+                                                    <Text style={style.locDatSeparator}>  |  </Text>
                                                     <IconEnt style={style.localIcon} name="location-pin" size={15} />
                                                     <Text style={style.churrasLocal}> {churras.local}</Text>
-                                                    <Text style={style.locDatSeparator}>  |  </Text>
-                                                    <IconFea style={style.dataIcon} name="calendar" size={15} />
-                                                    <Text style={style.churrasData}> {churras.data}</Text>
                                                 </View>
                                             </View>
                                         </View>
@@ -162,7 +167,7 @@ export default function ResumoChurras() {
             >
                 <View style={style.centeredView}>
                     <View style={style.modalView}>
-                        <Text style={style.modalText}>Desistiu de armar o churras <Text style={{fontWeight:'bold'}}>{churrasDeletar.nomeChurras}</Text>? </Text>
+                        <Text style={style.modalText}>Desistiu de armar o churras <Text style={{ fontWeight: 'bold' }}>{churrasDeletar.nomeChurras}</Text>? </Text>
                         <View style={style.footerModal}>
                             <TouchableOpacity style={style.exitBtn} onPress={() => setVisivel(false)}>
                                 <Icon style={style.iconSalvarBtn} name="times" size={20} />
@@ -176,7 +181,7 @@ export default function ResumoChurras() {
                     </View>
                 </View>
             </Modal>
-                      
+
             {/* <Modal
                 animationType="fade"
                 transparent={true}

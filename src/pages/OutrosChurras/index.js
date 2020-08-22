@@ -63,13 +63,20 @@ export default function OutrosChurras() {
         setLoading(false);
     }
 
+    function formatData(data) {
+        var date = new Date(data).getDate()+1
+        var month = new Date(data).getMonth()+1
+        var year = new Date(data).getFullYear()
+        return date + '/' + month + '/' + year
+    }
+
     useEffect(() => {
         loadChurrasPassados();
         loadChurrasFuturos();
     }, []);
 
     function detalheChurras(churras) {
-        navigation.push('DetalheChurras', { churras:churras,allowShare:false, editavel: false });
+        navigation.navigate('DetalheChurras', { churras, allowShare: false, editavel: false });
     }
 
     return (
@@ -107,16 +114,16 @@ export default function OutrosChurras() {
                                 <View style={style.churras}>
                                     <View style={style.churrasDescricao}>
                                         <View style={style.slideBtn}>
-                                            <Image source={{uri:churras.fotoUrlC}} style={style.churrasFoto} />
+                                            <Image source={{ uri: churras.fotoUrlC }} style={style.churrasFoto} />
                                             <View style={style.churrasInfosView}>
                                                 <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
                                                 <Text style={style.churrasDono}>{churras.nome} </Text>
                                                 <View style={style.churrasLocDat}>
+                                                    <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                                    <Text style={style.churrasData}> {formatData(churras.data)}</Text>
+                                                    <Text style={style.locDatSeparator}>  |  </Text>
                                                     <IconEnt style={style.localIcon} name="location-pin" size={15} />
                                                     <Text style={style.churrasLocal}> {churras.local}</Text>
-                                                    <Text style={style.locDatSeparator}>  |  </Text>
-                                                    <IconFea style={style.dataIcon} name="calendar" size={15} />
-                                                    <Text style={style.churrasData}> {churras.data}</Text>
                                                 </View>
                                             </View>
                                         </View>
@@ -142,16 +149,16 @@ export default function OutrosChurras() {
                                 <View style={style.churras}>
                                     <View style={style.churrasDescricao}>
                                         <View style={style.slideBtn}>
-                                            <Image source={{uri:churras.fotoUrlC}} style={style.churrasFoto} />
+                                            <Image source={{ uri: churras.fotoUrlC }} style={style.churrasFoto} />
                                             <View style={style.churrasInfosView}>
                                                 <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
                                                 <Text style={style.churrasDono}>{churras.nome} </Text>
                                                 <View style={style.churrasLocDat}>
+                                                <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                                    <Text style={style.churrasData}> {formatData(churras.data)}</Text>
+                                                    <Text style={style.locDatSeparator}>  |  </Text>
                                                     <IconEnt style={style.localIcon} name="location-pin" size={15} />
                                                     <Text style={style.churrasLocal}> {churras.local}</Text>
-                                                    <Text style={style.locDatSeparator}>  |  </Text>
-                                                    <IconFea style={style.dataIcon} name="calendar" size={15} />
-                                                    <Text style={style.churrasData}> {churras.data}</Text>
                                                 </View>
                                             </View>
                                         </View>

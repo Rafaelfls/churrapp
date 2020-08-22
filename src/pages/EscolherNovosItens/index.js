@@ -30,9 +30,9 @@ export default function EscolherNovosItens({ route, navigation }) {
         const responseUnidade = await api.get(`/unidade`);
         const responseTipos = await api.get(`/tipoSubTipo?subTipo=${1}`);
 
-        setUnidades([...unidades, ...responseUnidade.data]);
-        setItem([...item, ...responseItem.data]);
-        setTipo([...tipo, ...responseTipos.data]);
+        setUnidades(responseUnidade.data);
+        setItem(responseItem.data);
+        setTipo(responseTipos.data);
     }
 
     useEffect(() => {
