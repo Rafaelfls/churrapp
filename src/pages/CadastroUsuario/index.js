@@ -100,7 +100,6 @@ export default function CadastroUsuario() {
 
             const res = await fetch(apiUrl, options);
             const response = await res.json();
-            console.log(response.location)
             return response.location
         } else {
             return url
@@ -200,8 +199,6 @@ export default function CadastroUsuario() {
             allowsEditing: true,
             aspect: [1, 1],
         });
-
-        console.log("res", result);
 
         if (!result.cancelled) {
             setImage(result);

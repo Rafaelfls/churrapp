@@ -82,22 +82,21 @@ export default function EscolherNovosItens({ route, navigation }) {
                         <Icon style={style.iconHeaderBtn} name="arrow-alt-circle-left" size={20} />
                     </TouchableOpacity>
                 </View>
-
-                <FlatList
-                    data={tipo}
-                    horizontal={true}
-                    keyExtractor={tipo => String(tipo.id)}
-                    showsHorisontalScrollIndicator={false}
-                    renderItem={({ item: tipo }) => (
-                        <View style={style.filtroL} >
-                            <TouchableOpacity style={style.tiposDeItenscard} onPress={() => setFiltroTipo(tipo.id)}>
-                                <Text style={style.tiposDeItenstextCard}>{tipo.tipo}</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                />
-
-
+                <View style={{ height: 70 }}>
+                    <FlatList
+                        data={tipo}
+                        horizontal={true}
+                        keyExtractor={tipo => String(tipo.id)}
+                        showsHorisontalScrollIndicator={false}
+                        renderItem={({ item: tipo }) => (
+                            <View style={style.filtroL} >
+                                <TouchableOpacity style={style.tiposDeItenscard} onPress={() => setFiltroTipo(tipo.id)}>
+                                    <Text style={style.tiposDeItenstextCard}>{tipo.tipo}</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    />
+                </View>
                 <FlatList
                     data={item}
                     keyExtractor={item => String(item.id)}
@@ -154,7 +153,6 @@ export default function EscolherNovosItens({ route, navigation }) {
                                 <NumericInput
                                     value={quantidadeModal}
                                     onChange={quantNova => setQuantidadeModal(quantNova)}
-                                    onLimitReached={(isMax, msg) => console.log(isMax, msg)}
                                     totalWidth={150}
                                     totalHeight={30}
                                     iconSize={15}

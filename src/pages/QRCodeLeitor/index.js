@@ -26,8 +26,6 @@ export default function QRCodeLeitor() {
 
     function participarDoChurras() {
         setIsVisivel(false);
-        console.log(qrCodeValue + "    " + USUARIOLOGADO.id)
-
         api.post(`/convidadosChurras/${USUARIOLOGADO.id}`, {
             valorPagar: 20.50,
             churras_id: churrasId

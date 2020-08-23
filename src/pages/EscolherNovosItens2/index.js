@@ -112,7 +112,6 @@ export default function EscolherNovosItens2({ route, navigation }) {
                                 <NumericInput
                                     value={quantidadeModal}
                                     onChange={quantNova => setQuantidadeModal(quantNova)}
-                                    onLimitReached={(isMax, msg) => console.log(isMax, msg)}
                                     totalWidth={150}
                                     totalHeight={30}
                                     iconSize={15}

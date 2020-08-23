@@ -106,7 +106,6 @@ export default function DetalheChurras() {
 
   async function addItem(isVisible, item, unidadeDrop, qtdNova) {
     setIsVisivel(isVisible)
-    console.log(churras)
     await api.post('/listadochurras', {
       quantidade: qtdNova,
       churras_id: churras.id,
@@ -142,7 +141,6 @@ export default function DetalheChurras() {
   }
 
   async function deleteItem(itens){
-    console.log("ajdfnaeljfnaeljefnaef", itens)
     await api.delete(`/listadochurras/${itens.id}`) 
     .then(function(response){
       setRefresh(!refresh);
@@ -392,7 +390,6 @@ export default function DetalheChurras() {
               <NumericInput
                 value={quantidadeModal}
                 onChange={quantNova => setQuantidadeModal(quantNova)}
-                onLimitReached={(isMax, msg) => console.log(isMax, msg)}
                 totalWidth={150}
                 totalHeight={30}
                 iconSize={15}

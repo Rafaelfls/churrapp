@@ -39,8 +39,6 @@ export default function ParticiparChurrasco() {
             valorPagar: 30,
             churras_id: churras_id
         });
-        console.log("POSTADO " + USUARIOLOGADO.id + " - " + churras_id)
-
         return navigation.replace('Tabs')
     }
 

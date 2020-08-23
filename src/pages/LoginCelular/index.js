@@ -21,7 +21,6 @@ export default function LoginCelular() {
         await api.get(`/usuariosCel/${celularUser}/${criptoSenhaVar}`)
         .then(function(response){
             if(response.data[0] == undefined){
-                console.log(response)
                 return setVisivel(true)
             }else{
                 USUARIOLOGADO = response.data[0]

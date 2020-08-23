@@ -42,7 +42,6 @@ export default function AdicionaConvidados({ route, navigation }) {
     if ($sobrenome == undefined) {
       $sobrenome = '';
     }
-    console.log(convidadosList.length)
     convidadosList.push({
       id: convidadosList.length,
       nome: $nome,
@@ -66,7 +65,6 @@ export default function AdicionaConvidados({ route, navigation }) {
       Crypto.CryptoDigestAlgorithm.SHA512,
        telefone
     );
-    console.log("Senha= ",telefone )
   }
 
   async function criaListaConvidados(convid) {
@@ -77,7 +75,6 @@ export default function AdicionaConvidados({ route, navigation }) {
     }
     
     let senhaProvisoria = convid.telefone.substring(convid.telefone.length-9)
-    console.log(convid)
     await criaSenha(convid, senhaProvisoria)
     
     const response = await api.post('/usuarios', {
@@ -98,7 +95,6 @@ export default function AdicionaConvidados({ route, navigation }) {
       bebidaPreferida_id: 0,
       acompanhamentoPreferido_id: 0
     }).then(async function (response) {
-      console.log(response.data[0].id)
       await api.post(`/convidadosChurras/${response.data[0].id}`, {
         valorPagar: value,
         churras_id: churrasAtual.churrasCode
@@ -140,7 +136,6 @@ export default function AdicionaConvidados({ route, navigation }) {
   }
 
   function enviaMensagens(telefone, convite) {
-    console.log("telefone", telefone)
     Linking.canOpenURL(`whatsapp://send?text=${convite}`).then(supported => {
       if (supported) {
         if (convite === '') {

@@ -79,8 +79,6 @@ export default function CriarChurrasco() {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
       setImage(result);
     }
@@ -111,7 +109,7 @@ export default function CriarChurrasco() {
 
       const res = await fetch(apiUrl, options);
       const response = await res.json();
-      console.log(response.location)
+      
       return response.location
     } else {
       return url
