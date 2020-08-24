@@ -31,9 +31,9 @@ export default function EscolherNovosItens5({ route, navigation }) {
         const responseTipos = await api.get(`/tipoSubTipo?subTipo=${5}`);
 
 
-        setUnidades([...unidades, ...responseUnidade.data]);
-        setItem([...item, ...responseItem.data]);
-        setTipo([...tipo, ...responseTipos.data]);
+        setUnidades(responseUnidade.data);
+        setItem(responseItem.data);
+        setTipo(responseTipos.data);
     }
 
     useEffect(() => {
@@ -82,9 +82,9 @@ export default function EscolherNovosItens5({ route, navigation }) {
                     renderItem={({ item: item }) => (
                         <View >
                             <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
-                                {item.fotoUrlI == null
-                                    ? <Image source={{ uri: "https://churrappuploadteste.s3.amazonaws.com/default/tipo_" + item.tipo_id + ".jpg" }} style={style.churrasFoto} />
-                                    : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
+                            {item.fotoUrlI == null
+                                        ? <Image source={{ uri: item.fotoUrlT }} style={style.churrasFoto} />
+                                        : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
                                 <View style={style.churrasInfosView}>
                                     <Text style={style.churrasTitle}>{item.nomeItem}</Text>
                                     <Text style={style.churrasDono}>{item.descricao} </Text>

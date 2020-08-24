@@ -106,7 +106,7 @@ export default function EscolherNovosItens({ route, navigation }) {
                             {filtro == null ? (
                                 <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
                                     {item.fotoUrlI == null
-                                        ? <Image source={{ uri: "https://churrappuploadteste.s3.amazonaws.com/default/tipo_" + item.tipo_id + ".jpg" }} style={style.churrasFoto} />
+                                        ? <Image source={{ uri: item.fotoUrlT }} style={style.churrasFoto} />
                                         : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
                                     <View style={style.churrasInfosView}>
                                         <Text style={style.churrasTitle}>{item.nomeItem}</Text>
@@ -123,7 +123,7 @@ export default function EscolherNovosItens({ route, navigation }) {
                             ) : filtro == item.tipo_id ? (
                                 <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
                                     {item.fotoUrlI == null
-                                        ? <Image source={{ uri: "https://churrappuploadteste.s3.amazonaws.com/default/tipo_" + item.tipo_id + ".jpg" }} style={style.churrasFoto} />
+                                        ? <Image source={{ uri: item.fotoUrlT }} style={style.churrasFoto} />
                                         : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
                                     <View style={style.churrasInfosView}>
                                         <Text style={style.churrasTitle}>{item.nomeItem}</Text>
