@@ -199,6 +199,10 @@ export default function Perfil() {
                                     <Text style={style.infosRight}>{usuario.bebidaPreferida}</Text>
                                     <IconFA5 name="beer" size={18} />
                                 </View>
+                                <View style={style.containerInfos}>
+                                    <Text style={style.infosRight}>{usuario.sobremesaPreferida}</Text>
+                                    <IconFA5 name="candy-cane" size={18} />
+                                </View>
                             </View>
                         </View>
                     </View>
