@@ -28,19 +28,15 @@ export default function AdicionarSobremesas({ route,navigation }) {
     };
 
     async function carregaMinhaLista() {
-        console.log("carregaMinhaLista")
         await api.get(`/listadochurras/subTipo/${churrascode}/${5}`)
             .then(async function (response) {
                 setItemList([])
-                console.log("listadochurras", response.data)
                 if (response.data == 0) {
-                    console.log("carregaSugestao")
                     await api.get(`/sugestao/${5}`).then(function (response) {
                         setItemList(response.data);
                         setIsSugestao(true)
                     });
                 } else {
-                    console.log("carregaLista", response.data.length)
                     setItemList(response.data);
                     setIsSugestao(false)
                 }

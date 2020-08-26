@@ -22,7 +22,7 @@ export default function CriarChurrasco() {
   const [image, setImage] = useState({ cancelled: true });
   const [churrasCodeCriado, setChurrasCodeCriado] = useState('')
   const [visivel, setVisivel] = useState(false)
-  const [url] = useState("https://churrappuploadteste.s3.amazonaws.com/default/churrasco_default.png")
+  const [url] = useState("https://churrappuploadteste.s3.amazonaws.com/default/churrapp_default.png")
 
   const [borderColorRed1, setBorderColorRed1] = useState(style.formOk);
   const [borderColorRed2, setBorderColorRed2] = useState(style.formOk);
@@ -79,8 +79,6 @@ export default function CriarChurrasco() {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
       setImage(result);
     }
@@ -111,7 +109,7 @@ export default function CriarChurrasco() {
 
       const res = await fetch(apiUrl, options);
       const response = await res.json();
-      console.log(response.location)
+      
       return response.location
     } else {
       return url

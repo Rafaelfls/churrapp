@@ -42,7 +42,6 @@ export default StyleSheet.create({
         paddingBottom: 10,
     },
     churrasLocalContainer: {
-        marginBottom: 9,
         flexDirection: 'row',
         alignItems: 'center',
     },
@@ -71,7 +70,7 @@ export default StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 10,
         opacity: 0.8,
-        fontSize: 35,
+        fontSize: 30,
     },
     //Rodapé
     footer: {

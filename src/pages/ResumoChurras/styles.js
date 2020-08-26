@@ -10,14 +10,13 @@ export default StyleSheet.create({
     backgroundColor: '#fff'
   },  
   header: {
-    justifyContent: 'space-between',
-    alignItems: "flex-start",
+    justifyContent: 'center',
+    alignItems: "center",
     flexDirection: 'row',
     marginHorizontal: 20,
     marginBottom: 15,
   },
   titulo: {
-    paddingHorizontal: 40
   },
   textHeader: {
     fontSize: 30,
@@ -33,8 +32,16 @@ export default StyleSheet.create({
     position:"absolute",
     right: 0,
     top: 10,
+  },  
+  menuBtn:{
+    position:"absolute",
+    left: 0,
+    top: 10,
   },
   signOutIcon:{
+    color: 'gray',
+  },
+  menuIcon:{
     color: 'gray',
   },
 
@@ -127,7 +134,6 @@ export default StyleSheet.create({
     color: 'orangered',
     marginBottom: 2,
     fontFamily: 'poppins-medium',
-    width:'45%',
   },
 
   //fabButton

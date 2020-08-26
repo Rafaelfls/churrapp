@@ -30,11 +30,9 @@ export default function EscolherNovosItens3({ route, navigation }) {
         const responseUnidade = await api.get(`/unidade`);
         const responseTipos = await api.get(`/tipoSubTipo?subTipo=${3}`);
 
-        console.log(responseItem)
-
-        setUnidades([...unidades, ...responseUnidade.data]);
-        setItem([...item, ...responseItem.data]);
-        setTipo([...tipo, ...responseTipos.data]);
+        setUnidades(responseUnidade.data);
+        setItem(responseItem.data);
+        setTipo(responseTipos.data);
     }
 
     useEffect(() => {
@@ -84,21 +82,21 @@ export default function EscolherNovosItens3({ route, navigation }) {
                         <Icon style={style.iconHeaderBtn} name="arrow-alt-circle-left" size={20} />
                     </TouchableOpacity>
                 </View>
-
-                <FlatList
-                    data={tipo}
-                    horizontal={true}
-                    keyExtractor={tipo => String(tipo.id)}
-                    showsHorisontalScrollIndicator={false}
-                    renderItem={({ item: tipo }) => (
-                        <View style={style.filtroL} >
-                            <TouchableOpacity style={style.tiposDeItenscard} onPress={() => setFiltroTipo(tipo.id)}>
-                                <Text style={style.tiposDeItenstextCard}>{tipo.tipo}</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                />
-
+                <View style={{ height: 70 }}>
+                    <FlatList
+                        data={tipo}
+                        horizontal={true}
+                        keyExtractor={tipo => String(tipo.id)}
+                        showsHorisontalScrollIndicator={false}
+                        renderItem={({ item: tipo }) => (
+                            <View style={style.filtroL} >
+                                <TouchableOpacity style={style.tiposDeItenscard} onPress={() => setFiltroTipo(tipo.id)}>
+                                    <Text style={style.tiposDeItenstextCard}>{tipo.tipo}</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    />
+                </View>
 
                 <FlatList
                     data={item}
@@ -109,7 +107,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                             {filtro == null ? (
                                 <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
                                     {item.fotoUrlI == null
-                                        ? <Image source={{ uri: "https://churrappuploadteste.s3.amazonaws.com/default/tipo_" + item.tipo_id + ".jpg" }} style={style.churrasFoto} />
+                                        ? <Image source={{ uri: item.fotoUrlT }} style={style.churrasFoto} />
                                         : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
                                     <View style={style.churrasInfosView}>
                                         <Text style={style.churrasTitle}>{item.nomeItem}</Text>
@@ -126,7 +124,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                             ) : filtro == item.tipo_id ? (
                                 <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
                                     {item.fotoUrlI == null
-                                        ? <Image source={{ uri: "https://churrappuploadteste.s3.amazonaws.com/default/tipo_" + item.tipo_id + ".jpg" }} style={style.churrasFoto} />
+                                        ? <Image source={{ uri: item.fotoUrlT }} style={style.churrasFoto} />
                                         : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
                                     <View style={style.churrasInfosView}>
                                         <Text style={style.churrasTitle}>{item.nomeItem}</Text>
@@ -156,7 +154,6 @@ export default function EscolherNovosItens3({ route, navigation }) {
                                 <NumericInput
                                     value={quantidadeModal}
                                     onChange={quantNova => setQuantidadeModal(quantNova)}
-                                    onLimitReached={(isMax, msg) => console.log(isMax, msg)}
                                     totalWidth={150}
                                     totalHeight={30}
                                     iconSize={15}

@@ -9,37 +9,37 @@ export default StyleSheet.create({
   },
 
   //header
-  containerHeader:{
+  containerHeader: {
     flexDirection: 'row',
     paddingTop: Constants.statusBarHeight + 10,
     paddingBottom: '2%',
     backgroundColor: 'maroon',
 
   },
-  title:{
-    width:'70%',
-    marginTop:10,
+  title: {
+    width: '70%',
+    marginTop: 10,
   },
   detalheTitle: {
     fontSize: 30,
     marginBottom: 0,
     fontWeight: 'bold',
     color: 'white',
-    paddingBottom: 15, 
+    paddingBottom: 15,
     opacity: 0.9,
-    textAlign:"center",
+    textAlign: "center",
   },
-  backBtn:{
-    position:"relative",
-    top:0,
-    justifyContent:'center',
+  backBtn: {
+    position: "relative",
+    top: 0,
+    justifyContent: 'center',
     paddingHorizontal: 20,
   },
   shareBtn: {
-    position:"relative",
-    top:0,
-    right:0,
-    justifyContent:'center',
+    position: "relative",
+    top: 0,
+    right: 0,
+    justifyContent: 'center',
     paddingHorizontal: 20,
   },
 
@@ -48,13 +48,14 @@ export default StyleSheet.create({
     marginLeft: 15,
     marginBottom: 5,
     flexDirection: 'row',
-    justifyContent:  'space-between',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginRight: 15,
     marginTop: 10,
   },
   infosLocDat: {
     marginLeft: 5,
+    width: '70%'
   },
   churrasLocalContainer: {
     marginBottom: 9,
@@ -99,7 +100,7 @@ export default StyleSheet.create({
   },
 
   //linha
-  linhaDeSeparacao:{
+  linhaDeSeparacao: {
     backgroundColor: 'lightgray',
     height: 1,
     width: "90%",
@@ -109,30 +110,30 @@ export default StyleSheet.create({
   },
 
   //convidados
-  cabecalhoConvidados:{
+  cabecalhoConvidados: {
     flexDirection: 'row',
     marginHorizontal: 10,
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     marginTop: 5,
   },
-  containerTituloConvidados:{
+  containerTituloConvidados: {
     alignItems: 'flex-start',
   },
-  tituloConvidados:{
+  tituloConvidados: {
     fontSize: 17,
     fontWeight: 'bold',
   },
-  verTodos:{
+  verTodos: {
     fontWeight: 'bold',
   },
-  subtituloConvidados:{
+  subtituloConvidados: {
     fontSize: 17,
     opacity: 0.7,
   },
-  containerConvidados:{
+  containerConvidados: {
   },
-  convidado:{
+  convidado: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'maroon',
@@ -140,92 +141,103 @@ export default StyleSheet.create({
     margin: 10,
     height: 150,
   },
-  profileImg:{
+  profileImg: {
     height: 110,
     width: 100,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
   },
-  nomeConvidado:{
+  nomeConvidado: {
     color: 'white',
     padding: 3,
   },
-  foneConvidado:{
+  foneConvidado: {
     color: 'lightgray',
     paddingBottom: 12,
     fontSize: 12,
   },
 
   //Itens
-  cabecalhoItens:{
+  cabecalhoItens: {
     flexDirection: 'row',
     marginHorizontal: 10,
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     marginTop: 5,
   },
-  containerTituloItens:{
+  containerTituloItens: {
     alignItems: 'flex-start',
   },
-  tituloItens:{
+  tituloItens: {
     fontSize: 17,
     fontWeight: 'bold',
   },
-  verTodos:{
+  verTodos: {
     fontWeight: 'bold',
   },
-  subtituloItens:{
+  subtituloItens: {
     fontSize: 17,
     opacity: 0.7,
   },
-  containerItens:{
+  containerItens: {
   },
-  item:{
+  item: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: "#000",
+    backgroundColor: "#d3d3d3",
     borderRadius: 8,
     margin: 10,
     padding: 8,
     height: "90%",
   },
-  tiposDesign:{
+  tiposDesign: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: "maroon",
     borderRadius: 8,
-    margin: 20,
+    width: "100%",
+    marginVertical: 5,
     height: 70,
   },
-  subTiposDesign:{
+  subTiposDesign: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: "maroon",
     borderRadius: 8,
-    width: 200,
-    margin: 20,
+    width: "100%",
+    marginVertical: 5,
     height: 70,
   },
-  itensDesign:{
+  itensDesign: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: "#000",
+    backgroundColor: "maroon",
     borderRadius: 8,
-    margin: 20,
+    width: "100%",
+    marginVertical: 5,
     height: 70,
   },
-  itemImg:{
+  itemImg: {
     height: 110,
     width: 100,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
   },
-  nomeItem:{
-    color: '#fff',
+  nomeItemAdc: {
+    color: '#800000',
     padding: 3,
   },
-  qtdItem:{
-    color: 'gray',
+  qtdItemAdc: {
+    color: '#800000',
+    paddingBottom: 12,
+    fontSize: 12,
+  },
+  nomeItem: {
+    color: 'white',
+    padding: 3,
+  },
+  qtdItem: {
+    color: 'white',
     paddingBottom: 12,
     fontSize: 12,
   },
@@ -283,19 +295,31 @@ export default StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    height: '60%',
+    maxHeight: '60%',
+    height: 'auto',
   },
+  //subTipo  modal
   centeredSubTipoView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     position: 'absolute',
-    bottom: "45.5%",
+    bottom: 0,
     width: '100%',
     height: '60%',
   },
+  titleSubTipoModal: {
+    fontSize: 25,
+    marginBottom: 0,
+    fontWeight: 'bold',
+    color: 'black',
+    paddingBottom: 15,
+    opacity: 0.9,
+    textAlign: "center",
+  },
   footerModal: {
-    marginTop: 10,
+    margin: 10,
+    marginBottom: 25,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
   },
@@ -307,5 +331,170 @@ export default StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
+  iconSalvarBtn: {
+    marginLeft: 5,
+    color: 'white'
+  },
 
+  //cardModal
+
+  card: {
+    marginVertical: 5,
+    flexDirection: 'row',
+    paddingVertical: 10,
+    borderRadius: 8,
+    width: '100%',
+  },
+  textCard: {
+    justifyContent: "center",
+    alignSelf: 'center',
+    color: 'white',
+    fontSize: 36,
+  },
+  tiposDeItenscard: {
+    marginVertical: 5,
+    marginHorizontal: 7,
+    backgroundColor: 'maroon',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  tiposDeItenstextCard: {
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+    justifyContent: "center",
+    alignSelf: 'center',
+  },
+  iconTipo: {
+    justifyContent: "center",
+    alignSelf: 'center',
+    color: 'gold',
+    fontSize: 36,
+  },
+  //card itens
+
+  churrasFotoModal: {
+    width: 50,
+    height: 50,
+    borderRadius: 33,
+  },
+  churrasInfosViewModal: {
+    marginLeft: 10,
+  },
+  churrasTitleModal: {
+    fontSize: 15,
+    fontFamily: 'poppins-semi-bold',
+  },
+  churrasDonoModal: {
+    color: 'gray',
+    fontFamily: 'poppins-medium',
+  },
+  churrasLocDatModal: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+  },
+  localIconModal: {
+    color: 'steelblue',
+    paddingBottom: 5,
+  },
+  churrasLocalModal: {
+    fontSize: 13,
+    color: 'steelblue',
+    marginBottom: 2,
+    fontFamily: 'poppins-medium',
+    width: '40%',
+  },
+  locDatSeparatorModal: {
+    fontSize: 13,
+    color: 'gray',
+    marginBottom: 2,
+    fontFamily: 'poppins-medium',
+  },
+  dataIconModal: {
+    paddingBottom: 5,
+    color: 'orangered',
+  },
+  churrasDataModal: {
+    fontSize: 13,
+    color: 'orangered',
+    marginBottom: 2,
+    fontFamily: 'poppins-medium',
+    width: '45%',
+  },
+
+  //modalAdicionaQuantidade
+  
+  centeredViewQtd: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: '30%',
+  },
+  modalViewQtd: {
+    backgroundColor: "#f2f2f2",
+    width: '100%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 35,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    borderTopColor: "#d3d3d3",
+    borderTopWidth: 1,
+  },
+  iconSalvarBtnQtd: {
+    marginLeft: 5,
+    color: 'white'
+  },  
+  exitBtnFooterQtd: {
+    flexDirection: 'row-reverse',
+    backgroundColor: '#800000',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  salvarBtnQtd: {
+    flexDirection: 'row-reverse',
+    backgroundColor: '#800000',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 8,
+    alignItems: 'center',
+  }, 
+  footerModalQtd: {
+    marginTop:10,
+    marginBottom: 50,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
+  },
+  selectionFormQtd: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  boxDropdownQtd: {
+    paddingHorizontal: 70,
+    color: 'black',
+  },
+  titleSubTipoModalQtd: {
+    fontSize: 20,
+    marginBottom: 0,
+    fontWeight: 'bold',
+    color: 'black',
+    paddingBottom: 15,
+    opacity: 0.9,
+    textAlign: "center",
+  },
 });

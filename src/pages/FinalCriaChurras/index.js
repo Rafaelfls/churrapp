@@ -21,7 +21,7 @@ export default function FinalCriaChurras(){
                 <Text style={style.textHeader2}>Foi fácil, né?</Text>
             </View>
             <View style={style.btnContainer}>
-                <Text style={style.textHeader3}>Aproveita!</Text>
+                <Text style={style.textHeader3}>Aproveite!</Text>
                 <TouchableOpacity style = {style.continueBtn} onPress={() => next()}>
                     <Text style={style.textBtn}>Concluir</Text>
                 </TouchableOpacity>

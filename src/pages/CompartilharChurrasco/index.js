@@ -15,6 +15,7 @@ import style from './styles';
 export default function CompartilharChurrasco({ route, navigation }) {
     const rota = useRoute();
     const churras = rota.params.churras
+    const [churrasDateFormatted, setChurrasDateFormatted] = useState();
 
     function goBack() {
         navigation.goBack()
@@ -22,6 +23,17 @@ export default function CompartilharChurrasco({ route, navigation }) {
 
     const copyToClipboard = () => {
         Clipboard.setString(`${churras.id}`)
+    }
+
+    useEffect(() => {
+        formatData();
+    }, []);
+
+    function formatData() {
+        var date = new Date(churras.data).getDate() + 1
+        var month = new Date(churras.data).getMonth() + 1
+        var year = new Date(churras.data).getFullYear()
+        setChurrasDateFormatted(date + '/' + month + '/' + year)
     }
 
 
@@ -46,12 +58,17 @@ export default function CompartilharChurrasco({ route, navigation }) {
                 </View>
                 <View style={style.churrasDataContainer}>
                     <IconEnt name="calendar" size={22} style={style.dataIcon} />
-                    <Text style={style.churrasData}>{churras.data} - {churras.hrInicio}</Text>
+                    <Text style={style.churrasData}>{churrasDateFormatted}</Text>
                 </View>
+                <View style={style.churrasDataContainer}>
+                    <IconEnt name="clock" size={22} style={style.dataIcon} />
+                    <Text style={style.churrasData}>{churras.hrInicio}{churras.hrFim == null ? null : " - " + churras.hrFim}</Text>
+                </View>
+
 
                 <Text style={style.codigo} onPress={() => copyToClipboard()}>{churras.id}</Text>
                 <View style={style.qrCode}>
-                    <QRCode size={200} content={churras.id} />
+                    <QRCode size={180} logo={{ uri: churras.fotoUrlC }} logoSize={70} content={churras.id} />
                 </View>
             </View>
 

@@ -11,7 +11,7 @@ export default StyleSheet.create({
     },
 
     header: {
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: "center",
         flexDirection: 'row',
         marginHorizontal: 20,
@@ -68,8 +68,9 @@ export default StyleSheet.create({
 
     qrBtn:{
         flexDirection: 'row',
-        paddingLeft: 8
-        
+        alignItems: 'center',
+        textAlign:'center',
+        justifyContent: 'center',        
     },
 
     qrIcon:{
@@ -79,11 +80,4 @@ export default StyleSheet.create({
     backIcon:{
         color: 'black',
     },
-    exitBtn:{
-        justifyContent:'center',
-        paddingRight: 20,
-        alignSelf: 'center',
-        paddingBottom: 10
-      },
-    
 });
