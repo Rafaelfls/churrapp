@@ -32,7 +32,6 @@ export default function DetalheChurras() {
   const [churrasDateFormatted, setChurrasDateFormatted] = useState();
 
   const churras = route.params.churras;
-  const churrasId = route.params.churrasid
   const allowShare = route.params.allowShare;
   const editavel = route.params.editavel;
   const [modalTipoVisivel, setModalTipoVisivel] = useState(false);
@@ -45,6 +44,7 @@ export default function DetalheChurras() {
   const [itemModal, setItemModal] = React.useState('');
   const [visivel, setIsVisivel] = React.useState(false);
   const navigation = useNavigation();
+
 
   function CompartilharChurras(churras) {
     navigation.push('CompartilharChurrasco', { churras });
@@ -73,7 +73,7 @@ export default function DetalheChurras() {
   }
 
   async function carregarItens() {
-    const response = await api.get(`/listadochurras/${churrasId}`);
+    const response = await api.get(`/listadochurras/${churras.id}`);
 
     setItens(response.data);
     setItensTotal(response.data.length);
@@ -98,7 +98,7 @@ export default function DetalheChurras() {
   }
 
   async function carregarConvidados() {
-    const response = await api.get(`/convidados/${churrasId}`);
+    const response = await api.get(`/convidados/${churras.id}`);
 
     setConvidados(response.data);
     setConvidadosCount(response.data.length);
