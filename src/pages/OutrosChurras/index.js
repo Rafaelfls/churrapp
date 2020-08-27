@@ -31,7 +31,7 @@ export default function OutrosChurras() {
 
         setLoading(true);
 
-        const response = await api.get(`churraspassados`);
+        const response = await api.get(`churraspassados/${USUARIOLOGADO.id}`);
 
         setChurrasPassados(response.data);
         setTotal(response.headers['x-total-count']);
@@ -69,7 +69,7 @@ export default function OutrosChurras() {
     }, []);
 
     function detalheChurras(churras) {
-        navigation.navigate('DetalheChurras', { churras, allowShare: false, editavel: false, churrasid: churras.churras_id });
+        navigation.navigate('DetalheChurras', { churras, allowShare: false, editavel: false});
     }
 
     return (
