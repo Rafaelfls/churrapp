@@ -55,7 +55,7 @@ export default function ResumoChurras() {
     }
 
     function detalheChurras(churras) {
-        navigation.navigate('DetalheChurras', { churras, allowShare: true, editavel: true });
+        navigation.navigate('DetalheChurras', { churras, allowShare: true, editavel: true, churrasid: churras.id });
     }
 
 

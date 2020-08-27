@@ -32,6 +32,7 @@ export default function DetalheChurras() {
   const [churrasDateFormatted, setChurrasDateFormatted] = useState();
 
   const churras = route.params.churras;
+  const churrasId = route.params.churrasid
   const allowShare = route.params.allowShare;
   const editavel = route.params.editavel;
   const [modalTipoVisivel, setModalTipoVisivel] = useState(false);
@@ -72,7 +73,7 @@ export default function DetalheChurras() {
   }
 
   async function carregarItens() {
-    const response = await api.get(`/listadochurras/${churras.id}`);
+    const response = await api.get(`/listadochurras/${churrasId}`);
 
     setItens(response.data);
     setItensTotal(response.data.length);
@@ -97,7 +98,7 @@ export default function DetalheChurras() {
   }
 
   async function carregarConvidados() {
-    const response = await api.get(`/convidados/${churras.id}`);
+    const response = await api.get(`/convidados/${churrasId}`);
 
     setConvidados(response.data);
     setConvidadosCount(response.data.length);
@@ -117,6 +118,8 @@ export default function DetalheChurras() {
       setModalTipoVisivel(false)
     })
   }
+
+  
 
   function addItemVisivel() {
     if (editavel) {
@@ -233,7 +236,7 @@ export default function DetalheChurras() {
 
         <View style={style.cabecalhoItens}>
           <View style={style.containerTituloItens}>
-            <Text style={style.tituloItens}>Itens {itensTotal}</Text>
+            <Text style={style.tituloItens}>Itens</Text>
           </View>
           {addItemVisivel()}
         </View>

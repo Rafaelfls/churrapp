@@ -15,7 +15,6 @@ export default function OutrosChurras() {
     const [churrasPassado, setChurrasPassados] = useState([]);
     const [churrasFuturo, setChurrasFuturo] = useState([]);
     const [total, setTotal] = useState(0);
-    const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
 
 
@@ -32,13 +31,10 @@ export default function OutrosChurras() {
 
         setLoading(true);
 
-        const response = await api.get(`churraspassados`, {
-            params: { page }
-        });
+        const response = await api.get(`churraspassados`);
 
-        setChurrasPassados([...churrasPassado, ...response.data]);
+        setChurrasPassados(response.data);
         setTotal(response.headers['x-total-count']);
-        setPage(page + 1);
         setLoading(false);
     }
 
@@ -53,13 +49,10 @@ export default function OutrosChurras() {
 
         setLoading(true);
 
-        const response = await api.get(`churrasfuturo`, {
-            params: { page }
-        });
+        const response = await api.get(`churrasfuturo/${USUARIOLOGADO.id}`);
 
-        setChurrasFuturo([...churrasFuturo, ...response.data]);
+        setChurrasFuturo(response.data);
         setTotal(response.headers['x-total-count']);
-        setPage(page + 1);
         setLoading(false);
     }
 
@@ -76,7 +69,7 @@ export default function OutrosChurras() {
     }, []);
 
     function detalheChurras(churras) {
-        navigation.navigate('DetalheChurras', { churras, allowShare: false, editavel: false });
+        navigation.navigate('DetalheChurras', { churras, allowShare: false, editavel: false, churrasid: churras.churras_id });
     }
 
     return (
@@ -105,8 +98,6 @@ export default function OutrosChurras() {
                     style={style.churrasList}
                     showsVerticalScrollIndicator={false}
                     keyExtractor={churras => String(churras.id)}
-                    onEndReached={loadChurrasPassados}
-                    onEndReachedThreshold={0.2}
                     renderItem={({ item: churras }) => (
 
                         <View>
@@ -140,8 +131,6 @@ export default function OutrosChurras() {
                     style={style.churrasList}
                     showsVerticalScrollIndicator={false}
                     keyExtractor={churras => String(churras.id)}
-                    onEndReached={loadChurrasFuturos}
-                    onEndReachedThreshold={0.2}
                     renderItem={({ item: churras }) => (
 
                         <View>
