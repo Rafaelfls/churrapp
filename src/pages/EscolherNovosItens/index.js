@@ -15,10 +15,12 @@ export default function EscolherNovosItens({ route, navigation }) {
 
     const [item, setItem] = useState([]);
     const [unidades, setUnidades] = useState([]);
+    const [formato, setFormato] = useState([]);
     const [tipo, setTipo] = useState([]);
     const [visivel, setIsVisivel] = React.useState(false);
     const [itemModal, setItemModal] = React.useState('');
     const [selectedUnidade, setSelectedUnidade] = useState("Selecione...");
+    const [selectedFormato, setSelectedFormato] = useState("Selecione...");
     const [quantidadeModal, setQuantidadeModal] = useState(0)
     const [idItem, setIdItem] = useState(null)
     const [filtro, setFiltro] = useState(null)
@@ -28,9 +30,11 @@ export default function EscolherNovosItens({ route, navigation }) {
     async function firstLoad() {
         const responseItem = await api.get(`/listItem?subTipo=${1}`);
         const responseUnidade = await api.get(`/unidade`);
+        const responseFormato = await api.get(`/formatos`);
         const responseTipos = await api.get(`/tipoSubTipo?subTipo=${1}`);
 
         setUnidades(responseUnidade.data);
+        setFormato(responseFormato.data);
         setItem(responseItem.data);
         setTipo(responseTipos.data);
     }
@@ -40,18 +44,21 @@ export default function EscolherNovosItens({ route, navigation }) {
     }, []);
 
     function setVisibility(isVisible, item, unidade, id) {
+
         setQuantidadeModal(0)
         setIsVisivel(isVisible)
         setItemModal(item)
         setIdItem(id)
     }
 
-    async function addItem(isVisible, item, unidadeDrop, qtdNova) {
+    async function addItem(isVisible, item, unidadeDrop, formatoDrop, qtdNova) {
         setIsVisivel(isVisible)
+        console.log("Entrei ", item, unidadeDrop, formatoDrop, qtdNova)
         await api.post('/listadochurras', {
             quantidade: qtdNova,
             churras_id: churrascode,
             unidade_id: unidadeDrop,
+            formato_id: formatoDrop,
             item_id: item,
         }).then(function (res) {
             setQuantidadeModal(0)
@@ -174,12 +181,25 @@ export default function EscolherNovosItens({ route, navigation }) {
                                     ))}
                                 </Picker>
                             </View>
+                            <View style={style.selectionForm}>
+                                <Picker
+                                    selectedValue={selectedFormato}
+                                    style={style.boxDropdown}
+                                    itemStyle={style.itemDropdown}
+                                    mode="dropdown"
+                                    onValueChange={itemValue => setSelectedFormato(itemValue)}
+                                >
+                                    {formato.map(form => (
+                                        <Picker.Item label={form.formato} value={form.id} />
+                                    ))}
+                                </Picker>
+                            </View>
                             <View style={style.footerModal}>
-                                <TouchableOpacity style={style.exitBtnFooter} onPress={() => setVisibility(false, "", '', '')}>
+                                <TouchableOpacity style={style.exitBtnFooter} onPress={() => setVisibility(false, "", '', '', '')}>
                                     <Icon style={style.iconSalvarBtn} name="times" size={15} />
                                     <Text style={style.iconSalvarBtn}>Cancelar</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal)}>
+                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, selectedFormato, quantidadeModal)}>
                                     <Icon style={style.iconSalvarBtn} name="check" size={15} />
                                     <Text style={style.iconSalvarBtn}>Confirmar</Text>
                                 </TouchableOpacity>

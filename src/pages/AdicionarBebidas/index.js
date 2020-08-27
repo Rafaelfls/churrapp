@@ -65,6 +65,8 @@ export default function AdicionarBebidas({ route,navigation }) {
     }
 
     function backHome() {
+        LISTADECONVIDADOS=null;
+        CONVITE = null;
         api.delete(`/churras/${churrascode}`, config)
             .then(function (response) {
                 navigation.replace('Tabs');

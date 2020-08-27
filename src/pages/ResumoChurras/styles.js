@@ -2,13 +2,13 @@ import { StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 
 export default StyleSheet.create({
-  
+
   //header
   container: {
     flex: 1,
     paddingTop: Constants.statusBarHeight + 15,
     backgroundColor: '#fff'
-  },  
+  },
   header: {
     justifyContent: 'center',
     alignItems: "center",
@@ -23,25 +23,25 @@ export default StyleSheet.create({
     color: 'black',
     fontFamily: 'poppins-semi-bold',
   },
-  textSubHeader:{
+  textSubHeader: {
     fontSize: 15,
     color: 'gray',
     fontFamily: 'poppins-medium',
   },
-  signOutBtn:{
-    position:"absolute",
+  signOutBtn: {
+    position: "absolute",
     right: 0,
     top: 10,
-  },  
-  menuBtn:{
-    position:"absolute",
+  },
+  menuBtn: {
+    position: "absolute",
     left: 0,
     top: 10,
   },
-  signOutIcon:{
+  signOutIcon: {
     color: 'gray',
   },
-  menuIcon:{
+  menuIcon: {
     color: 'gray',
   },
 
@@ -58,57 +58,57 @@ export default StyleSheet.create({
     marginBottom: 15,
     marginLeft: 0,
   },
-  slideBtn:{
-    flexDirection:'row',
-    width:"74%",
+  slideBtn: {
+    flexDirection: 'row',
+    width: "74%",
   },
-  detalheSlide:{
-    backgroundColor:"darkgray",    
-    width:100,
-    marginRight:10,
-    justifyContent:'center',
-    alignItems:'center',
-    borderBottomLeftRadius:8,
-    borderTopLeftRadius:8,
+  detalheSlide: {
+    backgroundColor: "darkgray",
+    width: 100,
+    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomLeftRadius: 8,
+    borderTopLeftRadius: 8,
   },
-  deletarSlide:{
-    backgroundColor:"#800000",
-    width:100,
-    justifyContent:'center',
-    alignItems:'center',
-    borderBottomRightRadius:8,
-    borderTopRightRadius:8,
-  },  
-  
+  deletarSlide: {
+    backgroundColor: "#800000",
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomRightRadius: 8,
+    borderTopRightRadius: 8,
+  },
+
 
   //cardContent
-  churrasDescricao:{
-    flexDirection:'row',
+  churrasDescricao: {
+    flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
   },
-  churrasFoto:{
+  churrasFoto: {
     width: 66,
     height: 66,
     borderRadius: 33,
   },
-  churrasInfosView:{
+  churrasInfosView: {
     marginLeft: 10,
   },
   churrasTitle: {
     fontSize: 15,
     fontFamily: 'poppins-semi-bold',
   },
-  churrasDono:{
+  churrasDono: {
     color: 'gray',
     fontFamily: 'poppins-medium',
   },
   churrasLocDat: {
     flexDirection: 'row',
     alignItems: 'center',
-    width:'100%',
+    width: '100%',
   },
-  localIcon:{
+  localIcon: {
     color: 'steelblue',
     paddingBottom: 5,
   },
@@ -117,7 +117,7 @@ export default StyleSheet.create({
     color: 'steelblue',
     marginBottom: 2,
     fontFamily: 'poppins-medium',
-    width:'40%',
+    width: '40%',
   },
   locDatSeparator: {
     fontSize: 13,
@@ -125,7 +125,7 @@ export default StyleSheet.create({
     marginBottom: 2,
     fontFamily: 'poppins-medium',
   },
-  dataIcon:{
+  dataIcon: {
     paddingBottom: 5,
     color: 'orangered',
   },
@@ -137,7 +137,7 @@ export default StyleSheet.create({
   },
 
   //fabButton
-  fabBtn:{
+  fabBtn: {
     opacity: 0.85,
   },
   fabBtnIcon: {
@@ -147,77 +147,148 @@ export default StyleSheet.create({
   },
 
   //modal
-    modalView: {
-      margin: 20,
-      backgroundColor: "white",
-      borderRadius: 8,
-      padding: 25,
-      alignItems: "center",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 25,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
     },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     position: 'absolute',
     bottom: "35%",
-    width:'100%',
+    width: '100%',
   },
-  modalText:{
+  modalText: {
     fontSize: 18,
-    marginBottom:15
+    marginBottom: 15
   },
-  footerModal:{
-    marginTop:10,
-    flexDirection:'row',
-    justifyContent:'space-evenly'
+  footerModal: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
   },
-  exitBtn:{
-    flexDirection:'row-reverse',
-    backgroundColor:'#800000',
-    paddingHorizontal:10,
-    paddingVertical:2,
-    borderRadius:8,
-    alignItems:'center',
+  exitBtn: {
+    flexDirection: 'row-reverse',
+    backgroundColor: '#800000',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 8,
+    alignItems: 'center',
     marginHorizontal: 6,
   },
-  salvarBtn:{
-    flexDirection:'row-reverse',
-    backgroundColor:'#800000',
-    paddingHorizontal:10,
-    paddingVertical:2,
-    borderRadius:8,
-    alignItems:'center',
+  salvarBtn: {
+    flexDirection: 'row-reverse',
+    backgroundColor: '#800000',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 8,
+    alignItems: 'center',
     marginHorizontal: 6,
   },
-  iconSalvarBtn:{
-    marginLeft:5,
-    color:'white'
+  iconSalvarBtn: {
+    marginLeft: 5,
+    color: 'white'
   },
 
-  
+
   //Loading modal
   loadingBackground: {
-    flexDirection:"row",
+    flexDirection: "row",
     position: 'relative',
-    width:'100%',
-    height:"100%",
+    width: '100%',
+    height: "100%",
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'gray',
     opacity: 0.8
   },
-  textLoading:{
+  textLoading: {
     fontSize: 20,
     fontFamily: 'poppins-medium',
     color: 'white',
-    marginLeft:7,
+    marginLeft: 7,
   },
+
+  //notificação modal
+
+  //modal
+  modalViewNotf: {
+    margin: 20,
+    backgroundColor: "white",
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    padding: 25,
+    width: '100%',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  centeredViewNotf: {
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    position: 'absolute',
+    top: Constants.statusBarHeight - 44,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "#80808080"
+  },
+  cardNotf: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: "#800000"
+  },
+  cardTextNotf: {
+    fontFamily: 'poppins-medium',
+    fontSize: 18,
+  },
+  cardFooterNotf: {
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "flex-end",
+  },
+  cardBtnNotf: {
+    backgroundColor:'#800000',
+    borderRadius:8,
+    paddingHorizontal:10,
+    paddingVertical:3,
+    marginLeft:5,
+  },
+  cardBtnNotf1: {
+    borderRadius:8,
+    paddingHorizontal:10,
+    paddingVertical:3,
+    marginLeft:5,
+  },
+  cardBtnTextNotf: {
+    fontFamily: 'poppins-medium',
+    color:"white",
+    textAlign:'center',
+    textAlignVertical:'center'
+  },
+  cardBtnTextNotf1: {
+    fontFamily: 'poppins-medium',
+    color:"gray",
+    textAlign:'center',
+    textAlignVertical:'center'
+  },
+  //fim notificacao modal
 });
