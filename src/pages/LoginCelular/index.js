@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, Text, TextInput, TouchableOpacity, Modal } from 'react-native';
+import { View, Image, Text, TextInput, TouchableOpacity, Modal, Picker } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native'
 import { TextInputMask } from 'react-native-masked-text'
@@ -10,23 +10,51 @@ import style from './styles';
 
 export default function LoginCelular() {
 
+    // Dev apagar em produção
+    const [usuarioSelecionado, setUsuarioSelecionado] = useState()
+    const [usuarios, setUsuarios] = useState([]);
+
+    useEffect(() => {
+        carregarUsuarios();
+    }, []);
+
+    async function carregarUsuarios() {
+        const response = await api.get(`/usuarios`);
+
+        setUsuarios(response.data);
+    }
+    // Apagar acima em produção
+
     const navigation = useNavigation();
-    const [celularUser, setCelularUser] = useState();
+    const [celularUser, setCelularUser] = useState('');
     const [senhaUsuario, setSenhaUsuario] = useState('');
     const [valueCelular, setValueCelular] = useState('');
     const [visivel, setVisivel] = useState(false)
 
     async function navigateToResumo() {
         let criptoSenhaVar = await criptoSenha(senhaUsuario)
-        await api.get(`/usuariosCel/${celularUser}/${criptoSenhaVar}`)
-        .then(function(response){
-            if(response.data[0] == undefined){
-                return setVisivel(true)
-            }else{
-                USUARIOLOGADO = response.data[0]
-                navigation.replace('Tabs');  
-            }
-        }) 
+        if (celularUser == '') {
+            console.log(usuarioSelecionado)
+            await api.get(`/usuariosCel/${usuarioSelecionado.celular}/${usuarioSelecionado.senha}`)
+                .then(function (response) {
+                    if (response.data[0] == undefined) {
+                        return setVisivel(true)
+                    } else {
+                        USUARIOLOGADO = response.data[0]
+                        navigation.replace('Tabs');
+                    }
+                })
+        } else {
+            await api.get(`/usuariosCel/${celularUser}/${criptoSenhaVar}`)
+                .then(function (response) {
+                    if (response.data[0] == undefined) {
+                        return setVisivel(true)
+                    } else {
+                        USUARIOLOGADO = response.data[0]
+                        navigation.replace('Tabs');
+                    }
+                })
+        }
     }
 
     async function criptoSenha(senha) {
@@ -54,8 +82,17 @@ export default function LoginCelular() {
             </View>
             <Text style={style.title}>Seja bem vindo de volta!</Text>
             <Text style={style.subtitle}>Entre com seu celular para começar a festa.</Text>
-
             <View style={style.inputArea}>
+                <Picker
+                    mode="dropdown"
+                    selectedValue={usuarioSelecionado}
+                    onValueChange={usuarioSelecionado => setUsuarioSelecionado(usuarioSelecionado)}
+                >
+                    {usuarios.map(users => (
+                        <Picker.Item label={users.nome} value={users} />
+                    ))}
+
+                </Picker>
                 <Text style={style.textLabel}>Celular:</Text>
                 <TextInputMask
                     style={style.inputStandard}
@@ -70,15 +107,15 @@ export default function LoginCelular() {
                     placeholder={'(xx)xxxxx-xxxx'}
                     value={valueCelular}
                     includeRawValueInChangeText={true}
-                    onChangeText={(text, rawText) => {setCelularUser(rawText);setValueCelular(text)}}
+                    onChangeText={(text, rawText) => { setCelularUser(rawText); setValueCelular(text) }}
                 />
-                <Text style={style.textLabel}>Senha:</Text>                
+                <Text style={style.textLabel}>Senha:</Text>
                 <TextInput
-                        style={style.inputStandard}
-                        placeholder={"8 ~ 16 caracteres"}
-                        maxLength={16}
-                        onChangeText={text => setSenhaUsuario(text)}
-                    />
+                    style={style.inputStandard}
+                    placeholder={"8 ~ 16 caracteres"}
+                    maxLength={16}
+                    onChangeText={text => setSenhaUsuario(text)}
+                />
                 <TouchableOpacity style={style.continueBtn} onPress={navigateToResumo}>
                     <Text style={style.textBtn}>Entrar</Text>
                 </TouchableOpacity>
@@ -100,9 +137,8 @@ export default function LoginCelular() {
                     </View>
                 </View>
             </Modal>
-            <View style={style.cadastreSe}>
-                <Text>Novo no Churrapp?</Text>
-                <TouchableOpacity onPress={() => { navigation.replace('CadastroUsuario'); }}><Text style={style.cadastreSeBtn}>Cadastre-se.</Text></TouchableOpacity>
+            <View style={style.esqueciSenha}>
+                <TouchableOpacity><Text style={style.esqueciSenhaBtn}>Esqueci minha senha</Text></TouchableOpacity>
             </View>
         </View>
     );

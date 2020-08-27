@@ -60,12 +60,13 @@ export default StyleSheet.create({
       marginHorizontal: 60,
       marginTop: 50,
   },
-  cadastreSe:{
+  esqueciSenha:{
       marginHorizontal:60,
       flexDirection:"row",
       marginTop:10,
+      justifyContent:'flex-end'
   },
-  cadastreSeBtn:{
+  esqueciSenhaBtn:{
       marginLeft: 5,
       color:"maroon",
       textDecorationLine: "underline",

@@ -154,11 +154,14 @@ export default function Perfil() {
                                 <View style={style.background} />
                                 <Image source={{ uri: usuario.fotoUrlU }} style={style.profileImg} />
                                 <Text style={style.profileName}>{usuario.apelido}</Text>
-                                <Text style={style.profileLocal}>{usuario.cidade} - {usuario.uf}</Text>
-                                <View style={style.containerIdade}>
-                                    {isBirthday ? <Icon name="birthday-cake" style={style.birthdayCake} size={20} color={'white'} /> : null}
-                                    <Text style={style.profileIdade}>{idadeAtual} anos</Text>
-                                </View>
+                                {usuario.cadastrado ? (
+                                    <View style={{ alignItems: 'center', }}>
+                                        <Text style={style.profileLocal}>{usuario.cidade} - {usuario.uf}</Text>
+                                        <View style={style.containerIdade}>
+                                            {isBirthday ? <Icon name="birthday-cake" style={style.birthdayCake} size={20} color={'white'} /> : null}
+                                            <Text style={style.profileIdade}>{idadeAtual} anos</Text>
+                                        </View>
+                                    </View>) : null}
                             </View>
                         </View>
                         <View style={style.containerMyChurras}>
@@ -219,7 +222,7 @@ export default function Perfil() {
                                 <Text style={style.modalText}>Qual seu novo apelido?</Text>
                                 <TextInput
                                     style={style.inputStandard}
-                                    onChangeText={text => {usuarioUpdate.apelido = text}}
+                                    onChangeText={text => { usuarioUpdate.apelido = text }}
                                     placeholder={'john'}
                                 />
                             </View>
@@ -227,7 +230,7 @@ export default function Perfil() {
                                 <Text style={style.modalText}>Qual sua nova cidade?</Text>
                                 <TextInput
                                     style={style.inputStandard}
-                                    onChangeText={text => {usuarioUpdate.cidade = text}}
+                                    onChangeText={text => { usuarioUpdate.cidade = text }}
                                     placeholder={'Campinas'}
                                 />
                             </View>
@@ -235,7 +238,7 @@ export default function Perfil() {
                                 <Text style={style.modalText}>Qual seu novo uf?</Text>
                                 <TextInput
                                     style={style.inputStandard}
-                                    onChangeText={text => {usuarioUpdate.uf = text}}
+                                    onChangeText={text => { usuarioUpdate.uf = text }}
                                     maxLength={2}
                                     autoCapitalize={"characters"}
                                     placeholder={'SP'}
@@ -245,7 +248,7 @@ export default function Perfil() {
                                 <Text style={style.modalText}>Qual seu novo email?</Text>
                                 <TextInput
                                     style={style.inputStandard}
-                                    onChangeText={text => {usuarioUpdate.email = text}}
+                                    onChangeText={text => { usuarioUpdate.email = text }}
                                     autoCapitalize={"none"}
                                     placeholder={'email@123.com'}
                                 />
@@ -264,7 +267,7 @@ export default function Perfil() {
                                     placeholder={'(xx)xxxxx-xxxx'}
                                     value={celularNovo}
                                     includeRawValueInChangeText={true}
-                                    onChangeText={(text, rawText) => {usuarioUpdate.celular = rawText}}
+                                    onChangeText={(text, rawText) => { usuarioUpdate.celular = rawText }}
                                 />
                             </View>
                             <View style={style.editLine}>
@@ -273,7 +276,7 @@ export default function Perfil() {
                                     mode="dropdown"
                                     style={style.inputStandard}
                                     selectedValue={pontoCarneNovo_id}
-                                    onValueChange={pontoCarne_id => {usuarioUpdate.pontoCarne_id = pontoCarne_id}}
+                                    onValueChange={pontoCarne_id => { usuarioUpdate.pontoCarne_id = pontoCarne_id }}
                                 >
                                     {pontoCarneLista.map(pontoLista => (
                                         <Picker.Item label={pontoLista.ponto} value={pontoLista.id} />
@@ -287,7 +290,7 @@ export default function Perfil() {
                                     mode="dropdown"
                                     style={style.inputStandard}
                                     selectedValue={quantidadeComeNovo_id}
-                                    onValueChange={quantidadeCome_id => {usuarioUpdate.quantidadeCome_id = quantidadeCome_id}}
+                                    onValueChange={quantidadeCome_id => { usuarioUpdate.quantidadeCome_id = quantidadeCome_id }}
                                 >
                                     {quantidadeComeLista.map(quantidadeComeLista => (
                                         <Picker.Item label={quantidadeComeLista.nomeQuantidadeCome + " (" + quantidadeComeLista.quantidade + "g)"} value={quantidadeComeLista.id} />

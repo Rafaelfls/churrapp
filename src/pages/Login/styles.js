@@ -41,31 +41,20 @@ export default StyleSheet.create({
         marginTop     : '5%',
         justifyContent: "space-evenly",
     },
-    fbBtn:{
-        padding: 6,
-        backgroundColor: "#3B5998",
-        borderRadius: 10,
-        marginBottom: 10,
-        flexDirection: 'row'
-    },
     loginBtn:{
-        marginHorizontal: 70,
-        width: 150,
+        marginHorizontal: 90,
+        marginTop:40,
+        width: 200,
         alignSelf: "center",
         
     },
-    googleBtn:{
-        padding: 6, 
-        backgroundColor: '#fff', 
-        borderRadius: 10, 
-        marginBottom: 10, 
-        flexDirection: 'row'
-    },
-    celularBtn:{
-        padding: 6, 
-        backgroundColor: '#a3a29b', 
+    entrarBtn:{
+        padding: 10, 
+        backgroundColor: '#800000', 
+        marginBottom:25,
         borderRadius: 10, 
         flexDirection: 'row',
+        justifyContent:'center'
     },
     textBtnGoogle: {
         fontSize: 20,
@@ -75,6 +64,7 @@ export default StyleSheet.create({
 
     },
     textBtn: {
+        textAlign:'center',
         fontSize: 20,
         color: 'white',
         fontWeight: 'bold',
