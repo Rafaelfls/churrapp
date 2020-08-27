@@ -4,6 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconMI from 'react-native-vector-icons/MaterialIcons';
 import IconEnt from 'react-native-vector-icons/Entypo';
 import IconFea from 'react-native-vector-icons/Feather';
 import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
@@ -82,7 +83,7 @@ export default function ResumoChurras() {
         loadChurras();
     }, [refreshChurras]);
 
-    function menu(){
+    function notificacao(){
         console.log("abre menu lateral")
     }
 
@@ -91,8 +92,8 @@ export default function ResumoChurras() {
 
             <View style={style.header}>
                 <View style={style.menuBtn}>
-                    <TouchableOpacity onPress={menu}>
-                        <IconMCI style={style.menuIcon} name="menu" size={25} />
+                    <TouchableOpacity onPress={notificacao}>
+                        <IconMI style={style.menuIcon} name="notifications-none" size={30} />
                     </TouchableOpacity>
                 </View>
                 <View style={style.titulo}>
