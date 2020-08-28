@@ -65,10 +65,9 @@ export default function CompartilharChurrasco({ route, navigation }) {
                     <Text style={style.churrasData}>{churras.hrInicio}{churras.hrFim == null ? null : " - " + churras.hrFim}</Text>
                 </View>
 
-
-                <Text style={style.codigo} onPress={() => copyToClipboard()}>{churras.id}</Text>
+                <TouchableOpacity style={style.codigoTO} onPress={() => copyToClipboard()}><Text style={style.codigo}>{churras.id}</Text><IconFA name="copy" size={13} style={style.copyIcon} /></TouchableOpacity>
                 <View style={style.qrCode}>
-                    <QRCode size={180} logo={{ uri: churras.fotoUrlC }} logoSize={70} content={churras.id} />
+                    <QRCode size={180} logo={{ uri: churras.fotoUrlC }} logoSize={60} content={churras.id} />
                 </View>
             </View>
 

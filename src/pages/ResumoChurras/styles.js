@@ -222,14 +222,13 @@ export default StyleSheet.create({
   },
 
   //notificação modal
-
-  //modal
   modalViewNotf: {
     margin: 20,
     backgroundColor: "white",
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
     padding: 25,
+    paddingTop:40,
     width: '100%',
     shadowColor: "#000",
     shadowOffset: {
@@ -290,5 +289,10 @@ export default StyleSheet.create({
     textAlign:'center',
     textAlignVertical:'center'
   },
+  closeNotf:{
+    position:"absolute",
+    top:20,
+    right:20,
+  }
   //fim notificacao modal
 });

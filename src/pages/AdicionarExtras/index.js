@@ -20,6 +20,7 @@ export default function AdicionarExtras({ route, navigation }) {
     const [itemDeletar, setItemDeletar] = useState([]);
     const [isSugestao, setIsSugestao] = React.useState(false);
     const [isVisible, setIsVisible] = React.useState(false);
+    const [convidados, setConvidados] = useState([]);
     const { churrascode } = route.params;
 
     const config = {
@@ -44,7 +45,15 @@ export default function AdicionarExtras({ route, navigation }) {
 
     useEffect(() => {
         carregaMinhaLista();
+        carregaConvidados();
     }, [reload]);
+
+    async function carregaConvidados(){
+        await api.get(`/convidados/${churrascode}`)
+        .then(function(res){
+            setConvidados(res.data)
+        })
+    }
 
     function enviaMensagens(telefone, CONVITE) {
         Linking.canOpenURL(`whatsapp://send?text=${CONVITE}`).then(supported => {
@@ -70,8 +79,19 @@ export default function AdicionarExtras({ route, navigation }) {
         }
 
         await LISTADECONVIDADOS.map(convid => enviaMensagens(convid.telefone, CONVITE))
+        await convidados.map(convid => enviaNotificacao(convid.usuario_id))
 
         navigation.navigate('FinalCriaChurras');
+    }
+
+    console.log(convidados)
+    
+    async function enviaNotificacao(convidId){
+        await api.post(`/notificacoes/${convidId}/${churrascode}`,{
+            mensagem:`${USUARIOLOGADO.nome} está te convidando para o churras ${convidados[0].nomeChurras}, e o valor por pessoa é de ${convidados[0].valorPagar}. Para mais informações acesse o churrasco na pagina de churras futuros. `, 
+            negar:"Não vou", 
+            confirmar:"Vou"
+        })
     }
 
     function escolherNovosItens() {
@@ -109,9 +129,6 @@ export default function AdicionarExtras({ route, navigation }) {
     function onChangeVar(text, varivael) {
         varivael = text;
     }
-
-    console.log(LISTADECONVIDADOS,CONVITE)
-
 
     return (
         <View style={style.container}>

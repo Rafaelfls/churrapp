@@ -226,6 +226,7 @@ export default function ResumoChurras() {
             >
                 <View style={style.centeredViewNotf}>
                     <View style={style.modalViewNotf}>
+                    <TouchableOpacity style={style.closeNotf} onPress={() => setIsNotificacoesOpen(false)}><IconMCI size={25} name="close-circle-outline"/></TouchableOpacity>
                         <FlatList
                             data={notificacoes}
                             style={style.notificacoesList}

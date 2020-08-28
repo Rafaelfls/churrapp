@@ -42,6 +42,14 @@ export default function CadastroUsuario() {
         setSenhaUsuario(criptoSenha)
     }
 
+    async function enviaNotificacao(convidId){
+        await api.post(`/notificacoes/${convidId}`,{
+            mensagem:`Seja bem vind@ ao Churrapp, nós estamos muito felizes com a sua chegada!`, 
+            negar:null, 
+            confirmar:"Legal"
+        })
+    }
+
     async function navigateToResumo() {
 
         if (nomeUsuario == '') {
@@ -89,8 +97,9 @@ export default function CadastroUsuario() {
                 bebidaPreferida_id: 0,
                 acompanhamentoPreferido_id: 0,
                 sobremesaPreferida_id: 0,
-            }).then(function (response) {
+            }).then(async function (response) {
                 USUARIOLOGADO = response.data
+                await enviaNotificacao(USUARIOLOGADO.id)
                 navigation.replace('Tabs');
             })
         }
