@@ -58,6 +58,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                     churras_id: churrascode,
                     unidade_id: item.unidade_id,
                     item_id: item.item_id,
+                    formato_id: 2
                 })
             })
         }
@@ -69,6 +70,8 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     }
 
     function backHome() {
+        LISTADECONVIDADOS=null;
+        CONVITE = null;
         api.delete(`/churras/${churrascode}`, config)
             .then(function () {
                 navigation.replace('Tabs');

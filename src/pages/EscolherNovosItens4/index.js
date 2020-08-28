@@ -52,6 +52,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
             quantidade: qtdNova,
             churras_id: churrascode,
             unidade_id: unidadeDrop,
+            formato_id:0,
             item_id: item,
         }).then(function (res) {
             setQuantidadeModal(0)

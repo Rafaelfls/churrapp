@@ -2,24 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Modal, SafeAreaView, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
-import NumericInput from 'react-native-numeric-input';
 import api from '../../services/api';
+import NumericInput from 'react-native-numeric-input';
 
 //Icones imports
 import IconF5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
-
 import style from './styles';
 
-export default function AdicionarSobremesas({ route,navigation }) {
+export default function AdicionarSobremesa({ route,navigation }) {
 
     const { convidadosQtd } = route.params;
     const [itemList, setItemList] = React.useState([])
     const [reload, setReload] = React.useState(false);
-    const [itemDeletar, setItemDeletar] = useState([]);
     const [isSugestao, setIsSugestao] = React.useState(false);
+    const [itemDeletar, setItemDeletar] = useState([]);
     const [isVisible, setIsVisible] = React.useState(false);
     const { churrascode } = route.params;
 
@@ -48,7 +47,17 @@ export default function AdicionarSobremesas({ route,navigation }) {
     }, [reload]);
 
     function next() {
-        navigation.push('AdicionarExtras', { churrascode, convidadosQtd });
+        if (isSugestao) {
+            itemList.map(async item => {
+                await api.post('/listadochurras', {
+                    quantidade: item.quantidade,
+                    churras_id: churrascode,
+                    unidade_id: item.unidade_id,
+                    item_id: item.item_id,
+                })
+            })
+        }
+        navigation.navigate('AdicionarExtras', { churrascode, convidadosQtd });
     }
 
     function escolherNovosItens() {
@@ -56,17 +65,11 @@ export default function AdicionarSobremesas({ route,navigation }) {
     }
 
     function backHome() {
+        LISTADECONVIDADOS=null;
+        CONVITE = null;
         api.delete(`/churras/${churrascode}`, config)
             .then(function (response) {
                 navigation.replace('Tabs');
-            })
-    }
-
-    async function deleteItem(item) {
-        await api.delete(`/listadochurras/${item.id}`)
-            .then(function () {
-                setReload(!reload)
-                setIsVisible(false)
             })
     }
 
@@ -83,6 +86,14 @@ export default function AdicionarSobremesas({ route,navigation }) {
 
     function onChangeVar(text, varivael) {
         varivael = text;
+    }
+
+    async function deleteItem(item) {
+        await api.delete(`/listadochurras/${item.id}`)
+            .then(function () {
+                setReload(!reload)
+                setIsVisible(false)
+            })
     }
 
 
@@ -115,7 +126,7 @@ export default function AdicionarSobremesas({ route,navigation }) {
                                     </View>
                                 </View>)
                                 // Caso nao seja sujestão o item pode ser deletado
-                                : (<TouchableOpacity style={style.componentPicker} onPress={() => { setIsVisible(true); setItemDeletar(itemList) }}>
+                                : (<TouchableOpacity style={style.componentPicker} onPress={() => {setIsVisible(true);setItemDeletar(itemList)}}>
                                     <View style={style.textIcon}>
                                         <Text style={style.textLabel}>{itemList.nomeItem}</Text>
                                     </View>
@@ -128,6 +139,7 @@ export default function AdicionarSobremesas({ route,navigation }) {
                     style={style.listStyle} />
 
                 <ActionButton offsetX={10} offsetY={100} onPress={() => escolherNovosItens()} />
+
                 <Modal
                     animationType="slide"
                     transparent={true}

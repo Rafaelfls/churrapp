@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Modal, SafeAreaView, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, Linking , Modal, SafeAreaView, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import NumericInput from 'react-native-numeric-input';
@@ -8,12 +8,11 @@ import api from '../../services/api';
 //Icones imports
 import IconF5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Ionicons';
-import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
 import style from './styles';
 
-export default function AdicionarExtras({ route,navigation }) {
+export default function AdicionarExtras({ route, navigation }) {
 
     const { convidadosQtd } = route.params;
     const [itemList, setItemList] = React.useState([])
@@ -47,7 +46,18 @@ export default function AdicionarExtras({ route,navigation }) {
         carregaMinhaLista();
     }, [reload]);
 
-    function next() {
+    function enviaMensagens(telefone, CONVITE) {
+        Linking.canOpenURL(`whatsapp://send?text=${CONVITE}`).then(supported => {
+            if (supported) {
+                return Linking.openURL(`whatsapp://send?text=${CONVITE}&phone=+55${telefone}`);
+            } else {
+                return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${telefone}&text=${CONVITE}`)
+            }
+        })
+
+    }
+
+    async function next() {
         if (isSugestao) {
             itemList.map(async item => {
                 await api.post('/listadochurras', {
@@ -58,6 +68,9 @@ export default function AdicionarExtras({ route,navigation }) {
                 })
             })
         }
+
+        await LISTADECONVIDADOS.map(convid => enviaMensagens(convid.telefone, CONVITE))
+
         navigation.navigate('FinalCriaChurras');
     }
 
@@ -66,6 +79,8 @@ export default function AdicionarExtras({ route,navigation }) {
     }
 
     function backHome() {
+        LISTADECONVIDADOS=null;
+        CONVITE = null;
         api.delete(`/churras/${churrascode}`, config)
             .then(function (response) {
                 navigation.replace('Tabs');
@@ -81,7 +96,7 @@ export default function AdicionarExtras({ route,navigation }) {
     }
 
     function updateValue(qtdSugestao) {
-        if(isSugestao){
+        if (isSugestao) {
             if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
                 return (qtdSugestao)
             } else {
@@ -94,6 +109,8 @@ export default function AdicionarExtras({ route,navigation }) {
     function onChangeVar(text, varivael) {
         varivael = text;
     }
+
+    console.log(LISTADECONVIDADOS,CONVITE)
 
 
     return (
@@ -121,7 +138,7 @@ export default function AdicionarExtras({ route,navigation }) {
                                         <Text style={style.textLabel}>{itemList.nomeItem}</Text>
                                     </View>
                                     <View style={style.picker}>
-                                        <Text style={style.textLabel}>{updateValue(itemList.quantidade)+" "+itemList.unidade}</Text> 
+                                        <Text style={style.textLabel}>{updateValue(itemList.quantidade) + " " + itemList.unidade}</Text>
                                     </View>
                                 </View>)
                                 // Caso nao seja sujestão o item pode ser deletado
@@ -130,7 +147,7 @@ export default function AdicionarExtras({ route,navigation }) {
                                         <Text style={style.textLabel}>{itemList.nomeItem}</Text>
                                     </View>
                                     <View style={style.picker}>
-                                        <Text style={style.textLabel}>{updateValue(itemList.quantidade)+" "+itemList.unidade}</Text> 
+                                        <Text style={style.textLabel}>{updateValue(itemList.quantidade) + " " + itemList.unidade}</Text>
                                     </View>
                                 </TouchableOpacity>)}
                         </View>

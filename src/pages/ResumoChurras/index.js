@@ -20,12 +20,14 @@ export default function ResumoChurras() {
 
     const route = useRoute();
     const [churras, setChurras] = useState([]);
+    const [notificacoes, setnotificacoes] = useState([]);
+    const [isNotificacoesOpen, setIsNotificacoesOpen] = useState(false);
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const [visivel, setVisivel] = useState(false)
     const [churrasDeletar, setChurrasDeletar] = useState([]);
     const [refreshChurras, setRefreshChurras] = useState(true);
-    
+
     const config = {
         headers: { 'Authorization': USUARIOLOGADO.id }
     };
@@ -73,18 +75,50 @@ export default function ResumoChurras() {
     }
 
     function formatData(data) {
-        var date = new Date(data).getDate()+1
-        var month = new Date(data).getMonth()+1
+        var date = new Date(data).getDate() + 1
+        var month = new Date(data).getMonth() + 1
         var year = new Date(data).getFullYear()
         return date + '/' + month + '/' + year
     }
 
     useEffect(() => {
         loadChurras();
+        loadNotificacoes();
     }, [refreshChurras]);
 
-    function notificacao(){
-        console.log("abre menu lateral")
+    async function loadNotificacoes() {
+        await api.get(`/notificacoes/${USUARIOLOGADO.id}`).then(function (res) {
+            setnotificacoes(res.data)
+        })
+    }
+    function notificacao() {
+        setIsNotificacoesOpen(true);
+    }
+
+    async function clicknegar(notificacao) {
+        if (notificacao.churras_id == null) {
+            await api.delete(`/notificacoes/${notificacao.id}`)
+            setIsNotificacoesOpen(false)
+            setRefreshChurras(!refreshChurras);
+        } else {
+            await api.put(`/negarPresenca/${notificacao.usuario_id}/${notificacao.churras_id}`)
+            await api.delete(`/notificacoes/${notificacao.id}`)
+            setIsNotificacoesOpen(false)
+            setRefreshChurras(!refreshChurras);
+        }
+    }
+
+    async function clickconfirmar(notificacao) {
+        if (notificacao.churras_id == null) {
+            await api.delete(`/notificacoes/${notificacao.id}`)
+            setIsNotificacoesOpen(false)
+            setRefreshChurras(!refreshChurras);
+        } else if (notificacao.confirmar == 'Vou') {
+            await api.put(`/confirmaPresenca/${notificacao.usuario_id}/${notificacao.churras_id}`)
+            await api.delete(`/notificacoes/${notificacao.id}`)
+            setIsNotificacoesOpen(false)
+            setRefreshChurras(!refreshChurras);
+        }
     }
 
     return (
@@ -92,9 +126,12 @@ export default function ResumoChurras() {
 
             <View style={style.header}>
                 <View style={style.menuBtn}>
-                    <TouchableOpacity onPress={notificacao}>
-                        <IconMI style={style.menuIcon} name="notifications-none" size={30} />
-                    </TouchableOpacity>
+                    {notificacoes.length > 0
+                        ? (<TouchableOpacity onPress={notificacao}>
+                            <IconMI style={[style.menuIcon, { color: "#800000" }]} name="notifications-active" size={30} />
+                        </TouchableOpacity>)
+                        : <IconMI style={style.menuIcon} name="notifications-none" size={30} />
+                    }
                 </View>
                 <View style={style.titulo}>
                     <Text style={style.textHeader}>Meus churras</Text>
@@ -112,7 +149,6 @@ export default function ResumoChurras() {
                 style={style.churrasList}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={churras => String(churras.id)}
-                onEndReachedThreshold={0.2}
                 renderItem={({ item: churras }) => (
                     <View>
                         <View style={style.churras}>
@@ -133,7 +169,7 @@ export default function ResumoChurras() {
                                                 <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
                                                 <Text style={style.churrasDono}>{churras.nome} </Text>
                                                 <View style={style.churrasLocDat}>
-                                                <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                                    <IconFea style={style.dataIcon} name="calendar" size={15} />
                                                     <Text style={style.churrasData}> {formatData(churras.data)}</Text>
                                                     <Text style={style.locDatSeparator}>  |  </Text>
                                                     <IconEnt style={style.localIcon} name="location-pin" size={15} />
@@ -162,7 +198,7 @@ export default function ResumoChurras() {
             </ActionButton>
 
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
                 visible={visivel}
             >
@@ -179,6 +215,35 @@ export default function ResumoChurras() {
                                 <Text style={style.iconSalvarBtn}>Desisti</Text>
                             </TouchableOpacity>
                         </View>
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={isNotificacoesOpen}
+            >
+                <View style={style.centeredViewNotf}>
+                    <View style={style.modalViewNotf}>
+                        <FlatList
+                            data={notificacoes}
+                            style={style.notificacoesList}
+                            showsVerticalScrollIndicator={false}
+                            keyExtractor={notificacoes => String(notificacoes.id)}
+                            renderItem={({ item: notificacoes }) => (
+                                <View style={style.cardNotf}>
+                                    <Text style={style.cardTextNotf}>{notificacoes.mensagem}</Text>
+                                    <View style={style.cardFooterNotf}>
+                                        {notificacoes.negar != null
+                                            ? <TouchableOpacity style={style.cardBtnNotf1} onPress={() => clicknegar(notificacoes)}><Text style={style.cardBtnTextNotf1}>{notificacoes.negar}</Text></TouchableOpacity>
+                                            : null}
+                                        {notificacoes.confirmar != null
+                                            ? <TouchableOpacity style={style.cardBtnNotf} onPress={() => clickconfirmar(notificacoes)}><Text style={style.cardBtnTextNotf}>{notificacoes.confirmar}</Text></TouchableOpacity>
+                                            : null}
+                                    </View>
+                                </View>
+                            )} />
                     </View>
                 </View>
             </Modal>
