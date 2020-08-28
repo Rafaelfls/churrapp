@@ -40,9 +40,12 @@ export default function DetalheChurras() {
   const [quantidadeModal, setQuantidadeModal] = useState(0)
   const [idItem, setIdItem] = useState(null)
   const [selectedUnidade, setSelectedUnidade] = useState("Selecione...");
+  const [selectedFormato, setSelectedFormato] = useState("Selecione...");
+  const [formatoPicker, setFormatoPicker] = useState(false)
   const [unidades, setUnidades] = useState([]);
   const [itemModal, setItemModal] = React.useState('');
   const [visivel, setIsVisivel] = React.useState(false);
+  const [formato, setFormato] = useState([]);
   const navigation = useNavigation();
 
 
@@ -53,8 +56,10 @@ export default function DetalheChurras() {
 
   async function setVisibility(isVisible, item, unidade, id) {
     const responseUnidade = await api.get(`/unidade`);
+    const responseFormato = await api.get(`/formatos`);
 
     setUnidades(responseUnidade.data);
+    setFormato(responseFormato.data);
     setQuantidadeModal(0)
     setIsVisivel(isVisible)
     setItemModal(item)
@@ -93,6 +98,11 @@ export default function DetalheChurras() {
         setModalSubTipoVisivel(false);
         setModalTipoVisivel(true);
       });
+    if(subTipo.subTipo == "Carnes" ){
+      setFormatoPicker(true)
+    } else {
+      setSelectedFormato(0);
+    }
 
     }
   }
@@ -105,17 +115,21 @@ export default function DetalheChurras() {
   }
 
 
-  async function addItem(isVisible, item, unidadeDrop, qtdNova) {
+  async function addItem(isVisible, item, unidadeDrop, qtdNova, formato) {
     setIsVisivel(isVisible)
     await api.post('/listadochurras', {
       quantidade: qtdNova,
       churras_id: churras.id,
       unidade_id: unidadeDrop,
       item_id: item,
+      formato_id: formato
     }).then(function (res) {
       setQuantidadeModal(0)
       setModalSubTipoVisivel(false)
       setModalTipoVisivel(false)
+      setModalItemVisivel(isVisible)
+      setFormatoPicker(false)
+      setRefresh(!refresh)
     })
   }
 
@@ -128,6 +142,27 @@ export default function DetalheChurras() {
           <Text style={style.verTodos}>Adicionar item</Text>
         </TouchableOpacity>
       );
+    } else {
+      return null
+    }
+  }
+
+  function ativarFormatoPicker() {
+    if (formatoPicker) {
+      return(
+        <Picker
+                selectedValue={selectedFormato}
+                style={style.boxDropdownQtd}
+                itemStyle={style.itemDropdown}
+                mode="dropdown"
+                onValueChange={itemValue => setSelectedFormato(itemValue)}
+              >
+                
+                {formato.map(formato => (
+                  <Picker.Item label={formato.formato} value={formato.id} />
+                ))}
+              </Picker>
+      )
     } else {
       return null
     }
@@ -174,7 +209,7 @@ export default function DetalheChurras() {
         }
       </View>
 
-      <ScrollView nestedScrollEnabled={true}>
+      
 
         <View style={style.infosPrincipais}>
           <View style={style.infosLocDat}>
@@ -209,12 +244,12 @@ export default function DetalheChurras() {
             <Text style={style.subtituloConvidados}>{convidadosCount} pessoas</Text>
           </View>
         </View>
-
+        <View>
         <FlatList
           data={convidados}
           horizontal
           pagingEnabled={true}
-          style={{ height: 200, width: "100%" }}
+          style={{ height: 170, width: "100%" }}
           showsHorizontalScrollIndicator={false}
           keyExtractor={convidados => String(convidados.id)}
           renderItem={({ item: convidados }) => (
@@ -231,40 +266,34 @@ export default function DetalheChurras() {
 
           )}
         />
-
+</View>
         <View style={style.linhaDeSeparacao} />
+        
 
-        <View style={style.cabecalhoItens}>
+         <View style={style.cabecalhoItens}>
           <View style={style.containerTituloItens}>
             <Text style={style.tituloItens}>Itens</Text>
           </View>
           {addItemVisivel()}
         </View>
-
         <FlatList
-          data={itens}
-          horizontal
-          pagingEnabled={true}
-          style={{ height: 200, width: "100%" }}
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={itens => String(itens.id)}
-          renderItem={({ item: itens }) => (
+            data={itens}
+            style={{bottom: 2, top: 2}}
+            keyExtractor={itens => String(itens.id)}
+            renderItem={({ item: itens }) => (
 
-            <View style={{ width: 140, height: 'auto', flexDirection: 'row' }}>
-              <TouchableOpacity onPress={() => deleteItem(itens)}>
-                <View style={style.item}>
-                  <Image source={{ uri: itens.fotoUrlI }} style={style.itemImg} />
-                  <Text style={style.nomeItemAdc}>{itens.nomeItem}</Text>
-                  <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+              <View style={{ width: 'auto', height: 80, flexDirection: 'column', margin: 10 }}>
+                <TouchableOpacity onPress={() => deleteItem(itens)}>
+                  <View style={style.item}>
+                    <Image source={{ uri: itens.fotoUrlI }} style={style.itemImg} />
+                    <Text style={style.nomeItemAdc}>{itens.nomeItem}</Text>
+                    <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
 
-          )}
-        />
-
-      </ScrollView>
-
+            )}
+          />
       <Modal
         animationType="slide"
         transparent={true}
@@ -325,8 +354,8 @@ export default function DetalheChurras() {
               <TouchableHighlight style={style.exitBtn} onPress={() => {
                 setModalTipoVisivel(!modalTipoVisivel);
                 setTodosTipos([]);
+                setFormatoPicker(false);
               }}>
-                {/* <Icon style={style.iconSalvarBtn} name="times" size={15} /> */}
                 <Text style={style.iconSalvarBtn}>Cancelar</Text>
               </TouchableHighlight>
             </View>
@@ -370,9 +399,9 @@ export default function DetalheChurras() {
               <TouchableHighlight style={style.exitBtn} onPress={() => {
                 setModalItemVisivel(!modalItemVisivel);
                 setTodosItens([]);
-                setRefresh(!refresh)
+                setRefresh(!refresh);
+                setFormatoPicker(false);
               }}>
-                {/* <Icon style={style.iconSalvarBtn} name="times" size={15} /> */}
                 <Text style={style.iconSalvarBtn}>Cancelar</Text>
               </TouchableHighlight>
             </View>
@@ -413,13 +442,15 @@ export default function DetalheChurras() {
                   <Picker.Item label={unity.unidade} value={unity.id} />
                 ))}
               </Picker>
+              {ativarFormatoPicker()}
+              
             </View>
             <View style={style.footerModalQtd}>
               <TouchableOpacity style={style.exitBtnFooterQtd} onPress={() => setVisibility(false, "", '', '')}>
                 <Icon style={style.iconSalvarBtnQtd} name="times" size={15} />
                 <Text style={style.iconSalvarBtnQtd}>Cancelar</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={style.salvarBtnQtd} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal)}>
+              <TouchableOpacity style={style.salvarBtnQtd} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal, selectedFormato)}>
                 <Icon style={style.iconSalvarBtnQtd} name="check" size={15} />
                 <Text style={style.iconSalvarBtnQtd}>Confirmar</Text>
               </TouchableOpacity>

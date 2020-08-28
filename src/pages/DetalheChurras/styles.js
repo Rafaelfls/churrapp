@@ -188,7 +188,8 @@ export default StyleSheet.create({
     borderRadius: 8,
     margin: 10,
     padding: 8,
-    height: "90%",
+    height: 90,
+    bottom: 10
   },
   tiposDesign: {
     alignItems: 'center',
@@ -218,7 +219,7 @@ export default StyleSheet.create({
     height: 70,
   },
   itemImg: {
-    height: 110,
+    height: 30,
     width: 100,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
