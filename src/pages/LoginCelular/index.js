@@ -84,17 +84,16 @@ export default function LoginCelular() {
             <Text style={style.title}>Seja bem vindo de volta!</Text>
             <Text style={style.subtitle}>Entre com seu celular para começar a festa.</Text>
             <ScrollView>
-                <View style={style.inputArea}>
-                    {/* <Picker
-                        mode="dropdown"
-                        selectedValue={usuarioSelecionado}
-                        onValueChange={usuarioSelecionado => setUsuarioSelecionado(usuarioSelecionado)}
-                    >
-                        {usuarios.map(users => (
-                            <Picker.Item label={users.nome} value={users} />
-                        ))}
-
-                    </Picker> */}
+            <View style={style.inputArea}>
+                <Picker
+                    mode="dropdown"
+                    selectedValue={usuarioSelecionado}
+                    onValueChange={usuarioSelecionado => setUsuarioSelecionado(usuarioSelecionado)}
+                >
+                    {usuarios.map((users,idx) => (
+                        <Picker.Item label={users.nome} value={users} key={idx}/>
+                    ))}
+                    </Picker>
                     <Text style={style.textLabel}>Celular:</Text>
                     <TextInputMask
                         style={style.inputStandard}

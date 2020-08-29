@@ -57,7 +57,7 @@ export function useIsSugestao(){
 }
 
 export function createLoadingModal(loading) {
-    if(loading == true) {
+    if(loading === true) {
         return(
             <Modal
                 animationType="fade"

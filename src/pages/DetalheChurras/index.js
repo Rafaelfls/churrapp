@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconMat from 'react-native-vector-icons/MaterialCommunityIcons'
 import IconMa from 'react-native-vector-icons/MaterialIcons';
 import IconOct from 'react-native-vector-icons/Octicons';
+import { ScrollableTabView, DefaultTabBar, ScrollableTabBar, } from '@valdio/react-native-scrollable-tabview'
 import api from '../../services/api';
 
 import style from './styles';
@@ -209,91 +210,127 @@ export default function DetalheChurras() {
         }
       </View>
 
-      
-
-        <View style={style.infosPrincipais}>
-          <View style={style.infosLocDat}>
-            <View style={style.churrasLocalContainer}>
-              <IconFA name="map-o" size={20} style={style.localIcon} />
-              <Text style={style.churrasLocal}>{churras.local}</Text>
-            </View>
-            <View style={style.churrasLocalContainer}>
-              <IconEnt name="calendar" size={22} style={style.dataIcon} />
-              <Text style={style.churrasData}>{churrasDateFormatted}</Text>
-            </View>
-            <View style={style.churrasLocalContainer}>
-              <IconEnt name="clock" size={22} style={style.dataIcon} />
-              <Text style={style.churrasData}>{churras.hrInicio}{churras.hrFim == null ? null : " - " + churras.hrFim}</Text>
-            </View>
-            <View style={style.churrasLocalContainer}>
-              <IconMa name="description" size={22} style={style.dataIcon} />
-              <Text style={style.churrasData}>{churras.descricao == null ? "-" : churras.descricao}</Text>
-            </View>
-          </View>
-          <View style={style.churrasDonoContainer}>
-            <Image source={{ uri: churras.fotoUrlU }} style={style.donoImg} />
-            <Text style={style.churrasDono}>{churras.nome}</Text>
-          </View>
-        </View>
-
-        <View style={style.linhaDeSeparacao} />
-
-        <View style={style.cabecalhoConvidados}>
-          <View style={style.containerTituloConvidados}>
-            <Text style={style.tituloConvidados}>Convidados</Text>
-            <Text style={style.subtituloConvidados}>{convidadosCount} pessoas</Text>
-          </View>
-        </View>
-        <View>
-        <FlatList
-          data={convidados}
-          horizontal
-          pagingEnabled={true}
-          style={{ height: 170, width: "100%" }}
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={convidados => String(convidados.id)}
-          renderItem={({ item: convidados }) => (
-
-            <View style={{ width: 140, height: 'auto', flexDirection: 'row' }}>
-              <TouchableOpacity>
-                <View style={style.convidado}>
-                  <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
-                  <Text style={style.nomeConvidado}>{convidados.nome}</Text>
-                  <Text style={style.foneConvidado}>{convidados.celular}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-          )}
-        />
-</View>
-        <View style={style.linhaDeSeparacao} />
+        
         
 
-         <View style={style.cabecalhoItens}>
-          <View style={style.containerTituloItens}>
-            <Text style={style.tituloItens}>Itens</Text>
-          </View>
-          {addItemVisivel()}
-        </View>
-        <FlatList
-            data={itens}
-            style={{bottom: 2, top: 2}}
-            keyExtractor={itens => String(itens.id)}
-            renderItem={({ item: itens }) => (
+        
 
-              <View style={{ width: 'auto', height: 80, flexDirection: 'column', margin: 10 }}>
-                <TouchableOpacity onPress={() => deleteItem(itens)}>
-                  <View style={style.item}>
-                    <Image source={{ uri: itens.fotoUrlI }} style={style.itemImg} />
-                    <Text style={style.nomeItemAdc}>{itens.nomeItem}</Text>
-                    <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
+        <ScrollableTabView
+                style={style.tabView}
+                tabBarPosition="top" tabBarActiveTextColor="maroon" tabBarInactiveTextColor="dimgray"
+                tabBarTextStyle={{ fontWeight: 'normal', fontFamily: 'poppins-semi-bold', fontSize: 15 }}
+                tabBarBackgroundColor='white'
+                tabBarUnderlineStyle={{ backgroundColor: 'maroon', height: 2 }}
+                renderTabBar={() => <DefaultTabBar />}
+                ref={(tabView) => { tabView = tabView; }}
+                initialPage={0}
+            >
+          <View tabLabel="Info">
+            <View style={style.churrasImgContainer}>
+              <Image source={{ uri: churras.fotoUrlC }} style={style.churrasImg} />
+            </View>
+            <View style={style.infosPrincipais}>
+              <View style={style.infosLocDat}>
+                <View style={style.churrasLocalContainer}>
+                  <IconFA name="map-o" size={20} style={style.localIcon} />
+                  <Text style={style.churrasLocal}>{churras.local}</Text>
+                </View>
+                <View style={style.churrasLocalContainer}>
+                  <IconEnt name="calendar" size={22} style={style.dataIcon} />
+                  <Text style={style.churrasData}>{churrasDateFormatted}</Text>
+                </View>
+                <View style={style.churrasLocalContainer}>
+                  <IconEnt name="clock" size={22} style={style.dataIcon} />
+                  <Text style={style.churrasData}>{churras.hrInicio}{churras.hrFim == null ? null : " - " + churras.hrFim}</Text>
+                </View>
+                <View style={style.churrasLocalContainer}>
+                  <IconMa name="description" size={22} style={style.dataIcon} />
+                  <Text style={style.churrasData}>{churras.descricao == null ? "-" : churras.descricao}</Text>
+                </View>
+                <View style={style.churrasLocalContainer}>
+                  <IconMa name="attach-money" size={22} style={style.dataIcon} />
+                  <Text style={style.churrasData}>{churras.valorPago == null ? "-" : churras.valorPago}</Text>
+                </View>
+                <View style={style.churrasLocalContainer}>
+                  <IconMa name="attach-money" size={22} style={style.dataIcon} />
+                  <Text style={style.churrasData}>{churras.valorTotal == null ? "-" : churras.valorTotal}</Text>
+                </View>
+                <View style={style.churrasLocalContainer}>
+                  <IconMa name="people" size={22} style={style.dataIcon} />
+                  <View style={style.containerTituloConvidados}>
+                    {convidadosCount === 1
+                    ? <Text style={style.subtituloConvidados}>{convidadosCount} pessoa</Text>
+                    : <Text style={style.subtituloConvidados}>{convidadosCount} pessoas</Text>}
                   </View>
-                </TouchableOpacity>
+                </View>
               </View>
+            <View style={style.churrasDonoContainer}>
+              <Image source={{ uri: churras.fotoUrlU }} style={style.donoImg} />
+              <Text style={style.churrasDono}>{churras.nome}</Text>
+            </View>
+          </View>
+    </View>
+              
+              <FlatList
+                tabLabel='Convidados'
+                data={convidados}
+                style={{ height: 170, width: "100%" }}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={convidados => String(convidados.id)}
+                renderItem={({ item: convidados }) => (
 
-            )}
+                  <View style={{ width: 140, height: 'auto', flexDirection: 'row' }}>
+                    <TouchableOpacity>
+                      <View style={style.convidado}>
+                        <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
+                        <Text style={style.nomeConvidado}>{convidados.nome}</Text>
+                        <Text style={style.foneConvidado}>{convidados.celular}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+
+                )}
+              />
+        <View tabLabel='Itens'>
+          <View style={style.cabecalhoItens}>
+            <View style={style.containerTituloItens}>
+            </View>
+            {addItemVisivel()}
+          </View>
+          <FlatList
+              data={itens}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={itens => String(itens.id)}
+              renderItem={({ item: itens }) => (
+                
+                <View>
+                  
+                  <TouchableOpacity style={style.card} onPress={() => deleteItem(itens)}>
+                    <Image source={{ uri: itens.fotoUrlT }} style={style.churrasFotoModal} />
+                      
+                      <View style={style.churrasInfosViewModal}>
+                      <Text style={style.nomeItemAdc}>{itens.nomeItem}</Text>
+                        <View style={style.churrasLocDatModal}>
+                          <IconMat style={style.dataIconModal} name="cow" size={15} />
+                          <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
+                          <Text style={style.locDatSeparatorModal}>  |  </Text>
+                          <Icon style={style.localIconModal} name="coins" size={15} />
+                          {itens.precoMedio === null
+                            ? <Text style={style.precoItemNulo}>-</Text>
+                            :<Text style={style.precoItem}>{itens.precoMedio}R$</Text>}
+                        </View>
+                      </View>
+                      
+                      
+                  </TouchableOpacity>
+                </View>
+
+              )}
           />
+        </View>
+        
+      </ScrollableTabView>
+        
       <Modal
         animationType="slide"
         transparent={true}
