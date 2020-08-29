@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, SafeAreaView, FlatList} from 'react-native';
+import React, { Component, useEffect } from 'react';
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView, RefreshControl, FlatList, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
 import * as Crypto from 'expo-crypto';
@@ -10,10 +11,11 @@ import style from './styles';
 
 var convidadosList = [];
 
-export default function AdicionaConvidados({ route, navigation }) {
+export default function CompartilharConvidados({ route, navigation }) {
 
   const [value, onChangeValue] = React.useState(20.50);
   const [convite, onChangeText] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
   const [maxChar, setMaxChar] = React.useState(190);
   const [updatePage, setUpdatePage] = React.useState(false)
 
@@ -25,9 +27,8 @@ export default function AdicionaConvidados({ route, navigation }) {
   const { sobrenomeContato } = route.params;
   const { telefoneContato } = route.params;
   const { churrasAtual } = route.params;
-  global.LISTADECONVIDADOS = null;
-  global.CONVITE = null;
 
+console.log("churrasAtual",churrasAtual)
 
   useEffect(() => {
     if (telefoneContato != null) {
@@ -51,8 +52,9 @@ export default function AdicionaConvidados({ route, navigation }) {
     setUpdatePage(!updatePage)
   }
 
+  const inviteStandard = `Olá, estou te convidando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença.`
+
   function updateMsg(text) {
-    CONVITE = text;
     onChangeText(text)
     var atual = 190 - text.length
     setMaxChar(atual)
@@ -93,6 +95,7 @@ export default function AdicionaConvidados({ route, navigation }) {
       bebidaPreferida_id: 0,
       acompanhamentoPreferido_id: 0
     }).then(async function (response) {
+      console.log(response.data)
       await api.post(`/convidadosChurras/${response.data.usuario[0].id}`, {
         valorPagar: value,
         churras_id: churrasAtual.churrasCode
@@ -111,34 +114,37 @@ export default function AdicionaConvidados({ route, navigation }) {
 
   async function next() {
     const convidadosQtd = convidadosList.length
-    LISTADECONVIDADOS = convidadosList;
-
-    if(convite == ''){
-      CONVITE = inviteStandard;
-    }
 
     await convidadosList.map(convid => criaListaConvidados(convid))
+    await convidadosList.map(convid => enviaMensagens(convid.telefone, convite))
 
     var churrascode = churrasAtual.churrasCode
-    navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd, churrascode });
+    navigation.navigate('CompartilharChurrasco', { convidadosQtd, churrascode });
 
     convidadosList = []
   }
 
   function backHome() {
     convidadosList = []
-    LISTADECONVIDADOS=null;
-    CONVITE = null;
-    api.delete(`/churras/${churrasAtual.churrasCode}`, config)
-      .then(function (response) {
-        navigation.replace('Tabs');
-      })
+    navigation.navigate('CompartilharChurrasco');
   }
 
-  const inviteStandard = `Olá, estou te convidando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença.`
-
   function openContactList() {
-    navigation.push('OpenContactList')
+    navigation.push('OpenContactListCompartilhar')
+  }
+
+  function enviaMensagens(telefone, convite) {
+    Linking.canOpenURL(`whatsapp://send?text=${convite}`).then(supported => {
+      if (supported) {
+        if (convite === '') {
+          convite = inviteStandard;
+        }
+        return Linking.openURL(`whatsapp://send?text=${convite}&phone=+55${telefone}`);
+      } else {
+        return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${telefone}&text=${convite}`)
+      }
+    })
+
   }
 
   return (

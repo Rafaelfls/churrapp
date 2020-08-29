@@ -18,7 +18,24 @@ export default function CompartilharChurrasco({ route, navigation }) {
     const [churrasDateFormatted, setChurrasDateFormatted] = useState();
 
     function goBack() {
-        navigation.goBack()
+        navigation.navigate('DetalheChurras')
+    }
+
+    function compartilhar() {
+        navigation.navigate('CompartilharConvidados', {
+            nomeContato: null,
+            sobrenomeContato: null,
+            telefoneContato: null,
+            churrasAtual: {
+              churrasCode: churras.id,
+              nomeChurras: churras.nomeChurras,
+              local: churras.local,
+              hrInicio: churras.hrInicio,
+              hrFim: churras.hrFim,
+              descricao: churras.descricao,
+              data: churrasDateFormatted,
+            },
+          });
     }
 
     const copyToClipboard = () => {
@@ -72,7 +89,7 @@ export default function CompartilharChurrasco({ route, navigation }) {
             </View>
 
             <View style={style.footer}>
-                <TouchableOpacity onPress={goBack} style={style.shareBtn}>
+                <TouchableOpacity onPress={compartilhar} style={style.shareBtn}>
                     <Text style={style.shareText}>Compartilhar</Text>
                 </TouchableOpacity>
             </View>

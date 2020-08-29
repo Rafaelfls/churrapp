@@ -18,9 +18,11 @@ import ResumoChurras from './pages/ResumoChurras';
 import OutrosChurras from './pages/OutrosChurras';
 import CriarChurrasco from './pages/CriarChurrasco';
 import AdicionaConvidados from './pages/AdicionaConvidados';
+import CompartilharConvidados from './pages/CompartilharConvidados';
 import DetalheChurras from './pages/DetalheChurras';
 import InicioCriaChurras from './pages/InicioCriaChurras';
 import OpenContactList from './pages/OpenContactList';
+import OpenContactListCompartilhar from './pages/OpenContactListCompartilhar';
 import AdicionarPratoPrincipal from './pages/AdicionarPratoPrincipal';
 import ParticiparChurrasco from './pages/ParticiparChurrasco';
 import CompartilharChurrasco from './pages/CompartilharChurrasco';
@@ -97,6 +99,8 @@ export default function Routes() {
                     {/* Paginas de comparilhamento do churrasco */}
                     <AppStack.Screen name="ParticiparChurrasco" component={ParticiparChurrasco} />
                     <AppStack.Screen name="CompartilharChurrasco" component={CompartilharChurrasco} />
+                    <AppStack.Screen name="CompartilharConvidados" component={CompartilharConvidados} />
+                    <AppStack.Screen name="OpenContactListCompartilhar" component={OpenContactListCompartilhar} />
                     <AppStack.Screen name="QRCodeLeitor" component={QRCodeLeitor} />
                     {/* Fim telas de compartilhamento do churrasco */}
 

@@ -20,7 +20,8 @@ export default function CadastroUsuario() {
     const [visivel, setVisivel] = useState(false)
     const [modalText, setModalText] = useState('Faltaram algumas informações!');
     const [url, setUrl] = useState("https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png")
-
+    const [ erroMsg , setErroMsg ] = useState('');
+    const [ erroVisivel, setErroVisivel ] = useState('');
     const [borderColorRed1, setBorderColorRed1] = useState(style.formOk);
     const [borderColorRed2, setBorderColorRed2] = useState(style.formOk);
     const [borderColorRed3, setBorderColorRed3] = useState(style.formOk);
@@ -43,7 +44,8 @@ export default function CadastroUsuario() {
     }
 
     async function enviaNotificacao(convidId){
-        await api.post(`/notificacoes/${convidId}`,{
+        console.log("enviaNotify",convidId)
+        await api.post(`/notificacoesGeral/${convidId}`,{
             mensagem:`Seja bem vind@ ao Churrapp, nós estamos muito felizes com a sua chegada!`, 
             negar:null, 
             confirmar:"Legal"
@@ -88,7 +90,7 @@ export default function CadastroUsuario() {
                 idade: "20/12/2020",
                 fotoUrlU: url,
                 celular: celularUsuario,
-                cadastrado: false,
+                cadastrado: true,
                 apelido: nomeUsuario,
                 senha: senhaUsuario,
                 pontoCarne_id: 0,
@@ -97,10 +99,16 @@ export default function CadastroUsuario() {
                 bebidaPreferida_id: 0,
                 acompanhamentoPreferido_id: 0,
                 sobremesaPreferida_id: 0,
-            }).then(async function (response) {
-                USUARIOLOGADO = response.data
-                await enviaNotificacao(USUARIOLOGADO.id)
-                navigation.replace('Tabs');
+            }).then(async function (response) {                
+                console.log(response.data)
+                if(response.data.mensagem != undefined){
+                    setErroMsg(response.data.mensagem)
+                    setErroVisivel(true)
+                }else{
+                    USUARIOLOGADO = response.data.usuario[0]
+                    await enviaNotificacao(USUARIOLOGADO.id)
+                    navigation.replace('Tabs');
+                }
             })
         }
     }
@@ -118,7 +126,7 @@ export default function CadastroUsuario() {
 
             <ScrollView style={style.scrollView}>
                 <View style={style.formGroup}>
-                    <Text style={style.textLabel}>Nome:</Text>
+                    <Text style={style.textLabel}>Primeiro nome:</Text>
                     <TextInput
                         style={[style.inputStandard, borderColorRed1]}
                         onChangeText={text => setNomeUsuario(text)}
@@ -165,7 +173,23 @@ export default function CadastroUsuario() {
                     </View>
                 </View>
             </Modal>
-
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={erroVisivel}
+            >
+                <View style={style.centeredView}>
+                    <View style={style.modalView}>
+                        <Text style={style.modalTitle}>Ops!</Text>
+                        <Text style={style.modalText}>{erroMsg}</Text>
+                        <View style={style.footerModal}>
+                            <TouchableOpacity style={style.continueBtn} onPress={() => setErroVisivel(false)}>
+                                <Text style={style.textBtn}>Ok</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
             <View style={style.footer}>
                 <TouchableOpacity style={style.continueBtn} onPress={navigateToResumo}>
                     <Text style={style.textBtn}>Cadastrar</Text>
