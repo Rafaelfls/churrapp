@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
+import { Left } from 'native-base';
 
 export default StyleSheet.create({
 
@@ -89,6 +90,13 @@ export default StyleSheet.create({
     borderRadius: 10,
     padding: 10,
   },
+  churrasImgContainer: {
+    marginBottom: 0,
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    borderRadius: 10,
+    padding: 10,
+  },
   churrasDono: {
     color: 'white',
     fontSize: 13,
@@ -97,6 +105,12 @@ export default StyleSheet.create({
     height: 60,
     width: 60,
     borderRadius: 30,
+  },
+  churrasImg: {
+    height: 100,
+    width: 100,
+    borderRadius: 30,
+    resizeMode: 'stretch',
   },
 
   //linha
@@ -182,14 +196,13 @@ export default StyleSheet.create({
   containerItens: {
   },
   item: {
-    alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: "#d3d3d3",
     borderRadius: 8,
     margin: 10,
     padding: 8,
-    height: 90,
-    bottom: 10
+    height: 130,
+    bottom: 10,
   },
   tiposDesign: {
     alignItems: 'center',
@@ -230,8 +243,18 @@ export default StyleSheet.create({
   },
   qtdItemAdc: {
     color: '#800000',
-    paddingBottom: 12,
     fontSize: 12,
+  },
+  precoItem:{
+    fontSize: 12,
+    color: '#0000ff',
+    marginLeft: 2
+  },
+  precoItemNulo:{
+    fontSize: 20,
+    color: '#0000ff',
+    marginLeft: 2,
+    marginBottom: 5
   },
   nomeItem: {
     color: 'white',
@@ -343,6 +366,7 @@ export default StyleSheet.create({
     marginVertical: 5,
     flexDirection: 'row',
     paddingVertical: 10,
+    paddingHorizontal: 10,
     borderRadius: 8,
     width: '100%',
   },
@@ -383,6 +407,7 @@ export default StyleSheet.create({
   },
   churrasInfosViewModal: {
     marginLeft: 10,
+    marginBottom: 10
   },
   churrasTitleModal: {
     fontSize: 15,
