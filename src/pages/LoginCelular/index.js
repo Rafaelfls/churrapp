@@ -88,8 +88,8 @@ export default function LoginCelular() {
                     selectedValue={usuarioSelecionado}
                     onValueChange={usuarioSelecionado => setUsuarioSelecionado(usuarioSelecionado)}
                 >
-                    {usuarios.map(users => (
-                        <Picker.Item label={users.nome} value={users} />
+                    {usuarios.map((users,idx) => (
+                        <Picker.Item label={users.nome} value={users} key={idx}/>
                     ))}
 
                 </Picker>
