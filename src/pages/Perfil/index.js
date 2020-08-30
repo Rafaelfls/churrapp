@@ -355,8 +355,8 @@ export default function Perfil() {
                                     selectedValue={pontoCarneNovo_id}
                                     onValueChange={pontoCarne_id => { usuarioUpdate.pontoCarne_id = pontoCarne_id }}
                                 >
-                                    {pontoCarneLista.map(pontoLista => (
-                                        <Picker.Item label={pontoLista.ponto} value={pontoLista.id} />
+                                    {pontoCarneLista.map((pontoLista , idx) => (
+                                        <Picker.Item label={pontoLista.ponto}  key={idx} value={pontoLista.id} />
                                     ))}
 
                                 </Picker>
@@ -369,8 +369,8 @@ export default function Perfil() {
                                     selectedValue={quantidadeComeNovo_id}
                                     onValueChange={quantidadeCome_id => { usuarioUpdate.quantidadeCome_id = quantidadeCome_id }}
                                 >
-                                    {quantidadeComeLista.map(quantidadeComeLista => (
-                                        <Picker.Item label={quantidadeComeLista.nomeQuantidadeCome + " (" + quantidadeComeLista.quantidade + "g)"} value={quantidadeComeLista.id} />
+                                    {quantidadeComeLista.map((quantidadeComeLista , idx) => (
+                                        <Picker.Item label={quantidadeComeLista.nomeQuantidadeCome + " (" + quantidadeComeLista.quantidade + "g)"}  key={idx} value={quantidadeComeLista.id} />
                                     ))}
 
                                 </Picker>

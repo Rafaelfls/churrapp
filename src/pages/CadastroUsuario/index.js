@@ -29,8 +29,6 @@ export default function CadastroUsuario() {
     const [borderColorRed2, setBorderColorRed2] = useState(style.formOk);
     const [borderColorRed3, setBorderColorRed3] = useState(style.formOk);
 
-    global.USUARIOLOGADO = null;
-
     function backHome() {
         navigation.replace('Login');
     }
@@ -47,7 +45,6 @@ export default function CadastroUsuario() {
     }
 
     async function enviaNotificacao(convidId) {
-        console.log("enviaNotify", convidId)
         await api.post(`/notificacoesGeral/${convidId}`, {
             mensagem: `Seja bem vind@ ao Churrapp, nós estamos muito felizes com a sua chegada!`,
             negar: null,

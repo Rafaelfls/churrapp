@@ -28,8 +28,6 @@ export default function AdicionaConvidados({ route, navigation }) {
   const { sobrenomeContato } = route.params;
   const { telefoneContato } = route.params;
   const { churrasAtual } = route.params;
-  global.LISTADECONVIDADOS = null;
-  global.CONVITE = null;
 
 
   useEffect(() => {

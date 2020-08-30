@@ -14,13 +14,10 @@ import api from '../../services/api';
 import style from './styles';
 
 import { useChurrasCount } from '../../context/churrasContext';
-import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function ResumoChurras() {
     const { churrasCount, setChurrasCount } = useChurrasCount();
 
-    const { loading, setLoading } = useLoadingModal();
-    const criarModal = createLoadingModal(loading);
     const route = useRoute();
     const [churras, setChurras] = useState([]);
     const [notificacoes, setnotificacoes] = useState([]);
@@ -69,6 +66,7 @@ export default function ResumoChurras() {
     }
 
     function apertaFabBtn(btn) {
+        console.log(btn)
         if (btn == "criaChurras") {
             inicioCriarChurras();
         }
@@ -92,6 +90,9 @@ export default function ResumoChurras() {
 
     async function loadChurras() {
         setLoading(true);
+
+
+
         const response = await api.get(`/churras/${USUARIOLOGADO.id}`);
 
         setChurras(response.data);
@@ -134,7 +135,6 @@ export default function ResumoChurras() {
     }
 
     async function clickconfirmar(notificacao) {
-        setLoading(true)
         if (notificacao.churras_id == null) {
             await api.delete(`/notificacoes/${notificacao.id}`)
             setIsNotificacoesOpen(false)
@@ -145,7 +145,6 @@ export default function ResumoChurras() {
             setIsNotificacoesOpen(false)
             setRefreshChurras(!refreshChurras);
         }
-        setLoading(false)
     }
 
     return (
@@ -275,7 +274,20 @@ export default function ResumoChurras() {
                     </View>
                 </View>
             </Modal>
-            {criarModal}
+
+            {/* <Modal
+                animationType="fade"
+                transparent={true}
+                visible={loading}
+            >
+                <View
+                    style={style.loadingBackground}
+                >
+                    <ActivityIndicator size="large" color="maroon" />
+                    <Text style={style.textLoading}>Carregando ...</Text>
+                </View>
+            </Modal> */}
+
         </View>
 
     )

@@ -12,6 +12,8 @@ export default function Login() {
   const Tab = createBottomTabNavigator();
 
   global.USUARIOLOGADO = null;
+  global.LISTADECONVIDADOS = null;
+  global.CONVITE = null;
   
   function navigateToCadastro() {
     navigation.replace('CadastroUsuario');
