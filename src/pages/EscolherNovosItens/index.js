@@ -182,8 +182,8 @@ export default function EscolherNovosItens({ route, navigation }) {
                                     mode="dropdown"
                                     onValueChange={itemValue => setSelectedUnidade(itemValue)}
                                 >
-                                    {unidades.map(unity => (
-                                        <Picker.Item label={unity.unidade} value={unity.id} />
+                                    {unidades.map((unity , idx) => (
+                                        <Picker.Item label={unity.unidade} value={unity.id} key={idx} />
                                     ))}
                                 </Picker>
                             </View>
@@ -195,8 +195,8 @@ export default function EscolherNovosItens({ route, navigation }) {
                                     mode="dropdown"
                                     onValueChange={itemValue => setSelectedFormato(itemValue)}
                                 >
-                                    {formato.map(form => (
-                                        <Picker.Item label={form.formato} value={form.id} />
+                                    {formato.map((form , idx)=> (
+                                        <Picker.Item label={form.formato} value={form.id}  key={idx}/>
                                     ))}
                                 </Picker>
                             </View>

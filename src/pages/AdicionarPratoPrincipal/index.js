@@ -25,6 +25,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     const [reload, setReload] = React.useState(false);
     const [itemDeletar, setItemDeletar] = useState([]);
     const [isVisible, setIsVisible] = React.useState(false);
+    const [isSugestao, setIsSugestao] = React.useState(false);
     const [isFirstTime, setIsFirstTime] = React.useState(primeiroAcesso);
 
     const config = {
@@ -184,12 +185,12 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                 >
                     <View style={style.centeredView}>
                         <View style={style.modalView}>
+                            <Text style={style.modalTitleText}>Info</Text>
                             <Text style={style.modalText}>A seguir o Churrapp preparou para vocês uma sugestão de itens para seu churrasco.</Text>
                             <Text style={style.modalText}>Essa sugestão leva em conta quantos convidados você convidou para seu churras.</Text>
                             <Text style={style.modalText}>Se não gostar da sugestão é so adicionar itens de sua preferencia com as quantidades que preferir.</Text>
                             <View style={style.footerModal}>
                                 <TouchableOpacity style={style.salvarBtnModal} onPress={() => setIsFirstTime(false)}>
-                                    <IconF5 style={style.iconSalvarBtnModal} name="check" size={20} />
                                     <Text style={style.iconSalvarBtnModal}>Ok</Text>
                                 </TouchableOpacity>
                             </View>

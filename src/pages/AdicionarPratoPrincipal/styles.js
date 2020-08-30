@@ -104,17 +104,24 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: 'absolute',
-    bottom: "35%",
+    bottom: "18%",
     width: '100%',
   },
   modalText: {
-    fontSize: 18,
+    fontSize: 15,
     marginBottom: 15
   },
-  footerModal: {
-    marginTop: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly'
+  modalTitleText:{
+    color:'maroon',
+    fontSize:20,
+    fontFamily:'poppins-medium'
+  },
+  footerModal: {    
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    backgroundColor: 'white',
   },
   exitBtnModal: {
     flexDirection: 'row-reverse',
@@ -126,17 +133,20 @@ export default StyleSheet.create({
     marginHorizontal: 6,
   },
   salvarBtnModal: {
-    flexDirection: 'row-reverse',
-    backgroundColor: '#800000',
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-    borderRadius: 8,
     alignItems: 'center',
-    marginHorizontal: 6,
+    justifyContent: 'center',
+    borderRadius:8,
+    marginHorizontal:5,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: '40%',
+    paddingVertical: 5,
   },
   iconSalvarBtnModal: {
-    marginLeft: 5,
-    color: 'white'
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
   },
 
 })

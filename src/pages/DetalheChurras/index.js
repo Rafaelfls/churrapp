@@ -203,8 +203,8 @@ export default function DetalheChurras() {
             onValueChange={itemValue => setSelectedFormato(itemValue)}
           >
 
-            {formato.map(formato => (
-              <Picker.Item label={formato.formato} value={formato.id} />
+            {formato.map((formato, idx ) => (
+              <Picker.Item label={formato.formato}  key={idx} value={formato.id} />
             ))}
           </Picker>
         </View>
@@ -649,8 +649,8 @@ export default function DetalheChurras() {
                 mode="dropdown"
                 onValueChange={itemValue => setSelectedUnidade(itemValue)}
               >
-                {unidades.map(unity => (
-                  <Picker.Item label={unity.unidade} value={unity.id} />
+                {unidades.map((unity , idx) => (
+                  <Picker.Item label={unity.unidade}  key={idx} value={unity.id} />
                 ))}
               </Picker>
             </View>
