@@ -9,6 +9,7 @@ import IconMat from 'react-native-vector-icons/MaterialCommunityIcons'
 import IconMa from 'react-native-vector-icons/MaterialIcons';
 import IconOct from 'react-native-vector-icons/Octicons';
 import { ScrollableTabView, DefaultTabBar, ScrollableTabBar, } from '@valdio/react-native-scrollable-tabview'
+import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
 
 import style from './styles';
@@ -29,7 +30,7 @@ export default function DetalheChurras() {
   const [refresh, setRefresh] = useState(true);
   const [todosTipos, setTodosTipos] = useState([]);
   const [subTipos, setSubTipos] = useState([]);
-  const [cancelBtn, setCancelBtn] = useState();
+  const [contactar, setContactar] = useState([false, null]);
   const [churrasDateFormatted, setChurrasDateFormatted] = useState();
 
   const churras = route.params.churras;
@@ -93,17 +94,19 @@ export default function DetalheChurras() {
   async function carregarTodosTipos(subTipo) {
     if (subTipo.id == 2) {
       return pegarItemPorTipo({ id: 6 })
+    } else if (subTipo.id == 5) {
+      return pegarItemPorTipo({ id: 14 })
     } else {
       const response = await api.get(`/tipoSubTipo?subTipo=${subTipo.id}`).then(function (response) {
         setTodosTipos(response.data);
         setModalSubTipoVisivel(false);
         setModalTipoVisivel(true);
       });
-    if(subTipo.subTipo == "Carnes" ){
-      setFormatoPicker(true)
-    } else {
-      setSelectedFormato(0);
-    }
+      if (subTipo.subTipo == "Carnes") {
+        setFormatoPicker(true)
+      } else {
+        setSelectedFormato(0);
+      }
 
     }
   }
@@ -115,6 +118,7 @@ export default function DetalheChurras() {
     setConvidadosCount(response.data.length);
   }
 
+  console.log(convidados)
 
   async function addItem(isVisible, item, unidadeDrop, qtdNova, formato) {
     setIsVisivel(isVisible)
@@ -134,14 +138,12 @@ export default function DetalheChurras() {
     })
   }
 
-  
+
 
   function addItemVisivel() {
     if (editavel) {
       return (
-        <TouchableOpacity onPress={() => setModalSubTipoVisivel(true)}>
-          <Text style={style.verTodos}>Adicionar item</Text>
-        </TouchableOpacity>
+        <ActionButton offsetX={10} style={{ opacity: '0.6' }} offsetY={10} onPress={() => setModalSubTipoVisivel(true)} />
       );
     } else {
       return null
@@ -150,25 +152,45 @@ export default function DetalheChurras() {
 
   function ativarFormatoPicker() {
     if (formatoPicker) {
-      return(
-        <Picker
-                selectedValue={selectedFormato}
-                style={style.boxDropdownQtd}
-                itemStyle={style.itemDropdown}
-                mode="dropdown"
-                onValueChange={itemValue => setSelectedFormato(itemValue)}
-              >
-                
-                {formato.map(formato => (
-                  <Picker.Item label={formato.formato} value={formato.id} />
-                ))}
-              </Picker>
+      return (
+        <View style={style.selectionFormQtd}>
+          <Text style={style.selectionFormQtdLabel}>Formato:</Text>
+          <Picker
+            selectedValue={selectedFormato}
+            style={style.boxDropdownQtd}
+            itemStyle={style.itemDropdown}
+            mode="dropdown"
+            onValueChange={itemValue => setSelectedFormato(itemValue)}
+          >
+
+            {formato.map(formato => (
+              <Picker.Item label={formato.formato} value={formato.id} />
+            ))}
+          </Picker>
+        </View>
       )
     } else {
       return null
     }
   }
 
+  function formataNumeroCelular(celular) {
+    var celFormatado = []
+    if (celular.length == 11) {
+      for (let i = 0; i < celular.length; i++) {
+        if (i == 0) {
+          celFormatado.push('(', celular[i])
+        } else if (i == 1) {
+          celFormatado.push(celular[i], ')')
+        } else {
+          celFormatado.push(celular[i])
+        }
+      }
+      return celFormatado;
+    } else {
+      return celular
+    }
+  }
 
   async function pegarItemPorTipo(tipo) {
     const response = await api.get(`/items?tipo=${tipo.id}`).then(function (response) {
@@ -179,11 +201,11 @@ export default function DetalheChurras() {
     });
   }
 
-  async function deleteItem(itens){
-    await api.delete(`/listadochurras/${itens.id}`) 
-    .then(function(response){
-      setRefresh(!refresh);
-    })
+  async function deleteItem(itens) {
+    await api.delete(`/listadochurras/${itens.id}`)
+      .then(function (response) {
+        setRefresh(!refresh);
+      })
   }
 
 
@@ -210,133 +232,141 @@ export default function DetalheChurras() {
         }
       </View>
 
-        
-        
 
-        
 
-        <ScrollableTabView
-                style={style.tabView}
-                tabBarPosition="top" tabBarActiveTextColor="maroon" tabBarInactiveTextColor="dimgray"
-                tabBarTextStyle={{ fontWeight: 'normal', fontFamily: 'poppins-semi-bold', fontSize: 15 }}
-                tabBarBackgroundColor='white'
-                tabBarUnderlineStyle={{ backgroundColor: 'maroon', height: 2 }}
-                renderTabBar={() => <DefaultTabBar />}
-                ref={(tabView) => { tabView = tabView; }}
-                initialPage={0}
-            >
-          <View tabLabel="Info">
-            <View style={style.churrasImgContainer}>
-              <Image source={{ uri: churras.fotoUrlC }} style={style.churrasImg} />
-            </View>
-            <View style={style.infosPrincipais}>
-              <View style={style.infosLocDat}>
-                <View style={style.churrasLocalContainer}>
-                  <IconFA name="map-o" size={20} style={style.localIcon} />
-                  <Text style={style.churrasLocal}>{churras.local}</Text>
-                </View>
-                <View style={style.churrasLocalContainer}>
-                  <IconEnt name="calendar" size={22} style={style.dataIcon} />
-                  <Text style={style.churrasData}>{churrasDateFormatted}</Text>
-                </View>
-                <View style={style.churrasLocalContainer}>
-                  <IconEnt name="clock" size={22} style={style.dataIcon} />
-                  <Text style={style.churrasData}>{churras.hrInicio}{churras.hrFim == null ? null : " - " + churras.hrFim}</Text>
-                </View>
-                <View style={style.churrasLocalContainer}>
-                  <IconMa name="description" size={22} style={style.dataIcon} />
-                  <Text style={style.churrasData}>{churras.descricao == null ? "-" : churras.descricao}</Text>
-                </View>
-                <View style={style.churrasLocalContainer}>
-                  <IconMa name="attach-money" size={22} style={style.dataIcon} />
-                  <Text style={style.churrasData}>{churras.valorPago == null ? "-" : churras.valorPago}</Text>
-                </View>
-                <View style={style.churrasLocalContainer}>
-                  <IconMa name="attach-money" size={22} style={style.dataIcon} />
-                  <Text style={style.churrasData}>{churras.valorTotal == null ? "-" : churras.valorTotal}</Text>
-                </View>
-                <View style={style.churrasLocalContainer}>
-                  <IconMa name="people" size={22} style={style.dataIcon} />
-                  <View style={style.containerTituloConvidados}>
-                    {convidadosCount === 1
+
+
+
+      <ScrollableTabView
+        style={style.tabView}
+        tabBarPosition="top" tabBarActiveTextColor="maroon" tabBarInactiveTextColor="dimgray"
+        tabBarTextStyle={{ fontWeight: 'normal', fontFamily: 'poppins-semi-bold', fontSize: 15 }}
+        tabBarBackgroundColor='white'
+        tabBarUnderlineStyle={{ backgroundColor: 'maroon', height: 2 }}
+        renderTabBar={() => <DefaultTabBar />}
+        ref={(tabView) => { tabView = tabView; }}
+        initialPage={0}
+      >
+        <View tabLabel="Info">
+          <View style={style.churrasImgContainer}>
+            <Image source={{ uri: churras.fotoUrlC }} style={style.churrasImg} />
+          </View>
+          <View style={style.infosPrincipais}>
+            <View style={style.infosLocDat}>
+              <View style={style.churrasLocalContainer}>
+                <IconFA name="map-o" size={20} style={style.localIcon} />
+                <Text style={style.churrasLocal}>{churras.local}</Text>
+              </View>
+              <View style={style.churrasLocalContainer}>
+                <IconEnt name="calendar" size={22} style={style.dataIcon} />
+                <Text style={style.churrasData}>{churrasDateFormatted}</Text>
+              </View>
+              <View style={style.churrasLocalContainer}>
+                <IconEnt name="clock" size={22} style={style.dataIcon} />
+                <Text style={style.churrasData}>{churras.hrInicio}{churras.hrFim == null ? null : " - " + churras.hrFim}</Text>
+              </View>
+              <View style={style.churrasLocalContainer}>
+                <IconMa name="description" size={22} style={style.dataIcon} />
+                <Text style={style.churrasData}>{churras.descricao == null ? "-" : churras.descricao}</Text>
+              </View>
+              <View style={style.churrasLocalContainer}>
+                <IconMa name="attach-money" size={22} style={style.dataIcon} />
+                <Text style={style.churrasData}>{churras.valorPago == null ? "-" : churras.valorPago}</Text>
+              </View>
+              <View style={style.churrasLocalContainer}>
+                <IconMa name="attach-money" size={22} style={style.dataIcon} />
+                <Text style={style.churrasData}>{churras.valorTotal == null ? "-" : churras.valorTotal}</Text>
+              </View>
+              <View style={style.churrasLocalContainer}>
+                <IconMa name="people" size={22} style={style.dataIcon} />
+                <View style={style.containerTituloConvidados}>
+                  {convidadosCount === 1
                     ? <Text style={style.subtituloConvidados}>{convidadosCount} pessoa</Text>
                     : <Text style={style.subtituloConvidados}>{convidadosCount} pessoas</Text>}
-                  </View>
                 </View>
               </View>
+            </View>
             <View style={style.churrasDonoContainer}>
               <Image source={{ uri: churras.fotoUrlU }} style={style.donoImg} />
               <Text style={style.churrasDono}>{churras.nome}</Text>
             </View>
           </View>
-    </View>
-              
-              <FlatList
-                tabLabel='Convidados'
-                data={convidados}
-                style={{ height: 170, width: "100%" }}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={convidados => String(convidados.id)}
-                renderItem={({ item: convidados }) => (
-
-                  <View style={{ width: 140, height: 'auto', flexDirection: 'row' }}>
-                    <TouchableOpacity>
-                      <View style={style.convidado}>
-                        <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
-                        <Text style={style.nomeConvidado}>{convidados.nome}</Text>
-                        <Text style={style.foneConvidado}>{convidados.celular}</Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-
-                )}
-              />
-        <View tabLabel='Itens'>
-          <View style={style.cabecalhoItens}>
-            <View style={style.containerTituloItens}>
-            </View>
-            {addItemVisivel()}
-          </View>
-          <FlatList
-              data={itens}
-              showsVerticalScrollIndicator={false}
-              keyExtractor={itens => String(itens.id)}
-              renderItem={({ item: itens }) => (
-                
-                <View>
-                  
-                  <TouchableOpacity style={style.card} onPress={() => deleteItem(itens)}>
-                    <Image source={{ uri: itens.fotoUrlT }} style={style.churrasFotoModal} />
-                      
-                      <View style={style.churrasInfosViewModal}>
-                      <Text style={style.nomeItemAdc}>{itens.nomeItem}</Text>
-                        <View style={style.churrasLocDatModal}>
-                          <IconMat style={style.dataIconModal} name="cow" size={15} />
-                          <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
-                          <Text style={style.locDatSeparatorModal}>  |  </Text>
-                          <Icon style={style.localIconModal} name="coins" size={15} />
-                          {itens.precoMedio === null
-                            ? <Text style={style.precoItemNulo}>-</Text>
-                            :<Text style={style.precoItem}>{itens.precoMedio}R$</Text>}
-                        </View>
-                      </View>
-                      
-                      
-                  </TouchableOpacity>
-                </View>
-
-              )}
-          />
         </View>
-        
+
+        <FlatList
+          tabLabel='Convidados'
+          data={convidados}
+          style={{ height: 170, width: "100%" }}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={convidados => String(convidados.id)}
+          renderItem={({ item: convidados }) => (
+
+            <View style={style.containerConvidados}>
+              {convidados.confirmado
+                ? (<TouchableOpacity onPress={() => setContactar([true, true])} style={style.convidadoPresente}>
+                  <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
+                  <View>
+                    <Text style={style.nomeConvidado}>{convidados.nome}</Text>
+                    <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
+                  </View>
+                </TouchableOpacity>)
+                : convidados.confirmado == false
+                  ? (<TouchableOpacity onPress={() => setContactar([true, false])} style={style.convidadoAusente}>
+                    <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgAusente} />
+                    <View>
+                      <Text style={style.nomeConvidadoAusente}>{convidados.nome}</Text>
+                      <Text style={style.foneConvidadoAusente}>{formataNumeroCelular(convidados.celular)}</Text>
+                    </View>
+                  </TouchableOpacity>)
+                  : convidados.confirmado == null
+                    ? (<TouchableOpacity onPress={() => setContactar([true, null])} style={style.convidadoNaoConfirm}>
+                      <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
+                      <View>
+                        <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
+                        <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
+                      </View>
+                    </TouchableOpacity>) : null}
+            </View>
+
+          )}
+        />
+        <View tabLabel='Itens'>
+          <FlatList
+            data={itens}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={itens => String(itens.id)}
+            style={{ marginBottom: 30 }}
+            renderItem={({ item: itens }) => (
+              <View>
+                <TouchableOpacity style={style.cardItemAdicionado} onPress={() => deleteItem(itens)}>
+                  <Image source={{ uri: itens.fotoUrlT }} style={style.churrasFotoModal} />
+                  <View style={style.churrasInfosViewModal}>
+                    <Text style={style.churrasTitleModal}>{itens.nomeItem}</Text>
+                    <Text style={style.churrasDonoModal}>{itens.descricao} </Text>
+                    <View style={style.churrasLocDatModal}>
+                      <Icon style={style.dataIconModal} name="weight-hanging" size={15} />
+                      <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
+                      <Text style={style.locDatSeparatorModal}>  |  </Text>
+                      <Icon style={style.localIconModal} name="coins" size={15} />
+                      <Text style={style.churrasLocalModal}> {itens.precoMedio == null ? '-' : "R$ " + itens.precoMedio}</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+
+          {addItemVisivel()}
+        </View>
+
       </ScrollableTabView>
-        
+
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalSubTipoVisivel}
       >
-        <View style={style.centeredSubTipoView}>
+        <View style={style.centeredView}>
           <View style={style.modalView}>
             <Text style={style.titleSubTipoModal}>Escolha uma categoria</Text>
             <FlatList
@@ -404,7 +434,7 @@ export default function DetalheChurras() {
         animationType="slide"
         transparent={true}
         visible={modalItemVisivel}>
-        <View style={style.centeredView}>
+        <View style={style.centeredViewItens}>
           <View style={style.modalView}>
             <Text style={style.titleSubTipoModal}>Qual deseja adicionar?</Text>
             <FlatList
@@ -479,9 +509,8 @@ export default function DetalheChurras() {
                   <Picker.Item label={unity.unidade} value={unity.id} />
                 ))}
               </Picker>
-              {ativarFormatoPicker()}
-              
             </View>
+            {ativarFormatoPicker()}
             <View style={style.footerModalQtd}>
               <TouchableOpacity style={style.exitBtnFooterQtd} onPress={() => setVisibility(false, "", '', '')}>
                 <Icon style={style.iconSalvarBtnQtd} name="times" size={15} />
@@ -496,6 +525,17 @@ export default function DetalheChurras() {
         </View>
       </Modal>
 
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={contactar[0]}
+      >
+        <View style={style.centeredViewContactar}>
+          <View style={style.modalViewContactar}>
+
+          </View>
+        </View>
+      </Modal>
 
 
     </View>

@@ -141,8 +141,9 @@ export default StyleSheet.create({
     opacity: 0.85,
   },
   fabBtnIcon: {
-    fontSize: 20,
+    fontSize: 15,
     height: 22,
+    textAlignVertical:'center',
     color: 'white'
   },
 

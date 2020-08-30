@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, Vibration, ActivityIndicator, Modal, RefreshControl } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import ActionButton from 'react-native-action-button';
+import { FloatingAction } from "react-native-floating-action";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconMI from 'react-native-vector-icons/MaterialIcons';
@@ -22,12 +22,28 @@ export default function ResumoChurras() {
     const [churras, setChurras] = useState([]);
     const [notificacoes, setnotificacoes] = useState([]);
     const [isNotificacoesOpen, setIsNotificacoesOpen] = useState(false);
-    const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const [visivel, setVisivel] = useState(false)
     const [churrasDeletar, setChurrasDeletar] = useState([]);
     const [refreshChurras, setRefreshChurras] = useState(true);
 
+    const btns = [
+        {
+            text: "Criar Churras",
+            name: "criaChurras",
+            color:'#800000',            
+            icon: <Icon name="plus" style={style.fabBtnIcon} />,
+            position: 1
+        },
+        {
+            text: "Participar do Churras",
+            name: "participaChurras",
+            color:'#800000',
+            icon: <Icon name="users" style={style.fabBtnIcon} />,
+            position: 2
+        },
+    ]
+    
     const config = {
         headers: { 'Authorization': USUARIOLOGADO.id }
     };
@@ -47,6 +63,16 @@ export default function ResumoChurras() {
 
     function logout() {
         navigation.replace('Login');
+    }
+
+    function apertaFabBtn(btn) {
+        console.log(btn)
+        if (btn == "criaChurras") {
+            inicioCriarChurras();
+        }
+        if (btn == 'participaChurras') {
+            ParticiparChurras()
+        }
     }
 
     function inicioCriarChurras() {
@@ -188,14 +214,14 @@ export default function ResumoChurras() {
                 )}
             />
 
-            <ActionButton style={style.fabBtn} onPress={() => Vibration.vibrate(50)}>
-                <ActionButton.Item title="Criar Churras" style={style.fabBtn} onPress={inicioCriarChurras}>
-                    <Icon name="plus" style={style.fabBtnIcon} />
-                </ActionButton.Item>
-                <ActionButton.Item title="Participar do Churras" style={style.fabBtn} onPress={ParticiparChurras}>
-                    <Icon name="users" style={style.fabBtnIcon} />
-                </ActionButton.Item>
-            </ActionButton>
+            <FloatingAction
+                actions={btns}
+                color='#800000'
+                overlayColor='rgba(68, 68, 68, 0)'
+                onPress={() => Vibration.vibrate(50)}
+                onPressItem={name => {
+                    apertaFabBtn(name)
+                }} />
 
             <Modal
                 animationType="fade"
@@ -226,7 +252,7 @@ export default function ResumoChurras() {
             >
                 <View style={style.centeredViewNotf}>
                     <View style={style.modalViewNotf}>
-                    <TouchableOpacity style={style.closeNotf} onPress={() => setIsNotificacoesOpen(false)}><IconMCI size={25} name="close-circle-outline"/></TouchableOpacity>
+                        <TouchableOpacity style={style.closeNotf} onPress={() => setIsNotificacoesOpen(false)}><IconMCI size={25} name="close-circle-outline" /></TouchableOpacity>
                         <FlatList
                             data={notificacoes}
                             style={style.notificacoesList}

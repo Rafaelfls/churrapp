@@ -11,20 +11,20 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 export default function LoginCelular() {
 
-    // // Dev apagar em produção
-    // const [usuarioSelecionado, setUsuarioSelecionado] = useState()
-    // const [usuarios, setUsuarios] = useState([]);
+    // Dev apagar em produção
+    const [usuarioSelecionado, setUsuarioSelecionado] = useState()
+    const [usuarios, setUsuarios] = useState([]);
 
-    // useEffect(() => {
-    //     carregarUsuarios();
-    // }, []);
+    useEffect(() => {
+        carregarUsuarios();
+    }, []);
 
-    // async function carregarUsuarios() {
-    //     const response = await api.get(`/usuarios`);
+    async function carregarUsuarios() {
+        const response = await api.get(`/usuarios`);
 
-    //     setUsuarios(response.data);
-    // }
-    // // Apagar acima em produção
+        setUsuarios(response.data);
+    }
+    // Apagar acima em produção
 
     const navigation = useNavigation();
     const [celularUser, setCelularUser] = useState('');
