@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, SafeAreaView, FlatList} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import ActionButton from 'react-native-action-button';
@@ -7,11 +7,14 @@ import api from '../../services/api';
 import * as Crypto from 'expo-crypto';
 
 import style from './styles';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 var convidadosList = [];
 
 export default function AdicionaConvidados({ route, navigation }) {
 
+  const { loading, setLoading } = useLoadingModal();
+  const criarModal = createLoadingModal(loading);
   const [value, onChangeValue] = React.useState(20.50);
   const [convite, onChangeText] = React.useState('');
   const [maxChar, setMaxChar] = React.useState(190);
@@ -58,23 +61,23 @@ export default function AdicionaConvidados({ route, navigation }) {
     setMaxChar(atual)
   }
 
-  async function criaSenha(convid,telefone) {
+  async function criaSenha(convid, telefone) {
     convid.senha = await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA512,
-       telefone
+      telefone
     );
   }
 
   async function criaListaConvidados(convid) {
     convid.telefone = convid.telefone.replace("+55", "").replace(/-/g, "").replace(/\s/g, "").replace(/[()]/g, "");
 
-    if(convid.telefone.length > 11){
-      convid.telefone = convid.telefone.substring(convid.telefone.length-11)
+    if (convid.telefone.length > 11) {
+      convid.telefone = convid.telefone.substring(convid.telefone.length - 11)
     }
-    
-    let senhaProvisoria = convid.telefone.substring(convid.telefone.length-9)
+
+    let senhaProvisoria = convid.telefone.substring(convid.telefone.length - 9)
     await criaSenha(convid, senhaProvisoria)
-    
+
     const response = await api.post('/usuarios', {
       nome: convid.nome,
       sobrenome: convid.sobrenome,
@@ -113,24 +116,28 @@ export default function AdicionaConvidados({ route, navigation }) {
     const convidadosQtd = convidadosList.length
     LISTADECONVIDADOS = convidadosList;
 
-    if(convite == ''){
+    if (convite == '') {
       CONVITE = inviteStandard;
     }
 
+    setLoading(true)
     await convidadosList.map(convid => criaListaConvidados(convid))
-
+    setLoading(false)
     var churrascode = churrasAtual.churrasCode
-    navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd, churrascode });
+    navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd, churrascode, primeiroAcesso: true });
 
     convidadosList = []
   }
 
   function backHome() {
     convidadosList = []
-    LISTADECONVIDADOS=null;
+    LISTADECONVIDADOS = null;
     CONVITE = null;
+    setLoading(true)
+
     api.delete(`/churras/${churrasAtual.churrasCode}`, config)
       .then(function (response) {
+        setLoading(false)
         navigation.replace('Tabs');
       })
   }
@@ -187,6 +194,7 @@ export default function AdicionaConvidados({ route, navigation }) {
             <Text style={style.textBtn}>Convidar</Text>
           </TouchableOpacity>
         </View>
+        {criarModal}
       </SafeAreaView>
     </View>
   )

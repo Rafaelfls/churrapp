@@ -8,8 +8,11 @@ import api from '../../services/api';
 
 import style from './styles';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function LoginCelular() {
+    const { loading, setLoading } = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
 
     // Dev apagar em produção
     const [usuarioSelecionado, setUsuarioSelecionado] = useState()
@@ -33,15 +36,18 @@ export default function LoginCelular() {
     const [visivel, setVisivel] = useState(false)
 
     async function navigateToResumo() {
+        setLoading(true)
         let criptoSenhaVar = await criptoSenha(senhaUsuario)
         if (celularUser == '') {
             console.log(usuarioSelecionado)
             await api.get(`/usuariosCel/${usuarioSelecionado.celular}/${usuarioSelecionado.senha}`)
                 .then(function (response) {
                     if (response.data[0] == undefined) {
+                        setLoading(false)
                         return setVisivel(true)
                     } else {
                         USUARIOLOGADO = response.data[0]
+                        setLoading(false)
                         navigation.replace('Tabs');
                     }
                 })
@@ -49,9 +55,11 @@ export default function LoginCelular() {
             await api.get(`/usuariosCel/${celularUser}/${criptoSenhaVar}`)
                 .then(function (response) {
                     if (response.data[0] == undefined) {
+                        setLoading(false)
                         return setVisivel(true)
                     } else {
                         USUARIOLOGADO = response.data[0]
+                        setLoading(false)
                         navigation.replace('Tabs');
                     }
                 })
@@ -84,15 +92,15 @@ export default function LoginCelular() {
             <Text style={style.title}>Seja bem vindo de volta!</Text>
             <Text style={style.subtitle}>Entre com seu celular para começar a festa.</Text>
             <ScrollView>
-            <View style={style.inputArea}>
-                <Picker
-                    mode="dropdown"
-                    selectedValue={usuarioSelecionado}
-                    onValueChange={usuarioSelecionado => setUsuarioSelecionado(usuarioSelecionado)}
-                >
-                    {usuarios.map((users,idx) => (
-                        <Picker.Item label={users.nome} value={users} key={idx}/>
-                    ))}
+                <View style={style.inputArea}>
+                    <Picker
+                        mode="dropdown"
+                        selectedValue={usuarioSelecionado}
+                        onValueChange={usuarioSelecionado => setUsuarioSelecionado(usuarioSelecionado)}
+                    >
+                        {usuarios.map((users, idx) => (
+                            <Picker.Item label={users.nome} value={users} key={idx} />
+                        ))}
                     </Picker>
                     <Text style={style.textLabel}>Celular:</Text>
                     <TextInputMask
@@ -143,6 +151,7 @@ export default function LoginCelular() {
                     </View>
                 </View>
             </Modal>
+            {criarModal}
         </View>
     );
 }

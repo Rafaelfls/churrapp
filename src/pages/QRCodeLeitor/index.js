@@ -8,9 +8,12 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import api from '../../services/api';
 
 import style from './styles';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function QRCodeLeitor() {
 
+    const { loading, setLoading } = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
     const navigation = useNavigation();
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
@@ -26,6 +29,7 @@ export default function QRCodeLeitor() {
 
     async function participarDoChurras() {
         setIsVisivel(false);
+        setLoading(true)
         await api.post(`/convidadosChurras/${USUARIOLOGADO.id}`, {
             valorPagar: 30,
             churras_id: qrCodeValue
@@ -37,6 +41,7 @@ export default function QRCodeLeitor() {
             })
         });
         setQrCode(false)
+        setLoading(false)
         return navigation.replace('Tabs');
     }
 
@@ -97,6 +102,7 @@ export default function QRCodeLeitor() {
                     </View>
                 </View>
             </Modal>
+            {criarModal}
         </View>
 
 

@@ -9,9 +9,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
 import style from './styles';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function CriarChurrasco() {
 
+  const { loading, setLoading } = useLoadingModal();
+  const criarModal = createLoadingModal(loading);
   const navigation = useNavigation();
   const [nomeChurras, setNomeChurras] = useState('');
   const [local, setlocal] = useState('');
@@ -109,7 +112,7 @@ export default function CriarChurrasco() {
 
       const res = await fetch(apiUrl, options);
       const response = await res.json();
-      
+
       return response.location
     } else {
       return url
@@ -118,6 +121,7 @@ export default function CriarChurrasco() {
 
   async function criarChurras() {
 
+    setLoading(true)
     const novaUrl = await ulpoadImagem()
 
     await api.post('/churras', {
@@ -128,7 +132,8 @@ export default function CriarChurrasco() {
       descricao: descricao,
       data: date,
       fotoUrlC: novaUrl,
-    }, config).then(function (response) {      
+    }, config).then(function (response) {
+      setLoading(false)
       navigation.navigate('AdicionaConvidados', {
         nomeContato: null,
         sobrenomeContato: null,
@@ -304,6 +309,7 @@ export default function CriarChurrasco() {
             <Text style={style.textBtn}>Criar churras</Text>
           </TouchableOpacity>
         </View>
+        {criarModal}
       </SafeAreaView>
     </View>
   )
