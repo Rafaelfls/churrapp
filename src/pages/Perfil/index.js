@@ -140,6 +140,7 @@ export default function Perfil() {
 
     const pickImage = async () => {
         setLoading(true)
+
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,

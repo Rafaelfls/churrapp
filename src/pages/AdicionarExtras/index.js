@@ -54,11 +54,11 @@ export default function AdicionarExtras({ route, navigation }) {
         carregaConvidados();
     }, [reload]);
 
-    async function carregaConvidados() {
+    async function carregaConvidados(){
         await api.get(`/convidados/${churrascode}`)
-            .then(function (res) {
-                setConvidados(res.data)
-            })
+        .then(function(res){
+            setConvidados(res.data)
+        })
     }
 
     function enviaMensagens(telefone, CONVITE) {
@@ -92,11 +92,12 @@ export default function AdicionarExtras({ route, navigation }) {
         navigation.navigate('FinalCriaChurras');
     }
 
-    async function enviaNotificacao(convidId) {
-        await api.post(`/notificacoes/${convidId}/${churrascode}`, {
-            mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${convidados[0].nomeChurras}, e o valor por pessoa é de ${convidados[0].valorPagar}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
-            negar: "Não vou",
-            confirmar: "Vou"
+  
+    async function enviaNotificacao(convidId){
+        await api.post(`/notificacoes/${convidId}/${churrascode}`,{
+            mensagem:`${USUARIOLOGADO.nome} está te convidando para o churras ${convidados[0].nomeChurras}, e o valor por pessoa é de ${convidados[0].valorPagar}. Para mais informações acesse o churrasco na pagina de churras futuros. `, 
+            negar:"Não vou", 
+            confirmar:"Vou"
         })
     }
 

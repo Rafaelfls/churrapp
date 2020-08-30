@@ -30,8 +30,6 @@ export default function CompartilharConvidados({ route, navigation }) {
   const { telefoneContato } = route.params;
   const { churrasAtual } = route.params;
 
-  console.log("churrasAtual", churrasAtual)
-
   useEffect(() => {
     if (telefoneContato != null) {
       setConvidadosList(nomeContato, sobrenomeContato, telefoneContato)
@@ -62,23 +60,25 @@ export default function CompartilharConvidados({ route, navigation }) {
     setMaxChar(atual)
   }
 
-  async function criaSenha(convid, telefone) {
+
+  async function criaSenha(convid,telefone) {
     convid.senha = await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA512,
-      telefone
+       telefone
     );
   }
 
   async function criaListaConvidados(convid) {
     convid.telefone = convid.telefone.replace("+55", "").replace(/-/g, "").replace(/\s/g, "").replace(/[()]/g, "");
 
-    if (convid.telefone.length > 11) {
-      convid.telefone = convid.telefone.substring(convid.telefone.length - 11)
+
+    if(convid.telefone.length > 11){
+      convid.telefone = convid.telefone.substring(convid.telefone.length-11)
     }
-
-    let senhaProvisoria = convid.telefone.substring(convid.telefone.length - 9)
+    
+    let senhaProvisoria = convid.telefone.substring(convid.telefone.length-9)
     await criaSenha(convid, senhaProvisoria)
-
+    
     const response = await api.post('/usuarios', {
       nome: convid.nome,
       sobrenome: convid.sobrenome,

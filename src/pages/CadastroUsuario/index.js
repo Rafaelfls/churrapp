@@ -23,8 +23,8 @@ export default function CadastroUsuario() {
     const [visivel, setVisivel] = useState(false)
     const [modalText, setModalText] = useState('Faltaram algumas informações!');
     const [url, setUrl] = useState("https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png")
-    const [erroMsg, setErroMsg] = useState('');
-    const [erroVisivel, setErroVisivel] = useState('');
+    const [ erroMsg , setErroMsg ] = useState('');
+    const [ erroVisivel, setErroVisivel ] = useState('');
     const [borderColorRed1, setBorderColorRed1] = useState(style.formOk);
     const [borderColorRed2, setBorderColorRed2] = useState(style.formOk);
     const [borderColorRed3, setBorderColorRed3] = useState(style.formOk);
@@ -46,12 +46,11 @@ export default function CadastroUsuario() {
         setSenhaUsuario(criptoSenha)
     }
 
-    async function enviaNotificacao(convidId) {
-        console.log("enviaNotify", convidId)
-        await api.post(`/notificacoesGeral/${convidId}`, {
-            mensagem: `Seja bem vind@ ao Churrapp, nós estamos muito felizes com a sua chegada!`,
-            negar: null,
-            confirmar: "Legal"
+    async function enviaNotificacao(convidId){
+        await api.post(`/notificacoesGeral/${convidId}`,{
+            mensagem:`Seja bem vind@ ao Churrapp, nós estamos muito felizes com a sua chegada!`, 
+            negar:null, 
+            confirmar:"Legal"
         })
     }
 
