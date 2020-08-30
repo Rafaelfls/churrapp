@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Linking , Modal, SafeAreaView, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, Linking, Modal, SafeAreaView, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import NumericInput from 'react-native-numeric-input';
@@ -11,9 +11,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 
 import style from './styles';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function AdicionarExtras({ route, navigation }) {
 
+    const { loading, setLoading } = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
     const { convidadosQtd } = route.params;
     const [itemList, setItemList] = React.useState([])
     const [reload, setReload] = React.useState(false);
@@ -28,6 +31,7 @@ export default function AdicionarExtras({ route, navigation }) {
     };
 
     async function carregaMinhaLista() {
+        setLoading(true)
         await api.get(`/listadochurras/subTipo/${churrascode}/${4}`)
             .then(async function (response) {
                 setItemList([])
@@ -35,10 +39,12 @@ export default function AdicionarExtras({ route, navigation }) {
                     await api.get(`/sugestao/${4}`).then(function (response) {
                         setItemList(response.data);
                         setIsSugestao(true)
+                        setLoading(false)
                     });
                 } else {
                     setItemList(response.data);
                     setIsSugestao(false)
+                    setLoading(false)
                 }
             })
     }
@@ -68,6 +74,7 @@ export default function AdicionarExtras({ route, navigation }) {
 
     async function next() {
         if (isSugestao) {
+            setLoading(true)
             itemList.map(async item => {
                 await api.post('/listadochurras', {
                     quantidade: item.quantidade,
@@ -81,11 +88,11 @@ export default function AdicionarExtras({ route, navigation }) {
         await LISTADECONVIDADOS.map(convid => enviaMensagens(convid.telefone, CONVITE))
         await convidados.map(convid => enviaNotificacao(convid.usuario_id))
 
+        setLoading(false)
         navigation.navigate('FinalCriaChurras');
     }
 
-    console.log(convidados)
-    
+  
     async function enviaNotificacao(convidId){
         await api.post(`/notificacoes/${convidId}/${churrascode}`,{
             mensagem:`${USUARIOLOGADO.nome} está te convidando para o churras ${convidados[0].nomeChurras}, e o valor por pessoa é de ${convidados[0].valorPagar}. Para mais informações acesse o churrasco na pagina de churras futuros. `, 
@@ -99,19 +106,23 @@ export default function AdicionarExtras({ route, navigation }) {
     }
 
     function backHome() {
-        LISTADECONVIDADOS=null;
+        LISTADECONVIDADOS = null;
         CONVITE = null;
+        setLoading(true)
         api.delete(`/churras/${churrascode}`, config)
             .then(function (response) {
+                setLoading(false)
                 navigation.replace('Tabs');
             })
     }
 
     async function deleteItem(item) {
+        setLoading(true)
         await api.delete(`/listadochurras/${item.id}`)
             .then(function () {
                 setReload(!reload)
                 setIsVisible(false)
+                setLoading(false)
             })
     }
 
@@ -198,6 +209,7 @@ export default function AdicionarExtras({ route, navigation }) {
                         <Text style={style.textBtn}>Continuar</Text>
                     </TouchableOpacity>
                 </View>
+                {criarModal}
             </SafeAreaView>
         </View>
     )

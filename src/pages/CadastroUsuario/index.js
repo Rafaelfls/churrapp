@@ -8,9 +8,12 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Crypto from 'expo-crypto';
 
 import style from './styles';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function CadastroUsuario() {
 
+    const { loading, setLoading } = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
     const navigation = useNavigation();
 
     const [nomeUsuario, setNomeUsuario] = useState('');
@@ -44,7 +47,6 @@ export default function CadastroUsuario() {
     }
 
     async function enviaNotificacao(convidId){
-        console.log("enviaNotify",convidId)
         await api.post(`/notificacoesGeral/${convidId}`,{
             mensagem:`Seja bem vind@ ao Churrapp, nós estamos muito felizes com a sua chegada!`, 
             negar:null, 
@@ -76,11 +78,12 @@ export default function CadastroUsuario() {
             setModalText("Faltaram algumas informações!");
             return setVisivel(true)
         }
-        if (senhaUsuarioUncrpt.length<8) {
+        if (senhaUsuarioUncrpt.length < 8) {
             setModalText("A senha deve ter no mínimo 8 caracteres!");
             return setVisivel(true)
         } else {
 
+            setLoading(true)
             await api.post('/usuarios', {
                 nome: nomeUsuario,
                 sobrenome: 'sobrenome',
@@ -99,14 +102,15 @@ export default function CadastroUsuario() {
                 bebidaPreferida_id: 0,
                 acompanhamentoPreferido_id: 0,
                 sobremesaPreferida_id: 0,
-            }).then(async function (response) {                
-                console.log(response.data)
-                if(response.data.mensagem != undefined){
+            }).then(async function (response) {
+                if (response.data.mensagem != undefined) {
+                    setLoading(false)
                     setErroMsg(response.data.mensagem)
                     setErroVisivel(true)
-                }else{
+                } else {
                     USUARIOLOGADO = response.data.usuario[0]
                     await enviaNotificacao(USUARIOLOGADO.id)
+                    setLoading(false)
                     navigation.replace('Tabs');
                 }
             })
@@ -195,6 +199,7 @@ export default function CadastroUsuario() {
                     <Text style={style.textBtn}>Cadastrar</Text>
                 </TouchableOpacity>
             </View>
+            {criarModal}
         </View >
     );
 }

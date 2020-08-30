@@ -12,9 +12,12 @@ import api from '../../services/api';
 
 
 import style from './styles';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function ParticiparChurrasco() {
 
+    const { loading, setLoading } = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
     const navigation = useNavigation();
 
     const [text, onChangeText] = useState();
@@ -37,6 +40,7 @@ export default function ParticiparChurrasco() {
 
     async function entrarChurrasco() {
         if (churras_id != null) {
+            setLoading(true)
             await api.get(`/churrasPeloId/${churras_id}`)
                 .then(async function (res) {
                     if (res.data[0] != undefined) {
@@ -44,19 +48,21 @@ export default function ParticiparChurrasco() {
                             valorPagar: 30,
                             churras_id: churras_id
                         }).then(async function (res) {
-                            console.log(res.data)
                             await api.post(`/notificacoes/${USUARIOLOGADO.id}/${churras_id}`, {
                                 mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de ${res.data[0].valorPagar}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
                                 negar: "Não vou",
                                 confirmar: "Vou"
                             })
                         });
+                        setLoading(false)
                         navigation.replace('Tabs')
                     } else {
+                        setLoading(false)
                         setVisivel(true)
                     }
                 })
         } else {
+            setLoading(false)
             setVisivel(true)
         }
     }
@@ -106,6 +112,7 @@ export default function ParticiparChurrasco() {
                     <Text style={style.textBtn}>Entrar</Text>
                 </TouchableOpacity>
             </View>
+            {criarModal}
         </View>
 
     )

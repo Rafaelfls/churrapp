@@ -10,9 +10,12 @@ import IconFea from 'react-native-vector-icons/Feather';
 import IconMat from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import style from './styles';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function EscolherNovosItens({ route, navigation }) {
 
+  const { loading, setLoading } = useLoadingModal();
+  const criarModal = createLoadingModal(loading);
     const [item, setItem] = useState([]);
     const [unidades, setUnidades] = useState([]);
     const [formato, setFormato] = useState([]);
@@ -28,6 +31,7 @@ export default function EscolherNovosItens({ route, navigation }) {
     const { convidadosQtd } = route.params;
 
     async function firstLoad() {
+        setLoading(true)
         const responseItem = await api.get(`/listItem?subTipo=${1}`);
         const responseUnidade = await api.get(`/unidade`);
         const responseFormato = await api.get(`/formatos`);
@@ -37,6 +41,7 @@ export default function EscolherNovosItens({ route, navigation }) {
         setFormato(responseFormato.data);
         setItem(responseItem.data);
         setTipo(responseTipos.data);
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -53,7 +58,7 @@ export default function EscolherNovosItens({ route, navigation }) {
 
     async function addItem(isVisible, item, unidadeDrop, formatoDrop, qtdNova) {
         setIsVisivel(isVisible)
-        console.log("Entrei ", item, unidadeDrop, formatoDrop, qtdNova)
+        setLoading(true)
         await api.post('/listadochurras', {
             quantidade: qtdNova,
             churras_id: churrascode,
@@ -62,11 +67,12 @@ export default function EscolherNovosItens({ route, navigation }) {
             item_id: item,
         }).then(function (res) {
             setQuantidadeModal(0)
-        })
+        setLoading(false)
+    })
     }
 
     function backHome() {
-        navigation.push('AdicionarPratoPrincipal', { churrascode, convidadosQtd })
+        navigation.push('AdicionarPratoPrincipal', { churrascode, convidadosQtd, primeiroAcesso:false })
     }
 
     function setFiltroTipo(idFiltro) {
@@ -208,7 +214,7 @@ export default function EscolherNovosItens({ route, navigation }) {
                     </View>
                 </Modal>
 
-
+{criarModal}
             </SafeAreaView>
         </View>
     )

@@ -12,25 +12,27 @@ import IconF5 from 'react-native-vector-icons/FontAwesome5';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import style from './styles';
-import { useIsSugestao } from '../../context/churrasContext';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function AdicionarPratoPrincipal({ route, navigation }) {
 
+    const { loading, setLoading } = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
     const { convidadosQtd } = route.params;
+    const { churrascode } = route.params;
+    const { primeiroAcesso } = route.params;
     const [itemList, setItemList] = React.useState([])
     const [reload, setReload] = React.useState(false);
     const [itemDeletar, setItemDeletar] = useState([]);
     const [isVisible, setIsVisible] = React.useState(false);
-    const [isFirstTime, setIsFirstTime] = React.useState(true);
-    const { churrascode } = route.params;
-    
-    const {isSugestao, setIsSugestao} = useIsSugestao();
+    const [isFirstTime, setIsFirstTime] = React.useState(primeiroAcesso);
 
     const config = {
         headers: { 'Authorization': USUARIOLOGADO.id }
     };
 
     async function carregaMinhaLista() {
+        setLoading(true)
         await api.get(`/listadochurras/subTipo/${churrascode}/${1}`)
             .then(async function (response) {
                 setItemList([])
@@ -38,10 +40,12 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                     await api.get(`/sugestao/${1}`).then(function (response) {
                         setItemList(response.data);
                         setIsSugestao(true)
+                        setLoading(false)
                     });
                 } else {
                     setItemList(response.data);
                     setIsSugestao(false)
+                    setLoading(false)
                 }
             })
     }
@@ -52,6 +56,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
 
     function next() {
         if (isSugestao) {
+            setLoading(true)
             itemList.map(async item => {
                 await api.post('/listadochurras', {
                     quantidade: item.quantidade,
@@ -62,6 +67,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                 })
             })
         }
+        setLoading(false)
         navigation.push('AdicionarAcompanhamento', { churrascode, convidadosQtd });
     }
 
@@ -70,10 +76,12 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     }
 
     function backHome() {
-        LISTADECONVIDADOS=null;
+        LISTADECONVIDADOS = null;
         CONVITE = null;
+        setLoading(true)
         api.delete(`/churras/${churrascode}`, config)
             .then(function () {
+                setLoading(false)
                 navigation.replace('Tabs');
             })
     }
@@ -90,10 +98,12 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     }
 
     async function deleteItem(item) {
+        setLoading(true)
         await api.delete(`/listadochurras/${item.id}`)
             .then(function () {
                 setReload(!reload)
                 setIsVisible(false)
+                setLoading(false)
             })
     }
 
@@ -191,6 +201,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                         <Text style={style.textBtn}>Continuar</Text>
                     </TouchableOpacity>
                 </View>
+                {criarModal}
             </SafeAreaView>
         </View>
     )

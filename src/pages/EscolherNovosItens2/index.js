@@ -10,9 +10,12 @@ import IconFea from 'react-native-vector-icons/Feather';
 import IconMat from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import style from './styles';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function EscolherNovosItens2({ route, navigation }) {
 
+  const { loading, setLoading } = useLoadingModal();
+  const criarModal = createLoadingModal(loading);
     const [item, setItem] = useState([]);
     const [unidades, setUnidades] = useState([]);
     const [tipo, setTipo] = useState([]);
@@ -26,6 +29,7 @@ export default function EscolherNovosItens2({ route, navigation }) {
     const { convidadosQtd } = route.params;
 
     async function firstLoad() {
+        setLoading(true)
         const responseItem = await api.get(`/listItem?subTipo=${2}`);
         const responseUnidade = await api.get(`/unidade`);
         const responseTipos = await api.get(`/tipoSubTipo?subTipo=${2}`);
@@ -34,6 +38,7 @@ export default function EscolherNovosItens2({ route, navigation }) {
         setUnidades(responseUnidade.data);
         setItem(responseItem.data);
         setTipo(responseTipos.data);
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -49,6 +54,7 @@ export default function EscolherNovosItens2({ route, navigation }) {
 
     async function addItem(isVisible, item, unidadeDrop, qtdNova) {
         setIsVisivel(isVisible)
+        setLoading(true)
         await api.post('/listadochurras', {
             quantidade: qtdNova,
             churras_id: churrascode,
@@ -57,7 +63,8 @@ export default function EscolherNovosItens2({ route, navigation }) {
             item_id: item,
         }).then(function (res) {
             setQuantidadeModal(0)
-        })
+        setLoading(false)
+    })
     }
 
     function backHome() {
@@ -147,7 +154,7 @@ export default function EscolherNovosItens2({ route, navigation }) {
                         </View>
                     </View>
                 </Modal>
-
+{criarModal}
 
             </SafeAreaView>
         </View>

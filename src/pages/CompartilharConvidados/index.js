@@ -8,14 +8,16 @@ import api from '../../services/api';
 import * as Crypto from 'expo-crypto';
 
 import style from './styles';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 var convidadosList = [];
 
 export default function CompartilharConvidados({ route, navigation }) {
 
+  const { loading, setLoading } = useLoadingModal();
+  const criarModal = createLoadingModal(loading);
   const [value, onChangeValue] = React.useState(20.50);
   const [convite, onChangeText] = React.useState('');
-  const [loading, setLoading] = React.useState(false);
   const [maxChar, setMaxChar] = React.useState(190);
   const [updatePage, setUpdatePage] = React.useState(false)
 
@@ -27,8 +29,6 @@ export default function CompartilharConvidados({ route, navigation }) {
   const { sobrenomeContato } = route.params;
   const { telefoneContato } = route.params;
   const { churrasAtual } = route.params;
-
-console.log("churrasAtual",churrasAtual)
 
   useEffect(() => {
     if (telefoneContato != null) {
@@ -60,6 +60,7 @@ console.log("churrasAtual",churrasAtual)
     setMaxChar(atual)
   }
 
+
   async function criaSenha(convid,telefone) {
     convid.senha = await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA512,
@@ -69,6 +70,7 @@ console.log("churrasAtual",churrasAtual)
 
   async function criaListaConvidados(convid) {
     convid.telefone = convid.telefone.replace("+55", "").replace(/-/g, "").replace(/\s/g, "").replace(/[()]/g, "");
+
 
     if(convid.telefone.length > 11){
       convid.telefone = convid.telefone.substring(convid.telefone.length-11)
@@ -95,7 +97,6 @@ console.log("churrasAtual",churrasAtual)
       bebidaPreferida_id: 0,
       acompanhamentoPreferido_id: 0
     }).then(async function (response) {
-      console.log(response.data)
       await api.post(`/convidadosChurras/${response.data.usuario[0].id}`, {
         valorPagar: value,
         churras_id: churrasAtual.churrasCode
@@ -115,10 +116,12 @@ console.log("churrasAtual",churrasAtual)
   async function next() {
     const convidadosQtd = convidadosList.length
 
+    setLoading(true)
     await convidadosList.map(convid => criaListaConvidados(convid))
     await convidadosList.map(convid => enviaMensagens(convid.telefone, convite))
 
     var churrascode = churrasAtual.churrasCode
+    setLoading(false)
     navigation.navigate('CompartilharChurrasco', { convidadosQtd, churrascode });
 
     convidadosList = []
@@ -193,6 +196,7 @@ console.log("churrasAtual",churrasAtual)
             <Text style={style.textBtn}>Convidar</Text>
           </TouchableOpacity>
         </View>
+        {criarModal}
       </SafeAreaView>
     </View>
   )

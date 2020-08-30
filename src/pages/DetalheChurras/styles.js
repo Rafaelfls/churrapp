@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
-import { Left } from 'native-base';
 
 export default StyleSheet.create({
 
@@ -63,27 +62,27 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  churrasLocal: {
-    color: 'gray',
+  churrasNome: {
+    color: 'maroon',
+    fontFamily: 'poppins-medium',
     fontSize: 18,
   },
-  localIcon: {
-    color: 'gray',
+  icons: {
+    color: 'maroon',
     marginRight: 8,
   },
   churrasDataContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  churrasData: {
+  churrasInfo: {
     color: 'gray',
+    fontFamily: 'poppins-light',
     fontSize: 18,
   },
-  dataIcon: {
-    color: 'gray',
-    marginRight: 8,
-  },
   churrasDonoContainer: {
+    height: 150,
+    width: 120,
     marginBottom: 0,
     alignItems: 'center',
     backgroundColor: 'maroon',
@@ -96,20 +95,23 @@ export default StyleSheet.create({
     backgroundColor: 'transparent',
     borderRadius: 10,
     padding: 10,
+    flexDirection:'row',
+    justifyContent:'space-evenly'
   },
   churrasDono: {
     color: 'white',
-    fontSize: 13,
+    fontFamily: 'poppins-medium',
+    fontSize: 18,
   },
   donoImg: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
-  },
-  churrasImg: {
     height: 100,
     width: 100,
-    borderRadius: 30,
+    borderRadius: 100,
+  },
+  churrasImg: {
+    height: 150,
+    width: 150,
+    borderRadius: 10,
     resizeMode: 'stretch',
   },
 
@@ -142,34 +144,135 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   subtituloConvidados: {
-    fontSize: 17,
-    opacity: 0.7,
+    color: 'gray',
+    fontSize: 18,
   },
   containerConvidados: {
-  },
-  convidado: {
-    alignItems: 'center',
     justifyContent: 'center',
+    width: '100%',
+    height: 'auto',
+    flexDirection: 'row'
+  },
+
+  convidadoNaoConfirm: {
+    flexDirection: 'row',
+    backgroundColor: 'gray',
+    borderRadius: 8,
+    margin: 10,
+    height: 110,
+    padding: 1,
+    width: '90%'
+  },  
+  profileImgNaoConfirm: {
+    height: '100%',
+    width: 100,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+  },  
+  nomeConvidadoNaoConfirm: {
+    color: 'white',
+    fontFamily: 'poppins-medium',
+    fontSize: 20,
+    marginLeft: 10,
+    marginTop: 10,
+  },
+  foneConvidadoNaoConfirm: {
+    color: 'white',
+    fontFamily: 'poppins-light',
+    marginLeft: 10,
+    marginTop: 5,
+    fontSize: 15,
+  },
+  statusConvidadoNaoConfirm: {
+    color: 'white',
+    fontFamily: 'poppins-light',
+    marginLeft: 10,
+    marginTop: 5,
+    fontSize: 13,
+  },
+  convidadoAusente: {
+    flexDirection: 'row',
+    backgroundColor: 'gray',
+    borderRadius: 8,
+    margin: 10,
+    height: 110,
+    padding: 1,
+    width: '90%'
+  },  
+  profileImgAusente: {
+    height: '100%',
+    width: 100,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+    opacity:0.5
+  },  
+  nomeConvidadoAusente: {
+    color: 'white',
+    fontFamily: 'poppins-medium',
+    fontSize: 20,
+    marginLeft: 10,
+    marginTop: 10,
+    opacity:0.5
+  },
+  foneConvidadoAusente: {
+    color: 'white',
+    fontFamily: 'poppins-light',
+    marginLeft: 10,
+    marginTop: 5,
+    fontSize: 15,
+    opacity:0.5
+  },  
+  statusConvidadoAusente: {
+    color: 'white',
+    fontFamily: 'poppins-light',
+    marginLeft: 10,
+    marginTop: 5,
+    fontSize: 13,
+  },
+  convidadoPresente: {
+    flexDirection: 'row',
     backgroundColor: 'maroon',
     borderRadius: 8,
     margin: 10,
-    height: 150,
+    height: 110,
+    padding: 1,
+    width: '90%'
   },
   profileImg: {
-    height: 110,
+    height: '100%',
     width: 100,
     borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderBottomLeftRadius: 8,
   },
   nomeConvidado: {
     color: 'white',
-    padding: 3,
+    fontFamily: 'poppins-medium',
+    fontSize: 20,
+    marginLeft: 10,
+    marginTop: 10,
   },
   foneConvidado: {
-    color: 'lightgray',
-    paddingBottom: 12,
-    fontSize: 12,
+    color: 'white',
+    fontFamily: 'poppins-light',
+    marginLeft: 10,
+    marginTop: 5,
+    fontSize: 15,
   },
+  statusConvidado: {
+    color: 'white',
+    fontFamily: 'poppins-light',
+    marginLeft: 10,
+    marginTop: 5,
+    fontSize: 13,
+  },
+  convidadoPago:{
+    position:'absolute',
+    right:20,
+    top:13,
+    color:'green'
+  },
+
+  //fim convidados
 
   //Itens
   cabecalhoItens: {
@@ -242,15 +345,18 @@ export default StyleSheet.create({
     padding: 3,
   },
   qtdItemAdc: {
-    color: '#800000',
-    fontSize: 12,
+    fontSize: 13,
+    color: 'orangered',
+    marginBottom: 2,
+    fontFamily: 'poppins-medium',
+    width: '25%',
   },
-  precoItem:{
+  precoItem: {
     fontSize: 12,
     color: '#0000ff',
     marginLeft: 2
   },
-  precoItemNulo:{
+  precoItemNulo: {
     fontSize: 20,
     color: '#0000ff',
     marginLeft: 2,
@@ -300,7 +406,8 @@ export default StyleSheet.create({
     width: '100%',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 35,
+    padding: 25,
+    marginBottom: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -319,8 +426,16 @@ export default StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    maxHeight: '60%',
-    height: 'auto',
+    height: '40%',
+  },
+  centeredViewItens: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: '55%',
   },
   //subTipo  modal
   centeredSubTipoView: {
@@ -358,6 +473,17 @@ export default StyleSheet.create({
   iconSalvarBtn: {
     marginLeft: 5,
     color: 'white'
+  },
+
+  cardItemAdicionado: {
+    marginVertical: 5,
+    flexDirection: 'row',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    marginHorizontal: 10,
+    borderBottomColor: "#d3d3d3",
+    borderBottomWidth: 1,
   },
 
   //cardModal
@@ -407,7 +533,8 @@ export default StyleSheet.create({
   },
   churrasInfosViewModal: {
     marginLeft: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    width: '80%',
   },
   churrasTitleModal: {
     fontSize: 15,
@@ -425,6 +552,7 @@ export default StyleSheet.create({
   localIconModal: {
     color: 'steelblue',
     paddingBottom: 5,
+    paddingRight: 8,
   },
   churrasLocalModal: {
     fontSize: 13,
@@ -441,18 +569,25 @@ export default StyleSheet.create({
   },
   dataIconModal: {
     paddingBottom: 5,
+    paddingRight: 8,
     color: 'orangered',
   },
-  churrasDataModal: {
+  churrasDataLista: {
     fontSize: 13,
     color: 'orangered',
     marginBottom: 2,
     fontFamily: 'poppins-medium',
     width: '45%',
   },
+  churrasDataModal: {
+    fontSize: 13,
+    color: 'orangered',
+    marginBottom: 2,
+    fontFamily: 'poppins-medium',
+  },
 
   //modalAdicionaQuantidade
-  
+
   centeredViewQtd: {
     flex: 1,
     justifyContent: "center",
@@ -460,7 +595,7 @@ export default StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    height: '30%',
+    height: '40%',
   },
   modalViewQtd: {
     backgroundColor: "#f2f2f2",
@@ -482,7 +617,7 @@ export default StyleSheet.create({
   iconSalvarBtnQtd: {
     marginLeft: 5,
     color: 'white'
-  },  
+  },
   exitBtnFooterQtd: {
     flexDirection: 'row-reverse',
     backgroundColor: '#800000',
@@ -498,9 +633,9 @@ export default StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 8,
     alignItems: 'center',
-  }, 
+  },
   footerModalQtd: {
-    marginTop:10,
+    marginTop: 10,
     marginBottom: 50,
     flexDirection: 'row',
     justifyContent: 'space-evenly'
@@ -509,6 +644,11 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  selectionFormQtdLabel: {
+    fontSize: 18,
+    fontFamily: 'poppins-light',
+    marginRight: 10,
   },
   boxDropdownQtd: {
     paddingHorizontal: 70,
@@ -523,4 +663,81 @@ export default StyleSheet.create({
     opacity: 0.9,
     textAlign: "center",
   },
+
+  //modal entrar em contato com convidado
+  modalViewContactar: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 25,
+    alignItems: "center",
+    width:'95%',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  centeredViewContactar: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: '100%',
+  },
+  modalTitleCont:{
+    color:"#800000",
+    fontFamily: 'poppins-medium',
+    fontSize:30,
+    marginBottom:15,
+  },
+  modalTextCont:{
+    fontSize:17,
+    fontFamily: 'poppins-light',
+    textAlign:'center'
+  },
+  modalSubCont:{
+    fontSize:17,
+    fontFamily: 'poppins-light',
+    textAlign:'center',
+    marginTop:20,
+  },
+  footerModalCont:{    
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    backgroundColor: 'white',
+  },
+  continueBtnCont:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    marginHorizontal:5,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: '40%',
+    paddingVertical: 5,
+  },
+  textBtnCont:{
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
+  headerModalCont:{    
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    backgroundColor: 'white',
+  },
+  closeBtnCont:{
+    position:'absolute',
+    top:15,
+    right:20
+  },
+  //Fim modal entrar em contato com convidado
 });

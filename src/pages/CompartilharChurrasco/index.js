@@ -13,6 +13,7 @@ import style from './styles';
 
 
 export default function CompartilharChurrasco({ route, navigation }) {
+    
     const rota = useRoute();
     const churras = rota.params.churras
     const [churrasDateFormatted, setChurrasDateFormatted] = useState();

@@ -17,10 +17,8 @@ import { useChurrasCount, useLoadingModal, createLoadingModal } from '../../cont
 export default function Perfil() {
     const route = useRoute();
     const navigation = useNavigation();
-    const [perfil, setPerfil] = useState([]);
     const [id, setId] = useState(USUARIOLOGADO.id);
     const [visivel, setIsVisivel] = React.useState(false);
-    const [page, setPage] = useState(1);
     const [refreshPerfil, setRefreshPerfil] = useState(false);
     const [pontoCarneLista, setPontoCarneLista] = useState([]);
     const [quantidadeComeLista, setQuantidadeComeLista] = useState([]);
@@ -141,6 +139,8 @@ export default function Perfil() {
     }
 
     const pickImage = async () => {
+        setLoading(true)
+
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
@@ -151,6 +151,7 @@ export default function Perfil() {
             setImage(result);
             await uploadImage(result);
         }
+        setLoading(false)
     };
 
     async function uploadImage(imagem) {
