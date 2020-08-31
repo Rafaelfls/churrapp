@@ -11,9 +11,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import style from './styles';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
-export default function AdicionarSobremesa({ route,navigation }) {
+export default function AdicionarSobremesa({ route, navigation }) {
 
+    const { loading, setLoading } = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
     const { convidadosQtd } = route.params;
     const [itemList, setItemList] = React.useState([])
     const [reload, setReload] = React.useState(false);
@@ -27,6 +30,7 @@ export default function AdicionarSobremesa({ route,navigation }) {
     };
 
     async function carregaMinhaLista() {
+        setLoading(true)
         await api.get(`/listadochurras/subTipo/${churrascode}/${5}`)
             .then(async function (response) {
                 setItemList([])
@@ -34,10 +38,12 @@ export default function AdicionarSobremesa({ route,navigation }) {
                     await api.get(`/sugestao/${5}`).then(function (response) {
                         setItemList(response.data);
                         setIsSugestao(true)
+                        setLoading(false)
                     });
                 } else {
                     setItemList(response.data);
                     setIsSugestao(false)
+                    setLoading(false)
                 }
             })
     }
@@ -48,6 +54,7 @@ export default function AdicionarSobremesa({ route,navigation }) {
 
     function next() {
         if (isSugestao) {
+            setLoading(true)
             itemList.map(async item => {
                 await api.post('/listadochurras', {
                     quantidade: item.quantidade,
@@ -57,6 +64,7 @@ export default function AdicionarSobremesa({ route,navigation }) {
                 })
             })
         }
+        setLoading(false)
         navigation.navigate('AdicionarExtras', { churrascode, convidadosQtd });
     }
 
@@ -65,16 +73,18 @@ export default function AdicionarSobremesa({ route,navigation }) {
     }
 
     function backHome() {
-        LISTADECONVIDADOS=null;
+        LISTADECONVIDADOS = null;
         CONVITE = null;
+        setLoading(true)
         api.delete(`/churras/${churrascode}`, config)
             .then(function (response) {
+                setLoading(false)
                 navigation.replace('Tabs');
             })
     }
 
     function updateValue(qtdSugestao) {
-        if(isSugestao){
+        if (isSugestao) {
             if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
                 return (qtdSugestao)
             } else {
@@ -89,10 +99,12 @@ export default function AdicionarSobremesa({ route,navigation }) {
     }
 
     async function deleteItem(item) {
+        setLoading(true)
         await api.delete(`/listadochurras/${item.id}`)
             .then(function () {
                 setReload(!reload)
                 setIsVisible(false)
+                setLoading(false)
             })
     }
 
@@ -122,16 +134,16 @@ export default function AdicionarSobremesa({ route,navigation }) {
                                         <Text style={style.textLabel}>{itemList.nomeItem}</Text>
                                     </View>
                                     <View style={style.picker}>
-                                        <Text style={style.textLabel}>{updateValue(itemList.quantidade)+" "+itemList.unidade}</Text> 
+                                        <Text style={style.textLabel}>{updateValue(itemList.quantidade) + " " + itemList.unidade}</Text>
                                     </View>
                                 </View>)
                                 // Caso nao seja sujestão o item pode ser deletado
-                                : (<TouchableOpacity style={style.componentPicker} onPress={() => {setIsVisible(true);setItemDeletar(itemList)}}>
+                                : (<TouchableOpacity style={style.componentPicker} onPress={() => { setIsVisible(true); setItemDeletar(itemList) }}>
                                     <View style={style.textIcon}>
                                         <Text style={style.textLabel}>{itemList.nomeItem}</Text>
                                     </View>
                                     <View style={style.picker}>
-                                        <Text style={style.textLabel}>{updateValue(itemList.quantidade)+" "+itemList.unidade}</Text> 
+                                        <Text style={style.textLabel}>{updateValue(itemList.quantidade) + " " + itemList.unidade}</Text>
                                     </View>
                                 </TouchableOpacity>)}
                         </View>
@@ -166,6 +178,7 @@ export default function AdicionarSobremesa({ route,navigation }) {
                         <Text style={style.textBtn}>Continuar</Text>
                     </TouchableOpacity>
                 </View>
+                {criarModal}
             </SafeAreaView>
         </View>
     )

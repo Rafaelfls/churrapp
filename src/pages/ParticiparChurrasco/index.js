@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, FlatList, TextInput, TouchableOpacity, } from 'react-native';
+import { View, Text, Modal, TextInput, TouchableOpacity, } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 
@@ -12,13 +12,17 @@ import api from '../../services/api';
 
 
 import style from './styles';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function ParticiparChurrasco() {
 
+    const { loading, setLoading } = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
     const navigation = useNavigation();
 
     const [text, onChangeText] = useState();
-    const [churras_id, setChurras_id] = useState();
+    const [churras_id, setChurras_id] = useState(null);
+    const [visivel, setVisivel] = useState(false);
 
     const config = {
         headers: { 'Authorization': USUARIOLOGADO.id }
@@ -34,12 +38,33 @@ export default function ParticiparChurrasco() {
     }
 
 
-    function entrarChurrasco() {
-        api.post(`/convidadosChurras/${USUARIOLOGADO.id}`, {
-            valorPagar: 30,
-            churras_id: churras_id
-        });
-        return navigation.replace('Tabs')
+    async function entrarChurrasco() {
+        if (churras_id != null) {
+            setLoading(true)
+            await api.get(`/churrasPeloId/${churras_id}`)
+                .then(async function (res) {
+                    if (res.data[0] != undefined) {
+                        await api.post(`/convidadosChurras/${USUARIOLOGADO.id}`, {
+                            valorPagar: 30,
+                            churras_id: churras_id
+                        }).then(async function (res) {
+                            await api.post(`/notificacoes/${USUARIOLOGADO.id}/${churras_id}`, {
+                                mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de ${res.data[0].valorPagar}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+                                negar: "Não vou",
+                                confirmar: "Vou"
+                            })
+                        });
+                        setLoading(false)
+                        navigation.replace('Tabs')
+                    } else {
+                        setLoading(false)
+                        setVisivel(true)
+                    }
+                })
+        } else {
+            setLoading(false)
+            setVisivel(true)
+        }
     }
 
     return (
@@ -58,15 +83,36 @@ export default function ParticiparChurrasco() {
                 <Text style={style.inserirText}>Insira o código do churras</Text>
                 <TextInput
                     style={style.inputStandard}
+                    autoCapitalize={"none"}
                     onChangeText={text => setChurras_id(text)}
                     placeholder={'000000000000000'}
                 />
             </View>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={visivel}
+            >
+                <View style={style.centeredView}>
+                    <View style={style.modalView}>
+                        <Text style={style.modalTitle}>Ops!</Text>
+                        <Text style={style.modalText}>Este churrasco não existe!</Text>
+                        <View style={style.footerModal}>
+                            <TouchableOpacity style={style.continueBtnModal} onPress={() => setVisivel(false)}>
+                                <Text style={style.textBtnModal}>Ok</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
             <View style={style.btnsContainer}>
                 <TouchableOpacity style={style.enterBtn} onPress={entrarChurrasco}>
                     <Text style={style.textBtn}>Entrar</Text>
                 </TouchableOpacity>
             </View>
+            {criarModal}
         </View>
 
     )

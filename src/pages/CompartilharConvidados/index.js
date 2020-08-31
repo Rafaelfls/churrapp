@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, SafeAreaView, FlatList } from 'react-native';
+import React, { Component, useEffect } from 'react';
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView, RefreshControl, FlatList, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
 import * as Crypto from 'expo-crypto';
@@ -11,7 +12,7 @@ import { useLoadingModal, createLoadingModal } from '../../context/churrasContex
 
 var convidadosList = [];
 
-export default function AdicionaConvidados({ route, navigation }) {
+export default function CompartilharConvidados({ route, navigation }) {
 
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
@@ -28,7 +29,6 @@ export default function AdicionaConvidados({ route, navigation }) {
   const { sobrenomeContato } = route.params;
   const { telefoneContato } = route.params;
   const { churrasAtual } = route.params;
-
 
   useEffect(() => {
     if (telefoneContato != null) {
@@ -52,30 +52,33 @@ export default function AdicionaConvidados({ route, navigation }) {
     setUpdatePage(!updatePage)
   }
 
+  const inviteStandard = `Olá, estou te convidando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença.`
+
   function updateMsg(text) {
-    CONVITE = text;
     onChangeText(text)
     var atual = 190 - text.length
     setMaxChar(atual)
   }
 
-  async function criaSenha(convid, telefone) {
+
+  async function criaSenha(convid,telefone) {
     convid.senha = await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA512,
-      telefone
+       telefone
     );
   }
 
   async function criaListaConvidados(convid) {
     convid.telefone = convid.telefone.replace("+55", "").replace(/-/g, "").replace(/\s/g, "").replace(/[()]/g, "");
 
-    if (convid.telefone.length > 11) {
-      convid.telefone = convid.telefone.substring(convid.telefone.length - 11)
+
+    if(convid.telefone.length > 11){
+      convid.telefone = convid.telefone.substring(convid.telefone.length-11)
     }
-
-    let senhaProvisoria = convid.telefone.substring(convid.telefone.length - 9)
+    
+    let senhaProvisoria = convid.telefone.substring(convid.telefone.length-9)
     await criaSenha(convid, senhaProvisoria)
-
+    
     const response = await api.post('/usuarios', {
       nome: convid.nome,
       sobrenome: convid.sobrenome,
@@ -112,38 +115,39 @@ export default function AdicionaConvidados({ route, navigation }) {
 
   async function next() {
     const convidadosQtd = convidadosList.length
-    LISTADECONVIDADOS = convidadosList;
-
-    if (convite == '') {
-      CONVITE = inviteStandard;
-    }
 
     setLoading(true)
     await convidadosList.map(convid => criaListaConvidados(convid))
-    setLoading(false)
+    await convidadosList.map(convid => enviaMensagens(convid.telefone, convite))
+
     var churrascode = churrasAtual.churrasCode
-    navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd, churrascode, primeiroAcesso: true });
+    setLoading(false)
+    navigation.navigate('CompartilharChurrasco', { convidadosQtd, churrascode });
 
     convidadosList = []
   }
 
   function backHome() {
     convidadosList = []
-    LISTADECONVIDADOS = null;
-    CONVITE = null;
-    setLoading(true)
-
-    api.delete(`/churras/${churrasAtual.churrasCode}`, config)
-      .then(function (response) {
-        setLoading(false)
-        navigation.replace('Tabs');
-      })
+    navigation.navigate('CompartilharChurrasco');
   }
 
-  const inviteStandard = `Olá, estou te convidando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença.`
-
   function openContactList() {
-    navigation.push('OpenContactList')
+    navigation.push('OpenContactListCompartilhar')
+  }
+
+  function enviaMensagens(telefone, convite) {
+    Linking.canOpenURL(`whatsapp://send?text=${convite}`).then(supported => {
+      if (supported) {
+        if (convite === '') {
+          convite = inviteStandard;
+        }
+        return Linking.openURL(`whatsapp://send?text=${convite}&phone=+55${telefone}`);
+      } else {
+        return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${telefone}&text=${convite}`)
+      }
+    })
+
   }
 
   return (

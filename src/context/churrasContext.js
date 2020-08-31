@@ -9,7 +9,6 @@ export default function churrasProvider({ children }) {
     const [churrasCount, setChurrasCount ] = useState(0);
     const [convidadosCount, setConvidadosCount ] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [isSugestao, setIsSugestao] = useState(false);
 
     
 
@@ -22,8 +21,6 @@ export default function churrasProvider({ children }) {
           setConvidadosCount,
           loading,
           setLoading,
-          isSugestao,
-          setIsSugestao
           }}>
           {children}
       </ChurrasContext.Provider>
@@ -47,13 +44,6 @@ export function useLoadingModal() {
     const { loading, setLoading} = context;
     return {loading, setLoading};
         
-}
-
-export function useIsSugestao(){
-    const context = useContext(ChurrasContext);
-    const {isSugestao, setIsSugestao} = context;
-    return {isSugestao, setIsSugestao};
-
 }
 
 export function createLoadingModal(loading) {

@@ -80,4 +80,62 @@ export default StyleSheet.create({
     backIcon:{
         color: 'black',
     },
+
+    
+  //modal
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 8,
+    paddingHorizontal: 35,
+    paddingVertical: 25,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  modalTitle:{
+    color:"#800000",
+    fontSize:30,
+    marginBottom:15,
+  },
+  modalText:{
+    fontSize:20,
+    textAlign:'center'
+  },
+  footerModal:{    
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    backgroundColor: 'white',
+  },  
+  continueBtnModal:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: '85%',
+    paddingVertical: 5,
+  },  
+  textBtnModal:{
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
+
+  //fim modal
 });

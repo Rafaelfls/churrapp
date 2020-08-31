@@ -46,23 +46,30 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     churrasLocal: {
-        color: 'lightgray',
+        color: 'gray',
         fontSize: 18,
     },
     localIcon: {
-        color: 'lightgray',
+        color: 'gray',
         marginRight: 8,
     },
+    copyIcon:{
+        color: 'gray',
+    },
+    codigoTO:{
+        flexDirection:'row',
+        alignItems:'flex-start'
+    },  
     churrasDataContainer: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     churrasData: {
-        color: 'lightgray',
+        color: 'gray',
         fontSize: 18,
     },
     dataIcon: {
-        color: 'lightgray',
+        color: 'gray',
         marginRight: 8,
     },
     codigo: {

@@ -63,7 +63,8 @@ export default StyleSheet.create({
   esqueciSenha:{
       marginHorizontal:60,
       flexDirection:"row",
-      marginTop:10,
+      marginVertical:10,
+      marginBottom:20,
       justifyContent:'flex-end'
   },
   esqueciSenhaBtn:{

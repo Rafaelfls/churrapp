@@ -184,5 +184,5 @@ export default StyleSheet.create({
     justifyContent: "center",
     backgroundColor: 'white',
   },
-
+ //fim modal
 });

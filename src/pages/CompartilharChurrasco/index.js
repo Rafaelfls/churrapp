@@ -13,12 +13,30 @@ import style from './styles';
 
 
 export default function CompartilharChurrasco({ route, navigation }) {
+    
     const rota = useRoute();
     const churras = rota.params.churras
     const [churrasDateFormatted, setChurrasDateFormatted] = useState();
 
     function goBack() {
-        navigation.goBack()
+        navigation.navigate('DetalheChurras')
+    }
+
+    function compartilhar() {
+        navigation.navigate('CompartilharConvidados', {
+            nomeContato: null,
+            sobrenomeContato: null,
+            telefoneContato: null,
+            churrasAtual: {
+              churrasCode: churras.id,
+              nomeChurras: churras.nomeChurras,
+              local: churras.local,
+              hrInicio: churras.hrInicio,
+              hrFim: churras.hrFim,
+              descricao: churras.descricao,
+              data: churrasDateFormatted,
+            },
+          });
     }
 
     const copyToClipboard = () => {
@@ -65,15 +83,14 @@ export default function CompartilharChurrasco({ route, navigation }) {
                     <Text style={style.churrasData}>{churras.hrInicio}{churras.hrFim == null ? null : " - " + churras.hrFim}</Text>
                 </View>
 
-
-                <Text style={style.codigo} onPress={() => copyToClipboard()}>{churras.id}</Text>
+                <TouchableOpacity style={style.codigoTO} onPress={() => copyToClipboard()}><Text style={style.codigo}>{churras.id}</Text><IconFA name="copy" size={13} style={style.copyIcon} /></TouchableOpacity>
                 <View style={style.qrCode}>
-                    <QRCode size={180} logo={{ uri: churras.fotoUrlC }} logoSize={70} content={churras.id} />
+                    <QRCode size={180} logo={{ uri: churras.fotoUrlC }} logoSize={60} content={churras.id} />
                 </View>
             </View>
 
             <View style={style.footer}>
-                <TouchableOpacity onPress={goBack} style={style.shareBtn}>
+                <TouchableOpacity onPress={compartilhar} style={style.shareBtn}>
                     <Text style={style.shareText}>Compartilhar</Text>
                 </TouchableOpacity>
             </View>

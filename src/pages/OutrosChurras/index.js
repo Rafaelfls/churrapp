@@ -9,13 +9,15 @@ import IconFea from 'react-native-vector-icons/Feather';
 import churrasPhoto from '../../assets/fundoDescricao.jpg';
 
 import style from './styles';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function OutrosChurras() {
 
+    const { loading, setLoading } = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
     const [churrasPassado, setChurrasPassados] = useState([]);
     const [churrasFuturo, setChurrasFuturo] = useState([]);
     const [total, setTotal] = useState(0);
-    const [loading, setLoading] = useState(false);
 
 
     const navigation = useNavigation();
@@ -160,6 +162,7 @@ export default function OutrosChurras() {
                 />
             </ScrollableTabView>
 
+            {criarModal}
         </View>
 
     )

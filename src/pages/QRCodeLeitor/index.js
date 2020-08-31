@@ -8,9 +8,12 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import api from '../../services/api';
 
 import style from './styles';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function QRCodeLeitor() {
 
+    const { loading, setLoading } = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
     const navigation = useNavigation();
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
@@ -24,13 +27,21 @@ export default function QRCodeLeitor() {
     }
 
 
-    function participarDoChurras() {
+    async function participarDoChurras() {
         setIsVisivel(false);
-        api.post(`/convidadosChurras/${USUARIOLOGADO.id}`, {
-            valorPagar: 20.50,
-            churras_id: churrasId
+        setLoading(true)
+        await api.post(`/convidadosChurras/${USUARIOLOGADO.id}`, {
+            valorPagar: 30,
+            churras_id: qrCodeValue
+        }).then(async function (res) {
+            await api.post(`/notificacoes/${USUARIOLOGADO.id}/${qrCodeValue}`, {
+                mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de ${res.data[0].valorPagar}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+                negar: "Não vou",
+                confirmar: "Vou"
+            })
         });
         setQrCode(false)
+        setLoading(false)
         return navigation.replace('Tabs');
     }
 
@@ -91,6 +102,7 @@ export default function QRCodeLeitor() {
                     </View>
                 </View>
             </Modal>
+            {criarModal}
         </View>
 
 

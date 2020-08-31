@@ -8,9 +8,12 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Crypto from 'expo-crypto';
 
 import style from './styles';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function CadastroUsuario() {
 
+    const { loading, setLoading } = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
     const navigation = useNavigation();
 
     const [nomeUsuario, setNomeUsuario] = useState('');
@@ -20,12 +23,11 @@ export default function CadastroUsuario() {
     const [visivel, setVisivel] = useState(false)
     const [modalText, setModalText] = useState('Faltaram algumas informações!');
     const [url, setUrl] = useState("https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png")
-
+    const [ erroMsg , setErroMsg ] = useState('');
+    const [ erroVisivel, setErroVisivel ] = useState('');
     const [borderColorRed1, setBorderColorRed1] = useState(style.formOk);
     const [borderColorRed2, setBorderColorRed2] = useState(style.formOk);
     const [borderColorRed3, setBorderColorRed3] = useState(style.formOk);
-
-    global.USUARIOLOGADO = null;
 
     function backHome() {
         navigation.replace('Login');
@@ -40,6 +42,14 @@ export default function CadastroUsuario() {
             senha
         );
         setSenhaUsuario(criptoSenha)
+    }
+
+    async function enviaNotificacao(convidId) {
+        await api.post(`/notificacoesGeral/${convidId}`, {
+            mensagem: `Seja bem vind@ ao Churrapp, nós estamos muito felizes com a sua chegada!`,
+            negar: null,
+            confirmar: "Legal"
+        })
     }
 
     async function navigateToResumo() {
@@ -66,11 +76,12 @@ export default function CadastroUsuario() {
             setModalText("Faltaram algumas informações!");
             return setVisivel(true)
         }
-        if (senhaUsuarioUncrpt.length<8) {
+        if (senhaUsuarioUncrpt.length < 8) {
             setModalText("A senha deve ter no mínimo 8 caracteres!");
             return setVisivel(true)
         } else {
 
+            setLoading(true)
             await api.post('/usuarios', {
                 nome: nomeUsuario,
                 sobrenome: 'sobrenome',
@@ -80,7 +91,7 @@ export default function CadastroUsuario() {
                 idade: "20/12/2020",
                 fotoUrlU: url,
                 celular: celularUsuario,
-                cadastrado: false,
+                cadastrado: true,
                 apelido: nomeUsuario,
                 senha: senhaUsuario,
                 pontoCarne_id: 0,
@@ -89,9 +100,17 @@ export default function CadastroUsuario() {
                 bebidaPreferida_id: 0,
                 acompanhamentoPreferido_id: 0,
                 sobremesaPreferida_id: 0,
-            }).then(function (response) {
-                USUARIOLOGADO = response.data
-                navigation.replace('Tabs');
+            }).then(async function (response) {
+                if (response.data.mensagem != undefined) {
+                    setLoading(false)
+                    setErroMsg(response.data.mensagem)
+                    setErroVisivel(true)
+                } else {
+                    USUARIOLOGADO = response.data.usuario[0]
+                    await enviaNotificacao(USUARIOLOGADO.id)
+                    setLoading(false)
+                    navigation.replace('Tabs');
+                }
             })
         }
     }
@@ -109,7 +128,7 @@ export default function CadastroUsuario() {
 
             <ScrollView style={style.scrollView}>
                 <View style={style.formGroup}>
-                    <Text style={style.textLabel}>Nome:</Text>
+                    <Text style={style.textLabel}>Primeiro nome:</Text>
                     <TextInput
                         style={[style.inputStandard, borderColorRed1]}
                         onChangeText={text => setNomeUsuario(text)}
@@ -156,12 +175,29 @@ export default function CadastroUsuario() {
                     </View>
                 </View>
             </Modal>
-
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={erroVisivel}
+            >
+                <View style={style.centeredView}>
+                    <View style={style.modalView}>
+                        <Text style={style.modalTitle}>Ops!</Text>
+                        <Text style={style.modalText}>{erroMsg}</Text>
+                        <View style={style.footerModal}>
+                            <TouchableOpacity style={style.continueBtn} onPress={() => setErroVisivel(false)}>
+                                <Text style={style.textBtn}>Ok</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
             <View style={style.footer}>
                 <TouchableOpacity style={style.continueBtn} onPress={navigateToResumo}>
                     <Text style={style.textBtn}>Cadastrar</Text>
                 </TouchableOpacity>
             </View>
+            {criarModal}
         </View >
     );
 }

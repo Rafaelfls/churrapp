@@ -7,8 +7,12 @@ import * as Crypto from 'expo-crypto';
 import api from '../../services/api';
 
 import style from './styles';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function LoginCelular() {
+    const { loading, setLoading } = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
 
     // Dev apagar em produção
     const [usuarioSelecionado, setUsuarioSelecionado] = useState()
@@ -32,15 +36,18 @@ export default function LoginCelular() {
     const [visivel, setVisivel] = useState(false)
 
     async function navigateToResumo() {
+        setLoading(true)
         let criptoSenhaVar = await criptoSenha(senhaUsuario)
         if (celularUser == '') {
             console.log(usuarioSelecionado)
             await api.get(`/usuariosCel/${usuarioSelecionado.celular}/${usuarioSelecionado.senha}`)
                 .then(function (response) {
                     if (response.data[0] == undefined) {
+                        setLoading(false)
                         return setVisivel(true)
                     } else {
                         USUARIOLOGADO = response.data[0]
+                        setLoading(false)
                         navigation.replace('Tabs');
                     }
                 })
@@ -48,9 +55,11 @@ export default function LoginCelular() {
             await api.get(`/usuariosCel/${celularUser}/${criptoSenhaVar}`)
                 .then(function (response) {
                     if (response.data[0] == undefined) {
+                        setLoading(false)
                         return setVisivel(true)
                     } else {
                         USUARIOLOGADO = response.data[0]
+                        setLoading(false)
                         navigation.replace('Tabs');
                     }
                 })
@@ -82,44 +91,49 @@ export default function LoginCelular() {
             </View>
             <Text style={style.title}>Seja bem vindo de volta!</Text>
             <Text style={style.subtitle}>Entre com seu celular para começar a festa.</Text>
-            <View style={style.inputArea}>
-                <Picker
-                    mode="dropdown"
-                    selectedValue={usuarioSelecionado}
-                    onValueChange={usuarioSelecionado => setUsuarioSelecionado(usuarioSelecionado)}
-                >
-                    {usuarios.map((users,idx) => (
-                        <Picker.Item label={users.nome} value={users} key={idx}/>
-                    ))}
+            <ScrollView>
+                <View style={style.inputArea}>
+                    <Picker
+                        mode="dropdown"
+                        selectedValue={usuarioSelecionado}
+                        onValueChange={usuarioSelecionado => setUsuarioSelecionado(usuarioSelecionado)}
+                    >
+                        {usuarios.map((users, idx) => (
+                            <Picker.Item label={users.nome} value={users} key={idx} />
+                        ))}
+                    </Picker>
+                    <Text style={style.textLabel}>Celular:</Text>
+                    <TextInputMask
+                        style={style.inputStandard}
+                        type={'cel-phone'}
+                        options={{
+                            maskType: 'BRL',
+                            withDDD: true,
+                            dddMask: '(99) '
+                        }}
+                        autoFocus={true}
+                        keyboardType={"phone-pad"}
+                        placeholder={'(xx)xxxxx-xxxx'}
+                        value={valueCelular}
+                        includeRawValueInChangeText={true}
+                        onChangeText={(text, rawText) => { setCelularUser(rawText); setValueCelular(text) }}
+                    />
+                    <Text style={style.textLabel}>Senha:</Text>
+                    <TextInput
+                        style={style.inputStandard}
+                        placeholder={"8 ~ 16 caracteres"}
+                        maxLength={16}
+                        onChangeText={text => setSenhaUsuario(text)}
+                    />
+                    <TouchableOpacity style={style.continueBtn} onPress={navigateToResumo}>
+                        <Text style={style.textBtn}>Entrar</Text>
+                    </TouchableOpacity>
+                </View>
 
-                </Picker>
-                <Text style={style.textLabel}>Celular:</Text>
-                <TextInputMask
-                    style={style.inputStandard}
-                    type={'cel-phone'}
-                    options={{
-                        maskType: 'BRL',
-                        withDDD: true,
-                        dddMask: '(99) '
-                    }}
-                    autoFocus={true}
-                    keyboardType={"phone-pad"}
-                    placeholder={'(xx)xxxxx-xxxx'}
-                    value={valueCelular}
-                    includeRawValueInChangeText={true}
-                    onChangeText={(text, rawText) => { setCelularUser(rawText); setValueCelular(text) }}
-                />
-                <Text style={style.textLabel}>Senha:</Text>
-                <TextInput
-                    style={style.inputStandard}
-                    placeholder={"8 ~ 16 caracteres"}
-                    maxLength={16}
-                    onChangeText={text => setSenhaUsuario(text)}
-                />
-                <TouchableOpacity style={style.continueBtn} onPress={navigateToResumo}>
-                    <Text style={style.textBtn}>Entrar</Text>
-                </TouchableOpacity>
-            </View>
+                <View style={style.esqueciSenha}>
+                    <TouchableOpacity><Text style={style.esqueciSenhaBtn}>Esqueci minha senha</Text></TouchableOpacity>
+                </View>
+            </ScrollView>
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -137,9 +151,7 @@ export default function LoginCelular() {
                     </View>
                 </View>
             </Modal>
-            <View style={style.esqueciSenha}>
-                <TouchableOpacity><Text style={style.esqueciSenhaBtn}>Esqueci minha senha</Text></TouchableOpacity>
-            </View>
+            {criarModal}
         </View>
     );
 }
