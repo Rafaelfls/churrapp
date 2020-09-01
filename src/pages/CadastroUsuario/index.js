@@ -154,6 +154,7 @@ export default function CadastroUsuario() {
                         style={[style.inputStandard, borderColorRed2]}
                         placeholder={"8 ~ 16 caracteres"}
                         maxLength={16}
+                        secureTextEntry={true}
                         onChangeText={text => criptoSenha(text)}
                     />
                 </View>

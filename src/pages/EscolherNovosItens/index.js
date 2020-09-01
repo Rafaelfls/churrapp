@@ -14,8 +14,8 @@ import { useLoadingModal, createLoadingModal } from '../../context/churrasContex
 
 export default function EscolherNovosItens({ route, navigation }) {
 
-  const { loading, setLoading } = useLoadingModal();
-  const criarModal = createLoadingModal(loading);
+    const { loading, setLoading } = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
     const [item, setItem] = useState([]);
     const [unidades, setUnidades] = useState([]);
     const [formato, setFormato] = useState([]);
@@ -23,7 +23,7 @@ export default function EscolherNovosItens({ route, navigation }) {
     const [visivel, setIsVisivel] = React.useState(false);
     const [itemModal, setItemModal] = React.useState('');
     const [selectedUnidade, setSelectedUnidade] = useState("Selecione...");
-    const [selectedFormato, setSelectedFormato] = useState("Selecione...");
+    const [selectedFormato, setSelectedFormato] = useState();
     const [quantidadeModal, setQuantidadeModal] = useState(0)
     const [idItem, setIdItem] = useState(null)
     const [filtro, setFiltro] = useState(null)
@@ -37,6 +37,16 @@ export default function EscolherNovosItens({ route, navigation }) {
         const responseFormato = await api.get(`/formatos`);
         const responseTipos = await api.get(`/tipoSubTipo?subTipo=${1}`);
 
+        responseFormato.data.shift()
+        responseUnidade.data.sort(function (a, b) {
+            if (a.id > b.id) {
+                return 1;
+            }
+            if (a.id < b.id) {
+                return -1;
+            }
+            return 0;
+        })
         setUnidades(responseUnidade.data);
         setFormato(responseFormato.data);
         setItem(responseItem.data);
@@ -67,12 +77,12 @@ export default function EscolherNovosItens({ route, navigation }) {
             item_id: item,
         }).then(function (res) {
             setQuantidadeModal(0)
-        setLoading(false)
-    })
+            setLoading(false)
+        })
     }
 
     function backHome() {
-        navigation.push('AdicionarPratoPrincipal', { churrascode, convidadosQtd, primeiroAcesso:false })
+        navigation.push('AdicionarPratoPrincipal', { churrascode, convidadosQtd, primeiroAcesso: false })
     }
 
     function setFiltroTipo(idFiltro) {
@@ -161,8 +171,11 @@ export default function EscolherNovosItens({ route, navigation }) {
                 >
                     <View style={style.centeredView}>
                         <View style={style.modalView}>
-                            <Text style={style.modalText}>Quanto de {itemModal} deseja adicionar?</Text>
+                            <Text style={style.modalText}>Quanto de
+                                <Text style={{ fontFamily: 'poppins-medium', }}> {itemModal} </Text>
+                                 deseja adicionar?</Text>
                             <View style={style.selectionForm}>
+                                <Text style={style.modalTextLabel}>Quantidade:</Text>
                                 <NumericInput
                                     value={quantidadeModal}
                                     onChange={quantNova => setQuantidadeModal(quantNova)}
@@ -173,8 +186,10 @@ export default function EscolherNovosItens({ route, navigation }) {
                                     valueType='real'
                                     rounded
                                     textColor='black'
-                                    iconStyle={{ color: 'maroon' }}
-                                    style={style.quantidadeInput} />
+                                    iconStyle={{ color: 'maroon' }} />
+                            </View>
+                            <View style={style.selectionForm}>
+                                <Text style={style.modalTextLabel}>Unidade:</Text>
                                 <Picker
                                     selectedValue={selectedUnidade}
                                     style={style.boxDropdown}
@@ -182,12 +197,13 @@ export default function EscolherNovosItens({ route, navigation }) {
                                     mode="dropdown"
                                     onValueChange={itemValue => setSelectedUnidade(itemValue)}
                                 >
-                                    {unidades.map((unity , idx) => (
+                                    {unidades.map((unity, idx) => (
                                         <Picker.Item label={unity.unidade} value={unity.id} key={idx} />
                                     ))}
                                 </Picker>
                             </View>
                             <View style={style.selectionForm}>
+                                <Text style={style.modalTextLabel}>Opções:</Text>
                                 <Picker
                                     selectedValue={selectedFormato}
                                     style={style.boxDropdown}
@@ -195,8 +211,8 @@ export default function EscolherNovosItens({ route, navigation }) {
                                     mode="dropdown"
                                     onValueChange={itemValue => setSelectedFormato(itemValue)}
                                 >
-                                    {formato.map((form , idx)=> (
-                                        <Picker.Item label={form.formato} value={form.id}  key={idx}/>
+                                    {formato.map((form, idx) => (
+                                        <Picker.Item label={form.formato} value={form.id} key={idx} />
                                     ))}
                                 </Picker>
                             </View>
@@ -214,7 +230,7 @@ export default function EscolherNovosItens({ route, navigation }) {
                     </View>
                 </Modal>
 
-{criarModal}
+                {criarModal}
             </SafeAreaView>
         </View>
     )

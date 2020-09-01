@@ -75,7 +75,7 @@ export default StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    height: '30%',
+    maxHeight: '100%',
   },
   modalView: {
     backgroundColor: "#f2f2f2",
@@ -129,15 +129,25 @@ export default StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
     fontSize: 20,
+    fontFamily: 'poppins-light',
+  },
+  modalTextLabel:{
+    textAlign: "left",
+    fontSize: 17,
+    marginRight:15,
+    color:'#800000',
+    fontFamily: 'poppins-light',
   },
   boxDropdown: {
-    paddingHorizontal: 70,
+    position:'absolute',
+    right:0,
+    paddingHorizontal: 101,
     color: 'black',
   },
   selectionForm: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom:15,
   },
   textSalvarBtn: {
     color: 'gold',

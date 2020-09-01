@@ -194,7 +194,7 @@ export default function DetalheChurras() {
     if (formatoPicker) {
       return (
         <View style={style.selectionFormQtd}>
-          <Text style={style.selectionFormQtdLabel}>Formato:</Text>
+          <Text style={style.modalTextLabel}>Opções:</Text>
           <Picker
             selectedValue={selectedFormato}
             style={style.boxDropdownQtd}
@@ -203,8 +203,8 @@ export default function DetalheChurras() {
             onValueChange={itemValue => setSelectedFormato(itemValue)}
           >
 
-            {formato.map((formato, idx ) => (
-              <Picker.Item label={formato.formato}  key={idx} value={formato.id} />
+            {formato.map((formato, idx) => (
+              <Picker.Item label={formato.formato} key={idx} value={formato.id} />
             ))}
           </Picker>
         </View>
@@ -628,8 +628,11 @@ export default function DetalheChurras() {
       >
         <View style={style.centeredViewQtd}>
           <View style={style.modalViewQtd}>
-            <Text style={style.titleSubTipoModal}>Quanto de {itemModal} deseja adicionar?</Text>
+            <Text style={style.titleSubTipoModal}>Quanto de
+              <Text style={{ fontFamily: 'poppins-medium', }}> {itemModal} </Text>
+              deseja adicionar?</Text>
             <View style={style.selectionFormQtd}>
+              <Text style={style.modalTextLabel}>Quantidade:</Text>
               <NumericInput
                 value={quantidadeModal}
                 onChange={quantNova => setQuantidadeModal(quantNova)}
@@ -642,6 +645,9 @@ export default function DetalheChurras() {
                 textColor='black'
                 iconStyle={{ color: 'maroon' }}
                 style={style.quantidadeInputQtd} />
+            </View>
+            <View style={style.selectionFormQtd}>
+              <Text style={style.modalTextLabel}>Unidade:</Text>
               <Picker
                 selectedValue={selectedUnidade}
                 style={style.boxDropdownQtd}
@@ -649,8 +655,8 @@ export default function DetalheChurras() {
                 mode="dropdown"
                 onValueChange={itemValue => setSelectedUnidade(itemValue)}
               >
-                {unidades.map((unity , idx) => (
-                  <Picker.Item label={unity.unidade}  key={idx} value={unity.id} />
+                {unidades.map((unity, idx) => (
+                  <Picker.Item label={unity.unidade} key={idx} value={unity.id} />
                 ))}
               </Picker>
             </View>
