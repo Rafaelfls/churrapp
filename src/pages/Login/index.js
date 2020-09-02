@@ -29,7 +29,7 @@ export default function Login() {
       <View style={style.imageContainer}>
         <Image style={style.logo} source={logo} />
       </View>
-      <Text style={style.title}>Bora armar um churras?</Text>
+      <Text style={style.title}>Bora fazer um churras?</Text>
       <Text style={style.subtitle}>Como você prefere se conectar?</Text>
       <View style={style.allBtn}>
         <View style={style.loginBtn}>          

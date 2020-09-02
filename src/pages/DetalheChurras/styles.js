@@ -45,22 +45,14 @@ export default StyleSheet.create({
 
   //body
   infosPrincipais: {
-    marginLeft: 15,
-    marginBottom: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginRight: 15,
-    marginTop: 10,
-  },
-  infosLocDat: {
-    marginLeft: 5,
-    width: '70%'
+    marginHorizontal:15,
+    marginTop:10,
+    width:'60%',
   },
   churrasLocalContainer: {
     marginBottom: 9,
     flexDirection: 'row',
-    alignItems: 'center',
+    paddingRight:15,
   },
   churrasNome: {
     color: 'maroon',
@@ -349,7 +341,7 @@ export default StyleSheet.create({
     color: 'orangered',
     marginBottom: 2,
     fontFamily: 'poppins-medium',
-    width: '25%',
+    width: '40%',
   },
   precoItem: {
     fontSize: 12,
@@ -698,6 +690,17 @@ export default StyleSheet.create({
     fontFamily: 'poppins-medium',
     fontSize:30,
     marginBottom:15,
+  },
+  continueExitCont:{
+    position:'absolute',
+    top:10,
+    right:20
+  },
+  modalTitleOpt:{
+    color:"#800000",
+    fontFamily: 'poppins-medium',
+    fontSize:30,
+    marginBottom:5,
   },
   modalTextCont:{
     fontSize:17,
