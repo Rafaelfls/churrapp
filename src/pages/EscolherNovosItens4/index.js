@@ -34,6 +34,15 @@ export default function EscolherNovosItens3({ route, navigation }) {
         const responseUnidade = await api.get(`/unidade`);
         const responseTipos = await api.get(`/tipoSubTipo?subTipo=${4}`);
 
+        responseUnidade.data.sort(function (a, b) {
+            if (a.id > b.id) {
+                return 1;
+            }
+            if (a.id < b.id) {
+                return -1;
+            }
+            return 0;
+        })
         setUnidades(responseUnidade.data);
         setItem(responseItem.data);
         setTipo(responseTipos.data);
@@ -156,8 +165,11 @@ export default function EscolherNovosItens3({ route, navigation }) {
                 >
                     <View style={style.centeredView}>
                         <View style={style.modalView}>
-                            <Text style={style.modalText}>Quanto de {itemModal} deseja adicionar?</Text>
+                            <Text style={style.modalText}>Quanto de
+                                <Text style={{ fontFamily: 'poppins-medium', }}> {itemModal} </Text>
+                                 deseja adicionar?</Text>
                             <View style={style.selectionForm}>
+                                <Text style={style.modalTextLabel}>Quantidade:</Text>
                                 <NumericInput
                                     value={quantidadeModal}
                                     onChange={quantNova => setQuantidadeModal(quantNova)}
@@ -168,8 +180,10 @@ export default function EscolherNovosItens3({ route, navigation }) {
                                     valueType='real'
                                     rounded
                                     textColor='black'
-                                    iconStyle={{ color: 'maroon' }}
-                                    style={style.quantidadeInput} />
+                                    iconStyle={{ color: 'maroon' }} />
+                            </View>
+                            <View style={style.selectionForm}>
+                                <Text style={style.modalTextLabel}>Unidade:</Text>
                                 <Picker
                                     selectedValue={selectedUnidade}
                                     style={style.boxDropdown}
@@ -177,13 +191,13 @@ export default function EscolherNovosItens3({ route, navigation }) {
                                     mode="dropdown"
                                     onValueChange={itemValue => setSelectedUnidade(itemValue)}
                                 >
-                                    {unidades.map((unity , idx) => (
-                                        <Picker.Item label={unity.unidade} value={unity.id}  key={idx} />
+                                    {unidades.map((unity, idx) => (
+                                        <Picker.Item label={unity.unidade} value={unity.id} key={idx} />
                                     ))}
                                 </Picker>
                             </View>
                             <View style={style.footerModal}>
-                                <TouchableOpacity style={style.exitBtnFooter} onPress={() => setVisibility(false, "", '', '')}>
+                                <TouchableOpacity style={style.exitBtnFooter} onPress={() => setVisibility(false, "", '', '', '')}>
                                     <Icon style={style.iconSalvarBtn} name="times" size={15} />
                                     <Text style={style.iconSalvarBtn}>Cancelar</Text>
                                 </TouchableOpacity>

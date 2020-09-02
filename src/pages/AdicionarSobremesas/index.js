@@ -159,14 +159,13 @@ export default function AdicionarSobremesa({ route, navigation }) {
                 >
                     <View style={style.centeredView}>
                         <View style={style.modalView}>
-                            <Text style={style.modalText}>Deseja remover <Text style={{ fontWeight: 'bold' }}>{itemDeletar.nomeItem}</Text> do seu churras? </Text>
+                            <Text style={style.modalTitleText}>Deletar</Text>
+                            <Text style={style.modalText}>Deseja remover <Text style={{ fontFamily:'poppins-medium' }}>{itemDeletar.nomeItem}</Text> do seu churras? </Text>
                             <View style={style.footerModal}>
                                 <TouchableOpacity style={style.exitBtnModal} onPress={() => setIsVisible(false)}>
-                                    <IconF5 style={style.iconSalvarBtnModal} name="times" size={20} />
                                     <Text style={style.iconSalvarBtnModal}>Não</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={style.salvarBtnModal} onPress={() => deleteItem(itemDeletar)}>
-                                    <IconF5 style={style.iconSalvarBtnModal} name="check" size={20} />
+                                <TouchableOpacity style={style.exitBtnModal} onPress={() => deleteItem(itemDeletar)}>
                                     <Text style={style.iconSalvarBtnModal}>Sim</Text>
                                 </TouchableOpacity>
                             </View>

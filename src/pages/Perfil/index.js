@@ -105,7 +105,7 @@ export default function Perfil() {
     async function carregarQuantidadeCome() {
         const response = await api.get(`/quantidadecome`)
 
-        setQuantidadeComeLista([...quantidadeComeLista, ...response.data]);
+        setQuantidadeComeLista(response.data);
     }
 
     async function updatePerfil() {

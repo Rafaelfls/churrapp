@@ -56,18 +56,10 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent:'center'
     },
-    textBtnGoogle: {
-        fontSize: 20,
-        color: 'lightgray',
-        fontWeight: 'bold',
-        paddingHorizontal: 10
-
-    },
     textBtn: {
         textAlign:'center',
         fontSize: 20,
         color: 'white',
-        fontWeight: 'bold',
-        paddingHorizontal: 10,
+        fontFamily: 'poppins-medium',
     },
 });

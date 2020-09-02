@@ -123,6 +123,7 @@ export default function LoginCelular() {
                         style={style.inputStandard}
                         placeholder={"8 ~ 16 caracteres"}
                         maxLength={16}
+                        secureTextEntry={true}
                         onChangeText={text => setSenhaUsuario(text)}
                     />
                     <TouchableOpacity style={style.continueBtn} onPress={navigateToResumo}>

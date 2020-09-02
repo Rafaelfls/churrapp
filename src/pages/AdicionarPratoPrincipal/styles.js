@@ -103,13 +103,14 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    position: 'absolute',
-    bottom: "18%",
     width: '100%',
+    backgroundColor:'#80808080'
   },
   modalText: {
     fontSize: 15,
-    marginBottom: 15
+    marginBottom: 15,
+    textAlign:'center',
+    fontFamily:'poppins-light'
   },
   modalTitleText:{
     color:'maroon',
@@ -117,7 +118,7 @@ export default StyleSheet.create({
     fontFamily:'poppins-medium'
   },
   footerModal: {    
-    height: 90,
+    height: 50,
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: "center",

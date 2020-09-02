@@ -45,22 +45,14 @@ export default StyleSheet.create({
 
   //body
   infosPrincipais: {
-    marginLeft: 15,
-    marginBottom: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginRight: 15,
-    marginTop: 10,
-  },
-  infosLocDat: {
-    marginLeft: 5,
-    width: '70%'
+    marginHorizontal:15,
+    marginTop:10,
+    width:'60%',
   },
   churrasLocalContainer: {
     marginBottom: 9,
     flexDirection: 'row',
-    alignItems: 'center',
+    paddingRight:15,
   },
   churrasNome: {
     color: 'maroon',
@@ -349,7 +341,7 @@ export default StyleSheet.create({
     color: 'orangered',
     marginBottom: 2,
     fontFamily: 'poppins-medium',
-    width: '25%',
+    width: '40%',
   },
   precoItem: {
     fontSize: 12,
@@ -448,13 +440,10 @@ export default StyleSheet.create({
     height: '60%',
   },
   titleSubTipoModal: {
-    fontSize: 25,
-    marginBottom: 0,
-    fontWeight: 'bold',
-    color: 'black',
-    paddingBottom: 15,
-    opacity: 0.9,
+    marginBottom: 15,
     textAlign: "center",
+    fontSize: 20,
+    fontFamily: 'poppins-light',
   },
   footerModal: {
     margin: 10,
@@ -595,7 +584,7 @@ export default StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    height: '40%',
+    maxHeight: '100%',
   },
   modalViewQtd: {
     backgroundColor: "#f2f2f2",
@@ -642,8 +631,15 @@ export default StyleSheet.create({
   },
   selectionFormQtd: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom:15,
+  },  
+  modalTextLabel:{
+    textAlign: "left",
+    fontSize: 17,
+    marginRight:15,
+    color:'#800000',
+    fontFamily: 'poppins-light',
   },
   selectionFormQtdLabel: {
     fontSize: 18,
@@ -651,7 +647,9 @@ export default StyleSheet.create({
     marginRight: 10,
   },
   boxDropdownQtd: {
-    paddingHorizontal: 70,
+    position:'absolute',
+    right:0,
+    paddingHorizontal: 101,
     color: 'black',
   },
   titleSubTipoModalQtd: {
@@ -692,6 +690,17 @@ export default StyleSheet.create({
     fontFamily: 'poppins-medium',
     fontSize:30,
     marginBottom:15,
+  },
+  continueExitCont:{
+    position:'absolute',
+    top:10,
+    right:20
+  },
+  modalTitleOpt:{
+    color:"#800000",
+    fontFamily: 'poppins-medium',
+    fontSize:30,
+    marginBottom:5,
   },
   modalTextCont:{
     fontSize:17,
