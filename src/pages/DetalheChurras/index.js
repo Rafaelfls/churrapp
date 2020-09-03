@@ -625,7 +625,8 @@ async function uploadImage(imagem) {
               </View>
             </View>
           </ScrollView>
-          {allowEditing[0]
+          {editavel
+          ?allowEditing[0]
             ? <FloatingAction
               color='rgba(0,0,0,0.9)'
               showBackground={false}
@@ -638,7 +639,10 @@ async function uploadImage(imagem) {
               onPressMain={() => editPerfil()}
               floatingIcon={<IconMa name="edit" size={22} color={"white"} />}
             />
+          
+          :null
           }
+          
 
         </View>
         {editavel
