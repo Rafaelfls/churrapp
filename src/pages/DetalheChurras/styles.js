@@ -44,6 +44,26 @@ export default StyleSheet.create({
   },
 
   //body
+  formGroup:{
+    marginHorizontal:20,
+    marginTop: 15,
+    justifyContent: "center",
+  },
+  textLabel:{
+    fontSize: 17,
+    color:"maroon",
+    fontFamily: 'poppins-medium',
+    marginBottom: 5,
+  },
+  inputStandard:{ 
+    height: 40, 
+    borderBottomWidth: 0.5,
+    paddingHorizontal: 5,
+    marginBottom: 10,
+    color: 'black',
+    fontFamily: 'poppins-light',
+    fontSize: 16,
+  }, 
   infosPrincipais: {
     marginHorizontal:15,
     marginTop:10,
@@ -68,9 +88,19 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   churrasInfo: {
-    color: 'gray',
+    color: 'black',
     fontFamily: 'poppins-light',
-    fontSize: 18,
+    fontSize: 16,
+  },
+  editFotoChurras:{
+    position:'absolute',
+    top:0,
+    left:0,
+    right:0,
+    bottom:0,
+    width:100,
+    height:100,
+    backgroundColor:'blue'
   },
   churrasDonoContainer: {
     height: 150,
@@ -84,7 +114,6 @@ export default StyleSheet.create({
   churrasImgContainer: {
     marginBottom: 0,
     alignItems: 'center',
-    backgroundColor: 'transparent',
     borderRadius: 10,
     padding: 10,
     flexDirection:'row',
@@ -749,4 +778,33 @@ export default StyleSheet.create({
     right:20
   },
   //Fim modal entrar em contato com convidado
+
+  //editar Foto churras
+  centeredViewFotoChurras: {
+    position:'absolute',
+    height: 150,
+    width: 150,
+    borderRadius: 10,
+    marginLeft:10,
+    zIndex:1,
+  },
+  modalViewFotoChurras: {
+    backgroundColor: "rgba(114,114,114,0.5)",
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent:'center',
+    width:'100%',  
+    height:'100%'  
+  },
+  continueBtnFotoChurras:{
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textBtnFotoChurras:{
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
+  //fim editar foto churras
 });

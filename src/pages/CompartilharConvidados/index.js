@@ -119,7 +119,7 @@ export default function CompartilharConvidados({ route, navigation }) {
     setLoading(true)
     await convidadosList.map(convid => criaListaConvidados(convid))
     await convidadosList.map(convid => enviaMensagens(convid.telefone, convite))
-    await convidados.map(convid => enviaNotificacao(convid.usuario_id))
+    await convidadosList.map(convid => enviaNotificacao(convid.usuario_id))
 
     var churrascode = churrasAtual.churrasCode
     setLoading(false)
@@ -127,10 +127,10 @@ export default function CompartilharConvidados({ route, navigation }) {
 
     convidadosList = []
   }
-
+console.log(convidadosList)
   async function enviaNotificacao(convidId){
-    await api.post(`/notificacoes/${convidId}/${churrascode}`,{
-        mensagem:`${USUARIOLOGADO.nome} está te convidando para o churras ${convidados[0].nomeChurras}, e o valor por pessoa é de ${convidados[0].valorPagar}. Para mais informações acesse o churrasco na pagina de churras futuros. `, 
+    await api.post(`/notificacoes/${convidId}/${churrasAtual.churrasCode}`,{
+        mensagem:`${USUARIOLOGADO.nome} está te convidando para o churras ${churrasAtual.nomeChurras}. Para mais informações acesse o churrasco na pagina de churras futuros. `, 
         negar:"Não vou", 
         confirmar:"Vou"
     })

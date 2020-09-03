@@ -94,10 +94,10 @@ export default StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontFamily: 'poppins-regular',
-    paddingHorizontal:5,
+    paddingHorizontal: 5,
   },
-  containerIdade:{
-    flexDirection:'row',
+  containerIdade: {
+    flexDirection: 'row',
   },
   footerModal: {
     marginTop: 10,
@@ -171,7 +171,6 @@ export default StyleSheet.create({
 
   //Minhas Preferências
   containerGeral: {
-    flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     paddingTop: 25,
@@ -180,10 +179,14 @@ export default StyleSheet.create({
   },
 
   containerEsq: {
-    width: '48%',
     alignItems: 'flex-start',
+    marginLeft:10,
   },
-
+  preferenciasTitulo: {
+    fontFamily: 'poppins-medium',
+    fontSize: 20,
+    color: 'maroon'
+  },
   containerDir: {
     width: '48%',
     alignItems: 'flex-end',
@@ -211,19 +214,19 @@ export default StyleSheet.create({
 
   //Loading modal
   loadingBackground: {
-    flexDirection:"row",
+    flexDirection: "row",
     position: 'relative',
-    width:'100%',
-    height:"100%",
+    width: '100%',
+    height: "100%",
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'gray',
     opacity: 0.8
   },
-  textLoading:{
+  textLoading: {
     fontSize: 20,
     fontFamily: 'poppins-medium',
     color: 'white',
-    marginLeft:7,
+    marginLeft: 7,
   },
 });
