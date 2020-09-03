@@ -9,10 +9,11 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
 import style from './styles';
-import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
+import { useLoadingModal, createLoadingModal, useChurrasCount } from '../../context/churrasContext';
 
 export default function CriarChurrasco() {
 
+  const { churrasCount, setChurrasCount } = useChurrasCount();
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
   const navigation = useNavigation();
@@ -150,7 +151,7 @@ export default function CriarChurrasco() {
         },
       });
     })
-
+    api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: setChurrasCount(churrasCount + 1) });
   }
 
   return (

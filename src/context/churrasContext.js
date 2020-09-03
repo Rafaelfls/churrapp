@@ -7,6 +7,7 @@ const ChurrasContext = createContext();
 
 export default function churrasProvider({ children }) {
     const [churrasCount, setChurrasCount ] = useState(0);
+    const [churrasParticipado, setChurrasParticipado] = useState(0);
     const [convidadosCount, setConvidadosCount ] = useState(0);
     const [loading, setLoading] = useState(false);
 
@@ -21,6 +22,8 @@ export default function churrasProvider({ children }) {
           setConvidadosCount,
           loading,
           setLoading,
+          churrasParticipado,
+          setChurrasParticipado
           }}>
           {children}
       </ChurrasContext.Provider>
@@ -31,6 +34,12 @@ export function useChurrasCount() {
     const context = useContext(ChurrasContext);
     const {churrasCount, setChurrasCount} = context;
     return {churrasCount, setChurrasCount};
+}
+
+export function useChurrasParticipado() {
+    const context = useContext(ChurrasContext);
+    const {churrasParticipado, setChurrasParticipado} = context;
+    return {churrasParticipado, setChurrasParticipado};
 }
 
 export function useConvidadosCount() {

@@ -11,7 +11,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 
 import style from './styles';
-import { useChurrasCount, useLoadingModal, createLoadingModal } from '../../context/churrasContext';
+import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 
 export default function Perfil() {
@@ -37,8 +37,9 @@ export default function Perfil() {
     const [quantidadeComeNovo_id, setQuantidadeComeNovo_id] = useState(null);
     // foto ainda nao em uso
     // const [fotoNova, setFotoNova] = useState(null);
+    const [ churrasParticipados, setChurrasParticipados ] = useState(0);
 
-    const { churrasCount, setChurrasCount } = useChurrasCount();
+    
     const { loading, setLoading } = useLoadingModal();
     const criarModal = createLoadingModal(loading);
 
@@ -49,6 +50,7 @@ export default function Perfil() {
         const response = await api.get(`/usuarios/${id}`).then(function (response) {
             setUsuario(response.data)
             setUsuarioUpdate(response.data[0])
+            setChurrasParticipados(response.data[0].churrasParticipados)
 
             //converter data de nascimento para idade
             setImage({ uri: response.data[0].fotoUrlU })
@@ -217,13 +219,13 @@ export default function Perfil() {
                             <View style={style.containerOrg}>
                                 <IconMCI name="grill" size={28} />
                                 <Text style={style.profileOrg}>Organizou</Text>
-                                <Text style={style.profileOrgNumber}>{churrasCount}</Text>
+                                <Text style={style.profileOrgNumber}>{usuario.churrasCriados}</Text>
                             </View>
                             <View style={style.linhaSeparaçãoHor}></View>
                             <View style={style.containerPart}>
                                 <IconMCI name="grill" size={28} />
                                 <Text style={style.profilePart}>Participou</Text>
-                                <Text style={style.profilePartNumber}>7</Text>
+                                <Text style={style.profilePartNumber}>{usuario.churrasParticipados}</Text>
                             </View>
                         </View>
                         <View style={style.containerGeral}>

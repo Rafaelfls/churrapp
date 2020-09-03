@@ -13,10 +13,11 @@ import api from '../../services/api';
 
 import style from './styles';
 
-import { useChurrasCount } from '../../context/churrasContext';
+import { useChurrasCount, useChurrasParticipado } from '../../context/churrasContext';
 
 export default function ResumoChurras() {
     const { churrasCount, setChurrasCount } = useChurrasCount();
+    const { churrasParticipado, setChurrasParticipado } = useChurrasParticipado();
 
     const route = useRoute();
     const [churras, setChurras] = useState([]);
@@ -52,11 +53,12 @@ export default function ResumoChurras() {
 
     function deletar(churrass) {
         setLoading(true)
-        setChurrasCount(churrasCount - 1)
         api.delete(`/churras/${churrass.id}`, config).then(function () {
             setVisivel(!visivel)
             setLoading(false)
             setRefreshChurras(!refreshChurras)
+            api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: setChurrasCount(churrasCount - 1) });
+
         });
 
     }
@@ -93,10 +95,11 @@ export default function ResumoChurras() {
 
 
 
-        const response = await api.get(`/churras/${USUARIOLOGADO.id}`);
-
+        const response = await api.get(`/churras/${USUARIOLOGADO.id}`)
         setChurras(response.data);
         setChurrasCount(response.data.length);
+        setChurrasParticipado(USUARIOLOGADO.churrasParticipados)
+        api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: response.data.length });
         setLoading(false);
     }
 
@@ -142,6 +145,8 @@ export default function ResumoChurras() {
         } else if (notificacao.confirmar == 'Vou') {
             await api.put(`/confirmaPresenca/${notificacao.usuario_id}/${notificacao.churras_id}`)
             await api.delete(`/notificacoes/${notificacao.id}`)
+            setChurrasParticipado(churrasParticipado + 1)
+            api.put(`/usuariosQntParticipado/${USUARIOLOGADO.id}`, { churrasParticipados: churrasParticipado + 1 });
             setIsNotificacoesOpen(false)
             setRefreshChurras(!refreshChurras);
         }
