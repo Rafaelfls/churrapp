@@ -229,33 +229,32 @@ export default function Perfil() {
                             </View>
                         </View>
                         <View style={style.containerGeral}>
+                            <Text style={style.preferenciasTitulo}>Preferencias:</Text>
                             <View style={style.containerEsq}>
                                 <View style={style.containerInfos}>
                                     <IconMCI name="cow" size={18} />
+                                    <Text style={style.infosLeftTitulo}>Ponto preferido:</Text>
                                     <Text style={style.infosLeft}>{usuario.ponto}</Text>
                                 </View>
                                 <View style={style.containerInfos}>
                                     <IconMCI name="silverware-fork-knife" size={18} />
                                     <Text style={style.infosLeft}>{usuario.nomeQuantidadeCome}</Text>
                                 </View>
-                            </View >
-                            <View style={style.linhaSeparaçãoHor}></View>
-                            <View style={style.containerDir}>
                                 <View style={style.containerInfos}>
-                                    <Text style={style.infosRight}>{usuario.carnePreferida}</Text>
                                     <IconMCI name="pig" size={18} />
+                                    <Text style={style.infosLeft}>{usuario.carnePreferida}</Text>
                                 </View>
                                 <View style={style.containerInfos}>
-                                    <Text style={style.infosRight}>{usuario.acompanhamentoPreferido}</Text>
                                     <IconFA5 name="bread-slice" size={18} />
+                                    <Text style={style.infosLeft}>{usuario.acompanhamentoPreferido}</Text>
                                 </View>
                                 <View style={style.containerInfos}>
-                                    <Text style={style.infosRight}>{usuario.bebidaPreferida}</Text>
                                     <IconFA5 name="beer" size={18} />
+                                    <Text style={style.infosLeft}>{usuario.bebidaPreferida}</Text>
                                 </View>
                                 <View style={style.containerInfos}>
-                                    <Text style={style.infosRight}>{usuario.sobremesaPreferida}</Text>
-                                    <IconFA5 name="candy-cane" size={18} />
+                                    <Icon name="birthday-cake" size={18} />
+                                    <Text style={style.infosLeft}>{usuario.sobremesaPreferida}</Text>
                                 </View>
                             </View>
                         </View>
@@ -358,8 +357,8 @@ export default function Perfil() {
                                     selectedValue={pontoCarneNovo_id}
                                     onValueChange={pontoCarne_id => { usuarioUpdate.pontoCarne_id = pontoCarne_id }}
                                 >
-                                    {pontoCarneLista.map((pontoLista , idx) => (
-                                        <Picker.Item label={pontoLista.ponto}  key={idx} value={pontoLista.id} />
+                                    {pontoCarneLista.map((pontoLista, idx) => (
+                                        <Picker.Item label={pontoLista.ponto} key={idx} value={pontoLista.id} />
                                     ))}
 
                                 </Picker>
@@ -372,8 +371,8 @@ export default function Perfil() {
                                     selectedValue={quantidadeComeNovo_id}
                                     onValueChange={quantidadeCome_id => { usuarioUpdate.quantidadeCome_id = quantidadeCome_id }}
                                 >
-                                    {quantidadeComeLista.map((quantidadeComeLista , idx) => (
-                                        <Picker.Item label={quantidadeComeLista.nomeQuantidadeCome + " (" + quantidadeComeLista.quantidade + "g)"}  key={idx} value={quantidadeComeLista.id} />
+                                    {quantidadeComeLista.map((quantidadeComeLista, idx) => (
+                                        <Picker.Item label={quantidadeComeLista.nomeQuantidadeCome + " (" + quantidadeComeLista.quantidade + "g)"} key={idx} value={quantidadeComeLista.id} />
                                     ))}
 
                                 </Picker>

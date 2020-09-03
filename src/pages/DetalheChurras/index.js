@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, Linking, Picker, ScrollView, Modal, TouchableHighlight } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, Linking, Picker, ScrollView, Modal, TextInput, TouchableHighlight } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import NumericInput from 'react-native-numeric-input';
 import IconEnt from 'react-native-vector-icons/Entypo';
@@ -11,6 +11,10 @@ import IconOct from 'react-native-vector-icons/Octicons';
 import { ScrollableTabView, DefaultTabBar, ScrollableTabBar, } from '@valdio/react-native-scrollable-tabview'
 import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
+import * as ImagePicker from 'expo-image-picker';
+import { FloatingAction } from "react-native-floating-action";
+import DatePicker from 'react-native-datepicker';
+
 
 import style from './styles';
 import { Container } from 'native-base';
@@ -18,15 +22,17 @@ import { Container } from 'native-base';
 import { useConvidadosCount, useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
 export default function DetalheChurras() {
+  const route = useRoute();
   const { convidadosCount, setConvidadosCount } = useConvidadosCount();
 
+  const churras = route.params.churras;
+  const editavel = route.params.editavel;
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
-  const route = useRoute();
   const [itens, setItens] = useState([]);
   const [itensTotal, setItensTotal] = useState(0);
   const [convidados, setConvidados] = useState([]);
-  const [convidadosConfirmados] = useState(0);
+  const [convidadosConfirmados, setConfirmados] = useState(0);
   const [todosItens, setTodosItens] = useState([]);
   const [pagoVisivel, setPagoVisivel] = useState(false);
   const [refresh, setRefresh] = useState(true);
@@ -35,9 +41,13 @@ export default function DetalheChurras() {
   const [contactar, setContactar] = useState([false, null, null, null]);
   const [churrasDateFormatted, setChurrasDateFormatted] = useState();
   const [visivel2, setVisibility2] = useState([false])
+  const [editChurrasNome, setEditChurrasNome] = useState(churras.nomeChurras)
+  const [editChurrasLocal, setEditChurrasLocal] = useState(churras.local)
+  const [editChurrasData, setEditChurrasData] = useState(churrasDateFormatted)
+  const [editChurrasInicio, setEditChurrasInicio] = useState(churras.hrInicio)
+  const [editChurrasFim, setEditChurrasFim] = useState(churras.hrFim)
+  const [editChurrasDescricao, setEditChurrasDescricao] = useState(churras.descricao)
 
-  const churras = route.params.churras;
-  const editavel = route.params.editavel;
   const [modalTipoVisivel, setModalTipoVisivel] = useState(false);
   const [modalItemVisivel, setModalItemVisivel] = useState(false);
   const [modalSubTipoVisivel, setModalSubTipoVisivel] = useState(false);
@@ -53,6 +63,14 @@ export default function DetalheChurras() {
   const [unidadeInvalidaVisivel, setUnidadeInvalidaVisivel] = useState(false)
   const [opcaoItensVisible, setOpcaoItensVisible] = useState([false])
   const navigation = useNavigation();
+  const [churrasAtual, setChurrasAtual] = useState([])
+
+
+  //editar perfil
+  const [allowEditing, setAllowEditing] = useState([false, 'darkgray'])
+  const [returnVisivel, setReturnVisivel] = useState([false])
+  const [image, setImage] = useState({ cancelled: true, uri: null });
+  //Fim editar perfil
 
   function CompartilharChurras(churras) {
     navigation.push('CompartilharChurrasco', { churras });
@@ -90,6 +108,7 @@ export default function DetalheChurras() {
     var month = new Date(churras.data).getMonth() + 1
     var year = new Date(churras.data).getFullYear()
     setChurrasDateFormatted(date + '/' + month + '/' + year)
+    setEditChurrasData(date + '/' + month + '/' + year)
   }
 
   function backHome() {
@@ -132,6 +151,33 @@ export default function DetalheChurras() {
     }
   }
 
+  function editPerfil() {
+    setAllowEditing([true, 'black']);
+  }
+
+
+  async function savePerfil() {
+    setLoading(true)
+    setAllowEditing([false, 'darkgray']);
+    if(image.uri != null){
+      var novaUrl = await uploadImage(image);
+    }else{
+      var novaUrl = churras.fotoUrlC;
+    }
+    await api.put(`/churrasUpdate/${churras.id}`, {
+      nomeChurras: editChurrasNome,
+      data: editChurrasData,
+      hrInicio: editChurrasInicio,
+      hrFim: editChurrasFim,
+      local: editChurrasLocal,
+      descricao: editChurrasDescricao,
+      fotoUrlC: novaUrl,
+    }).then(function (res) {
+      setReturnVisivel([true, res.data.mensagem])
+      setRefresh(!refresh)
+    })
+  }
+
   async function carregarConvidados() {
     const response = await api.get(`/convidados/${churras.id}`);
 
@@ -141,12 +187,13 @@ export default function DetalheChurras() {
   }
 
   function setConvidadosConfirmados(convid) {
+    var qtd = 0;
     convid.forEach(pessoa => {
       if (pessoa.confirmado) {
-        convidadosConfirmados++;
+        qtd++;
       }
     });
-    return convidadosConfirmados;
+    return setConfirmados(qtd);
   }
 
   async function addItem(isVisible, item, unidadeDrop, qtdNova, formato) {
@@ -285,15 +332,77 @@ export default function DetalheChurras() {
       })
   }
 
+  async function carregaChurras() {
+    const res = await api.get(`churrasPeloId/${churras.id}`)
+
+    setChurrasAtual(res.data[0])
+    setEditChurrasNome(res.data[0].nomeChurras)
+    setEditChurrasLocal(res.data[0].local)
+    const dataFormatada = formatData(res.data[0].data)
+    setEditChurrasData(dataFormatada)
+    setEditChurrasInicio(res.data[0].hrInicio)
+    setEditChurrasFim(res.data[0].hrFim)
+    setEditChurrasDescricao(res.data[0].descricao)
+  }
+
+  function formatData(data) {
+    var date = new Date(churras.data).getDate() + 1
+    var month = new Date(churras.data).getMonth() + 1
+    var year = new Date(churras.data).getFullYear()
+    setChurrasDateFormatted(date + '/' + month + '/' + year)
+    return date + '/' + month + '/' + year
+  }
+
+  const pickImage = async () => {
+    setLoading(true)
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+    });
+
+    if (!result.cancelled) {
+        churras.fotoUrlC = result.uri;
+        setImage(result);
+    }
+    setLoading(false)
+};
+
+async function uploadImage(imagem) {
+    let apiUrl = 'https://pure-island-99817.herokuapp.com/fotosUsuarios';
+    let uriParts = imagem.uri.split('.');
+    let fileType = uriParts[uriParts.length - 1];
+    let uri = imagem.uri
+
+    let formData = new FormData();
+    formData.append('file', {
+        uri,
+        name: `photo.${fileType}`,
+        type: `image/${fileType}`,
+    });
+
+    let options = {
+        method: 'POST',
+        body: formData,
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+        },
+    };
+
+    const res = await fetch(apiUrl, options);
+    const response = await res.json()
+    
+    return response.location;
+}
 
   useEffect(() => {
-    setLoading(true)
+    carregaChurras();
     carregarItens();
     carregarConvidados();
     carregarSubTipos();
-    formatData();
     loadUnidadeFormato();
-    setLoading(false)
   }, [refresh]);
 
   return (
@@ -303,10 +412,10 @@ export default function DetalheChurras() {
           <IconOct name="chevron-left" size={25} color={"white"} />
         </TouchableOpacity>
         <View style={style.title}>
-          <Text style={style.detalheTitle}>{churras.nomeChurras}</Text>
+          <Text style={style.detalheTitle}>{editChurrasNome}</Text>
         </View>
         {editavel &&
-          <TouchableOpacity style={style.shareBtn} onPress={() => CompartilharChurras(churras)} >
+          <TouchableOpacity style={style.shareBtn} onPress={() => CompartilharChurras(churrasAtual)} >
             <IconEnt name="share" size={25} color={"white"} />
           </TouchableOpacity>
         }
@@ -327,56 +436,211 @@ export default function DetalheChurras() {
         ref={(tabView) => { tabView = tabView; }}
         initialPage={0}
       >
-        <ScrollView tabLabel="Info">
-          <View style={style.churrasImgContainer}>
-            <Image source={{ uri: churras.fotoUrlC }} style={style.churrasImg} />
-            <View style={style.churrasDonoContainer}>
-              <Image source={{ uri: churras.fotoUrlU }} style={style.donoImg} />
-              <Text style={style.churrasDono}>{churras.nome}</Text>
+        <View tabLabel="Info">
+          <ScrollView>
+            <View style={style.churrasImgContainer}>
+            {allowEditing[0]
+              ?<TouchableOpacity activeOpacity={0.5} onPress={pickImage} style={style.centeredViewFotoChurras}>
+                <View style={style.modalViewFotoChurras}>
+                  <View style={style.continueBtnFotoChurras}>
+                    <IconMa name="edit" size={22} color={"white"} />
+                  </View>
+                </View>
+              </TouchableOpacity>
+              :null}
+              <Image source={{ uri: churras.fotoUrlC }} style={style.churrasImg} />
+              <View style={style.churrasDonoContainer}>
+                <Image source={{ uri: churras.fotoUrlU }} style={style.donoImg} />
+                <Text style={style.churrasDono}>{churras.nome}</Text>
+              </View>
             </View>
-          </View>
-          <View style={style.infosPrincipais}>
-              <View style={style.churrasLocalContainer}>
+            {allowEditing[0]
+              ? <View style={style.formGroup}>
+                <View style={{ flexDirection: 'row' }}>
+                  <IconMat name="cowboy" size={20} style={style.icons} />
+                  <Text style={style.churrasNome}>Nome do churras: </Text>
+                </View>
+                <TextInput
+                  style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                  editable={allowEditing[0]}
+                  onChangeText={text => setEditChurrasNome(text)}
+                  value={editChurrasNome}
+                />
+              </View>
+              : null}
+            <View style={style.formGroup}>
+              <View style={{ flexDirection: 'row' }}>
                 <IconFA name="map-o" size={20} style={style.icons} />
                 <Text style={style.churrasNome}>Local: </Text>
-                <Text style={style.churrasInfo}>{churras.local}</Text>
               </View>
-              <View style={style.churrasLocalContainer}>
+              <TextInput
+                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                editable={allowEditing[0]}
+                onChangeText={text => setEditChurrasLocal(text)}
+                value={editChurrasLocal}
+              />
+            </View>
+            <View style={style.formGroup}>
+              <View style={{ flexDirection: 'row' }}>
                 <IconEnt name="calendar" size={22} style={style.icons} />
                 <Text style={style.churrasNome}>Data: </Text>
-                <Text style={style.churrasInfo}>{churrasDateFormatted}</Text>
               </View>
-              <View style={style.churrasLocalContainer}>
+              <DatePicker
+                  style={{ width: '100%'}}
+                  date={editChurrasData}
+                  mode="date"
+                  disabled={!allowEditing[0]}
+                  placeholder="DD/MM/AAAA"
+                  format="DD/MM/YYYY"
+                  minDate="01/05/2020"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      display:'none'
+                    },
+                    dateText:{
+                      color: allowEditing[1],
+                      fontSize:16,
+                      position:'absolute',
+                      fontFamily: 'poppins-light',
+                    },
+                    disabled:{
+                      backgroundColor:'transparent',
+                    },
+                    dateInput: {
+                      borderBottomWidth: 1,
+                      borderWidth: 0,
+                      borderBottomColor: allowEditing[1],
+                    }
+                  }}
+                  onDateChange={(date) => { setEditChurrasData(date) }}
+                />              
+            </View>
+            <View style={style.formGroup}>
+              <View style={{ flexDirection: 'row' }}>
                 <IconEnt name="clock" size={22} style={style.icons} />
-                <Text style={style.churrasNome}>Horário: </Text>
-                <Text style={style.churrasInfo}>{churras.hrInicio}{churras.hrFim == null ? null : " - " + churras.hrFim}</Text>
+                <Text style={style.churrasNome}>Horário de início: </Text>
               </View>
-              <View style={style.churrasLocalContainer}>
+              <DatePicker
+                  style={{ width: '100%'}}
+                  date={editChurrasInicio}
+                  mode="time"
+                  placeholder="00:00"
+                  disabled={!allowEditing[0]}
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      display:'none'
+                    },
+                    dateText:{
+                      color: allowEditing[1],
+                      fontSize:16,
+                      position:'absolute',
+                      fontFamily: 'poppins-light',
+                    },
+                    disabled:{
+                      backgroundColor:'transparent',
+                    },
+                    dateInput: {
+                      borderBottomWidth: 1,
+                      borderWidth: 0,
+                      borderBottomColor: allowEditing[1],
+                    }
+                  }}
+                  onDateChange={(date) => { setEditChurrasInicio(date) }}
+                />              
+            </View>
+            <View style={style.formGroup}>
+              <View style={{ flexDirection: 'row' }}>
+                <IconEnt name="clock" size={22} style={style.icons} />
+                <Text style={style.churrasNome}>Horário de Fim: </Text>
+              </View>
+              <DatePicker
+                  style={{ width: '100%'}}
+                  date={editChurrasFim}
+                  mode="time"
+                  placeholder="00:00"
+                  confirmBtnText="Confirm"
+                  disabled={!allowEditing[0]}
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      display:'none'
+                    },
+                    disabled:{
+                      backgroundColor:'transparent',
+                    },
+                    dateText:{
+                      color: allowEditing[1],
+                      fontSize:16,
+                      position:'absolute',
+                      fontFamily: 'poppins-light',
+                    },
+                    dateInput: {
+                      borderBottomWidth: 1,
+                      borderWidth: 0,
+                      borderBottomColor: allowEditing[1],
+                    }
+                  }}
+                  onDateChange={(date) => { setEditChurrasFim(date) }}
+                />  
+            </View>
+            <View style={style.formGroup}>
+              <View style={{ flexDirection: 'row' }}>
                 <IconMa name="description" size={22} style={style.icons} />
                 <Text style={style.churrasNome}>Descrição: </Text>
-                <Text style={style.churrasInfo}>{churras.descricao == null ? "-" : churras.descricao}</Text>
               </View>
-              <View style={style.churrasLocalContainer}>
+              <TextInput
+                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                editable={allowEditing[0]}
+                onChangeText={text => setEditChurrasDescricao(text)}
+                value={editChurrasDescricao == null ? "-" : editChurrasDescricao}
+              />
+            </View>
+            <View style={style.formGroup}>
+              <View style={{ flexDirection: 'row' }}>
                 <IconMa name="attach-money" size={22} style={style.icons} />
                 <Text style={style.churrasNome}>Valor total: </Text>
-                <Text style={style.churrasInfo}>{churras.valorTotal == null ? "R$ 00.00" : churras.valorTotal}</Text>
               </View>
-              <View style={style.churrasLocalContainer}>
+              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{churras.valorTotal == null ? "R$ 00.00" : churras.valorTotal}</Text>
+            </View>
+            <View style={style.formGroup}>
+              <View style={{ flexDirection: 'row' }}>
                 <Icon name="money-bill-wave" size={17} style={style.icons} />
                 <Text style={style.churrasNome}>Valor recebido: </Text>
-                <Text style={style.churrasInfo}>{churras.valorPago == null ? "R$ 00.00" : churras.valorPago}</Text>
               </View>
-              <View style={style.churrasLocalContainer}>
+              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{churras.valorPago == null ? "R$ 00.00" : churras.valorPago}</Text>
+            </View>
+            <View style={style.formGroup}>
+              <View style={{ flexDirection: 'row' }}>
                 <IconMa name="people" size={22} style={style.icons} />
                 <Text style={style.churrasNome}>Convidados: </Text>
-                <View style={style.containerTituloConvidados}>
-                  {convidadosCount == 1
-                    ? <Text style={style.churrasInfo}>{convidadosConfirmados} confirmado</Text>
-                    : <Text style={style.churrasInfo}>{convidadosConfirmados} confirmados</Text>}
-                </View>
+              </View>
+              <View style={[style.inputStandard, { borderBottomColor: 'darkgray', }]}>
+                {convidadosCount == 1
+                  ? <Text style={[style.churrasInfo, { color: 'darkgray', }]}>{convidadosConfirmados} confirmado</Text>
+                  : <Text style={[style.churrasInfo, { color: 'darkgray', }]}>{convidadosConfirmados} confirmados</Text>}
               </View>
             </View>
-        </ScrollView>
+          </ScrollView>
+          {allowEditing[0]
+            ? <FloatingAction
+              color='rgba(0,0,0,0.9)'
+              showBackground={false}
+              onPressMain={() => savePerfil()}
+              floatingIcon={<IconMa name="save" size={22} color={"white"} />}
+            />
+            : <FloatingAction
+              color='rgba(0,0,0,0.9)'
+              showBackground={false}
+              onPressMain={() => editPerfil()}
+              floatingIcon={<IconMa name="edit" size={22} color={"white"} />}
+            />
+          }
+
+        </View>
         {editavel
           ? (<FlatList
             tabLabel='Convidados'
@@ -792,6 +1056,21 @@ export default function DetalheChurras() {
             <Text style={style.modalTextCont}>Selecione uma unidade de medida!</Text>
             <View style={style.footerModalCont}>
               <TouchableOpacity style={style.continueBtnCont} onPress={() => setUnidadeInvalidaVisivel(false)}><Text style={style.textBtnCont}>Ok</Text></TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={returnVisivel[0]}
+      >
+        <View style={style.centeredViewContactar}>
+          <View style={style.modalViewContactar}>
+            <Text style={style.modalTitleCont}>Editar churras!</Text>
+            <Text style={style.modalTextCont}>{returnVisivel[1]}</Text>
+            <View style={style.footerModalCont}>
+              <TouchableOpacity style={style.continueBtnCont} onPress={() => setReturnVisivel([false])}><Text style={style.textBtnCont}>Ok</Text></TouchableOpacity>
             </View>
           </View>
         </View>
