@@ -88,7 +88,7 @@ export default function CadastroUsuario() {
                 email: `${celularUsuario}@churrapp.com`,
                 cidade: "cidade",
                 uf: "uf",
-                idade: "20/12/2020",
+                idade: "02/01/1900",
                 fotoUrlU: url,
                 celular: celularUsuario,
                 cadastrado: true,

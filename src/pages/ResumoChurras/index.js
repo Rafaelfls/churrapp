@@ -32,19 +32,19 @@ export default function ResumoChurras() {
         {
             text: "Criar Churras",
             name: "criaChurras",
-            color:'#800000',            
+            color: '#800000',
             icon: <Icon name="plus" style={style.fabBtnIcon} />,
             position: 1
         },
         {
             text: "Participar do Churras",
             name: "participaChurras",
-            color:'#800000',
+            color: '#800000',
             icon: <Icon name="users" style={style.fabBtnIcon} />,
             position: 2
         },
     ]
-    
+
     const config = {
         headers: { 'Authorization': USUARIOLOGADO.id }
     };
@@ -157,9 +157,16 @@ export default function ResumoChurras() {
 
             <View style={style.header}>
                 <View style={style.menuBtn}>
+                    <View style={style.centeredViewNotificacaoQtd}>
+                        {notificacoes.length > 0
+                            ? <View style={style.modalViewNotificacaoQtd}>
+                                <Text style={style.textBtnNotificacaoQtd}>{notificacoes.length}</Text>
+                            </View>
+                            : null}
+                    </View>
                     {notificacoes.length > 0
                         ? (<TouchableOpacity onPress={notificacao}>
-                            <IconMI style={[style.menuIcon, { color: "#800000" }]} name="notifications-active" size={30} />
+                            <IconMI style={{ color: "#800000" }} name="notifications" size={30} />
                         </TouchableOpacity>)
                         : <IconMI style={style.menuIcon} name="notifications-none" size={30} />
                     }
@@ -257,7 +264,7 @@ export default function ResumoChurras() {
             >
                 <View style={style.centeredViewNotf}>
                     <View style={style.modalViewNotf}>
-                     <TouchableOpacity style={style.closeNotf} onPress={() => setIsNotificacoesOpen(false)}><IconMCI size={25} name="close-circle-outline" /></TouchableOpacity>
+                        <TouchableOpacity style={style.closeNotf} onPress={() => setIsNotificacoesOpen(false)}><IconMCI size={25} name="close-circle-outline" /></TouchableOpacity>
                         <FlatList
                             data={notificacoes}
                             style={style.notificacoesList}

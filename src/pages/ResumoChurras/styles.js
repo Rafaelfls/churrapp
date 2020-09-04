@@ -44,6 +44,25 @@ export default StyleSheet.create({
   menuIcon: {
     color: 'gray',
   },
+  //Notificação quantidade
+  centeredViewNotificacaoQtd: {
+    position: 'absolute',
+    height: 15,
+    width: 15,
+    left:19,
+    zIndex: 1,
+  },
+  modalViewNotificacaoQtd: {
+    backgroundColor: "rgba(114,114,114,0.5)",
+    borderRadius: 100,
+    alignItems: "center",
+  },
+  textBtnNotificacaoQtd: {
+    color: 'white',
+    fontSize: 10,
+    fontFamily: 'poppins-medium',
+  },
+  //fim Notificação quantidade
 
   //cards
   churrasList: {

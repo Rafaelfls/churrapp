@@ -26,14 +26,17 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   inputStandard: {
-    position: 'absolute',
-    right: 0,
     height: 40,
-    borderColor: 'gray',
-    fontFamily: 'poppins-regular',
     borderBottomWidth: 0.5,
     paddingHorizontal: 5,
-    width: '45%'
+    marginBottom: 10,
+    color: 'black',
+    fontFamily: 'poppins-light',
+    fontSize: 16,
+  },
+  icons: {
+    color: 'maroon',
+    marginRight: 8,
   },
   modalText: {
     width: '50%'
@@ -174,22 +177,30 @@ export default StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     paddingTop: 25,
-    paddingHorizontal: 20,
     paddingBottom: 10,
   },
 
   containerEsq: {
     alignItems: 'flex-start',
-    marginLeft:10,
+    marginLeft: 10,
   },
+  textoItem: {
+    color: 'maroon',
+    fontFamily: 'poppins-medium',
+    fontSize: 18,
+  },
+  formGroup: {
+    marginHorizontal: 20,
+    marginTop: 15,
+    justifyContent: "center",
+  },
+
   preferenciasTitulo: {
     fontFamily: 'poppins-medium',
     fontSize: 20,
-    color: 'maroon'
-  },
-  containerDir: {
-    width: '48%',
-    alignItems: 'flex-end',
+    color: 'maroon',
+    marginVertical: 10,
+    marginLeft: 10,
   },
 
   infosLeft: {
@@ -229,4 +240,88 @@ export default StyleSheet.create({
     color: 'white',
     marginLeft: 7,
   },
+  //modal return update
+  modalViewContactar: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 25,
+    alignItems: "center",
+    width: '95%',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  centeredViewContactar: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: '100%',
+  },
+  modalTitleCont: {
+    color: "#800000",
+    fontFamily: 'poppins-medium',
+    fontSize: 30,
+    marginBottom: 15,
+  },
+  modalTextCont: {
+    fontSize: 17,
+    fontFamily: 'poppins-light',
+    textAlign: 'center'
+  },
+  footerModalCont: {
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    backgroundColor: 'white',
+  },
+  continueBtnCont: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    marginHorizontal: 5,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: '40%',
+    paddingVertical: 5,
+  },
+  textBtnCont: {
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
+  //fim modal retunr update
+  //editar Foto perfil
+  centeredViewFotoPerfil: {
+    position: 'absolute',
+    height: 140,
+    width: 140,
+    zIndex: 1,
+  },
+  modalViewFotoPerfil: {
+    backgroundColor: "rgba(114,114,114,0.5)",
+    borderRadius: 70,
+    alignItems: "center",
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%'
+  },
+  continueBtnFotoPerfil: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textBtnFotoPerfil: {
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
+  //fim editar foto perfil
 });

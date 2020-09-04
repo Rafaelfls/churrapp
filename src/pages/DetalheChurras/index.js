@@ -66,11 +66,11 @@ export default function DetalheChurras() {
   const [churrasAtual, setChurrasAtual] = useState([])
 
 
-  //editar perfil
+  //editar Churras
   const [allowEditing, setAllowEditing] = useState([false, 'darkgray'])
   const [returnVisivel, setReturnVisivel] = useState([false])
   const [image, setImage] = useState({ cancelled: true, uri: null });
-  //Fim editar perfil
+  //Fim editar Churras
 
   function CompartilharChurras(churras) {
     navigation.push('CompartilharChurrasco', { churras });
@@ -103,13 +103,13 @@ export default function DetalheChurras() {
     setLoading(false)
   }
 
-  function formatData() {
-    var date = new Date(churras.data).getDate() + 1
-    var month = new Date(churras.data).getMonth() + 1
-    var year = new Date(churras.data).getFullYear()
-    setChurrasDateFormatted(date + '/' + month + '/' + year)
-    setEditChurrasData(date + '/' + month + '/' + year)
-  }
+  // function formatData() {
+  //   var date = new Date(churras.data).getDate() + 1
+  //   var month = new Date(churras.data).getMonth() + 1
+  //   var year = new Date(churras.data).getFullYear()
+  //   setChurrasDateFormatted(date + '/' + month + '/' + year)
+  //   setEditChurrasData(date + '/' + month + '/' + year)
+  // }
 
   function backHome() {
     navigation.goBack()
@@ -159,9 +159,9 @@ export default function DetalheChurras() {
   async function savePerfil() {
     setLoading(true)
     setAllowEditing([false, 'darkgray']);
-    if(image.uri != null){
+    if (image.uri != null) {
       var novaUrl = await uploadImage(image);
-    }else{
+    } else {
       var novaUrl = churras.fotoUrlC;
     }
     await api.put(`/churrasUpdate/${churras.id}`, {
@@ -346,9 +346,9 @@ export default function DetalheChurras() {
   }
 
   function formatData(data) {
-    var date = new Date(churras.data).getDate() + 1
-    var month = new Date(churras.data).getMonth() + 1
-    var year = new Date(churras.data).getFullYear()
+    var date = new Date(data).getDate() + 1
+    var month = new Date(data).getMonth() + 1
+    var year = new Date(data).getFullYear()
     setChurrasDateFormatted(date + '/' + month + '/' + year)
     return date + '/' + month + '/' + year
   }
@@ -357,19 +357,19 @@ export default function DetalheChurras() {
     setLoading(true)
 
     let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
     });
 
     if (!result.cancelled) {
-        churras.fotoUrlC = result.uri;
-        setImage(result);
+      churras.fotoUrlC = result.uri;
+      setImage(result);
     }
     setLoading(false)
-};
+  };
 
-async function uploadImage(imagem) {
+  async function uploadImage(imagem) {
     let apiUrl = 'https://pure-island-99817.herokuapp.com/fotosUsuarios';
     let uriParts = imagem.uri.split('.');
     let fileType = uriParts[uriParts.length - 1];
@@ -377,25 +377,25 @@ async function uploadImage(imagem) {
 
     let formData = new FormData();
     formData.append('file', {
-        uri,
-        name: `photo.${fileType}`,
-        type: `image/${fileType}`,
+      uri,
+      name: `photo.${fileType}`,
+      type: `image/${fileType}`,
     });
 
     let options = {
-        method: 'POST',
-        body: formData,
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'multipart/form-data',
-        },
+      method: 'POST',
+      body: formData,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
     };
 
     const res = await fetch(apiUrl, options);
     const response = await res.json()
-    
+
     return response.location;
-}
+  }
 
   useEffect(() => {
     carregaChurras();
@@ -439,15 +439,15 @@ async function uploadImage(imagem) {
         <View tabLabel="Info">
           <ScrollView>
             <View style={style.churrasImgContainer}>
-            {allowEditing[0]
-              ?<TouchableOpacity activeOpacity={0.5} onPress={pickImage} style={style.centeredViewFotoChurras}>
-                <View style={style.modalViewFotoChurras}>
-                  <View style={style.continueBtnFotoChurras}>
-                    <IconMa name="edit" size={22} color={"white"} />
+              {allowEditing[0]
+                ? <TouchableOpacity activeOpacity={0.5} onPress={pickImage} style={style.centeredViewFotoChurras}>
+                  <View style={style.modalViewFotoChurras}>
+                    <View style={style.continueBtnFotoChurras}>
+                      <IconMa name="edit" size={22} color={"white"} />
+                    </View>
                   </View>
-                </View>
-              </TouchableOpacity>
-              :null}
+                </TouchableOpacity>
+                : null}
               <Image source={{ uri: churras.fotoUrlC }} style={style.churrasImg} />
               <View style={style.churrasDonoContainer}>
                 <Image source={{ uri: churras.fotoUrlU }} style={style.donoImg} />
@@ -486,36 +486,36 @@ async function uploadImage(imagem) {
                 <Text style={style.churrasNome}>Data: </Text>
               </View>
               <DatePicker
-                  style={{ width: '100%'}}
-                  date={editChurrasData}
-                  mode="date"
-                  disabled={!allowEditing[0]}
-                  placeholder="DD/MM/AAAA"
-                  format="DD/MM/YYYY"
-                  minDate="01/05/2020"
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  customStyles={{
-                    dateIcon: {
-                      display:'none'
-                    },
-                    dateText:{
-                      color: allowEditing[1],
-                      fontSize:16,
-                      position:'absolute',
-                      fontFamily: 'poppins-light',
-                    },
-                    disabled:{
-                      backgroundColor:'transparent',
-                    },
-                    dateInput: {
-                      borderBottomWidth: 1,
-                      borderWidth: 0,
-                      borderBottomColor: allowEditing[1],
-                    }
-                  }}
-                  onDateChange={(date) => { setEditChurrasData(date) }}
-                />              
+                style={{ width: '100%' }}
+                date={editChurrasData}
+                mode="date"
+                disabled={!allowEditing[0]}
+                placeholder="DD/MM/AAAA"
+                format="DD/MM/YYYY"
+                minDate="01/05/2020"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                customStyles={{
+                  dateIcon: {
+                    display: 'none'
+                  },
+                  dateText: {
+                    color: allowEditing[1],
+                    fontSize: 16,
+                    position: 'absolute',
+                    fontFamily: 'poppins-light',
+                  },
+                  disabled: {
+                    backgroundColor: 'transparent',
+                  },
+                  dateInput: {
+                    borderBottomWidth: 1,
+                    borderWidth: 0,
+                    borderBottomColor: allowEditing[1],
+                  }
+                }}
+                onDateChange={(date) => { setEditChurrasData(date) }}
+              />
             </View>
             <View style={style.formGroup}>
               <View style={{ flexDirection: 'row' }}>
@@ -523,34 +523,34 @@ async function uploadImage(imagem) {
                 <Text style={style.churrasNome}>Horário de início: </Text>
               </View>
               <DatePicker
-                  style={{ width: '100%'}}
-                  date={editChurrasInicio}
-                  mode="time"
-                  placeholder="00:00"
-                  disabled={!allowEditing[0]}
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  customStyles={{
-                    dateIcon: {
-                      display:'none'
-                    },
-                    dateText:{
-                      color: allowEditing[1],
-                      fontSize:16,
-                      position:'absolute',
-                      fontFamily: 'poppins-light',
-                    },
-                    disabled:{
-                      backgroundColor:'transparent',
-                    },
-                    dateInput: {
-                      borderBottomWidth: 1,
-                      borderWidth: 0,
-                      borderBottomColor: allowEditing[1],
-                    }
-                  }}
-                  onDateChange={(date) => { setEditChurrasInicio(date) }}
-                />              
+                style={{ width: '100%' }}
+                date={editChurrasInicio}
+                mode="time"
+                placeholder="00:00"
+                disabled={!allowEditing[0]}
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                customStyles={{
+                  dateIcon: {
+                    display: 'none'
+                  },
+                  dateText: {
+                    color: allowEditing[1],
+                    fontSize: 16,
+                    position: 'absolute',
+                    fontFamily: 'poppins-light',
+                  },
+                  disabled: {
+                    backgroundColor: 'transparent',
+                  },
+                  dateInput: {
+                    borderBottomWidth: 1,
+                    borderWidth: 0,
+                    borderBottomColor: allowEditing[1],
+                  }
+                }}
+                onDateChange={(date) => { setEditChurrasInicio(date) }}
+              />
             </View>
             <View style={style.formGroup}>
               <View style={{ flexDirection: 'row' }}>
@@ -558,34 +558,34 @@ async function uploadImage(imagem) {
                 <Text style={style.churrasNome}>Horário de Fim: </Text>
               </View>
               <DatePicker
-                  style={{ width: '100%'}}
-                  date={editChurrasFim}
-                  mode="time"
-                  placeholder="00:00"
-                  confirmBtnText="Confirm"
-                  disabled={!allowEditing[0]}
-                  cancelBtnText="Cancel"
-                  customStyles={{
-                    dateIcon: {
-                      display:'none'
-                    },
-                    disabled:{
-                      backgroundColor:'transparent',
-                    },
-                    dateText:{
-                      color: allowEditing[1],
-                      fontSize:16,
-                      position:'absolute',
-                      fontFamily: 'poppins-light',
-                    },
-                    dateInput: {
-                      borderBottomWidth: 1,
-                      borderWidth: 0,
-                      borderBottomColor: allowEditing[1],
-                    }
-                  }}
-                  onDateChange={(date) => { setEditChurrasFim(date) }}
-                />  
+                style={{ width: '100%' }}
+                date={editChurrasFim}
+                mode="time"
+                placeholder="00:00"
+                confirmBtnText="Confirm"
+                disabled={!allowEditing[0]}
+                cancelBtnText="Cancel"
+                customStyles={{
+                  dateIcon: {
+                    display: 'none'
+                  },
+                  disabled: {
+                    backgroundColor: 'transparent',
+                  },
+                  dateText: {
+                    color: allowEditing[1],
+                    fontSize: 16,
+                    position: 'absolute',
+                    fontFamily: 'poppins-light',
+                  },
+                  dateInput: {
+                    borderBottomWidth: 1,
+                    borderWidth: 0,
+                    borderBottomColor: allowEditing[1],
+                  }
+                }}
+                onDateChange={(date) => { setEditChurrasFim(date) }}
+              />
             </View>
             <View style={style.formGroup}>
               <View style={{ flexDirection: 'row' }}>
@@ -626,23 +626,23 @@ async function uploadImage(imagem) {
             </View>
           </ScrollView>
           {editavel
-          ?allowEditing[0]
-            ? <FloatingAction
-              color='rgba(0,0,0,0.9)'
-              showBackground={false}
-              onPressMain={() => savePerfil()}
-              floatingIcon={<IconMa name="save" size={22} color={"white"} />}
-            />
-            : <FloatingAction
-              color='rgba(0,0,0,0.9)'
-              showBackground={false}
-              onPressMain={() => editPerfil()}
-              floatingIcon={<IconMa name="edit" size={22} color={"white"} />}
-            />
-          
-          :null
+            ? allowEditing[0]
+              ? <FloatingAction
+                color='rgba(0,0,0,0.9)'
+                showBackground={false}
+                onPressMain={() => savePerfil()}
+                floatingIcon={<IconMa name="save" size={22} color={"white"} />}
+              />
+              : <FloatingAction
+                color='rgba(0,0,0,0.9)'
+                showBackground={false}
+                onPressMain={() => editPerfil()}
+                floatingIcon={<IconMa name="edit" size={22} color={"white"} />}
+              />
+
+            : null
           }
-          
+
 
         </View>
         {editavel
@@ -1074,7 +1074,9 @@ async function uploadImage(imagem) {
             <Text style={style.modalTitleCont}>Editar churras!</Text>
             <Text style={style.modalTextCont}>{returnVisivel[1]}</Text>
             <View style={style.footerModalCont}>
-              <TouchableOpacity style={style.continueBtnCont} onPress={() => setReturnVisivel([false])}><Text style={style.textBtnCont}>Ok</Text></TouchableOpacity>
+              <TouchableOpacity style={style.continueBtnCont} onPress={() => setReturnVisivel([false])}>
+                <Text style={style.textBtnCont}>Ok</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

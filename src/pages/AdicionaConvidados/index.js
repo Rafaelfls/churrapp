@@ -82,7 +82,7 @@ export default function AdicionaConvidados({ route, navigation }) {
       email: convid.nome + "@churrapp",
       cidade: "cidade",
       uf: "uf",
-      idade: "20/02/2002",
+      idade: "02/01/1900",
       fotoUrlU: "https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png",
       celular: convid.telefone,
       cadastrado: false,
