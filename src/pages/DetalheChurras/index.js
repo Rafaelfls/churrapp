@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, Linking, Picker, ScrollView, Modal, TextInput, TouchableHighlight } from 'react-native';
+import {
+  View, Text, Image, FlatList, TouchableOpacity, Linking,
+  Picker, ScrollView, Modal, TextInput, TouchableHighlight, Switch
+} from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import NumericInput from 'react-native-numeric-input';
 import IconEnt from 'react-native-vector-icons/Entypo';
@@ -41,12 +44,17 @@ export default function DetalheChurras() {
   const [contactar, setContactar] = useState([false, null, null, null]);
   const [churrasDateFormatted, setChurrasDateFormatted] = useState();
   const [visivel2, setVisibility2] = useState([false])
-  const [editChurrasNome, setEditChurrasNome] = useState(churras.nomeChurras)
-  const [editChurrasLocal, setEditChurrasLocal] = useState(churras.local)
-  const [editChurrasData, setEditChurrasData] = useState(churrasDateFormatted)
-  const [editChurrasInicio, setEditChurrasInicio] = useState(churras.hrInicio)
-  const [editChurrasFim, setEditChurrasFim] = useState(churras.hrFim)
-  const [editChurrasDescricao, setEditChurrasDescricao] = useState(churras.descricao)
+  const [editChurrasNome, setEditChurrasNome] = useState('')
+  const [editChurrasNomeUsuario, setEditChurrasNomeUsuario] = useState('')
+  const [editChurrasLocal, setEditChurrasLocal] = useState('')
+  const [editChurrasData, setEditChurrasData] = useState('')
+  const [editChurrasInicio, setEditChurrasInicio] = useState('')
+  const [editChurrasFim, setEditChurrasFim] = useState('')
+  const [editChurrasDescricao, setEditChurrasDescricao] = useState('')
+  const [editChurrasFotoUrlC, setEditChurrasFotoUrlC] = useState('')
+  const [editChurrasFotoUrlU, setEditChurrasFotoUrlU] = useState('')
+  const [editChurrasValorTotal, setEditChurrasValorTotal] = useState('')
+  const [editChurrasValorPago, setEditChurrasValorPago] = useState('')
 
   const [modalTipoVisivel, setModalTipoVisivel] = useState(false);
   const [modalItemVisivel, setModalItemVisivel] = useState(false);
@@ -71,6 +79,11 @@ export default function DetalheChurras() {
   const [returnVisivel, setReturnVisivel] = useState([false])
   const [image, setImage] = useState({ cancelled: true, uri: null });
   //Fim editar Churras
+
+  //Convidado Alterar presença
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [convidadoAtual, setConvidadoAtual] = useState(null)
+  //fim convidado alterar presença 
 
   function CompartilharChurras(churras) {
     navigation.push('CompartilharChurrasco', { churras });
@@ -103,20 +116,16 @@ export default function DetalheChurras() {
     setLoading(false)
   }
 
-  // function formatData() {
-  //   var date = new Date(churras.data).getDate() + 1
-  //   var month = new Date(churras.data).getMonth() + 1
-  //   var year = new Date(churras.data).getFullYear()
-  //   setChurrasDateFormatted(date + '/' + month + '/' + year)
-  //   setEditChurrasData(date + '/' + month + '/' + year)
-  // }
-
   function backHome() {
-    navigation.goBack()
+    if (editavel) {
+      navigation.replace('Tabs')
+    } else {
+      navigation.replace('Tabs', { screen: "OutrosChurras" })
+    }
   }
 
   async function carregarItens() {
-    const response = await api.get(`/listadochurras/${churras.id}`);
+    const response = await api.get(`/listadochurras/${churras}`);
 
     setItens(response.data);
     setItensTotal(response.data.length);
@@ -162,9 +171,9 @@ export default function DetalheChurras() {
     if (image.uri != null) {
       var novaUrl = await uploadImage(image);
     } else {
-      var novaUrl = churras.fotoUrlC;
+      var novaUrl = editChurrasFotoUrlC;
     }
-    await api.put(`/churrasUpdate/${churras.id}`, {
+    await api.put(`/churrasUpdate/${churras}`, {
       nomeChurras: editChurrasNome,
       data: editChurrasData,
       hrInicio: editChurrasInicio,
@@ -179,11 +188,30 @@ export default function DetalheChurras() {
   }
 
   async function carregarConvidados() {
-    const response = await api.get(`/convidados/${churras.id}`);
+    const response = await api.get(`/convidados/${churras}`);
 
     setConvidados(response.data);
     setConvidadosCount(response.data.length);
     setConvidadosConfirmados(response.data);
+    if(!editavel){
+      response.data.map(convid =>{
+        if(convid.usuario_id == USUARIOLOGADO.id){
+          setConvidadoAtual(convid)
+          setIsEnabled(convid.confirmado)
+        }
+      })
+    }
+  }
+  
+  async function atualizaPresença(){
+    setLoading(true)
+    setIsEnabled(previousState => !previousState)    
+    if(!isEnabled){
+      await api.put(`/confirmaPresenca/${convidadoAtual.usuario_id}/${convidadoAtual.churras_id}`)
+    }else{
+      await api.put(`/negarPresenca/${convidadoAtual.usuario_id}/${convidadoAtual.churras_id}`)
+    }
+    setLoading(false)
   }
 
   function setConvidadosConfirmados(convid) {
@@ -206,7 +234,7 @@ export default function DetalheChurras() {
     setLoading(true)
     await api.post('/listadochurras', {
       quantidade: qtdNova,
-      churras_id: churras.id,
+      churras_id: churras,
       unidade_id: unidadeDrop,
       item_id: item,
       formato_id: form
@@ -333,16 +361,21 @@ export default function DetalheChurras() {
   }
 
   async function carregaChurras() {
-    const res = await api.get(`churrasPeloId/${churras.id}`)
+    const res = await api.get(`churrasPeloId/${churras}`)
 
     setChurrasAtual(res.data[0])
     setEditChurrasNome(res.data[0].nomeChurras)
+    setEditChurrasNomeUsuario(res.data[0].nome)
     setEditChurrasLocal(res.data[0].local)
     const dataFormatada = formatData(res.data[0].data)
     setEditChurrasData(dataFormatada)
     setEditChurrasInicio(res.data[0].hrInicio)
     setEditChurrasFim(res.data[0].hrFim)
     setEditChurrasDescricao(res.data[0].descricao)
+    setEditChurrasFotoUrlC(res.data[0].fotoUrlC)
+    setEditChurrasFotoUrlU(res.data[0].fotoUrlU)
+    setEditChurrasValorTotal(res.data[0].valorTotal)
+    setEditChurrasValorPago(res.data[0].valorPago)
   }
 
   function formatData(data) {
@@ -363,7 +396,7 @@ export default function DetalheChurras() {
     });
 
     if (!result.cancelled) {
-      churras.fotoUrlC = result.uri;
+      setEditChurrasFotoUrlC(result.uri);
       setImage(result);
     }
     setLoading(false)
@@ -414,10 +447,23 @@ export default function DetalheChurras() {
         <View style={style.title}>
           <Text style={style.detalheTitle}>{editChurrasNome}</Text>
         </View>
-        {editavel &&
-          <TouchableOpacity style={style.shareBtn} onPress={() => CompartilharChurras(churrasAtual)} >
+        {editavel
+          ? <TouchableOpacity style={style.shareBtn} onPress={() => CompartilharChurras(churrasAtual)} >
             <IconEnt name="share" size={25} color={"white"} />
           </TouchableOpacity>
+          :<View style={style.participateBtn}>
+            {isEnabled
+            ?<Text style={style.textSwitch}>Vou</Text>
+            :<Text style={style.textSwitch}>Não Vou</Text>
+            }
+            <Switch
+            trackColor={{ false: "gray", true: "green" }}
+            thumbColor={isEnabled ? "#ffffff" : "#ffffff"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={atualizaPresença}
+            value={isEnabled}
+          />
+          </View>           
         }
       </View>
 
@@ -448,10 +494,10 @@ export default function DetalheChurras() {
                   </View>
                 </TouchableOpacity>
                 : null}
-              <Image source={{ uri: churras.fotoUrlC }} style={style.churrasImg} />
+              <Image source={{ uri: editChurrasFotoUrlC }} style={style.churrasImg} />
               <View style={style.churrasDonoContainer}>
-                <Image source={{ uri: churras.fotoUrlU }} style={style.donoImg} />
-                <Text style={style.churrasDono}>{churras.nome}</Text>
+                <Image source={{ uri: editChurrasFotoUrlU }} style={style.donoImg} />
+                <Text style={style.churrasDono}>{editChurrasNomeUsuario}</Text>
               </View>
             </View>
             {allowEditing[0]
@@ -604,14 +650,14 @@ export default function DetalheChurras() {
                 <IconMa name="attach-money" size={22} style={style.icons} />
                 <Text style={style.churrasNome}>Valor total: </Text>
               </View>
-              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{churras.valorTotal == null ? "R$ 00.00" : churras.valorTotal}</Text>
+              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : editChurrasValorTotal}</Text>
             </View>
             <View style={style.formGroup}>
               <View style={{ flexDirection: 'row' }}>
                 <Icon name="money-bill-wave" size={17} style={style.icons} />
                 <Text style={style.churrasNome}>Valor recebido: </Text>
               </View>
-              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{churras.valorPago == null ? "R$ 00.00" : churras.valorPago}</Text>
+              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorPago == null ? "R$ 00.00" : editChurrasValorPago}</Text>
             </View>
             <View style={style.formGroup}>
               <View style={{ flexDirection: 'row' }}>

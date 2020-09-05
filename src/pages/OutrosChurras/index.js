@@ -103,7 +103,7 @@ export default function OutrosChurras() {
                     renderItem={({ item: churras }) => (
 
                         <View>
-                            <TouchableOpacity onPress={() => detalheChurras(churras)}>
+                            <TouchableOpacity onPress={() => detalheChurras(churras.id)}>
                                 <View style={style.churras}>
                                     <View style={style.churrasDescricao}>
                                         <View style={style.slideBtn}>
@@ -136,7 +136,7 @@ export default function OutrosChurras() {
                     renderItem={({ item: churras }) => (
 
                         <View>
-                            <TouchableOpacity onPress={() => detalheChurras(churras)}>
+                            <TouchableOpacity onPress={() => detalheChurras(churras.id)}>
                                 <View style={style.churras}>
                                     <View style={style.churrasDescricao}>
                                         <View style={style.slideBtn}>

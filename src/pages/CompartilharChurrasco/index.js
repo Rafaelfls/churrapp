@@ -19,7 +19,7 @@ export default function CompartilharChurrasco({ route, navigation }) {
     const [churrasDateFormatted, setChurrasDateFormatted] = useState();
 
     function goBack() {
-        navigation.navigate('DetalheChurras')
+        navigation.replace('DetalheChurras',{churras:churras.id, editavel:true})
     }
 
     function compartilhar() {

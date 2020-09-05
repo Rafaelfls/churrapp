@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Modal, SafeAreaView, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, Switch, Modal, SafeAreaView, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import NumericInput from 'react-native-numeric-input';
@@ -23,6 +23,7 @@ export default function AdicionarBebidas({ route, navigation }) {
     const [itemDeletar, setItemDeletar] = useState([]);
     const [isSugestao, setIsSugestao] = React.useState(false);
     const [isVisible, setIsVisible] = React.useState(false);
+    const [isEnabled, setIsEnabled] = useState(false);
     const { churrascode } = route.params;
 
     const config = {
@@ -61,6 +62,7 @@ export default function AdicionarBebidas({ route, navigation }) {
                     churras_id: churrascode,
                     unidade_id: item.unidade_id,
                     item_id: item.item_id,
+                    formato_id:7
                 })
             })
             setLoading(false)
@@ -101,11 +103,48 @@ export default function AdicionarBebidas({ route, navigation }) {
     async function deleteItem(item) {
         setLoading(false)
         await api.delete(`/listadochurras/${item.id}`)
-            .then(function () {
-                setReload(!reload)
+            .then(function (res) {
+                setIsEnabled(false)
                 setIsVisible(false)
+                setReload(!reload)
                 setLoading(false)
             })
+    }
+
+    async function adicionarSugestao() {
+        setLoading(true)
+        setIsEnabled(previousState => !previousState)
+        if (!isEnabled) {
+            if (isSugestao) {
+                setLoading(true)
+                itemList.map(async item => {
+                    await api.post('/listadochurras', {
+                        quantidade: item.quantidade,
+                        churras_id: churrascode,
+                        unidade_id: item.unidade_id,
+                        item_id: item.item_id,
+                        formato_id: 7
+                    })
+                })
+            }
+            setIsSugestao(false)
+            setReload(!reload)
+            setLoading(false)
+        } else {
+            await api.get(`/sugestao/${1}`).then(function (response) {
+                response.data.map(async item => {
+                    await api.post('/listadochurras', {
+                        quantidade: -item.quantidade,
+                        churras_id: churrascode,
+                        unidade_id: item.unidade_id,
+                        item_id: item.item_id,
+                        formato_id: 7
+                    })
+                })
+                setReload(!reload)
+            });
+        }
+        setLoading(false)
     }
 
 
@@ -120,6 +159,23 @@ export default function AdicionarBebidas({ route, navigation }) {
                         <Icon style={style.iconHeaderBtn} name="md-exit" size={22} />
                     </TouchableOpacity>
                 </View>
+                {isSugestao
+                    ? <View style={{ flexDirection: 'row',marginTop:5, justifyContent: "center", alignItems: "center" }}>
+                        {isEnabled
+                            ? <Text style={style.textLabel}>Apagar sugestão?</Text>
+                            : <Text style={style.textLabel}>Manter sugestão?</Text>
+                        }
+
+                        <Switch
+                            trackColor={{ false: "gray", true: "maroon" }}
+                            thumbColor={isEnabled ? "#ffffff" : "#ffffff"}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={adicionarSugestao}
+                            value={isEnabled}
+                        />
+                    </View>
+                    : null
+                }
 
                 <FlatList
                     data={itemList}
@@ -159,7 +215,7 @@ export default function AdicionarBebidas({ route, navigation }) {
                     <View style={style.centeredView}>
                         <View style={style.modalView}>
                             <Text style={style.modalTitleText}>Deletar</Text>
-                            <Text style={style.modalText}>Deseja remover <Text style={{ fontFamily:'poppins-medium' }}>{itemDeletar.nomeItem}</Text> do seu churras? </Text>
+                            <Text style={style.modalText}>Deseja remover <Text style={{ fontFamily: 'poppins-medium' }}>{itemDeletar.nomeItem}</Text> do seu churras? </Text>
                             <View style={style.footerModal}>
                                 <TouchableOpacity style={style.exitBtnModal} onPress={() => setIsVisible(false)}>
                                     <Text style={style.iconSalvarBtnModal}>Não</Text>

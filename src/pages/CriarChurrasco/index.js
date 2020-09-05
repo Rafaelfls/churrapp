@@ -172,12 +172,12 @@ export default function CriarChurrasco() {
             <TextInput
               style={[style.inputStandard, borderColorRed1]}
               onChangeText={text => setNomeChurras(text)}
-              placeholder={'Churrasbom'}
+              placeholder={'Nome do churrasco'}
             />
             <Text style={style.textLabel}>Local</Text>
             <TextInput
               style={[style.inputStandard, borderColorRed2]}
-              placeholder={"Alameda santos, 202"}
+              placeholder={"Local do churrasco"}
               onChangeText={text => setlocal(text)}
             />
             <Text style={style.textLabel}>Descrição</Text>
@@ -185,7 +185,7 @@ export default function CriarChurrasco() {
               style={[style.inputStandard, style.formOk]}
               multiline={true}
               numberOfLines={3}
-              placeholder={"O melhor churras do ano"}
+              placeholder={"Descrição do churrasco (opcional)"}
               onChangeText={text => setdescricao(text)}
             />
             <View style={style.componentPicker}>
@@ -197,7 +197,7 @@ export default function CriarChurrasco() {
                   mode="date"
                   placeholder="DD/MM/AAAA"
                   format="DD/MM/YYYY"
-                  minDate="01/05/2020"
+                  minDate={new Date()}
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
                   customStyles={{
@@ -280,28 +280,14 @@ export default function CriarChurrasco() {
                 />
               </View>
             </View>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={visivel}
-            >
-              <View style={style.centeredView}>
-                <View style={style.modalView}>
-                  <Text style={style.modalTitle}>Ops!</Text>
-                  <Text style={style.modalText}>Faltaram algumas informações!</Text>
-                  <View style={style.footerModal}>
-                    <TouchableOpacity style={style.continueBtn} onPress={() => setVisivel(false)}>
-                      <Text style={style.textBtn}>Ok</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
+            <View style={{ marginVertical: 10 }}>
+              <Text style={style.textLabel}>Foto do churras</Text>
+              <View style={style.imagePicker}>
+                <TouchableOpacity style={style.inputDisplay} onPress={pickImage} >
+                  <IconFA style={style.addImgIcon} name="image" size={100} />
+                  {image && <Image source={{ uri: image.uri }} style={{ width: 170, height: 170, paddingVertical: 10 }} />}
+                </TouchableOpacity>
               </View>
-            </Modal>
-            <View style={style.imagePicker}>
-              <TouchableOpacity style={style.inputDisplay} onPress={pickImage} >
-                <IconFA style={style.addImgIcon} name="image" size={100} />
-                {image && <Image source={{ uri: image.uri }} style={{ width: 170, height: 170, paddingVertical: 10 }} />}
-              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
@@ -311,6 +297,24 @@ export default function CriarChurrasco() {
             <Text style={style.textBtn}>Criar churras</Text>
           </TouchableOpacity>
         </View>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={visivel}
+        >
+          <View style={style.centeredView}>
+            <View style={style.modalView}>
+              <Text style={style.modalTitle}>Ops!</Text>
+              <Text style={style.modalText}>Faltaram algumas informações!</Text>
+              <View style={style.footerModal}>
+                <TouchableOpacity style={style.continueBtn} onPress={() => setVisivel(false)}>
+                  <Text style={style.textBtn}>Ok</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
         {criarModal}
       </SafeAreaView>
     </View>

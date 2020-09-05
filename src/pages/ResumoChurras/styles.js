@@ -186,13 +186,20 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    position: 'absolute',
-    bottom: "35%",
     width: '100%',
   },
   modalText: {
     fontSize: 18,
-    marginBottom: 15
+    marginBottom: 15,
+    textAlign:'center'
+
+  },
+  modalTitleCont:{
+    color:"#800000",
+    textAlign:'center',
+    fontFamily: 'poppins-medium',
+    fontSize:27,
+    marginBottom:15,
   },
   footerModal: {
     marginTop: 10,
@@ -206,16 +213,16 @@ export default StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 8,
     alignItems: 'center',
-    marginHorizontal: 6,
+    marginHorizontal:3,
   },
   salvarBtn: {
+    marginHorizontal:3,
     flexDirection: 'row-reverse',
     backgroundColor: '#800000',
     paddingHorizontal: 10,
     paddingVertical: 2,
     borderRadius: 8,
     alignItems: 'center',
-    marginHorizontal: 6,
   },
   iconSalvarBtn: {
     marginLeft: 5,

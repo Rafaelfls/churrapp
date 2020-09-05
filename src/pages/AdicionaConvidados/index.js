@@ -13,21 +13,20 @@ var convidadosList = [];
 
 export default function AdicionaConvidados({ route, navigation }) {
 
+  const { nomeContato } = route.params;
+  const { sobrenomeContato } = route.params;
+  const { telefoneContato } = route.params;
+  const { churrasAtual } = route.params;
+
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
   const [value, onChangeValue] = React.useState(20.50);
-  const [convite, onChangeText] = React.useState('');
-  const [maxChar, setMaxChar] = React.useState(190);
+  const [convite, onChangeText] = React.useState(`Olá, estou te convidando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença.`);
   const [updatePage, setUpdatePage] = React.useState(false)
 
   const config = {
     headers: { 'Authorization': USUARIOLOGADO.id }
   };
-
-  const { nomeContato } = route.params;
-  const { sobrenomeContato } = route.params;
-  const { telefoneContato } = route.params;
-  const { churrasAtual } = route.params;
 
 
   useEffect(() => {
@@ -50,13 +49,6 @@ export default function AdicionaConvidados({ route, navigation }) {
       telefone: $telefone,
     })
     setUpdatePage(!updatePage)
-  }
-
-  function updateMsg(text) {
-    CONVITE = text;
-    onChangeText(text)
-    var atual = 190 - text.length
-    setMaxChar(atual)
   }
 
   async function criaSenha(convid, telefone) {
@@ -156,15 +148,13 @@ export default function AdicionaConvidados({ route, navigation }) {
           </TouchableOpacity>
         </View>
         <View style={style.formGroup}>
-          <Text style={style.textLabel}>Mensagem ({maxChar})</Text>
+          <Text style={style.textLabel}>Mensagem</Text>
           <TextInput
-            style={[style.inputStandard, { height: 100 }]}
+            style={[style.inputStandard, { height: 70 }]}
             multiline={true}
-            numberOfLines={2}
-            maxLength={190}
-            onChange={text => onChangeText('')}
-            onChangeText={text => updateMsg(text)}
-            placeholder={inviteStandard}
+            numberOfLines={3}
+            onChange={text => onChangeText(text)}
+            value={convite}
           />
         </View>
 
