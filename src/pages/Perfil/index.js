@@ -9,7 +9,7 @@ import IconFea from '@expo/vector-icons/Feather';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import * as ImagePicker from 'expo-image-picker';
 import { FloatingAction } from "react-native-floating-action";
-import DatePicker from 'react-native-datepicker';
+import * as Crypto from 'expo-crypto';
 
 
 import style from './styles';
@@ -28,7 +28,6 @@ export default function Perfil() {
 
     // Dados do usuario
     const [usuario, setUsuario] = useState([]);
-    const [usuarioUpdate, setUsuarioUpdate] = useState([]);
     const [image, setImage] = useState({ cancelled: true, uri: null });
     const [idadeAtual, setIdadeAtual] = useState();
 
@@ -40,6 +39,8 @@ export default function Perfil() {
     const [emailNovo, setEmailNovo] = useState('')
     const [cidadeNovo, setCidadeNovo] = useState('')
     const [ufNovo, setUfNovo] = useState('')
+    const [senhaNova, setSenhaNova] = useState([false])
+    const [senhaUpdate, setSenhaUpdate] = useState('')
     const [apelidoNovo, setApelidoNovo] = useState('')
     const [idadeNovo, setIdadeNovo] = useState('')
     const [celularNovo, setCelularNovo] = useState('')
@@ -48,7 +49,7 @@ export default function Perfil() {
     const [pontoCarneNovo_id, setPontoCarneNovo_id] = useState(null);
     const [quantidadeComeNovo_id, setQuantidadeComeNovo_id] = useState(null);
     const [idadeformatada, setIdadeFormatada] = useState(null);
-    const [ pickImageOptions, setPickImageOptions] =useState([false])
+    const [pickImageOptions, setPickImageOptions] = useState([false])
     //Fim editar perfil
     const [churrasParticipados, setChurrasParticipados] = useState(0);
 
@@ -74,6 +75,7 @@ export default function Perfil() {
             setCelularNovoFormat(response.data[0].celular)
             setFotoUrlUNovo(response.data[0].fotoUrlU)
             setQuantidadeComeNovo_id(response.data[0].quantidadeCome_id)
+            setSenhaUpdate(response.data[0].senha)
             setPontoCarneNovo_id(response.data[0].pontoCarne_id)
             if (idadeformatada != "02/01/1900") {
                 setIdadeNovo(idadeformatada)
@@ -134,7 +136,7 @@ export default function Perfil() {
     }
 
 
-    function editPerfil() {        
+    function editPerfil() {
         if (idadeformatada != "02/01/1900") {
             setIdadeNovo(idadeformatada)
         }
@@ -158,7 +160,7 @@ export default function Perfil() {
             cidade: cidadeNovo,
             uf: ufNovo,
             idade: idadeNovo,
-            senha: usuario.senha,
+            senha: senhaUpdate,
             fotoUrlU: fotoUrlUNovo,
             celular: celularNovo,
             apelido: apelidoNovo,
@@ -168,9 +170,38 @@ export default function Perfil() {
             bebidaPreferida_id: usuario.bebidaPreferida_id,
             acompanhamentoPreferido_id: usuario.acompanhamentoPreferido_id,
         }).then(function (response) {
-            setReturnVisivel([true, response.data.mensagem])
+            setReturnVisivel([true, response.data.mensagem, "Editar perfil!"])
             setRefreshPerfil(!refreshPerfil)
         })
+    }
+
+    async function alterarSenha() {
+
+        var senha1 = await criptoSenha(senhaNova[1])
+        var senha2 = await criptoSenha(senhaNova[2])
+        var senha3 = await criptoSenha(senhaNova[3])
+
+        if (usuario[0].senha == senha1) {
+            if (senhaNova[2].length >= 8 && senhaNova[3].length >= 8) {
+                if (senha2 == senha3) {
+                    setSenhaUpdate(senha2)
+                    return setSenhaNova([false])
+                } else {
+                    return setReturnVisivel([true, "Novas senhas não conferem.", "Alterar senha!"])
+                }
+            }else{
+                return setReturnVisivel([true, "A senha deve ter no minimo 8 caracteres.", "Alterar senha!"])
+            }
+        } else {
+            return setReturnVisivel([true, "Senha atual incorreta.", "Alterar senha!"])
+        }
+    }
+
+    async function criptoSenha(senha) {
+        return await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA512,
+            senha
+        );
     }
 
     useEffect(() => {
@@ -201,7 +232,7 @@ export default function Perfil() {
         });
 
         if (!result.cancelled) {
-            setFotoUrlUNovo( result.uri);
+            setFotoUrlUNovo(result.uri);
             setImage(result);
         }
         setLoading(false)
@@ -247,7 +278,7 @@ export default function Perfil() {
                         <View style={style.backgroundProfile}>
                             <View style={style.containerProfile}>
                                 {allowEditing[0]
-                                    ? <TouchableOpacity activeOpacity={0.5} onPress={()=>setPickImageOptions([true])} style={style.centeredViewFotoPerfil}>
+                                    ? <TouchableOpacity activeOpacity={0.5} onPress={() => setPickImageOptions([true])} style={style.centeredViewFotoPerfil}>
                                         <View style={style.modalViewFotoPerfil}>
                                             <View style={style.continueBtnFotoPerfil}>
                                                 <IconMI name="edit" size={22} color={"white"} />
@@ -410,6 +441,22 @@ export default function Perfil() {
                                         onChangeText={(text, rawText) => { setCelularNovo(rawText); setCelularNovoFormat(text) }}
                                     />
                                 </View>
+                                <View style={style.formGroup}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <IconMCI name="email" size={18} style={style.icons} />
+                                        <Text style={style.textoItem}>Senha:</Text>
+                                    </View>
+                                    <TextInput
+                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                        editable={false}
+                                        secureTextEntry={true}
+                                        value={'1234567890'}
+                                    />
+                                    <TouchableOpacity onPress={() => setSenhaNova([true])} style={style.mudarSenhaTO}>
+                                        <Text style={style.mudarSenha}>Alterar senha</Text>
+                                    </TouchableOpacity>
+
+                                </View>
                             </View>
                             : null}
                         <Text style={style.preferenciasTitulo}>Preferencias:</Text>
@@ -510,18 +557,64 @@ export default function Perfil() {
                     floatingIcon={<IconMI name="edit" size={22} color={"white"} />}
                 />}
 
-<Modal
+            <Modal
                 animationType="slide"
                 transparent={true}
                 visible={returnVisivel[0]}
             >
                 <View style={style.centeredViewContactar}>
                     <View style={style.modalViewContactar}>
-                        <Text style={style.modalTitleCont}>Editar perfil!</Text>
+                        <Text style={style.modalTitleCont}>{returnVisivel[2]}</Text>
                         <Text style={style.modalTextCont}>{returnVisivel[1]}</Text>
                         <View style={style.footerModalCont}>
                             <TouchableOpacity style={style.continueBtnCont} onPress={() => setReturnVisivel([false])}>
                                 <Text style={style.textBtnCont}>Ok</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={senhaNova[0]}
+            >
+                <View style={style.centeredViewContactar}>
+                    <View style={style.modalViewContactar}>
+                        <Text style={style.modalTitleCont}>Alterar senha!</Text>
+                        <View style={[style.formGroup, { width: '100%' }]}>
+                            <Text style={style.textoItem}>Senha atual:</Text>
+                            <TextInput
+                                style={[style.inputStandard]}
+                                secureTextEntry={true}
+                                onChangeText={text => { setSenhaNova([senhaNova[0], text, senhaNova[2], senhaNova[3]]) }}
+                                value={senhaNova[1]}
+                            />
+                        </View>
+                        <View style={[style.formGroup, { width: '100%' }]}>
+                            <Text style={style.textoItem}>Nova senha:</Text>
+                            <TextInput
+                                style={[style.inputStandard]}
+                                secureTextEntry={true}
+                                onChangeText={text => { setSenhaNova([senhaNova[0], senhaNova[1], text, senhaNova[3]]) }}
+                                value={senhaNova[2]}
+                            />
+                        </View>
+                        <View style={[style.formGroup, { width: '100%' }]}>
+                            <Text style={style.textoItem}>Confirmar nova senha:</Text>
+                            <TextInput
+                                style={[style.inputStandard]}
+                                secureTextEntry={true}
+                                onChangeText={text => { setSenhaNova([senhaNova[0], senhaNova[1], senhaNova[2], text]) }}
+                                value={senhaNova[3]}
+                            />
+                        </View>
+                        <View style={style.footerModalCont}>
+                            <TouchableOpacity style={style.continueBtnCont} onPress={() => setSenhaNova([false])}>
+                                <Text style={style.textBtnCont}>Cancelar</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={style.continueBtnCont} onPress={alterarSenha}>
+                                <Text style={style.textBtnCont}>Salvar</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -540,7 +633,8 @@ export default function Perfil() {
                             <TouchableOpacity style={style.continueBtnCont} onPress={() => {
                                 setFotoUrlUNovo("https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png");
                                 setImage({ cancelled: true, uri: "https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png" });
-                                setPickImageOptions([false])}}>
+                                setPickImageOptions([false])
+                            }}>
                                 <Text style={style.textBtnCont}>Remover</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={style.continueBtnCont} onPress={pickImage}>

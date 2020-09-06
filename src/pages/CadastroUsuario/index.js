@@ -19,15 +19,18 @@ export default function CadastroUsuario() {
     const [nomeUsuario, setNomeUsuario] = useState('');
     const [celularUsuario, setCelularUsuario] = useState('');
     const [senhaUsuario, setSenhaUsuario] = useState('');
+    const [senhaUsuario2, setSenhaUsuario2] = useState('');
     const [senhaUsuarioUncrpt, setSenhaUsuarioUncrpt] = useState('');
+    const [senhaUsuarioUncrpt2, setSenhaUsuarioUncrpt2] = useState('');
     const [visivel, setVisivel] = useState(false)
     const [modalText, setModalText] = useState('Faltaram algumas informações!');
     const [url, setUrl] = useState("https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png")
-    const [ erroMsg , setErroMsg ] = useState('');
-    const [ erroVisivel, setErroVisivel ] = useState('');
+    const [erroMsg, setErroMsg] = useState('');
+    const [erroVisivel, setErroVisivel] = useState('');
     const [borderColorRed1, setBorderColorRed1] = useState(style.formOk);
     const [borderColorRed2, setBorderColorRed2] = useState(style.formOk);
     const [borderColorRed3, setBorderColorRed3] = useState(style.formOk);
+    const [borderColorRed4, setBorderColorRed4] = useState(style.formOk);
 
     function backHome() {
         navigation.replace('Login');
@@ -35,13 +38,21 @@ export default function CadastroUsuario() {
 
     useEffect(() => { }, []);
 
-    async function criptoSenha(senha) {
+    async function criptoSenha1(senha) {
         setSenhaUsuarioUncrpt(senha)
         const criptoSenha = await Crypto.digestStringAsync(
             Crypto.CryptoDigestAlgorithm.SHA512,
             senha
         );
         setSenhaUsuario(criptoSenha)
+    }
+    async function criptoSenha2(senha) {
+        setSenhaUsuarioUncrpt2(senha)
+        const criptoSenha = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA512,
+            senha
+        );
+        setSenhaUsuario2(criptoSenha)
     }
 
     async function enviaNotificacao(convidId) {
@@ -64,6 +75,11 @@ export default function CadastroUsuario() {
         } else {
             setBorderColorRed2(style.formOk)
         }
+        if (senhaUsuario2 == '') {
+            setBorderColorRed4(style.formNok)
+        } else {
+            setBorderColorRed4(style.formOk)
+        }
         if (celularUsuario == '') {
             setBorderColorRed3(style.formNok)
         } else {
@@ -77,41 +93,49 @@ export default function CadastroUsuario() {
             return setVisivel(true)
         }
         if (senhaUsuarioUncrpt.length < 8) {
+            setBorderColorRed2(style.formNok)
+            setBorderColorRed4(style.formNok)
             setModalText("A senha deve ter no mínimo 8 caracteres!");
             return setVisivel(true)
         } else {
-
-            setLoading(true)
-            await api.post('/usuarios', {
-                nome: nomeUsuario,
-                sobrenome: 'sobrenome',
-                email: `${celularUsuario}@churrapp.com`,
-                cidade: "cidade",
-                uf: "uf",
-                idade: "02/01/1900",
-                fotoUrlU: url,
-                celular: celularUsuario,
-                cadastrado: true,
-                apelido: nomeUsuario,
-                senha: senhaUsuario,
-                pontoCarne_id: 0,
-                carnePreferida_id: 0,
-                quantidadeCome_id: 0,
-                bebidaPreferida_id: 0,
-                acompanhamentoPreferido_id: 0,
-                sobremesaPreferida_id: 0,
-            }).then(async function (response) {
-                if (response.data.mensagem != undefined) {
-                    setLoading(false)
-                    setErroMsg(response.data.mensagem)
-                    setErroVisivel(true)
-                } else {
-                    USUARIOLOGADO = response.data.usuario[0]
-                    await enviaNotificacao(USUARIOLOGADO.id)
-                    setLoading(false)
-                    navigation.replace('Tabs');
-                }
-            })
+            if (senhaUsuarioUncrpt == senhaUsuarioUncrpt2) {
+                setLoading(true)
+                await api.post('/usuarios', {
+                    nome: nomeUsuario,
+                    sobrenome: 'sobrenome',
+                    email: `${celularUsuario}@churrapp.com`,
+                    cidade: "cidade",
+                    uf: "uf",
+                    idade: "02/01/1900",
+                    fotoUrlU: url,
+                    celular: celularUsuario,
+                    cadastrado: true,
+                    apelido: nomeUsuario,
+                    senha: senhaUsuario,
+                    pontoCarne_id: 0,
+                    carnePreferida_id: 0,
+                    quantidadeCome_id: 0,
+                    bebidaPreferida_id: 0,
+                    acompanhamentoPreferido_id: 0,
+                    sobremesaPreferida_id: 0,
+                }).then(async function (response) {
+                    if (response.data.mensagem != undefined) {
+                        setLoading(false)
+                        setErroMsg(response.data.mensagem)
+                        setErroVisivel(true)
+                    } else {
+                        USUARIOLOGADO = response.data.usuario[0]
+                        await enviaNotificacao(USUARIOLOGADO.id)
+                        setLoading(false)
+                        navigation.replace('Tabs');
+                    }
+                })
+            } else {
+                setBorderColorRed2(style.formNok)
+                setBorderColorRed4(style.formNok)
+                setModalText("As senhas não são iguais!");
+                return setVisivel(true)
+            }
         }
     }
     return (
@@ -155,7 +179,15 @@ export default function CadastroUsuario() {
                         placeholder={"8 ~ 16 caracteres"}
                         maxLength={16}
                         secureTextEntry={true}
-                        onChangeText={text => criptoSenha(text)}
+                        onChangeText={text => criptoSenha1(text)}
+                    />
+                    <Text style={style.textLabel}>Confirmar senha:</Text>
+                    <TextInput
+                        style={[style.inputStandard, borderColorRed4]}
+                        placeholder={"8 ~ 16 caracteres"}
+                        maxLength={16}
+                        secureTextEntry={true}
+                        onChangeText={text => criptoSenha2(text)}
                     />
                 </View>
             </ScrollView>

@@ -34,6 +34,18 @@ export default StyleSheet.create({
     fontFamily: 'poppins-light',
     fontSize: 16,
   },
+  mudarSenhaTO:{
+    position:'absolute',
+    right:5,
+    top:35,
+    backgroundColor:'maroon',
+    borderRadius:8
+  },
+  mudarSenha:{
+    color:'white',
+    paddingHorizontal:10,
+    paddingVertical:3,
+  },
   icons: {
     color: 'maroon',
     marginRight: 8,
