@@ -18,6 +18,7 @@ import { useChurrasCount, useChurrasParticipado } from '../../context/churrasCon
 export default function ResumoChurras() {
     const { churrasCount, setChurrasCount } = useChurrasCount();
     const { churrasParticipado, setChurrasParticipado } = useChurrasParticipado();
+    const [ contadorCriado, setContadorCriado ] = useState(USUARIOLOGADO.churrasCriados);
 
     const route = useRoute();
     const [churras, setChurras] = useState([]);
@@ -92,14 +93,28 @@ export default function ResumoChurras() {
 
     async function loadChurras() {
         setLoading(true);
-
-
-
+        
         const response = await api.get(`/churras/${USUARIOLOGADO.id}`)
         setChurras(response.data);
-        setChurrasCount(response.data.length);
+        setContadorCriado(USUARIOLOGADO.churrasCriados)
+        setChurrasCount(contadorCriado);
         setChurrasParticipado(USUARIOLOGADO.churrasParticipados)
-        api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: response.data.length });
+        if(response.data.length === contadorCriado){
+            console.log("AQUI" + response.data.length )
+            api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: contadorCriado });
+        } else if(USUARIOLOGADO.churrasCriados != response.data.length ) {
+            if(USUARIOLOGADO.churrasCriados < response.data.length ){
+                setContadorCriado(response.data.length )
+                setChurrasCount(USUARIOLOGADO.churrasCriados + response.data.length)
+                console.log("AQUI2 " + response.data.length + " " + contadorCriado)
+            } else if(USUARIOLOGADO.churrasCriados > response.data.length ){
+                console.log("AQUI3 " + response.data.length )
+                setChurrasCount(response.data.length)
+                setContadorCriado(USUARIOLOGADO.churrasCriados)
+            }
+            console.log("AQUI4 " + response.data.length + " " + contadorCriado + " " + churrasCount)
+            api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: contadorCriado });
+        }
         setLoading(false);
     }
 
