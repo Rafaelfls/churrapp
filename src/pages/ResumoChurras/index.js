@@ -33,19 +33,19 @@ export default function ResumoChurras() {
         {
             text: "Criar Churras",
             name: "criaChurras",
-            color:'#800000',            
+            color: '#800000',
             icon: <Icon name="plus" style={style.fabBtnIcon} />,
             position: 1
         },
         {
             text: "Participar do Churras",
             name: "participaChurras",
-            color:'#800000',
+            color: '#800000',
             icon: <Icon name="users" style={style.fabBtnIcon} />,
             position: 2
         },
     ]
-    
+
     const config = {
         headers: { 'Authorization': USUARIOLOGADO.id }
     };
@@ -65,6 +65,7 @@ export default function ResumoChurras() {
     }
 
     function logout() {
+        USUARIOLOGADO = null
         navigation.replace('Login');
     }
 
@@ -87,7 +88,7 @@ export default function ResumoChurras() {
     }
 
     function detalheChurras(churras) {
-        navigation.navigate('DetalheChurras', { churras, editavel: true, churrasid: churras.id });
+        navigation.navigate('DetalheChurras', { churras, editavel: true });
     }
 
 
@@ -158,12 +159,13 @@ export default function ResumoChurras() {
             setIsNotificacoesOpen(false)
             setRefreshChurras(!refreshChurras);
         } else if (notificacao.confirmar == 'Vou') {
+            var churrasId = notificacao.churras_id;
             await api.put(`/confirmaPresenca/${notificacao.usuario_id}/${notificacao.churras_id}`)
             await api.delete(`/notificacoes/${notificacao.id}`)
             setChurrasParticipado(churrasParticipado + 1)
             api.put(`/usuariosQntParticipado/${USUARIOLOGADO.id}`, { churrasParticipados: churrasParticipado + 1 });
             setIsNotificacoesOpen(false)
-            setRefreshChurras(!refreshChurras);
+            navigation.navigate('DetalheChurras', { churras: churrasId, editavel: false })
         }
     }
 
@@ -172,9 +174,16 @@ export default function ResumoChurras() {
 
             <View style={style.header}>
                 <View style={style.menuBtn}>
+                    <View style={style.centeredViewNotificacaoQtd}>
+                        {notificacoes.length > 0
+                            ? <View style={style.modalViewNotificacaoQtd}>
+                                <Text style={style.textBtnNotificacaoQtd}>{notificacoes.length}</Text>
+                            </View>
+                            : null}
+                    </View>
                     {notificacoes.length > 0
                         ? (<TouchableOpacity onPress={notificacao}>
-                            <IconMI style={[style.menuIcon, { color: "#800000" }]} name="notifications-active" size={30} />
+                            <IconMI style={{ color: "#800000" }} name="notifications" size={30} />
                         </TouchableOpacity>)
                         : <IconMI style={style.menuIcon} name="notifications-none" size={30} />
                     }
@@ -203,7 +212,7 @@ export default function ResumoChurras() {
                                     style={{ backgroundColor: 'white', width: "95%" }}
                                     height={100}
                                     onSlidingSuccessLeft={() => { setVisivel(true); setChurrasDeletar(churras) }}
-                                    onSlidingSuccessRight={() => detalheChurras(churras)}
+                                    onSlidingSuccessRight={() => detalheChurras(churras.id)}
                                     slideDirection={SlideDirection.ANY}>
                                     <View style={{ flexDirection: "row", width: '100%' }}>
                                         <View style={style.detalheSlide}>
@@ -250,15 +259,16 @@ export default function ResumoChurras() {
             >
                 <View style={style.centeredView}>
                     <View style={style.modalView}>
-                        <Text style={style.modalText}>Desistiu de armar o churras <Text style={{ fontWeight: 'bold' }}>{churrasDeletar.nomeChurras}</Text>? </Text>
+                        <Text style={style.modalTitleCont}>Cancelar churras!</Text>
+                        <Text style={style.modalText}>Deseja cancelar o churras <Text style={{ fontWeight: 'bold' }}>{churrasDeletar.nomeChurras}</Text>? </Text>
                         <View style={style.footerModal}>
                             <TouchableOpacity style={style.exitBtn} onPress={() => setVisivel(false)}>
                                 <Icon style={style.iconSalvarBtn} name="times" size={20} />
-                                <Text style={style.iconSalvarBtn}>Nunca</Text>
+                                <Text style={style.iconSalvarBtn}>Não</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={style.salvarBtn} onPress={() => deletar(churrasDeletar)}>
                                 <Icon style={style.iconSalvarBtn} name="check" size={20} />
-                                <Text style={style.iconSalvarBtn}>Desisti</Text>
+                                <Text style={style.iconSalvarBtn}>Sim</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -272,7 +282,7 @@ export default function ResumoChurras() {
             >
                 <View style={style.centeredViewNotf}>
                     <View style={style.modalViewNotf}>
-                     <TouchableOpacity style={style.closeNotf} onPress={() => setIsNotificacoesOpen(false)}><IconMCI size={25} name="close-circle-outline" /></TouchableOpacity>
+                        <TouchableOpacity style={style.closeNotf} onPress={() => setIsNotificacoesOpen(false)}><IconMCI size={25} name="close-circle-outline" /></TouchableOpacity>
                         <FlatList
                             data={notificacoes}
                             style={style.notificacoesList}
@@ -294,19 +304,6 @@ export default function ResumoChurras() {
                     </View>
                 </View>
             </Modal>
-
-            {/* <Modal
-                animationType="fade"
-                transparent={true}
-                visible={loading}
-            >
-                <View
-                    style={style.loadingBackground}
-                >
-                    <ActivityIndicator size="large" color="maroon" />
-                    <Text style={style.textLoading}>Carregando ...</Text>
-                </View>
-            </Modal> */}
 
         </View>
 

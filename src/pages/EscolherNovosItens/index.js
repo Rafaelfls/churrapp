@@ -37,7 +37,15 @@ export default function EscolherNovosItens({ route, navigation }) {
         const responseFormato = await api.get(`/formatos`);
         const responseTipos = await api.get(`/tipoSubTipo?subTipo=${1}`);
 
-        responseFormato.data.shift()
+        responseFormato.data.sort(function (a, b) {
+            if (a.id > b.id) {
+                return 1;
+            }
+            if (a.id < b.id) {
+                return -1;
+            }
+            return 0;
+        })
         responseUnidade.data.sort(function (a, b) {
             if (a.id > b.id) {
                 return 1;

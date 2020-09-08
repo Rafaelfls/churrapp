@@ -69,6 +69,11 @@ export default StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
   },
+  modalTitle:{
+    color:"#800000",
+    fontSize:30,
+    marginBottom:15,
+  },
   exitBtn: {
     flexDirection: 'row-reverse',
     position: "absolute",
@@ -79,7 +84,7 @@ export default StyleSheet.create({
   textHeaderBtn: {
     fontSize: 15,
     marginHorizontal: 7,
-  },
+  }, 
   salvarBtn: {
     flexDirection: 'row-reverse',
     backgroundColor: '#800000',
@@ -88,13 +93,11 @@ export default StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
-  iconSalvarBtn: {
+  textSalvarBtn:{
     color: 'white',
-    paddingHorizontal: 5,
-  },
-  textSalvarBtn: {
-    color: 'white',
-    paddingHorizontal: 5,
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
   },
   footer: {
     flexDirection: 'row',

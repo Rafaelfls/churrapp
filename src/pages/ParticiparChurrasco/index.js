@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Modal, TextInput, TouchableOpacity, } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import ActionButton from 'react-native-action-button';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconOct from 'react-native-vector-icons/Octicons';
@@ -20,6 +20,7 @@ export default function ParticiparChurrasco() {
     const criarModal = createLoadingModal(loading);
     const navigation = useNavigation();
 
+
     const [text, onChangeText] = useState();
     const [churras_id, setChurras_id] = useState(null);
     const [visivel, setVisivel] = useState(false);
@@ -33,8 +34,11 @@ export default function ParticiparChurrasco() {
         navigation.replace('Tabs')
     }
 
-    function LerQR() {
-        navigation.navigate('QRCodeLeitor');
+    async function LerQR() {
+        const { status } = await BarCodeScanner.requestPermissionsAsync();
+        if(status === 'granted'){
+            navigation.navigate('QRCodeLeitor');
+        }
     }
 
 
