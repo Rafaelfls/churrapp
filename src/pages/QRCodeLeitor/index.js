@@ -15,7 +15,6 @@ export default function QRCodeLeitor() {
     const { loading, setLoading } = useLoadingModal();
     const criarModal = createLoadingModal(loading);
     const navigation = useNavigation();
-    const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [visivel, setIsVisivel] = React.useState(false);
     const [qrCode, setQrCode] = useState(true);
@@ -32,9 +31,9 @@ export default function QRCodeLeitor() {
         setLoading(true)
         await api.post(`/convidadosChurras/${USUARIOLOGADO.id}`, {
             valorPagar: 30,
-            churras_id: qrCodeValue
+            churras_id: qrCodeValue.id
         }).then(async function (res) {
-            await api.post(`/notificacoes/${USUARIOLOGADO.id}/${qrCodeValue}`, {
+            await api.post(`/notificacoes/${USUARIOLOGADO.id}/${qrCodeValue.id}`, {
                 mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de ${res.data[0].valorPagar}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
                 negar: "Não vou",
                 confirmar: "Vou"
@@ -45,18 +44,18 @@ export default function QRCodeLeitor() {
         return navigation.replace('Tabs');
     }
 
-    useEffect(() => {
-        (async () => {
-            const { status } = await BarCodeScanner.requestPermissionsAsync();
-            setHasPermission(status === 'granted');
-        })();
-    }, []);
-
     const handleBarCodeScanned = ({ data }) => {
         setIsVisivel(true)
         setScanned(false);
-        setQrCodeValue(data)
+        loadChurras(data)
     };
+
+    async function loadChurras(id){
+        await api.get(`churrasPeloId/${id}`)
+        .then(function(res){
+            setQrCodeValue(res.data[0])
+        })
+    }
 
     return (
 
@@ -90,7 +89,8 @@ export default function QRCodeLeitor() {
             >
                 <View style={style.centeredView}>
                     <View style={style.modalView}>
-                        <Text style={style.modalText}>Deseja participar do churras {qrCodeValue}?</Text>
+                        <Text style={style.modalTitle}>Participar!</Text>
+                        <Text style={style.modalText}>Deseja participar do churras {qrCodeValue.nomeChurras}?</Text>
                         <View style={style.footer}>
                             <TouchableOpacity style={style.salvarBtn} onPress={() => setIsVisivel(false)}>
                                 <Text style={style.textSalvarBtn}>Cancelar</Text>

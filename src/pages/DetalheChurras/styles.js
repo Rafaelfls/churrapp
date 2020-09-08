@@ -42,7 +42,17 @@ export default StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
-
+  participateBtn: {
+    position:'absolute',
+    top:40,
+    right:20,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  textSwitch:{
+    color:'white',
+    fontFamily: 'poppins-light',
+  },
   //body
   formGroup:{
     marginHorizontal:20,

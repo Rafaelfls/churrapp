@@ -3,11 +3,13 @@ import { View, Text, TouchableOpacity, FlatList, ScrollView, Modal, Picker, Imag
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { TextInputMask } from 'react-native-masked-text'
 import api from '../../services/api';
-import IconFA5 from 'react-native-vector-icons/FontAwesome5';
 import IconMCI from '@expo/vector-icons/MaterialCommunityIcons';
+import IconMI from '@expo/vector-icons/MaterialIcons';
 import IconFea from '@expo/vector-icons/Feather';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import * as ImagePicker from 'expo-image-picker';
+import { FloatingAction } from "react-native-floating-action";
+import * as Crypto from 'expo-crypto';
 
 
 import style from './styles';
@@ -26,20 +28,32 @@ export default function Perfil() {
 
     // Dados do usuario
     const [usuario, setUsuario] = useState([]);
-    const [usuarioUpdate, setUsuarioUpdate] = useState([]);
     const [image, setImage] = useState({ cancelled: true, uri: null });
     const [idadeAtual, setIdadeAtual] = useState();
 
-    // Dados a serem atualizados pelo usuario
-    const [idadeUsuario, setIdadeUsuario] = useState('');
-    const [celularNovo, setCelularNovo] = useState();
+    //editar perfil
+    const [allowEditing, setAllowEditing] = useState([false, 'darkgray'])
+    const [returnVisivel, setReturnVisivel] = useState([false])
+    const [nomeNovo, setNomeNovo] = useState('')
+    const [sobrenomeNovo, setSobrenomeNovo] = useState('')
+    const [emailNovo, setEmailNovo] = useState('')
+    const [cidadeNovo, setCidadeNovo] = useState('')
+    const [ufNovo, setUfNovo] = useState('')
+    const [senhaNova, setSenhaNova] = useState([false])
+    const [senhaUpdate, setSenhaUpdate] = useState('')
+    const [apelidoNovo, setApelidoNovo] = useState('')
+    const [idadeNovo, setIdadeNovo] = useState('')
+    const [celularNovo, setCelularNovo] = useState('')
+    const [celularNovoFormat, setCelularNovoFormat] = useState('')
+    const [fotoUrlUNovo, setFotoUrlUNovo] = useState('')
     const [pontoCarneNovo_id, setPontoCarneNovo_id] = useState(null);
     const [quantidadeComeNovo_id, setQuantidadeComeNovo_id] = useState(null);
-    // foto ainda nao em uso
-    // const [fotoNova, setFotoNova] = useState(null);
-    const [ churrasParticipados, setChurrasParticipados ] = useState(0);
+    const [idadeformatada, setIdadeFormatada] = useState(null);
+    const [pickImageOptions, setPickImageOptions] = useState([false])
+    //Fim editar perfil
+    const [churrasParticipados, setChurrasParticipados] = useState(0);
 
-    
+
     const { loading, setLoading } = useLoadingModal();
     const criarModal = createLoadingModal(loading);
 
@@ -49,19 +63,48 @@ export default function Perfil() {
 
         const response = await api.get(`/usuarios/${id}`).then(function (response) {
             setUsuario(response.data)
-            setUsuarioUpdate(response.data[0])
+            //info para editar perfil
+            setNomeNovo(response.data[0].nome)
+            setSobrenomeNovo(response.data[0].sobrenome)
+            setEmailNovo(response.data[0].email)
+            setCidadeNovo(response.data[0].cidade)
+            setUfNovo(response.data[0].uf)
+            setApelidoNovo(response.data[0].apelido)
+            setIdadeFormatada(formatDataNascimento(response.data[0].idade))
+            setCelularNovo(response.data[0].celular)
+            setCelularNovoFormat(response.data[0].celular)
+            setFotoUrlUNovo(response.data[0].fotoUrlU)
+            setQuantidadeComeNovo_id(response.data[0].quantidadeCome_id)
+            setSenhaUpdate(response.data[0].senha)
+            setPontoCarneNovo_id(response.data[0].pontoCarne_id)
+            if (idadeformatada != "02/01/1900") {
+                setIdadeNovo(idadeformatada)
+            }
+            //fim info para editar
             setChurrasParticipados(response.data[0].churrasParticipados)
 
             //converter data de nascimento para idade
             setImage({ uri: response.data[0].fotoUrlU })
-            formatData(response.data[0].idade)
+            formatDataIdade(response.data[0].idade)
         }).then(function () {
             setLoading(false)
         });
         setLoading(false);
     }
+    function formatDataNascimento(data) {
+        var date = new Date(data).getDate() + 1
+        var month = new Date(data).getMonth() + 1
+        var year = new Date(data).getFullYear()
+        if (date < 10) {
+            date = "0" + date
+        }
+        if (month < 10) {
+            month = "0" + month
+        }
+        return date + '/' + month + '/' + year
+    }
 
-    function formatData(data) {
+    function formatDataIdade(data) {
         var dataAtual = new Date();
         var anoAtual = dataAtual.getFullYear();
         var diaNasc = new Date(data).getDate() + 1
@@ -92,6 +135,75 @@ export default function Perfil() {
         setIdadeAtual(idade)
     }
 
+
+    function editPerfil() {
+        if (idadeformatada != "02/01/1900") {
+            setIdadeNovo(idadeformatada)
+        }
+        setAllowEditing([true, 'black']);
+    }
+
+
+    async function savePerfil() {
+        setLoading(true)
+        setAllowEditing([false, 'darkgray']);
+        if (image.uri != null) {
+            var novaUrl = await uploadImage(image);
+        } else {
+            var novaUrl = fotoUrlUNovo;
+        }
+        console.log(idadeNovo)
+        api.put(`/usuarios/${id}`, {
+            nome: nomeNovo,
+            sobrenome: sobrenomeNovo,
+            email: emailNovo,
+            cidade: cidadeNovo,
+            uf: ufNovo,
+            idade: idadeNovo,
+            senha: senhaUpdate,
+            fotoUrlU: fotoUrlUNovo,
+            celular: celularNovo,
+            apelido: apelidoNovo,
+            pontoCarne_id: pontoCarneNovo_id,
+            carnePreferida_id: usuario.carnePreferida_id,
+            quantidadeCome_id: quantidadeComeNovo_id,
+            bebidaPreferida_id: usuario.bebidaPreferida_id,
+            acompanhamentoPreferido_id: usuario.acompanhamentoPreferido_id,
+        }).then(function (response) {
+            setReturnVisivel([true, response.data.mensagem, "Editar perfil!"])
+            setRefreshPerfil(!refreshPerfil)
+        })
+    }
+
+    async function alterarSenha() {
+
+        var senha1 = await criptoSenha(senhaNova[1])
+        var senha2 = await criptoSenha(senhaNova[2])
+        var senha3 = await criptoSenha(senhaNova[3])
+
+        if (usuario[0].senha == senha1) {
+            if (senhaNova[2].length >= 8 && senhaNova[3].length >= 8) {
+                if (senha2 == senha3) {
+                    setSenhaUpdate(senha2)
+                    return setSenhaNova([false])
+                } else {
+                    return setReturnVisivel([true, "Novas senhas não conferem.", "Alterar senha!"])
+                }
+            }else{
+                return setReturnVisivel([true, "A senha deve ter no minimo 8 caracteres.", "Alterar senha!"])
+            }
+        } else {
+            return setReturnVisivel([true, "Senha atual incorreta.", "Alterar senha!"])
+        }
+    }
+
+    async function criptoSenha(senha) {
+        return await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA512,
+            senha
+        );
+    }
+
     useEffect(() => {
         loadPerfil();
         carregarPonto();
@@ -110,39 +222,9 @@ export default function Perfil() {
         setQuantidadeComeLista(response.data);
     }
 
-    async function updatePerfil() {
-        setLoading(true)
-
-        return api.patch(`/usuarios/${id}`, {
-            nome: usuarioUpdate.nome,
-            sobrenome: usuarioUpdate.sobrenome,
-            email: usuarioUpdate.email,
-            cidade: usuarioUpdate.cidade,
-            uf: usuarioUpdate.uf,
-            idade: usuarioUpdate.idade,
-            joined: usuarioUpdate.joined,
-            senha: usuarioUpdate.senha,
-            fotoUrlU: usuarioUpdate.fotoUrlU,
-            celular: usuarioUpdate.celular,
-            apelido: usuarioUpdate.apelido,
-            pontoCarne_id: usuarioUpdate.pontoCarne_id,
-            carnePreferida_id: usuarioUpdate.carnePreferida_id,
-            quantidadeCome_id: usuarioUpdate.quantidadeCome_id,
-            bebidaPreferida_id: usuarioUpdate.bebidaPreferida_id,
-            acompanhamentoPreferido_id: usuarioUpdate.acompanhamentoPreferido_id,
-            cadastrado: usuarioUpdate.cadastrado,
-        }).then(function (response) {
-            if (response.status == 200) {
-                setCelularNovo('')
-                setIdadeUsuario('')
-                setRefreshPerfil(!refreshPerfil)
-            }
-        })
-    }
-
     const pickImage = async () => {
         setLoading(true)
-
+        setPickImageOptions([false])
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
@@ -150,8 +232,8 @@ export default function Perfil() {
         });
 
         if (!result.cancelled) {
+            setFotoUrlUNovo(result.uri);
             setImage(result);
-            await uploadImage(result);
         }
         setLoading(false)
     };
@@ -179,11 +261,9 @@ export default function Perfil() {
         };
 
         const res = await fetch(apiUrl, options);
-        const response = await res.json();
-
-        usuarioUpdate.fotoUrlU = response.location;
-        setImage({ uri: response.location })
-        return updatePerfil()
+        const response = await res.json()
+        setFotoUrlUNovo(response.location)
+        return response.location;
     }
 
     return (
@@ -196,13 +276,17 @@ export default function Perfil() {
                 renderItem={({ item: usuario }) => (
                     <View>
                         <View style={style.backgroundProfile}>
-                            <TouchableOpacity style={style.editarContainer} onPress={() => setIsVisivel(true)}>
-                                <IconFea name="edit" size={25} color={'white'} />
-                            </TouchableOpacity>
                             <View style={style.containerProfile}>
-                                <TouchableOpacity style={style.inputDisplay} onPress={pickImage} >
-                                    <Image source={{ uri: image.uri }} style={style.profileImg} />
-                                </TouchableOpacity>
+                                {allowEditing[0]
+                                    ? <TouchableOpacity activeOpacity={0.5} onPress={() => setPickImageOptions([true])} style={style.centeredViewFotoPerfil}>
+                                        <View style={style.modalViewFotoPerfil}>
+                                            <View style={style.continueBtnFotoPerfil}>
+                                                <IconMI name="edit" size={22} color={"white"} />
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                    : null}
+                                <Image source={{ uri: fotoUrlUNovo }} style={style.profileImg} />
 
                                 <Text style={style.profileName}>{usuario.apelido}</Text>
                                 {usuario.uf != 'uf' && usuario.cidade != 'cidade' ? (
@@ -228,164 +312,333 @@ export default function Perfil() {
                                 <Text style={style.profilePartNumber}>{usuario.churrasParticipados}</Text>
                             </View>
                         </View>
-                        <View style={style.containerGeral}>
-                            <Text style={style.preferenciasTitulo}>Preferencias:</Text>
-                            <View style={style.containerEsq}>
-                                <View style={style.containerInfos}>
-                                    <IconMCI name="cow" size={18} />
-                                    <Text style={style.infosLeftTitulo}>Ponto preferido:</Text>
-                                    <Text style={style.infosLeft}>{usuario.ponto}</Text>
+                        {allowEditing[0]
+                            ? <View>
+                                <Text style={style.preferenciasTitulo}>Informações:</Text>
+                                <View style={style.formGroup}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <IconMI name="person" size={18} style={style.icons} />
+                                        <Text style={style.textoItem}>Nome:</Text>
+                                    </View>
+                                    <TextInput
+                                        style={[style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray' }]}
+                                        editable={false}
+                                        value={nomeNovo}
+                                    />
                                 </View>
-                                <View style={style.containerInfos}>
-                                    <IconMCI name="silverware-fork-knife" size={18} />
-                                    <Text style={style.infosLeft}>{usuario.nomeQuantidadeCome}</Text>
+                                <View style={style.formGroup}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <IconMI name="people" size={18} style={style.icons} />
+                                        <Text style={style.textoItem}>Sobrenome:</Text>
+                                    </View>
+                                    {usuario.sobrenome == "sobrenome"
+                                        ? <TextInput
+                                            style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                            editable={allowEditing[0]}
+                                            onChangeText={text => { setSobrenomeNovo(text) }}
+                                            value={sobrenomeNovo}
+                                        />
+                                        : <TextInput
+                                            style={[style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray' }]}
+                                            editable={false}
+                                            value={sobrenomeNovo}
+                                        />}
                                 </View>
-                                <View style={style.containerInfos}>
-                                    <IconMCI name="pig" size={18} />
-                                    <Text style={style.infosLeft}>{usuario.carnePreferida}</Text>
+
+                                <View style={style.formGroup}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Icon name="baby" size={18} style={style.icons} />
+                                        <Text style={style.textoItem}>Data de nascimento:</Text>
+                                    </View>
+                                    {idadeformatada == "02/01/1900"
+                                        ? <TextInputMask
+                                            style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                            type={'datetime'}
+                                            options={{
+                                                format: 'DD/MM/YYYY'
+                                            }}
+                                            placeholder="DD/MM/AAAA"
+                                            value={idadeNovo}
+                                            onChangeText={text => { setIdadeNovo(text) }}
+                                        />
+
+                                        : <TextInputMask
+                                            style={[style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}
+                                            type={'datetime'}
+                                            editable={false}
+                                            options={{
+                                                format: 'DD/MM/YYYY'
+                                            }}
+                                            value={idadeformatada}
+                                        />}
                                 </View>
-                                <View style={style.containerInfos}>
-                                    <IconFA5 name="bread-slice" size={18} />
-                                    <Text style={style.infosLeft}>{usuario.acompanhamentoPreferido}</Text>
+                                <View style={style.formGroup}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <IconMCI name="cowboy" size={18} style={style.icons} />
+                                        <Text style={style.textoItem}>Apelido:</Text>
+                                    </View>
+                                    <TextInput
+                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                        editable={allowEditing[0]}
+                                        onChangeText={text => { setApelidoNovo(text) }}
+                                        value={apelidoNovo}
+                                    />
                                 </View>
-                                <View style={style.containerInfos}>
-                                    <IconFA5 name="beer" size={18} />
-                                    <Text style={style.infosLeft}>{usuario.bebidaPreferida}</Text>
+                                <View style={style.formGroup}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <IconMI name="location-city" size={18} style={style.icons} />
+                                        <Text style={style.textoItem}>Cidade em que mora:</Text>
+                                    </View>
+                                    <TextInput
+                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                        editable={allowEditing[0]}
+                                        onChangeText={text => { setCidadeNovo(text) }}
+                                        value={cidadeNovo}
+                                    />
                                 </View>
-                                <View style={style.containerInfos}>
-                                    <Icon name="birthday-cake" size={18} />
-                                    <Text style={style.infosLeft}>{usuario.sobremesaPreferida}</Text>
+                                <View style={style.formGroup}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <IconMI name="location-on" size={18} style={style.icons} />
+                                        <Text style={style.textoItem}>Uf em que mora:</Text>
+                                    </View>
+                                    <TextInput
+                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                        editable={allowEditing[0]}
+                                        onChangeText={text => { setUfNovo(text) }}
+                                        value={ufNovo}
+                                    />
+                                </View>
+                                <View style={style.formGroup}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <IconMCI name="email" size={18} style={style.icons} />
+                                        <Text style={style.textoItem}>Email:</Text>
+                                    </View>
+                                    <TextInput
+                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                        editable={allowEditing[0]}
+                                        onChangeText={text => { setEmailNovo(text) }}
+                                        value={emailNovo}
+                                    />
+                                </View>
+                                <View style={style.formGroup}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <IconMCI name="cellphone-android" size={18} style={style.icons} />
+                                        <Text style={style.textoItem}>Celular:</Text>
+                                    </View>
+                                    <TextInputMask
+                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                        editable={allowEditing[0]}
+                                        type={'cel-phone'}
+                                        options={{
+                                            maskType: 'BRL',
+                                            withDDD: true,
+                                            dddMask: '(99) '
+                                        }}
+                                        keyboardType={"phone-pad"}
+                                        placeholder={'(xx)xxxxx-xxxx'}
+                                        value={celularNovoFormat}
+                                        includeRawValueInChangeText={true}
+                                        onChangeText={(text, rawText) => { setCelularNovo(rawText); setCelularNovoFormat(text) }}
+                                    />
+                                </View>
+                                <View style={style.formGroup}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <IconMCI name="email" size={18} style={style.icons} />
+                                        <Text style={style.textoItem}>Senha:</Text>
+                                    </View>
+                                    <TextInput
+                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                        editable={false}
+                                        secureTextEntry={true}
+                                        value={'1234567890'}
+                                    />
+                                    <TouchableOpacity onPress={() => setSenhaNova([true])} style={style.mudarSenhaTO}>
+                                        <Text style={style.mudarSenha}>Alterar senha</Text>
+                                    </TouchableOpacity>
+
                                 </View>
                             </View>
+                            : null}
+                        <Text style={style.preferenciasTitulo}>Preferencias:</Text>
+                        <View style={style.formGroup}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <IconMCI name="cow" size={18} style={style.icons} />
+                                <Text style={style.textoItem}>Ponto preferido:</Text>
+                            </View>
+                            <Picker
+                                mode="dropdown"
+                                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                enabled={allowEditing[0]}
+                                selectedValue={pontoCarneNovo_id}
+                                onValueChange={pontoCarne_id => { setPontoCarneNovo_id(pontoCarne_id) }}
+                            >
+                                {pontoCarneLista.map((pontoLista, idx) => (
+                                    <Picker.Item label={pontoLista.ponto} key={idx} value={pontoLista.id} />
+                                ))}
+
+                            </Picker>
+                        </View>
+                        <View style={style.formGroup}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <IconMCI name="silverware-fork-knife" size={18} style={style.icons} />
+                                <Text style={style.textoItem}>Tamanho da fome:</Text>
+                            </View>
+                            <Picker
+                                mode="dropdown"
+                                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                enabled={allowEditing[0]}
+                                selectedValue={quantidadeComeNovo_id}
+                                onValueChange={quantidadeCome_id => { setQuantidadeComeNovo_id(quantidadeCome_id) }}
+                            >
+                                {quantidadeComeLista.map((quantidadeComeLista, idx) => (
+                                    <Picker.Item label={quantidadeComeLista.nomeQuantidadeCome + " (" + quantidadeComeLista.quantidade + "g)"} key={idx} value={quantidadeComeLista.id} />
+                                ))}
+
+                            </Picker>
+                        </View>
+                        <View style={style.formGroup}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <IconMCI name="pig" size={18} style={style.icons} />
+                                <Text style={style.textoItem}>Carne preferida:</Text>
+                            </View>
+                            <TextInput
+                                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                editable={allowEditing[0]}
+                                value={usuario.carnePreferida}
+                            />
+                        </View>
+                        <View style={style.formGroup}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Icon name="bread-slice" size={18} style={style.icons} />
+                                <Text style={style.textoItem}>Acompanhamento preferido:</Text>
+                            </View>
+                            <TextInput
+                                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                editable={allowEditing[0]}
+                                value={usuario.acompanhamentoPreferido}
+                            />
+                        </View>
+                        <View style={style.formGroup}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Icon name="beer" size={18} style={style.icons} />
+                                <Text style={style.textoItem}>Bebida preferida:</Text>
+                            </View>
+                            <TextInput
+                                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                editable={allowEditing[0]}
+                                value={usuario.bebidaPreferida}
+                            />
+                        </View>
+                        <View style={style.formGroup}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Icon name="birthday-cake" size={18} style={style.icons} />
+                                <Text style={style.textoItem}>Sobremesa:</Text>
+                            </View>
+                            <TextInput
+                                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                editable={allowEditing[0]}
+                                value={usuario.sobremesaPreferida}
+                            />
                         </View>
                     </View>
                 )} />
+
+            {allowEditing[0]
+                ? <FloatingAction
+                    color='rgba(0,0,0,0.9)'
+                    showBackground={false}
+                    onPressMain={() => savePerfil()}
+                    floatingIcon={<IconMI name="save" size={22} color={"white"} />}
+                />
+                : <FloatingAction
+                    color='rgba(0,0,0,0.9)'
+                    showBackground={false}
+                    onPressMain={() => editPerfil()}
+                    floatingIcon={<IconMI name="edit" size={22} color={"white"} />}
+                />}
+
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={visivel}
+                visible={returnVisivel[0]}
             >
-                <View style={style.centeredView}>
-                    <View style={style.modalView}>
-                        <ScrollView>
-                            <View style={style.editLine}>
-                                <Text style={style.modalText}>Qual seu nome?</Text>
-                                <TextInput
-                                    style={style.inputStandard}
-                                    onChangeText={text => { usuarioUpdate.nome = text }}
-                                    placeholder={'Nome'}
-                                />
-                            </View>
-                            <View style={style.editLine}>
-                                <Text style={style.modalText}>Qual seu sobrenome?</Text>
-                                <TextInput
-                                    style={style.inputStandard}
-                                    onChangeText={text => { usuarioUpdate.sobrenome = text }}
-                                    placeholder={'Sobrenome'}
-                                />
-                            </View>
-                            <View style={style.editLine}>
-                                <Text style={style.modalText}>Qual seu novo apelido?</Text>
-                                <TextInput
-                                    style={style.inputStandard}
-                                    onChangeText={text => { usuarioUpdate.apelido = text }}
-                                    placeholder={'Apelido'}
-                                />
-                            </View>
-                            <View style={style.editLine}>
-                                <Text style={style.modalText}>Quando você nasceu?</Text>
-                                <TextInputMask
-                                    type={'datetime'}
-                                    style={style.inputStandard}
-                                    placeholder={"dd/mm/aaaa"}
-                                    options={{
-                                        format: 'DD/MM/YYYY'
-                                    }}
-                                    value={idadeUsuario}
-                                    onChangeText={(text) => { usuarioUpdate.idade = text; setIdadeUsuario(text) }}
-                                />
-                            </View>
-                            <View style={style.editLine}>
-                                <Text style={style.modalText}>Qual sua nova cidade?</Text>
-                                <TextInput
-                                    style={style.inputStandard}
-                                    onChangeText={text => { usuarioUpdate.cidade = text }}
-                                    placeholder={'Cidade'}
-                                />
-                            </View>
-                            <View style={style.editLine}>
-                                <Text style={style.modalText}>Qual seu novo uf?</Text>
-                                <TextInput
-                                    style={style.inputStandard}
-                                    onChangeText={text => { usuarioUpdate.uf = text }}
-                                    maxLength={2}
-                                    autoCapitalize={"characters"}
-                                    placeholder={'Uf'}
-                                />
-                            </View>
-                            <View style={style.editLine}>
-                                <Text style={style.modalText}>Qual seu novo email?</Text>
-                                <TextInput
-                                    style={style.inputStandard}
-                                    onChangeText={text => { usuarioUpdate.email = text }}
-                                    autoCapitalize={"none"}
-                                    placeholder={'email@123.com'}
-                                />
-                            </View>
-                            <View style={style.editLine}>
-                                <Text style={style.modalText}>Qual seu novo celular?</Text>
-                                <TextInputMask
-                                    style={style.inputStandard}
-                                    type={'cel-phone'}
-                                    options={{
-                                        maskType: 'BRL',
-                                        withDDD: true,
-                                        dddMask: '(99) '
-                                    }}
-                                    keyboardType={"phone-pad"}
-                                    placeholder={'(xx)xxxxx-xxxx'}
-                                    value={celularNovo}
-                                    includeRawValueInChangeText={true}
-                                    onChangeText={(text, rawText) => { usuarioUpdate.celular = rawText; setCelularNovo(text) }}
-                                />
-                            </View>
-                            <View style={style.editLine}>
-                                <Text style={style.modalText}>Qual seu novo ponto?</Text>
-                                <Picker
-                                    mode="dropdown"
-                                    style={style.inputStandard}
-                                    selectedValue={pontoCarneNovo_id}
-                                    onValueChange={pontoCarne_id => { usuarioUpdate.pontoCarne_id = pontoCarne_id }}
-                                >
-                                    {pontoCarneLista.map((pontoLista, idx) => (
-                                        <Picker.Item label={pontoLista.ponto} key={idx} value={pontoLista.id} />
-                                    ))}
-
-                                </Picker>
-                            </View>
-                            <View style={style.editLine}>
-                                <Text style={style.modalText}>Quantidade que come?</Text>
-                                <Picker
-                                    mode="dropdown"
-                                    style={style.inputStandard}
-                                    selectedValue={quantidadeComeNovo_id}
-                                    onValueChange={quantidadeCome_id => { usuarioUpdate.quantidadeCome_id = quantidadeCome_id }}
-                                >
-                                    {quantidadeComeLista.map((quantidadeComeLista, idx) => (
-                                        <Picker.Item label={quantidadeComeLista.nomeQuantidadeCome + " (" + quantidadeComeLista.quantidade + "g)"} key={idx} value={quantidadeComeLista.id} />
-                                    ))}
-
-                                </Picker>
-                            </View>
-                        </ScrollView>
-                        <View style={style.footerModal}>
-                            <TouchableOpacity style={style.exitBtn} onPress={() => setIsVisivel(false)}>
-                                <Icon style={style.iconSalvarBtn} name="times" size={15} />
-                                <Text style={style.iconSalvarBtn}>Cancelar</Text>
+                <View style={style.centeredViewContactar}>
+                    <View style={style.modalViewContactar}>
+                        <Text style={style.modalTitleCont}>{returnVisivel[2]}</Text>
+                        <Text style={style.modalTextCont}>{returnVisivel[1]}</Text>
+                        <View style={style.footerModalCont}>
+                            <TouchableOpacity style={style.continueBtnCont} onPress={() => setReturnVisivel([false])}>
+                                <Text style={style.textBtnCont}>Ok</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={style.salvarBtn} onPress={updatePerfil}>
-                                <Icon style={style.iconSalvarBtn} name="check" size={15} />
-                                <Text style={style.iconSalvarBtn}>Salvar</Text>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={senhaNova[0]}
+            >
+                <View style={style.centeredViewContactar}>
+                    <View style={style.modalViewContactar}>
+                        <Text style={style.modalTitleCont}>Alterar senha!</Text>
+                        <View style={[style.formGroup, { width: '100%' }]}>
+                            <Text style={style.textoItem}>Senha atual:</Text>
+                            <TextInput
+                                style={[style.inputStandard]}
+                                secureTextEntry={true}
+                                onChangeText={text => { setSenhaNova([senhaNova[0], text, senhaNova[2], senhaNova[3]]) }}
+                                value={senhaNova[1]}
+                            />
+                        </View>
+                        <View style={[style.formGroup, { width: '100%' }]}>
+                            <Text style={style.textoItem}>Nova senha:</Text>
+                            <TextInput
+                                style={[style.inputStandard]}
+                                secureTextEntry={true}
+                                onChangeText={text => { setSenhaNova([senhaNova[0], senhaNova[1], text, senhaNova[3]]) }}
+                                value={senhaNova[2]}
+                            />
+                        </View>
+                        <View style={[style.formGroup, { width: '100%' }]}>
+                            <Text style={style.textoItem}>Confirmar nova senha:</Text>
+                            <TextInput
+                                style={[style.inputStandard]}
+                                secureTextEntry={true}
+                                onChangeText={text => { setSenhaNova([senhaNova[0], senhaNova[1], senhaNova[2], text]) }}
+                                value={senhaNova[3]}
+                            />
+                        </View>
+                        <View style={style.footerModalCont}>
+                            <TouchableOpacity style={style.continueBtnCont} onPress={() => setSenhaNova([false])}>
+                                <Text style={style.textBtnCont}>Cancelar</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={style.continueBtnCont} onPress={alterarSenha}>
+                                <Text style={style.textBtnCont}>Salvar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={pickImageOptions[0]}
+            >
+                <View style={style.centeredViewContactar}>
+                    <View style={style.modalViewContactar}>
+                        <Text style={style.modalTitleCont}>Foto de perfil!</Text>
+                        <Text style={style.modalTextCont}>Deseja escolher uma foto ou remover atual?</Text>
+                        <View style={style.footerModalCont}>
+                            <TouchableOpacity style={style.continueBtnCont} onPress={() => {
+                                setFotoUrlUNovo("https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png");
+                                setImage({ cancelled: true, uri: "https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png" });
+                                setPickImageOptions([false])
+                            }}>
+                                <Text style={style.textBtnCont}>Remover</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={style.continueBtnCont} onPress={pickImage}>
+                                <Text style={style.textBtnCont}>Escolher</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

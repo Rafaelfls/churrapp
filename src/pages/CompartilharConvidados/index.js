@@ -101,6 +101,7 @@ export default function CompartilharConvidados({ route, navigation }) {
         valorPagar: value,
         churras_id: churrasAtual.churrasCode
       })
+      enviaNotificacao(response.data.usuario[0].id)
     })
 
   }
@@ -115,11 +116,9 @@ export default function CompartilharConvidados({ route, navigation }) {
 
   async function next() {
     const convidadosQtd = convidadosList.length
-
     setLoading(true)
     await convidadosList.map(convid => criaListaConvidados(convid))
     await convidadosList.map(convid => enviaMensagens(convid.telefone, convite))
-    await convidadosList.map(convid => enviaNotificacao(convid.usuario_id))
 
     var churrascode = churrasAtual.churrasCode
     setLoading(false)
@@ -127,7 +126,7 @@ export default function CompartilharConvidados({ route, navigation }) {
 
     convidadosList = []
   }
-console.log(convidadosList)
+  
   async function enviaNotificacao(convidId){
     await api.post(`/notificacoes/${convidId}/${churrasAtual.churrasCode}`,{
         mensagem:`${USUARIOLOGADO.nome} está te convidando para o churras ${churrasAtual.nomeChurras}. Para mais informações acesse o churrasco na pagina de churras futuros. `, 

@@ -114,7 +114,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignContent: "center",
-    marginVertical: 10,
+    marginBottom: 10,
   },
   inputDisplay:{ 
       flex: 0.7, 
@@ -125,7 +125,8 @@ export default StyleSheet.create({
       borderWidth: 1,
       borderRadius:8,
       paddingVertical: 10,
-      marginVertical: 20, 
+      marginTop:5,
+      marginBottom: 20, 
       height: 200,
   },
   addImgIcon:{
