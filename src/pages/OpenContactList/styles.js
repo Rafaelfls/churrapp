@@ -1,6 +1,5 @@
-import { StyleSheet, YellowBox } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
-import { ceil } from 'react-native-reanimated';
 
 export default StyleSheet.create({
   container: {

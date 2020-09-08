@@ -6,8 +6,6 @@ import api from '../../services/api';
 import IconEnt from 'react-native-vector-icons/Entypo';
 import IconFea from 'react-native-vector-icons/Feather';
 
-import churrasPhoto from '../../assets/fundoDescricao.jpg';
-
 import style from './styles';
 import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 

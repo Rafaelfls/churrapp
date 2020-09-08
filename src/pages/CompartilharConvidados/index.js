@@ -26,26 +26,21 @@ export default function CompartilharConvidados({ route, navigation }) {
   };
 
   const { nomeContato } = route.params;
-  const { sobrenomeContato } = route.params;
   const { telefoneContato } = route.params;
   const { churrasAtual } = route.params;
 
   useEffect(() => {
     if (telefoneContato != null) {
-      setConvidadosList(nomeContato, sobrenomeContato, telefoneContato)
+      setConvidadosList(nomeContato, telefoneContato)
     }
   }, [telefoneContato]);
 
   useEffect(() => { }, [updatePage])
 
-  function setConvidadosList($nome, $sobrenome, $telefone) {
-    if ($sobrenome == undefined) {
-      $sobrenome = '';
-    }
+  function setConvidadosList($nome, $telefone) {
     convidadosList.push({
       id: convidadosList.length,
       nome: $nome,
-      sobrenome: $sobrenome,
       senha: null,
       telefone: $telefone,
     })
@@ -81,7 +76,7 @@ export default function CompartilharConvidados({ route, navigation }) {
     
     const response = await api.post('/usuarios', {
       nome: convid.nome,
-      sobrenome: convid.sobrenome,
+      sobrenome: "sobrenome",
       email: convid.nome + "@churrapp",
       cidade: "cidade",
       uf: "uf",
@@ -187,7 +182,7 @@ export default function CompartilharConvidados({ route, navigation }) {
           renderItem={({ item: convidadosList }) => (
             <TouchableOpacity style={style.listaConvidados} onPress={() => apagaConvidado(convidadosList.id)}>
               <View style={style.listaConvidadosItem}>
-                <Text style={style.listaConvidadosLabel}>{convidadosList.nome} {convidadosList.sobrenome}</Text>
+                <Text style={style.listaConvidadosLabel}>{convidadosList.nome}</Text>
               </View>
               <View style={style.listaConvidadosItem}>
                 <IconFA style={style.phoneIcon} name="phone" size={16} />

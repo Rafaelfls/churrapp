@@ -11,6 +11,8 @@ import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
 
 import api from '../../services/api';
 
+import semChurras from '../../assets/semChurras.png'
+
 import style from './styles';
 
 import { useChurrasCount, useChurrasParticipado } from '../../context/churrasContext';
@@ -175,7 +177,7 @@ export default function ResumoChurras() {
                 </View>
                 <View style={style.titulo}>
                     <Text style={style.textHeader}>Meus churras</Text>
-                    <Text style={style.textSubHeader}>Você tem {churrasCount} churras criados</Text>
+                    <Text style={style.textSubHeader}>Você tem {churrasCount} eventos criados</Text>
                 </View>
                 <View style={style.signOutBtn}>
                     <TouchableOpacity onPress={logout}>
@@ -228,6 +230,11 @@ export default function ResumoChurras() {
                 )}
             />
 
+            {churras.length == 0
+            ?<Image style={style.semChurras} source={semChurras} />
+            :null
+            }
+            
             <FloatingAction
                 actions={btns}
                 color='#800000'
