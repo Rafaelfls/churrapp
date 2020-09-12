@@ -54,19 +54,19 @@ export default function AdicionarSobremesa({ route, navigation }) {
     }, [reload]);
 
     function next() {
-        if (isSugestao) {
-            setLoading(true)
-            itemList.map(async item => {
-                await api.post('/listadochurras', {
-                    quantidade: item.quantidade,
-                    churras_id: churrascode,
-                    unidade_id: item.unidade_id,
-                    item_id: item.item_id,
-                    formato_id:7
-                })
-            })
-        }
-        setLoading(false)
+        // if (isSugestao) {
+        //     setLoading(true)
+        //     itemList.map(async item => {
+        //         await api.post('/listadochurras', {
+        //             quantidade: item.quantidade,
+        //             churras_id: churrascode,
+        //             unidade_id: item.unidade_id,
+        //             item_id: item.item_id,
+        //             formato_id:7
+        //         })
+        //     })
+        // }
+        // setLoading(false)
         navigation.navigate('AdicionarExtras', { churrascode, convidadosQtd });
     }
 

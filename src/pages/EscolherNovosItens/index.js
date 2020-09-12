@@ -23,7 +23,7 @@ export default function EscolherNovosItens({ route, navigation }) {
     const [visivel, setIsVisivel] = React.useState(false);
     const [itemModal, setItemModal] = React.useState('');
     const [selectedUnidade, setSelectedUnidade] = useState("Selecione...");
-    const [selectedFormato, setSelectedFormato] = useState();
+    const [selectedFormato, setSelectedFormato] = useState(1);
     const [quantidadeModal, setQuantidadeModal] = useState(0)
     const [idItem, setIdItem] = useState(null)
     const [filtro, setFiltro] = useState(null)
@@ -77,11 +77,17 @@ export default function EscolherNovosItens({ route, navigation }) {
     async function addItem(isVisible, item, unidadeDrop, formatoDrop, qtdNova) {
         setIsVisivel(isVisible)
         setLoading(true)
+        var formatoFinal;
+        if(formatoDrop == 1){
+            formatoFinal = 7;
+        }else{
+            formatoFinal = formatoDrop
+        }
         await api.post('/listadochurras', {
             quantidade: qtdNova,
             churras_id: churrascode,
             unidade_id: unidadeDrop,
-            formato_id: formatoDrop,
+            formato_id: formatoFinal,
             item_id: item,
         }).then(function (res) {
             setQuantidadeModal(0)

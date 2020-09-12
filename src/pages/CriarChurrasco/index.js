@@ -23,6 +23,7 @@ export default function CriarChurrasco() {
   const [hrFim, sethrFim] = useState();
   const [descricao, setdescricao] = useState();
   const [date, setDate] = useState('');
+  const [limiteConfirmacao, setLimiteConfirmacao] = useState(null);
   const [image, setImage] = useState({ cancelled: true });
   const [churrasCodeCriado, setChurrasCodeCriado] = useState('')
   const [visivel, setVisivel] = useState(false)
@@ -134,6 +135,7 @@ export default function CriarChurrasco() {
       descricao: descricao,
       data: date,
       fotoUrlC: novaUrl,
+      limiteConfirmacao: limiteConfirmacao,
     }, config).then(function (response) {
       setLoading(false)
       navigation.navigate('AdicionaConvidados', {
@@ -148,6 +150,7 @@ export default function CriarChurrasco() {
           hrFim: hrFim,
           descricao: descricao,
           data: date,
+          limiteConfirmacao: limiteConfirmacao,
         },
       });
     })
@@ -188,98 +191,115 @@ export default function CriarChurrasco() {
               placeholder={"Descrição do churrasco (opcional)"}
               onChangeText={text => setdescricao(text)}
             />
-            <View style={style.componentPicker}>
-              <Text style={style.textLabel}>Data</Text>
-              <View style={style.picker}>
-                <DatePicker
-                  style={{ width: 200 }}
-                  date={date}
-                  mode="date"
-                  placeholder="DD/MM/AAAA"
-                  format="DD/MM/YYYY"
-                  minDate={new Date()}
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  customStyles={{
-                    dateIcon: {
-                      position: 'absolute',
-                      left: 0,
-                      top: 4,
-                      marginLeft: 0
-                    },
-                    dateInput: {
-                      borderBottomWidth: 1,
-                      borderWidth: 0,
-                      marginLeft: 36,
-                      borderBottomColor: borderColorRed3,
-                      fontFamily: 'poppins-regular',
-                    },
-                    // ... You can check the source to find the other keys.
-                  }}
-                  onDateChange={(date) => { setDate(date) }}
-                />
-              </View>
-            </View>
-            <View style={style.componentPicker}>
-              <Text style={style.textLabel}>Início</Text>
-              <View style={style.picker}>
-                <DatePicker
-                  style={{ width: 200 }}
-                  date={hrInicio}
-                  mode="time"
-                  placeholder="00:00"
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  customStyles={{
-                    dateIcon: {
-                      position: 'absolute',
-                      left: 0,
-                      top: 4,
-                      marginLeft: 0
-                    },
-                    dateInput: {
-                      borderBottomWidth: 1,
-                      borderWidth: 0,
-                      marginLeft: 36,
-                      borderBottomColor: borderColorRed4,
-                      fontFamily: 'poppins-regular',
-                    },
-                    // ... You can check the source to find the other keys.
-                  }}
-                  onDateChange={(hrInicio) => { sethrInicio(hrInicio) }}
-                />
-              </View>
-            </View>
-            <View style={style.componentPicker}>
-              <Text style={style.textLabel}>Término</Text>
-              <View style={style.picker}>
-                <DatePicker
-                  style={{ width: 200 }}
-                  date={hrFim}
-                  mode="time"
-                  placeholder="00:00"
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  customStyles={{
-                    dateIcon: {
-                      position: 'absolute',
-                      left: 0,
-                      top: 4,
-                      marginLeft: 0
-                    },
-                    dateInput: {
-                      borderBottomWidth: 1,
-                      borderWidth: 0,
-                      marginLeft: 36,
-                      borderBottomColor: 'darkgray',
-                      fontFamily: 'poppins-regular',
-                    },
-                    // ... You can check the source to find the other keys.
-                  }}
-                  onDateChange={(hrFim) => { sethrFim(hrFim) }}
-                />
-              </View>
-            </View>
+            <Text style={style.textLabel}>Data</Text>
+            <DatePicker
+              style={{ width: "100%", marginBottom:10 }}
+              date={date}
+              mode="date"
+              placeholder="DD/MM/AAAA"
+              format="DD/MM/YYYY"
+              minDate={new Date()}
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0
+                },
+                dateInput: {
+                  borderBottomWidth: 1,
+                  borderWidth: 0,
+                  marginLeft: 36,
+                  borderBottomColor: borderColorRed3,
+                  fontFamily: 'poppins-regular',
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date) => { setDate(date) }}
+            />
+            <Text style={style.textLabel}>Início</Text>
+            <DatePicker
+              style={{ width: "100%", marginBottom:10 }}
+              date={hrInicio}
+              mode="time"
+              placeholder="00:00"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0
+                },
+                dateInput: {
+                  borderBottomWidth: 1,
+                  borderWidth: 0,
+                  marginLeft: 36,
+                  borderBottomColor: borderColorRed4,
+                  fontFamily: 'poppins-regular',
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(hrInicio) => { sethrInicio(hrInicio) }}
+            />
+            <Text style={style.textLabel}>Término</Text>
+            <DatePicker
+              style={{ width: "100%", marginBottom:10 }}
+              date={hrFim}
+              mode="time"
+              placeholder="00:00"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0
+                },
+                dateInput: {
+                  borderBottomWidth: 1,
+                  borderWidth: 0,
+                  marginLeft: 36,
+                  borderBottomColor: 'darkgray',
+                  fontFamily: 'poppins-regular',
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(hrFim) => { sethrFim(hrFim) }}
+            />
+            <Text style={style.textLabel}>Confirmação de presença até</Text>
+            <DatePicker
+              style={{ width: "100%", marginBottom:10 }}
+              date={limiteConfirmacao}
+              mode="date"
+              placeholder="DD/MM/AAAA"
+              format="DD/MM/YYYY"
+              minDate={new Date()}
+              maxDate={date}
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0
+                },
+                dateInput: {
+                  borderBottomWidth: 1,
+                  borderWidth: 0,
+                  marginLeft: 36,
+                  borderBottomColor: 'darkgray',
+                  fontFamily: 'poppins-regular',
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date) => { setLimiteConfirmacao(date) }}
+            />
             <View style={{ marginVertical: 10 }}>
               <Text style={style.textLabel}>Foto do churras</Text>
               <View style={style.imagePicker}>

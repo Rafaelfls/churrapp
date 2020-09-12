@@ -74,18 +74,18 @@ export default function AdicionarExtras({ route, navigation }) {
     }
 
     async function next() {
-        if (isSugestao) {
-            setLoading(true)
-            itemList.map(async item => {
-                await api.post('/listadochurras', {
-                    quantidade: item.quantidade,
-                    churras_id: churrascode,
-                    unidade_id: item.unidade_id,
-                    item_id: item.item_id,
-                    formato_id:7
-                })
-            })
-        }
+        // if (isSugestao) {
+        //     setLoading(true)
+        //     itemList.map(async item => {
+        //         await api.post('/listadochurras', {
+        //             quantidade: item.quantidade,
+        //             churras_id: churrascode,
+        //             unidade_id: item.unidade_id,
+        //             item_id: item.item_id,
+        //             formato_id:7
+        //         })
+        //     })
+        // }
 
         await LISTADECONVIDADOS.map(convid => enviaMensagens(convid.telefone, CONVITE))
         await convidados.map(convid => enviaNotificacao(convid.usuario_id))

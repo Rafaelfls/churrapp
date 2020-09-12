@@ -20,7 +20,7 @@ export default function AdicionaConvidados({ route, navigation }) {
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
   const [value, onChangeValue] = React.useState(20.50);
-  const [convite, onChangeText] = React.useState(`Olá, estou te convidando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença.`);
+  const [convite, onChangeText] = React.useState(`Olá, estou te convidando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença${churrasAtual.limiteConfirmacao == null ? "" : ` até o dia ${churrasAtual.limiteConfirmacao}`}.`);
   const [updatePage, setUpdatePage] = React.useState(false)
 
   const config = {

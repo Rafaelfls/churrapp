@@ -144,12 +144,17 @@ export default StyleSheet.create({
     color: 'steelblue',
     paddingBottom: 5,
   },
+  churrasLocalSV: {
+    marginBottom: 2,
+    marginRight:3,
+    width: '100%',
+  },
   churrasLocal: {
     fontSize: 13,
     color: 'steelblue',
     marginBottom: 2,
     fontFamily: 'poppins-medium',
-    width: '40%',
+    width: '100%',
   },
   locDatSeparator: {
     fontSize: 13,

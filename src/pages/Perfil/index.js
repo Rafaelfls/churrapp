@@ -532,7 +532,7 @@ export default function Perfil() {
                         <View style={style.formGroup}>
                             <View style={{ flexDirection: 'row' }}>
                                 <Icon name="birthday-cake" size={18} style={style.icons} />
-                                <Text style={style.textoItem}>Sobremesa:</Text>
+                                <Text style={style.textoItem}>Sobremesa preferida:</Text>
                             </View>
                             <TextInput
                                 style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
