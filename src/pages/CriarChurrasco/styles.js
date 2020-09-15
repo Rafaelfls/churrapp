@@ -85,6 +85,16 @@ export default StyleSheet.create({
     width: '85%',
     paddingVertical: 5,
   },
+  sairBtn:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10
+  },
   textBtn:{
     color: 'white',
     fontSize: 17,
@@ -173,10 +183,22 @@ export default StyleSheet.create({
     color:"#800000",
     fontSize:30,
     marginBottom:15,
+    fontWeight: "bold"
+  },
+  confirmarSairTitle:{
+    color:"#800000",
+    fontSize:20,
+    marginBottom:8,
+    textAlign:"center"
   },
   modalText:{
     fontSize:17,
     textAlign:'center'
+  },
+  confirmarSairSubTitle:{
+    fontSize:12,
+    textAlign:'center',
+    color: "grey"
   },
   footerModal:{    
     height: 90,

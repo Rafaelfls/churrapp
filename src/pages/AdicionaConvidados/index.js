@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, SafeAreaView, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView, FlatList, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import ActionButton from 'react-native-action-button';
@@ -23,6 +23,8 @@ export default function AdicionaConvidados({ route, navigation }) {
   const [value, onChangeValue] = React.useState(20.50);
   const [convite, onChangeText] = React.useState(`Olá, estou te convidando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença.`);
   const [updatePage, setUpdatePage] = React.useState(false)
+  const [modalSair, setModalSair] = useState(false)
+
 
   const config = {
     headers: { 'Authorization': USUARIOLOGADO.id }
@@ -119,18 +121,33 @@ export default function AdicionaConvidados({ route, navigation }) {
     convidadosList = []
   }
 
-  function backHome() {
-    convidadosList = []
-    LISTADECONVIDADOS = null;
-    CONVITE = null;
-    setLoading(true)
-
-    api.delete(`/churras/${churrasAtual.churrasCode}`, config)
+  function backHome(sair, ficar) {
+    if(sair === true) {
+      convidadosList = []
+      LISTADECONVIDADOS = null;
+      CONVITE = null;
+      setLoading(true)
+      api.delete(`/churras/${churrasAtual.churrasCode}`, config)
       .then(function (response) {
         setLoading(false)
         navigation.replace('Tabs');
       })
-  }
+      setModalSair(false)
+    }
+    if(ficar === true){
+      setModalSair(false)
+    }
+   }
+
+   function backOnePage(){
+    setLoading(true)
+    api.delete(`/churras/${churrasAtual.churrasCode}`, config)
+    .then(function (response) {
+      setLoading(false)
+      navigation.goBack()
+    })
+     
+   }
 
   const inviteStandard = `Olá, estou te convidando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença.`
 
@@ -142,9 +159,12 @@ export default function AdicionaConvidados({ route, navigation }) {
     <View style={style.container}>
       <SafeAreaView style={style.body}>
         <View style={style.headerGroup}>
+        <TouchableOpacity style={style.exitBtn} onPress={() => backOnePage()}>
+            <Icon style={style.iconHeaderBtn} name="md-arrow-back" size={22} />
+          </TouchableOpacity>
           <Text style={style.textHeader}>Convide seus amigos!</Text>
-          <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
-            <Icon style={style.iconHeaderBtn} name="md-exit" size={22} />
+          <TouchableOpacity style={style.exitBtn} onPress={() => setModalSair(true)}>
+            <Icon style={style.iconHeaderBtn} name="md-close" size={22} />
           </TouchableOpacity>
         </View>
         <View style={style.formGroup}>
@@ -182,6 +202,27 @@ export default function AdicionaConvidados({ route, navigation }) {
             <Text style={style.textBtn}>Convidar</Text>
           </TouchableOpacity>
         </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalSair}
+        >
+          <View style={style.centeredView}>
+            <View style={style.modalView}>
+              <Text style={style.modalTitle}>Quer sair?</Text>
+              <Text style={style.modalText}>Você deseja mesmo desfazer este churras?</Text>
+              <Text style={style.confirmarSairSubTitle}>(Ele sera completamente perdido, mas nunca esquecido)</Text>
+              <View style={style.footerModal}>
+                 <TouchableOpacity style={style.sairBtn} onPress={() => backHome(false, true)}>
+                  <Text style={style.textBtn}>Não</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={style.sairBtn} onPress={() => backHome(true, false)}>
+                  <Text style={style.textBtn}>Claro</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
         {criarModal}
       </SafeAreaView>
     </View>

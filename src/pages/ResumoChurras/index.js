@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, Vibration, ActivityIndicator, Modal, RefreshControl } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, Image, FlatList, TouchableOpacity, Vibration, ActivityIndicator, Modal, RefreshControl, AppState } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { FloatingAction } from "react-native-floating-action";
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -18,6 +18,7 @@ import { useChurrasCount, useChurrasParticipado } from '../../context/churrasCon
 export default function ResumoChurras() {
     const { churrasCount, setChurrasCount } = useChurrasCount();
     const { churrasParticipado, setChurrasParticipado } = useChurrasParticipado();
+    const [ contadorCriado, setContadorCriado ] = useState(USUARIOLOGADO.churrasCriados);
 
     const route = useRoute();
     const [churras, setChurras] = useState([]);
@@ -27,6 +28,10 @@ export default function ResumoChurras() {
     const [visivel, setVisivel] = useState(false)
     const [churrasDeletar, setChurrasDeletar] = useState([]);
     const [refreshChurras, setRefreshChurras] = useState(true);
+    const [test, setTest] = useState([]);
+    var newChurrasCriados;
+
+    
 
     const btns = [
         {
@@ -56,8 +61,10 @@ export default function ResumoChurras() {
         api.delete(`/churras/${churrass.id}`, config).then(function () {
             setVisivel(!visivel)
             setLoading(false)
+            setChurrasCount(churrasCount-1)
+            setContadorCriado(contadorCriado - 1)
+            api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: contadorCriado });
             setRefreshChurras(!refreshChurras)
-            api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: setChurrasCount(churrasCount - 1) });
 
         });
 
@@ -78,8 +85,13 @@ export default function ResumoChurras() {
         }
     }
 
+
     function inicioCriarChurras() {
+        setRefreshChurras(!refreshChurras);
+        newChurrasCriados = churrasCount + 1;
+        api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: newChurrasCriados });
         navigation.navigate('InicioCriaChurras');
+        
     }
 
     function ParticiparChurras() {
@@ -93,14 +105,12 @@ export default function ResumoChurras() {
 
     async function loadChurras() {
         setLoading(true);
-
-
-
+        const user = await api.get(`/usuarios/${USUARIOLOGADO.id}`);
         const response = await api.get(`/churras/${USUARIOLOGADO.id}`)
         setChurras(response.data);
-        setChurrasCount(response.data.length);
+        setChurrasCount(user.data[0].churrasCriados)
+        setContadorCriado(response.data.length);
         setChurrasParticipado(USUARIOLOGADO.churrasParticipados)
-        api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: response.data.length });
         setLoading(false);
     }
 
@@ -175,8 +185,9 @@ export default function ResumoChurras() {
                 </View>
                 <View style={style.titulo}>
                     <Text style={style.textHeader}>Meus churras</Text>
-                    <Text style={style.textSubHeader}>Você tem {churrasCount} churras criados</Text>
+                    <Text style={style.textSubHeader}>Você tem {contadorCriado} churras criados</Text>
                 </View>
+                    
                 <View style={style.signOutBtn}>
                     <TouchableOpacity onPress={logout}>
                         <IconMCI style={style.signOutIcon} name="logout" size={25} />
