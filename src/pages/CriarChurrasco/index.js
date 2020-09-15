@@ -27,12 +27,14 @@ export default function CriarChurrasco() {
   const [image, setImage] = useState({ cancelled: true });
   const [churrasCodeCriado, setChurrasCodeCriado] = useState('')
   const [visivel, setVisivel] = useState(false)
+  const [modalSair, setModalSair] = useState(false)
   const [url] = useState("https://churrappuploadteste.s3.amazonaws.com/default/churrapp_default.png")
 
   const [borderColorRed1, setBorderColorRed1] = useState(style.formOk);
   const [borderColorRed2, setBorderColorRed2] = useState(style.formOk);
   const [borderColorRed3, setBorderColorRed3] = useState('darkgray');
   const [borderColorRed4, setBorderColorRed4] = useState('darkgray');
+  var newChurrasCriados;
 
 
   const config = {
@@ -73,8 +75,17 @@ export default function CriarChurrasco() {
 
   }
 
-  function backHome() {
-    navigation.replace('Tabs');
+  function backHome(sair, ficar) {
+    if(sair === true) {
+      newChurrasCriados = churrasCount - 1;
+      api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: newChurrasCriados });
+      navigation.replace('Tabs');
+      setModalSair(false)
+    }
+    if(ficar === true){
+      setModalSair(false)
+    }
+    
   }
 
   const pickImage = async () => {
@@ -154,7 +165,6 @@ export default function CriarChurrasco() {
         },
       });
     })
-    api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: setChurrasCount(churrasCount + 1) });
   }
 
   return (
@@ -165,8 +175,8 @@ export default function CriarChurrasco() {
             <Text style={style.textHeader}>Vamos começar!</Text>
             <Text style={style.textSubHeader}>Insira as informações principais</Text>
           </View>
-          <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
-            <Icon style={style.iconHeaderBtn} name="md-exit" size={22} />
+          <TouchableOpacity style={style.exitBtn} onPress={() => setModalSair(true)}>
+            <Icon style={style.iconHeaderBtn} name="md-close" size={22} />
           </TouchableOpacity>
         </View>
         <ScrollView style={style.scrollView}>
@@ -330,6 +340,27 @@ export default function CriarChurrasco() {
               <View style={style.footerModal}>
                 <TouchableOpacity style={style.continueBtn} onPress={() => setVisivel(false)}>
                   <Text style={style.textBtn}>Ok</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalSair}
+        >
+          <View style={style.centeredView}>
+            <View style={style.modalView}>
+              <Text style={style.modalTitle}>Quer sair?</Text>
+              <Text style={style.modalText}>Você deseja mesmo desfazer este churras?</Text>
+              <Text style={style.confirmarSairSubTitle}>(Ele sera completamente perdido, mas nunca esquecido)</Text>
+              <View style={style.footerModal}>
+                 <TouchableOpacity style={style.sairBtn} onPress={() => backHome(false, true)}>
+                  <Text style={style.textBtn}>Não</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={style.sairBtn} onPress={() => backHome(true, false)}>
+                  <Text style={style.textBtn}>Claro</Text>
                 </TouchableOpacity>
               </View>
             </View>
