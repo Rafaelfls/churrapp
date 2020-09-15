@@ -24,6 +24,7 @@ export default function AdicionarBebidas({ route, navigation }) {
     const [isSugestao, setIsSugestao] = React.useState(false);
     const [isVisible, setIsVisible] = React.useState(false);
     const [isEnabled, setIsEnabled] = useState(false);
+    const [modalSair, setModalSair] = useState(false)
     const { churrascode } = route.params;
 
     const config = {
@@ -74,16 +75,28 @@ export default function AdicionarBebidas({ route, navigation }) {
         navigation.push('EscolherNovosItens3', { churrascode })
     }
 
-    function backHome() {
-        LISTADECONVIDADOS = null;
-        CONVITE = null;
-        setLoading(true)
-        api.delete(`/churras/${churrascode}`, config)
-            .then(function (response) {
-                setLoading(false)
-                navigation.replace('Tabs');
-            })
+    function backHome(sair, ficar) {
+        if(sair === true) {
+            LISTADECONVIDADOS = null;
+            CONVITE = null;
+            setLoading(true)
+            api.delete(`/churras/${churrascode}`, config)
+                .then(function (response) {
+                    navigation.replace('Tabs');
+                    setLoading(false)
+                })
+          setModalSair(false)
+        }
+        if(ficar === true){
+          setModalSair(false)
+        }
     }
+       function backOnePage(){
+        setLoading(true)
+        setItemList([])
+        setLoading(false)
+        navigation.goBack()
+   }
 
     function updateValue(qtdSugestao) {
         if (isSugestao) {
@@ -152,11 +165,14 @@ export default function AdicionarBebidas({ route, navigation }) {
         <View style={style.container}>
             <SafeAreaView style={style.body}>
                 <View style={style.headerGroup}>
+                    <TouchableOpacity style={style.exitBtn} onPress={() => backOnePage()}>
+                        <Icon style={style.iconHeaderBtn} name="md-arrow-back" size={22} />
+                    </TouchableOpacity>
                     <View style={style.headerTextGroup}>
                         <Text style={style.textHeader}>Bebidas:</Text>
                     </View>
-                    <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
-                        <Icon style={style.iconHeaderBtn} name="md-exit" size={22} />
+                    <TouchableOpacity style={style.exitBtn} onPress={() => setModalSair(true)}>
+                        <Icon style={style.iconHeaderBtn} name="md-close" size={22} />
                     </TouchableOpacity>
                 </View>
                 {isSugestao
@@ -232,6 +248,27 @@ export default function AdicionarBebidas({ route, navigation }) {
                         <Text style={style.textBtn}>Continuar</Text>
                     </TouchableOpacity>
                 </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalSair}
+        >
+          <View style={style.centeredView}>
+            <View style={style.modalView}>
+              <Text style={style.modalTitle}>Quer sair?</Text>
+              <Text style={style.modalTextSair}>Você deseja mesmo desfazer este churras?</Text>
+              <Text style={style.confirmarSairSubTitle}>(Ele sera completamente perdido, mas nunca esquecido)</Text>
+              <View style={style.footerModal}>
+                 <TouchableOpacity style={style.sairBtn} onPress={() => backHome(false, true)}>
+                  <Text style={style.textBtn}>Não</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={style.sairBtn} onPress={() => backHome(true, false)}>
+                  <Text style={style.textBtn}>Claro</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
                 {criarModal}
             </SafeAreaView>
         </View>

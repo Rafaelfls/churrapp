@@ -131,6 +131,37 @@ export default StyleSheet.create({
     textAlign:'center',
     fontFamily:'poppins-light'
   },
+  modalTextSair:{
+    fontSize:17,
+    textAlign:'center'
+  },
+  modalTitle:{
+    color:"#800000",
+    fontSize:30,
+    marginBottom:15,
+    fontWeight: "bold"
+  },
+  confirmarSairTitle:{
+    color:"#800000",
+    fontSize:20,
+    marginBottom:8,
+    textAlign:"center"
+  },
+  confirmarSairSubTitle:{
+    fontSize:12,
+    textAlign:'center',
+    color: "grey"
+  },
+  sairBtn:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10
+  },
   footerModal: {    
     height: 50,
     flexDirection: "row",

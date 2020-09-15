@@ -149,5 +149,21 @@ export default StyleSheet.create({
     fontFamily: 'poppins-medium',
     textAlign: 'center',
   },
+  sairBtn:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10
+  },
+  textBtn:{
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
 
 })
