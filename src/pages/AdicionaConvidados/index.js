@@ -14,14 +14,13 @@ var convidadosList = [];
 export default function AdicionaConvidados({ route, navigation }) {
 
   const { nomeContato } = route.params;
-  const { sobrenomeContato } = route.params;
   const { telefoneContato } = route.params;
   const { churrasAtual } = route.params;
 
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
   const [value, onChangeValue] = React.useState(20.50);
-  const [convite, onChangeText] = React.useState(`Olá, estou te convidando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença.`);
+  const [convite, onChangeText] = React.useState(`Olá, estou te convidando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença${churrasAtual.limiteConfirmacao == null ? "" : ` até o dia ${churrasAtual.limiteConfirmacao}`}.`);
   const [updatePage, setUpdatePage] = React.useState(false)
   const [modalSair, setModalSair] = useState(false)
 
@@ -33,20 +32,16 @@ export default function AdicionaConvidados({ route, navigation }) {
 
   useEffect(() => {
     if (telefoneContato != null) {
-      setConvidadosList(nomeContato, sobrenomeContato, telefoneContato)
+      setConvidadosList(nomeContato, telefoneContato)
     }
   }, [telefoneContato]);
 
   useEffect(() => { }, [updatePage])
 
-  function setConvidadosList($nome, $sobrenome, $telefone) {
-    if ($sobrenome == undefined) {
-      $sobrenome = '';
-    }
+  function setConvidadosList($nome, $telefone) {
     convidadosList.push({
       id: convidadosList.length,
       nome: $nome,
-      sobrenome: $sobrenome,
       senha: null,
       telefone: $telefone,
     })
@@ -72,7 +67,7 @@ export default function AdicionaConvidados({ route, navigation }) {
 
     const response = await api.post('/usuarios', {
       nome: convid.nome,
-      sobrenome: convid.sobrenome,
+      sobrenome: 'sobrenome',
       email: convid.nome + "@churrapp",
       cidade: "cidade",
       uf: "uf",
@@ -107,10 +102,7 @@ export default function AdicionaConvidados({ route, navigation }) {
   async function next() {
     const convidadosQtd = convidadosList.length
     LISTADECONVIDADOS = convidadosList;
-
-    if (convite == '') {
-      CONVITE = inviteStandard;
-    }
+    CONVITE = convite;
 
     setLoading(true)
     await convidadosList.map(convid => criaListaConvidados(convid))
@@ -185,7 +177,7 @@ export default function AdicionaConvidados({ route, navigation }) {
           renderItem={({ item: convidadosList }) => (
             <TouchableOpacity style={style.listaConvidados} onPress={() => apagaConvidado(convidadosList.id)}>
               <View style={style.listaConvidadosItem}>
-                <Text style={style.listaConvidadosLabel}>{convidadosList.nome} {convidadosList.sobrenome}</Text>
+                <Text style={style.listaConvidadosLabel}>{convidadosList.nome}</Text>
               </View>
               <View style={style.listaConvidadosItem}>
                 <IconFA style={style.phoneIcon} name="phone" size={16} />

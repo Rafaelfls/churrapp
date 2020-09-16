@@ -49,7 +49,7 @@ export default StyleSheet.create({
     position: 'absolute',
     height: 15,
     width: 15,
-    left:19,
+    left: 19,
     zIndex: 1,
   },
   modalViewNotificacaoQtd: {
@@ -99,6 +99,19 @@ export default StyleSheet.create({
     borderTopRightRadius: 8,
   },
 
+  //imagem Quando nao tem churras
+
+  semChurras: {
+    marginTop:60,
+    height: "100%",
+    width:'100%',
+    alignSelf: "center",
+    position:'absolute',
+    top:0
+  },
+
+  // fim imagem quando nao tem churras
+
 
   //cardContent
   churrasDescricao: {
@@ -131,12 +144,17 @@ export default StyleSheet.create({
     color: 'steelblue',
     paddingBottom: 5,
   },
+  churrasLocalSV: {
+    marginBottom: 2,
+    marginRight:3,
+    width: '100%',
+  },
   churrasLocal: {
     fontSize: 13,
     color: 'steelblue',
     marginBottom: 2,
     fontFamily: 'poppins-medium',
-    width: '40%',
+    width: '100%',
   },
   locDatSeparator: {
     fontSize: 13,
@@ -162,7 +180,7 @@ export default StyleSheet.create({
   fabBtnIcon: {
     fontSize: 15,
     height: 22,
-    textAlignVertical:'center',
+    textAlignVertical: 'center',
     color: 'white'
   },
 
@@ -191,15 +209,15 @@ export default StyleSheet.create({
   modalText: {
     fontSize: 18,
     marginBottom: 15,
-    textAlign:'center'
+    textAlign: 'center'
 
   },
-  modalTitleCont:{
-    color:"#800000",
-    textAlign:'center',
+  modalTitleCont: {
+    color: "#800000",
+    textAlign: 'center',
     fontFamily: 'poppins-medium',
-    fontSize:27,
-    marginBottom:15,
+    fontSize: 27,
+    marginBottom: 15,
   },
   footerModal: {
     marginTop: 10,
@@ -213,10 +231,10 @@ export default StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 8,
     alignItems: 'center',
-    marginHorizontal:3,
+    marginHorizontal: 3,
   },
   salvarBtn: {
-    marginHorizontal:3,
+    marginHorizontal: 3,
     flexDirection: 'row-reverse',
     backgroundColor: '#800000',
     paddingHorizontal: 10,
@@ -255,7 +273,7 @@ export default StyleSheet.create({
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
     padding: 25,
-    paddingTop:40,
+    paddingTop: 40,
     width: '100%',
     shadowColor: "#000",
     shadowOffset: {
@@ -292,34 +310,34 @@ export default StyleSheet.create({
     justifyContent: "flex-end",
   },
   cardBtnNotf: {
-    backgroundColor:'#800000',
-    borderRadius:8,
-    paddingHorizontal:10,
-    paddingVertical:3,
-    marginLeft:5,
+    backgroundColor: '#800000',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    marginLeft: 5,
   },
   cardBtnNotf1: {
-    borderRadius:8,
-    paddingHorizontal:10,
-    paddingVertical:3,
-    marginLeft:5,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    marginLeft: 5,
   },
   cardBtnTextNotf: {
     fontFamily: 'poppins-medium',
-    color:"white",
-    textAlign:'center',
-    textAlignVertical:'center'
+    color: "white",
+    textAlign: 'center',
+    textAlignVertical: 'center'
   },
   cardBtnTextNotf1: {
     fontFamily: 'poppins-medium',
-    color:"gray",
-    textAlign:'center',
-    textAlignVertical:'center'
+    color: "gray",
+    textAlign: 'center',
+    textAlignVertical: 'center'
   },
-  closeNotf:{
-    position:"absolute",
-    top:20,
-    right:20,
+  closeNotf: {
+    position: "absolute",
+    top: 20,
+    right: 20,
   }
   //fim notificacao modal
 });

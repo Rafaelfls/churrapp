@@ -11,9 +11,12 @@ import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
 
 import api from '../../services/api';
 
+import semChurras from '../../assets/semChurras.png'
+
 import style from './styles';
 
 import { useChurrasCount, useChurrasParticipado } from '../../context/churrasContext';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function ResumoChurras() {
     const { churrasCount, setChurrasCount } = useChurrasCount();
@@ -118,6 +121,12 @@ export default function ResumoChurras() {
         var date = new Date(data).getDate() + 1
         var month = new Date(data).getMonth() + 1
         var year = new Date(data).getFullYear()
+        if (date<10){
+            date = "0"+date
+        }
+        if (month<10){
+            month = "0"+month
+        }
         return date + '/' + month + '/' + year
     }
 
@@ -185,7 +194,8 @@ export default function ResumoChurras() {
                 </View>
                 <View style={style.titulo}>
                     <Text style={style.textHeader}>Meus churras</Text>
-                    <Text style={style.textSubHeader}>Você tem {contadorCriado} churras criados</Text>
+
+                    <Text style={style.textSubHeader}>Você tem {contadorCriado} eventos criados</Text>
                 </View>
                     
                 <View style={style.signOutBtn}>
@@ -224,7 +234,12 @@ export default function ResumoChurras() {
                                                     <Text style={style.churrasData}> {formatData(churras.data)}</Text>
                                                     <Text style={style.locDatSeparator}>  |  </Text>
                                                     <IconEnt style={style.localIcon} name="location-pin" size={15} />
-                                                    <Text style={style.churrasLocal}> {churras.local}</Text>
+                                                    <ScrollView
+                                                        style={style.churrasLocalSV}                                                       
+                                                        horizontal={true}
+                                                    >
+                                                        <Text style={style.churrasLocal}> {churras.local}</Text>
+                                                    </ScrollView>
                                                 </View>
                                             </View>
                                         </View>
@@ -238,6 +253,11 @@ export default function ResumoChurras() {
                     </View>
                 )}
             />
+
+            {churras.length == 0
+                ? <Image style={style.semChurras} source={semChurras} />
+                : null
+            }
 
             <FloatingAction
                 actions={btns}

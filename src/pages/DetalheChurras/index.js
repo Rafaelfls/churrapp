@@ -42,12 +42,12 @@ export default function DetalheChurras() {
   const [todosTipos, setTodosTipos] = useState([]);
   const [subTipos, setSubTipos] = useState([]);
   const [contactar, setContactar] = useState([false, null, null, null]);
-  const [churrasDateFormatted, setChurrasDateFormatted] = useState();
   const [visivel2, setVisibility2] = useState([false])
   const [editChurrasNome, setEditChurrasNome] = useState('')
   const [editChurrasNomeUsuario, setEditChurrasNomeUsuario] = useState('')
   const [editChurrasLocal, setEditChurrasLocal] = useState('')
   const [editChurrasData, setEditChurrasData] = useState('')
+  const [editChurrasDataLimite, setEditChurrasDataLimite] = useState('')
   const [editChurrasInicio, setEditChurrasInicio] = useState('')
   const [editChurrasFim, setEditChurrasFim] = useState('')
   const [editChurrasDescricao, setEditChurrasDescricao] = useState('')
@@ -154,7 +154,7 @@ export default function DetalheChurras() {
       if (subTipo.subTipo == "Carnes") {
         setFormatoPicker(true)
       } else {
-        setSelectedFormato(0);
+        setSelectedFormato(1);
       }
 
     }
@@ -176,6 +176,7 @@ export default function DetalheChurras() {
     await api.put(`/churrasUpdate/${churras}`, {
       nomeChurras: editChurrasNome,
       data: editChurrasData,
+      limiteConfirmacao: editChurrasDataLimite,
       hrInicio: editChurrasInicio,
       hrFim: editChurrasFim,
       local: editChurrasLocal,
@@ -193,22 +194,22 @@ export default function DetalheChurras() {
     setConvidados(response.data);
     setConvidadosCount(response.data.length);
     setConvidadosConfirmados(response.data);
-    if(!editavel){
-      response.data.map(convid =>{
-        if(convid.usuario_id == USUARIOLOGADO.id){
+    if (!editavel) {
+      response.data.map(convid => {
+        if (convid.usuario_id == USUARIOLOGADO.id) {
           setConvidadoAtual(convid)
           setIsEnabled(convid.confirmado)
         }
       })
     }
   }
-  
-  async function atualizaPresença(){
+
+  async function atualizaPresença() {
     setLoading(true)
-    setIsEnabled(previousState => !previousState)    
-    if(!isEnabled){
+    setIsEnabled(previousState => !previousState)
+    if (!isEnabled) {
       await api.put(`/confirmaPresenca/${convidadoAtual.usuario_id}/${convidadoAtual.churras_id}`)
-    }else{
+    } else {
       await api.put(`/negarPresenca/${convidadoAtual.usuario_id}/${convidadoAtual.churras_id}`)
     }
     setLoading(false)
@@ -270,6 +271,19 @@ export default function DetalheChurras() {
       opcaoItensVisible([false])
       setRefresh(!refresh)
     })
+  }
+
+  function passouDoLimite(){
+    var dataLimite = new Date(churrasAtual.limiteConfirmacao).getTime()
+    if(dataLimite == 0 ){
+      return false
+    }
+    var hoje = new Date().getTime()
+    if(dataLimite <= hoje){
+      return true
+    }else{
+      return false
+    }
   }
 
   async function entrarEmContato(modal, celular) {
@@ -368,7 +382,9 @@ export default function DetalheChurras() {
     setEditChurrasNomeUsuario(res.data[0].nome)
     setEditChurrasLocal(res.data[0].local)
     const dataFormatada = formatData(res.data[0].data)
+    const dataFormatadaLimite = formatData(res.data[0].limiteConfirmacao)
     setEditChurrasData(dataFormatada)
+    setEditChurrasDataLimite(dataFormatadaLimite)
     setEditChurrasInicio(res.data[0].hrInicio)
     setEditChurrasFim(res.data[0].hrFim)
     setEditChurrasDescricao(res.data[0].descricao)
@@ -382,7 +398,6 @@ export default function DetalheChurras() {
     var date = new Date(data).getDate() + 1
     var month = new Date(data).getMonth() + 1
     var year = new Date(data).getFullYear()
-    setChurrasDateFormatted(date + '/' + month + '/' + year)
     return date + '/' + month + '/' + year
   }
 
@@ -451,19 +466,20 @@ export default function DetalheChurras() {
           ? <TouchableOpacity style={style.shareBtn} onPress={() => CompartilharChurras(churrasAtual)} >
             <IconEnt name="share" size={25} color={"white"} />
           </TouchableOpacity>
-          :<View style={style.participateBtn}>
+          : <View style={style.participateBtn}>
             {isEnabled
-            ?<Text style={style.textSwitch}>Vou</Text>
-            :<Text style={style.textSwitch}>Não Vou</Text>
+              ? <Text style={style.textSwitch}>Vou</Text>
+              : <Text style={style.textSwitch}>Não Vou</Text>
             }
             <Switch
-            trackColor={{ false: "gray", true: "green" }}
-            thumbColor={isEnabled ? "#ffffff" : "#ffffff"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={atualizaPresença}
-            value={isEnabled}
-          />
-          </View>           
+              trackColor={{ false: "gray", true: "green" }}
+              thumbColor={passouDoLimite()?isEnabled ? "gray" : "gray":isEnabled ? "white" : "white"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={atualizaPresença}
+              disabled={passouDoLimite()}
+              value={isEnabled}
+            />
+          </View>
         }
       </View>
 
@@ -538,7 +554,7 @@ export default function DetalheChurras() {
                 disabled={!allowEditing[0]}
                 placeholder="DD/MM/AAAA"
                 format="DD/MM/YYYY"
-                minDate="01/05/2020"
+                minDate={new Date()}
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 customStyles={{
@@ -561,6 +577,44 @@ export default function DetalheChurras() {
                   }
                 }}
                 onDateChange={(date) => { setEditChurrasData(date) }}
+              />
+            </View>
+            <View style={style.formGroup}>
+              <View style={{ flexDirection: 'row' }}>
+                <IconEnt name="calendar" size={22} style={style.icons} />
+                <Text style={style.churrasNome}>Data limite confirmação: </Text>
+              </View>
+              <DatePicker
+                style={{ width: '100%' }}
+                date={editChurrasDataLimite}
+                mode="date"
+                disabled={!allowEditing[0]}
+                placeholder="DD/MM/AAAA"
+                format="DD/MM/YYYY"
+                minDate={new Date()}
+                maxDate={editChurrasData}
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                customStyles={{
+                  dateIcon: {
+                    display: 'none'
+                  },
+                  dateText: {
+                    color: allowEditing[1],
+                    fontSize: 16,
+                    position: 'absolute',
+                    fontFamily: 'poppins-light',
+                  },
+                  disabled: {
+                    backgroundColor: 'transparent',
+                  },
+                  dateInput: {
+                    borderBottomWidth: 1,
+                    borderWidth: 0,
+                    borderBottomColor: allowEditing[1],
+                  }
+                }}
+                onDateChange={(date) => { setEditChurrasDataLimite(date) }}
               />
             </View>
             <View style={style.formGroup}>
@@ -692,104 +746,182 @@ export default function DetalheChurras() {
 
         </View>
         {editavel
-          ? (<FlatList
-            tabLabel='Convidados'
-            data={convidados}
-            style={{ height: 170, width: "100%" }}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={convidados => String(convidados.id)}
-            renderItem={({ item: convidados }) => (
+          ? (<View tabLabel='Convidados' style={{ height: '100%', width: "100%" }}>
 
-              <View style={style.containerConvidados}>
-                {convidados.confirmado
-                  ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoPresente}>
-                    <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
-                    <View>
-                      <Text style={style.nomeConvidado}>{convidados.nome}</Text>
-                      <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
-                      <Text style={style.statusConvidado}>Vou comparecer</Text>
-                    </View>
-                    {convidados.pagou
-                      ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
-                      : null}
-                  </TouchableOpacity>)
-                  : convidados.confirmado == false
-                    ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoAusente}>
-                      <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgAusente} />
+            {churrasAtual.limiteConfirmacao != null
+              ? <View style={style.formGroup}>
+                <Text style={[style.churrasNome, { textAlign: 'center' }]}>Data limite confirmação: </Text>
+                <DatePicker
+                  style={{ width: '100%' }}
+                  date={editChurrasDataLimite}
+                  mode="date"
+                  disabled={true}
+                  placeholder="DD/MM/AAAA"
+                  format="DD/MM/YYYY"
+                  minDate={new Date()}
+                  maxDate={editChurrasData}
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      display: 'none'
+                    },
+                    dateText: {
+                      color: 'darkgray',
+                      fontSize: 16,
+                      position: 'absolute',
+                      fontFamily: 'poppins-light',
+                    },
+                    disabled: {
+                      backgroundColor: 'transparent',
+                    },
+                    dateInput: {
+                      borderBottomWidth: 1,
+                      borderWidth: 0,
+                      borderBottomColor: 'darkgray',
+                    }
+                  }}
+                  onDateChange={(date) => { setEditChurrasDataLimite(date) }}
+                />
+              </View>
+              : null}
+            <FlatList
+              data={convidados}
+              style={{ height: 170, width: "100%" }}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={convidados => String(convidados.id)}
+              renderItem={({ item: convidados }) => (
+
+                <View style={style.containerConvidados}>
+                  {convidados.confirmado
+                    ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoPresente}>
+                      <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
                       <View>
-                        <Text style={style.nomeConvidadoAusente}>{convidados.nome}</Text>
-                        <Text style={style.foneConvidadoAusente}>{formataNumeroCelular(convidados.celular)}</Text>
-                        <Text style={style.statusConvidadoAusente}>Não vou comparecer</Text>
+                        <Text style={style.nomeConvidado}>{convidados.nome}</Text>
+                        <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
+                        <Text style={style.statusConvidado}>Vou comparecer</Text>
                       </View>
                       {convidados.pagou
                         ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
                         : null}
                     </TouchableOpacity>)
-                    : convidados.confirmado == null
-                      ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoNaoConfirm}>
-                        <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
+                    : convidados.confirmado == false
+                      ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoAusente}>
+                        <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgAusente} />
                         <View>
-                          <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
-                          <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
-                          <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
+                          <Text style={style.nomeConvidadoAusente}>{convidados.nome}</Text>
+                          <Text style={style.foneConvidadoAusente}>{formataNumeroCelular(convidados.celular)}</Text>
+                          <Text style={style.statusConvidadoAusente}>Não vou comparecer</Text>
                         </View>
                         {convidados.pagou
                           ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
                           : null}
-                      </TouchableOpacity>) : null}
-              </View>
-            )}
-          />)
-          : (<FlatList
-            tabLabel='Convidados'
-            data={convidados}
-            style={{ height: 170, width: "100%" }}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={convidados => String(convidados.id)}
-            renderItem={({ item: convidados }) => (
+                      </TouchableOpacity>)
+                      : convidados.confirmado == null
+                        ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoNaoConfirm}>
+                          <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
+                          <View>
+                            <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
+                            <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
+                            <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
+                          </View>
+                          {convidados.pagou
+                            ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                            : null}
+                        </TouchableOpacity>) : null}
+                </View>
+              )}
+            />
+          </View>)
+          : (<View tabLabel='Convidados' style={{ height: '100%', width: "100%" }}>
 
-              <View style={style.containerConvidados}>
-                {convidados.confirmado
-                  ? (<View style={style.convidadoPresente}>
-                    <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
-                    <View>
-                      <Text style={style.nomeConvidado}>{convidados.nome}</Text>
-                      <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
-                      <Text style={style.statusConvidado}>Vou comparecer</Text>
-                    </View>
-                    {convidados.pagou
-                      ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
-                      : null}
-                  </View>)
-                  : convidados.confirmado == false
-                    ? (<View style={style.convidadoAusente}>
-                      <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgAusente} />
+            {churrasAtual.limiteConfirmacao != null
+              ? <View style={style.formGroup}>
+                <Text style={[style.churrasNome, { textAlign: 'center' }]}>Data limite confirmação: </Text>
+                <DatePicker
+                  style={{ width: '100%' }}
+                  date={editChurrasDataLimite}
+                  mode="date"
+                  disabled={true}
+                  placeholder="DD/MM/AAAA"
+                  format="DD/MM/YYYY"
+                  minDate={new Date()}
+                  maxDate={editChurrasData}
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      display: 'none'
+                    },
+                    dateText: {
+                      color: 'darkgray',
+                      fontSize: 16,
+                      position: 'absolute',
+                      fontFamily: 'poppins-light',
+                    },
+                    disabled: {
+                      backgroundColor: 'transparent',
+                    },
+                    dateInput: {
+                      borderBottomWidth: 1,
+                      borderWidth: 0,
+                      borderBottomColor: 'darkgray',
+                    }
+                  }}
+                  onDateChange={(date) => { setEditChurrasDataLimite(date) }}
+                />
+              </View>
+              : null}
+            <FlatList
+              data={convidados}
+              style={{ height: 170, width: "100%" }}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={convidados => String(convidados.id)}
+              renderItem={({ item: convidados }) => (
+
+                <View style={style.containerConvidados}>
+                  {convidados.confirmado
+                    ? (<View style={style.convidadoPresente}>
+                      <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
                       <View>
-                        <Text style={style.nomeConvidadoAusente}>{convidados.nome}</Text>
-                        <Text style={style.foneConvidadoAusente}>{formataNumeroCelular(convidados.celular)}</Text>
-                        <Text style={style.statusConvidadoAusente}>Não vou comparecer</Text>
+                        <Text style={style.nomeConvidado}>{convidados.nome}</Text>
+                        <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
+                        <Text style={style.statusConvidado}>Vou comparecer</Text>
                       </View>
                       {convidados.pagou
                         ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
                         : null}
                     </View>)
-                    : convidados.confirmado == null
-                      ? (<View style={style.convidadoNaoConfirm}>
-                        <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
+                    : convidados.confirmado == false
+                      ? (<View style={style.convidadoAusente}>
+                        <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgAusente} />
                         <View>
-                          <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
-                          <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
-                          <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
+                          <Text style={style.nomeConvidadoAusente}>{convidados.nome}</Text>
+                          <Text style={style.foneConvidadoAusente}>{formataNumeroCelular(convidados.celular)}</Text>
+                          <Text style={style.statusConvidadoAusente}>Não vou comparecer</Text>
                         </View>
                         {convidados.pagou
                           ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
                           : null}
                       </View>)
-                      : null}
-              </View>
+                      : convidados.confirmado == null
+                        ? (<View style={style.convidadoNaoConfirm}>
+                          <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
+                          <View>
+                            <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
+                            <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
+                            <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
+                          </View>
+                          {convidados.pagou
+                            ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                            : null}
+                        </View>)
+                        : null}
+                </View>
 
-            )}
-          />)}
+              )}
+            />
+          </View>)}
 
         {editavel
           ? (

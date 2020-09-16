@@ -1,119 +1,113 @@
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, SafeAreaView, FlatList, ActivityIndicator,TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {StyleSheet, View, FlatList, Text, TouchableOpacity,SafeAreaView,TextInput,ActivityIndicator } from 'react-native';
 import * as Contacts from 'expo-contacts';
+import { useNavigation } from '@react-navigation/native'
 
 import style from './styles';
 
-export default class ContactListCompartilhar extends React.Component {
-  constructor() {
-    super();
-    
-    this.state = {
-      isLoading: false,
-      contacts: []
-    };
-  }
+export default function OpenContactListCompartilhar() {
 
-  loadContacts = async () => {
-    const { status } = await Contacts.requestPermissionsAsync();
+  const navigation = useNavigation();
+  const [contacts, setContacts] = useState([]);
+  const [contactsMemory, setContactsMemory] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-    if (status === 'granted') {
-      const { data } = await Contacts.getContactsAsync();
-      this.setState({ contacts: data, inMemoryContacts: data, isLoading: false });
-    }
-  };
+  useEffect(() => {
+    (async () => {
+      setIsLoading(true)
+      const { status } = await Contacts.requestPermissionsAsync();
+      if (status === 'granted') {
+        const { data } = await Contacts.getContactsAsync({
+          fields: [Contacts.Fields.PhoneNumbers]
+        });
 
-  componentDidMount() {
-    this.setState({ isLoading: true });
-    this.loadContacts();
-  }
+        if (data.length > 0) {
+          var contactList = []
+          data.map(user => {
+            if (user.phoneNumbers) {
+              contactList.push({ nome: user.name, celular: user.phoneNumbers[0].number })
+            }
+          })
+          setContacts(contactList)
+          setContactsMemory(contactList)
+          setIsLoading(false)
+        }
+      }
+    })();
+  }, []);
 
-  renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => this.props.navigation.navigate('CompartilharConvidados',{
-      nomeContato:item.firstName ,
-      sobrenomeContato:item.lastName ,
-      telefoneContato: item.phoneNumbers[0].number,
-      churrasCodeAtual:null
-    })} style={{ minHeight: 70, padding: 5, paddingHorizontal: 20 }}>
-      <Text style={{ color: 'black', fontFamily: 'poppins-semi-bold', fontSize: 18 }}>
-        {item.firstName + ' '}
-        {item.lastName}
-      </Text>
-      <Text style={{ color: 'gray', fontWeight: 'poppins-medium' }}>
-        {item.phoneNumbers[0].number}
-      </Text>
-    </TouchableOpacity>
-  );
-
-  searchContacts = value => {
-    const filteredContacts = this.state.inMemoryContacts.filter(contact => {
+  function searchContacts(value) {
+    const filteredContacts = contactsMemory.filter(contact => {
       let contactLowercase = (
-        contact.firstName +
-        ' ' +
-        contact.lastName
+        contact.nome
       ).toLowerCase();
 
       let searchTermLowercase = value.toLowerCase();
 
       return contactLowercase.indexOf(searchTermLowercase) > -1;
     });
-    this.setState({ contacts: filteredContacts });
+    console.log(filteredContacts)
+    setContacts(filteredContacts)
   };
 
-  render() {
-    return (
-      <View style={style.container}>
-        <SafeAreaView style={style.body}>
-          <Text style={style.textHeader}>Adicione os seus convidados!</Text>
-          <TextInput
-            placeholder="Buscar"
-            placeholderTextColor="gray"
-            style={{
-              backgroundColor: 'white',
-              height: 40,
-              fontFamily: 'poppins-medium',
-              fontSize: 15,
-              paddingLeft: 5,
-              marginHorizontal: 20,
-              marginBottom: 10,
-              borderBottomWidth: 1,
-              borderBottomColor: 'gray',
-            }}
-            onChangeText={value => this.searchContacts(value)}
+
+  return (
+    <View style={style.container}>
+      <SafeAreaView style={style.body}>
+        <Text style={style.textHeader}>Adicione os seus convidados!</Text>
+        <TextInput
+          placeholder="Buscar"
+          placeholderTextColor="gray"
+          style={{
+            backgroundColor: 'white',
+            height: 40,
+            fontFamily: 'poppins-medium',
+            fontSize: 15,
+            paddingLeft: 5,
+            marginHorizontal: 20,
+            marginBottom: 10,
+            borderBottomWidth: 1,
+            borderBottomColor: 'gray',
+          }}
+          onChangeText={value => searchContacts(value)}
+        />
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
+          {isLoading 
+          ? (
+            <View
+              style={{
+                ...StyleSheet.absoluteFill,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginLeft: 30,
+              }}
+            >
+              <ActivityIndicator size="large" color="maroon" />
+            </View>
+          ) : null}
+          <FlatList
+            data={contacts}
+            keyExtractor={item => contacts.celular}
+            showsVerticalScrollIndicator={false}
+            style={style.churrasList}
+            renderItem={({ item: contacts }) => (
+              <TouchableOpacity onPress={() => navigation.navigate('CompartilharConvidados', {
+                nomeContato: contacts.nome,
+                telefoneContato: contacts.celular,
+                churrasCodeAtual: null
+              })} style={{ minHeight: 70, padding: 5, paddingHorizontal: 20 }}>
+                <Text style={{ color: 'black', fontFamily: 'poppins-semi-bold', fontSize: 18 }}>
+                  {contacts.nome}
+                </Text>
+                <Text style={{ color: 'gray', fontWeight: 'poppins-medium' }}>
+                  {contacts.celular}
+                </Text>
+              </TouchableOpacity>
+            )}
           />
-          <View style={{ flex: 1, backgroundColor: 'white' }}>
-            {this.state.isLoading ? (
-              <View
-                style={{
-                  ...StyleSheet.absoluteFill,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginLeft: 30,
-                }}
-              >
-                <ActivityIndicator size="large" color="maroon" />
-              </View>
-            ) : null}
-            <FlatList
-              data={this.state.contacts}
-              renderItem={this.renderItem}
-              keyExtractor={(item, index) => index.toString()}
-              ListEmptyComponent={() => (
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginTop: 50,
-                  }}
-                >
-                  <Text style={{ color: 'black', fontFamily: 'poppins-medium', fontSize: 20 }}>No Contacts Found</Text>
-                </View>
-              )}
-            />
-          </View>
-        </SafeAreaView>
-      </View>
-    );
-  }
+
+        </View>
+      </SafeAreaView>
+    </View>
+  );
 }
