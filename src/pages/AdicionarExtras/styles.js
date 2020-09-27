@@ -19,7 +19,7 @@ export default StyleSheet.create({
     justifyContent: "space-between",
   },
   textHeader: {
-    fontSize: 18,
+    fontSize: 20,
     color: 'black',
     fontFamily: 'poppins-semi-bold',
   },
@@ -50,7 +50,7 @@ export default StyleSheet.create({
     color: 'maroon',
   },
   textLabel: {
-    fontSize: 16,
+    fontSize: 17,
     color: "maroon",
     fontFamily: 'poppins-semi-bold',
     marginLeft: 10
@@ -195,6 +195,47 @@ export default StyleSheet.create({
     paddingVertical: 5,
   },
   iconSalvarBtnModal: {
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
+
+  //modal sair
+  modalTitle:{
+    color:"#800000",
+    fontSize:30,
+    marginBottom:15,
+    fontWeight: "bold"
+  },
+  modalTextSair:{
+    fontSize:17,
+    textAlign:'center',
+    fontFamily:'poppins-light'
+  },
+  confirmarSairSubTitle:{
+    fontSize:12,
+    textAlign:'center',
+    color: "grey"
+  },
+  footerModalSair:{    
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    backgroundColor: 'white',
+  },
+  sairBtn:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10
+  },
+  textBtn:{
     color: 'white',
     fontSize: 17,
     fontFamily: 'poppins-medium',

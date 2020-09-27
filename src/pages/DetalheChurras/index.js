@@ -382,9 +382,14 @@ export default function DetalheChurras() {
     setEditChurrasNomeUsuario(res.data[0].nome)
     setEditChurrasLocal(res.data[0].local)
     const dataFormatada = formatData(res.data[0].data)
-    const dataFormatadaLimite = formatData(res.data[0].limiteConfirmacao)
+    if(res.data[0].limiteConfirmacao === null){
+      setEditChurrasDataLimite(dataFormatada)
+    }else{
+      const dataFormatadaLimite = formatData(res.data[0].limiteConfirmacao)
+      setEditChurrasDataLimite(dataFormatadaLimite)
+
+    }
     setEditChurrasData(dataFormatada)
-    setEditChurrasDataLimite(dataFormatadaLimite)
     setEditChurrasInicio(res.data[0].hrInicio)
     setEditChurrasFim(res.data[0].hrFim)
     setEditChurrasDescricao(res.data[0].descricao)
@@ -704,14 +709,14 @@ export default function DetalheChurras() {
                 <IconMa name="attach-money" size={22} style={style.icons} />
                 <Text style={style.churrasNome}>Valor total: </Text>
               </View>
-              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : editChurrasValorTotal}</Text>
+              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ "+editChurrasValorTotal}</Text>
             </View>
             <View style={style.formGroup}>
               <View style={{ flexDirection: 'row' }}>
                 <Icon name="money-bill-wave" size={17} style={style.icons} />
                 <Text style={style.churrasNome}>Valor recebido: </Text>
               </View>
-              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorPago == null ? "R$ 00.00" : editChurrasValorPago}</Text>
+              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorPago == null ? "R$ 00.00" : "R$ "+editChurrasValorPago}</Text>
             </View>
             <View style={style.formGroup}>
               <View style={{ flexDirection: 'row' }}>
@@ -943,7 +948,7 @@ export default function DetalheChurras() {
                           <Text style={style.qtdItemAdc}>{itens.quantidade} {itens.unidade}</Text>
                           <Text style={style.locDatSeparatorModal}>  |  </Text>
                           <Icon style={style.localIconModal} name="coins" size={15} />
-                          <Text style={style.churrasLocalModal}> {itens.precoMedio == null ? '-' : "R$ " + itens.precoMedio}</Text>
+                          <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + itens.precoItem}</Text>
                         </View>
                       </View>
                     </TouchableOpacity>
@@ -972,7 +977,7 @@ export default function DetalheChurras() {
                         <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
                         <Text style={style.locDatSeparatorModal}>  |  </Text>
                         <Icon style={style.localIconModal} name="coins" size={15} />
-                        <Text style={style.churrasLocalModal}> {itens.precoMedio == null ? '-' : "R$ " + itens.precoMedio}</Text>
+                        <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + itens.precoItem}</Text>
                       </View>
                     </View>
                   </View>

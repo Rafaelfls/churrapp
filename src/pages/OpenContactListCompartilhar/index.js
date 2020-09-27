@@ -3,6 +3,8 @@ import {StyleSheet, View, FlatList, Text, TouchableOpacity,SafeAreaView,TextInpu
 import * as Contacts from 'expo-contacts';
 import { useNavigation } from '@react-navigation/native'
 
+import IconFea from 'react-native-vector-icons/Feather';
+
 import style from './styles';
 
 export default function OpenContactListCompartilhar() {
@@ -54,7 +56,19 @@ export default function OpenContactListCompartilhar() {
   return (
     <View style={style.container}>
       <SafeAreaView style={style.body}>
-        <Text style={style.textHeader}>Adicione os seus convidados!</Text>
+        <View style={{flexDirection:"row", marginLeft:10, alignItems:'center'}}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('AdicionaConvidados', {
+              nomeContato: null,
+              telefoneContato: null,
+              churrasCodeAtual: null
+            })
+            }
+          >
+            <IconFea style={style.iconHeaderBtn} name="chevron-left" size={22} />
+          </TouchableOpacity>
+          <Text style={style.textHeader}>Adicione os seus convidados!</Text>
+        </View>
         <TextInput
           placeholder="Buscar"
           placeholderTextColor="gray"

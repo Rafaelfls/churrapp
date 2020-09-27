@@ -6,6 +6,7 @@ import NumericInput from 'react-native-numeric-input';
 import api from '../../services/api';
 
 //Icones imports
+import IconFat from 'react-native-vector-icons/Feather';
 import IconF5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -55,19 +56,6 @@ export default function AdicionarBebidas({ route, navigation }) {
     }, [reload]);
 
     function next() {
-        // if (isSugestao) {
-        //     setLoading(true)
-        //     itemList.map(async item => {
-        //         await api.post('/listadochurras', {
-        //             quantidade: item.quantidade,
-        //             churras_id: churrascode,
-        //             unidade_id: item.unidade_id,
-        //             item_id: item.item_id,
-        //             formato_id:7
-        //         })
-        //     })
-        //     setLoading(false)
-        // }
         navigation.push('AdicionarSobremesas', { churrascode, convidadosQtd });
     }
 
@@ -75,35 +63,31 @@ export default function AdicionarBebidas({ route, navigation }) {
         navigation.push('EscolherNovosItens3', { churrascode })
     }
 
-    function backHome(sair, ficar) {
-        if(sair === true) {
-            LISTADECONVIDADOS = null;
-            CONVITE = null;
-            setLoading(true)
-            api.delete(`/churras/${churrascode}`, config)
-                .then(function (response) {
-                    navigation.replace('Tabs');
-                    setLoading(false)
-                })
-          setModalSair(false)
-        }
-        if(ficar === true){
-          setModalSair(false)
-        }
+    function backHome() {
+        LISTADECONVIDADOS = null;
+        CONVITE = null;
+        setLoading(true)
+        api.delete(`/churras/${churrascode}`, config)
+            .then(function (response) {
+                navigation.replace('Tabs');
+                setLoading(false)
+            })
+        setModalSair(false)
     }
-       function backOnePage(){
+
+    function backOnePage() {
         setLoading(true)
         setItemList([])
         setLoading(false)
         navigation.goBack()
-   }
+    }
 
     function updateValue(qtdSugestao) {
         if (isSugestao) {
             if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
                 return (qtdSugestao)
             } else {
-                return (qtdSugestao * convidadosQtd)
+                return (qtdSugestao * (convidadosQtd))
             }
         }
         return qtdSugestao
@@ -131,12 +115,19 @@ export default function AdicionarBebidas({ route, navigation }) {
             if (isSugestao) {
                 setLoading(true)
                 itemList.map(async item => {
+                    var quantidadeFinal = item.quantidade * convidadosQtd
                     await api.post('/listadochurras', {
-                        quantidade: item.quantidade,
+                        quantidade: quantidadeFinal,
                         churras_id: churrascode,
                         unidade_id: item.unidade_id,
                         item_id: item.item_id,
-                        formato_id: 7
+                        formato_id: 7,
+                        precoItem: item.precoMedio,
+                    }).then(async function (res) {
+                        var precoFinalTotal = item.precoMedio * item.quantidade;
+                        await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
+                            valorTotal: precoFinalTotal
+                        })
                     })
                 })
             }
@@ -146,12 +137,19 @@ export default function AdicionarBebidas({ route, navigation }) {
         } else {
             await api.get(`/sugestao/${1}`).then(function (response) {
                 response.data.map(async item => {
+                    var quantidadeFinal = item.quantidade * convidadosQtd
                     await api.post('/listadochurras', {
-                        quantidade: -item.quantidade,
+                        quantidade: -quantidadeFinal,
                         churras_id: churrascode,
                         unidade_id: item.unidade_id,
                         item_id: item.item_id,
-                        formato_id: 7
+                        formato_id: 7,
+                        precoItem: item.precoMedio,
+                    }).then(async function (res) {
+                        var precoFinalTotal = item.precoMedio * item.quantidade;
+                        await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
+                            valorTotal: -precoFinalTotal
+                        })
                     })
                 })
                 setReload(!reload)
@@ -166,17 +164,17 @@ export default function AdicionarBebidas({ route, navigation }) {
             <SafeAreaView style={style.body}>
                 <View style={style.headerGroup}>
                     <TouchableOpacity style={style.exitBtn} onPress={() => backOnePage()}>
-                        <Icon style={style.iconHeaderBtn} name="md-arrow-back" size={22} />
+                        <IconFat style={style.iconHeaderBtn} name="chevron-left" size={22} />
                     </TouchableOpacity>
                     <View style={style.headerTextGroup}>
-                        <Text style={style.textHeader}>Bebidas:</Text>
+                        <Text style={style.textHeader}>Bebidas</Text>
                     </View>
                     <TouchableOpacity style={style.exitBtn} onPress={() => setModalSair(true)}>
                         <Icon style={style.iconHeaderBtn} name="md-close" size={22} />
                     </TouchableOpacity>
                 </View>
                 {isSugestao
-                    ? <View style={{ flexDirection: 'row',marginTop:5, justifyContent: "center", alignItems: "center" }}>
+                    ? <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: "center", alignItems: "center" }}>
                         {isEnabled
                             ? <Text style={style.textLabel}>Apagar sugestão?</Text>
                             : <Text style={style.textLabel}>Manter sugestão?</Text>
@@ -248,27 +246,27 @@ export default function AdicionarBebidas({ route, navigation }) {
                         <Text style={style.textBtn}>Continuar</Text>
                     </TouchableOpacity>
                 </View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalSair}
-        >
-          <View style={style.centeredView}>
-            <View style={style.modalView}>
-              <Text style={style.modalTitle}>Quer sair?</Text>
-              <Text style={style.modalTextSair}>Você deseja mesmo desfazer este churras?</Text>
-              <Text style={style.confirmarSairSubTitle}>(Ele sera completamente perdido, mas nunca esquecido)</Text>
-              <View style={style.footerModal}>
-                 <TouchableOpacity style={style.sairBtn} onPress={() => backHome(false, true)}>
-                  <Text style={style.textBtn}>Não</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={style.sairBtn} onPress={() => backHome(true, false)}>
-                  <Text style={style.textBtn}>Claro</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalSair}
+                >
+                    <View style={style.centeredView}>
+                        <View style={style.modalView}>
+                            <Text style={style.modalTitle}>Quer sair?</Text>
+                            <Text style={style.modalText}>Você deseja mesmo cancelar este churrasco?</Text>
+                            <Text style={style.confirmarSairSubTitle}>(Tudo que fez até aqui sera perdido)</Text>
+                            <View style={style.footerModalSair}>
+                                <TouchableOpacity style={style.sairBtn} onPress={() => setModalSair(false)}>
+                                    <Text style={style.textBtn}>Não</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={style.sairBtn} onPress={() => backHome()}>
+                                    <Text style={style.textBtn}>Sim</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
                 {criarModal}
             </SafeAreaView>
         </View>

@@ -24,17 +24,11 @@ export default StyleSheet.create({
   body:{
     flex: 1,
   },
-
-  
-
-
 formGroup:{
   marginHorizontal:20,
   marginTop: 15,
   justifyContent: "center",
 },
-
-
 textLabel:{
   fontSize: 18,
   color:"black",
@@ -75,6 +69,49 @@ listaConvidadosLabelNum:{
   marginLeft: 10,
 },
 
+//modal editar convite
+editarConvite:{
+  backgroundColor:'maroon',
+  color:'white',
+  fontSize:13,
+  paddingHorizontal: 10,
+  paddingVertical:1,
+  borderRadius:8,
+  fontFamily: 'poppins-medium',  
+},
+modalTitleConvite:{
+  color:"#800000",
+  fontSize:30,
+  fontWeight: "bold"
+},
+subTitleConvite:{
+  fontSize:12,
+  textAlign:'center',
+  marginBottom:15,
+  color: "grey",
+  width:'100%',
+  fontFamily: 'poppins-light',  
+},
+modalTextConvite:{
+  fontSize:17,
+  justifyContent:'flex-start',
+  width:'100%',
+},
+inputStandardConvite:{ 
+  borderColor: 'gray', 
+  paddingHorizontal: 5,
+  borderBottomWidth: 1,
+  marginBottom: 10,
+  fontFamily: 'poppins-medium',
+},
+formGroupConvite:{
+  marginHorizontal:0,
+  marginTop: 0,
+  justifyContent: "center",
+},
+checkbox:{
+  
+},
 
 //footer
 footer:{    

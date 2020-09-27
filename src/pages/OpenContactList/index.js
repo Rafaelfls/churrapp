@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import {StyleSheet, View, FlatList, Text, TouchableOpacity,SafeAreaView,TextInput,ActivityIndicator } from 'react-native';
+import { StyleSheet, View, FlatList, Text, TouchableOpacity, SafeAreaView, TextInput, ActivityIndicator } from 'react-native';
 import * as Contacts from 'expo-contacts';
 import { useNavigation } from '@react-navigation/native'
+import IconFea from 'react-native-vector-icons/Feather';
 
 import style from './styles';
 
@@ -54,7 +55,19 @@ export default function OpenContactList() {
   return (
     <View style={style.container}>
       <SafeAreaView style={style.body}>
-        <Text style={style.textHeader}>Adicione os seus convidados!</Text>
+        <View style={{flexDirection:"row", marginLeft:10, alignItems:'center'}}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('AdicionaConvidados', {
+              nomeContato: null,
+              telefoneContato: null,
+              churrasCodeAtual: null
+            })
+            }
+          >
+            <IconFea style={style.iconHeaderBtn} name="chevron-left" size={22} />
+          </TouchableOpacity>
+          <Text style={style.textHeader}>Adicione os seus convidados!</Text>
+        </View>
         <TextInput
           placeholder="Buscar"
           placeholderTextColor="gray"
@@ -72,29 +85,29 @@ export default function OpenContactList() {
           onChangeText={value => searchContacts(value)}
         />
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-          {isLoading 
-          ? (
-            <View
-              style={{
-                ...StyleSheet.absoluteFill,
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginLeft: 30,
-              }}
-            >
-              <ActivityIndicator size="large" color="maroon" />
-            </View>
-          ) : null}
+          {isLoading
+            ? (
+              <View
+                style={{
+                  ...StyleSheet.absoluteFill,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 30,
+                }}
+              >
+                <ActivityIndicator size="large" color="maroon" />
+              </View>
+            ) : null}
           <FlatList
             data={contacts}
             keyExtractor={item => contacts.celular}
             showsVerticalScrollIndicator={false}
             style={style.churrasList}
             renderItem={({ item: contacts }) => (
-              <TouchableOpacity onPress={() => navigation.navigate('AdicionaConvidados',{
-                nomeContato:contacts.nome ,
+              <TouchableOpacity onPress={() => navigation.navigate('AdicionaConvidados', {
+                nomeContato: contacts.nome,
                 telefoneContato: contacts.celular,
-                churrasCodeAtual:null
+                churrasCodeAtual: null
               })} style={{ minHeight: 70, padding: 5, paddingHorizontal: 20 }}>
                 <Text style={{ color: 'black', fontFamily: 'poppins-semi-bold', fontSize: 18 }}>
                   {contacts.nome}

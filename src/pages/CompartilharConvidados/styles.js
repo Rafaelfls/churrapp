@@ -14,10 +14,10 @@ export default StyleSheet.create({
     flexDirection:'row',
     marginHorizontal: 20,
     alignItems: "center",
-    justifyContent: "space-between",
   },
   textHeader: {
     fontSize: 23,
+    marginLeft:10,
     color: 'black',
     fontFamily: 'poppins-semi-bold',
   },
@@ -101,4 +101,93 @@ textBtn:{
   fontFamily: 'poppins-medium',
   textAlign: 'center',
 },
+
+
+//modal editar convite
+editarConvite:{
+  backgroundColor:'maroon',
+  color:'white',
+  fontSize:13,
+  paddingHorizontal: 10,
+  paddingVertical:1,
+  borderRadius:8,
+  fontFamily: 'poppins-medium',  
+},
+modalTitleConvite:{
+  color:"#800000",
+  fontSize:30,
+  fontWeight: "bold"
+},
+subTitleConvite:{
+  fontSize:12,
+  textAlign:'center',
+  marginBottom:15,
+  color: "grey",
+  width:'100%',
+  fontFamily: 'poppins-light',  
+},
+modalTextConvite:{
+  fontSize:17,
+  justifyContent:'flex-start',
+  width:'100%',
+},
+inputStandardConvite:{ 
+  borderColor: 'gray', 
+  paddingHorizontal: 5,
+  borderBottomWidth: 1,
+  marginBottom: 10,
+  fontFamily: 'poppins-medium',
+},
+formGroupConvite:{
+  marginHorizontal:0,
+  marginTop: 0,
+  justifyContent: "center",
+},
+centeredView: {
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  marginTop: 22
+},
+modalView: {
+  margin: 20,
+  backgroundColor: "white",
+  borderRadius: 8,
+  paddingHorizontal: 35,
+  paddingVertical: 25,
+  alignItems: "center",
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+  elevation: 5
+},
+
+footerModal:{    
+  height: 90,
+  flexDirection: "row",
+  alignItems: 'center',
+  justifyContent: "center",
+  backgroundColor: 'white',
+},
+sairBtn:{
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius:8,
+  backgroundColor: 'maroon',
+  height: '60%',
+  width: 125,
+  paddingVertical: 5,
+  marginHorizontal: 10
+},
+textBtn:{
+  color: 'white',
+  fontSize: 17,
+  fontFamily: 'poppins-medium',
+  textAlign: 'center',
+},
+
 })

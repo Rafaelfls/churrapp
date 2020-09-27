@@ -14,15 +14,12 @@ export default StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: '5%',
     alignItems: "center",
-    justifyContent: "space-between",
   },
   textHeader: {
     fontSize: 18,
     color: 'black',
+    marginLeft:10,
     fontFamily: 'poppins-semi-bold',
-  },
-  exitBtn: {
-    flexDirection: 'row-reverse',
   },
   textHeaderBtn: {
     fontSize: 15,
@@ -137,6 +134,8 @@ export default StyleSheet.create({
     marginRight:15,
     color:'#800000',
     fontFamily: 'poppins-light',
+    maxWidth:'45%',
+    width:'45%'
   },
   boxDropdown: {
     position:'absolute',
