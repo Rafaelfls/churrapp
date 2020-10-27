@@ -64,7 +64,13 @@ export default function AdicionarExtras({ route, navigation }) {
             })
     }
 
-    function enviaMensagens(telefone, CONVITE) {
+    function enviaMensagens(convid) { 
+        var telefone = convid.celular
+        var valorFinal = (convid.valorTotal / convidadosQtd).toFixed(2);
+        CONVITE = CONVITE.replace('R$XX,XX.','R$'+valorFinal+".")
+        CONVITE = CONVITE.replace(',,',',')
+        CONVITE = CONVITE.replace(',.','.')
+        CONVITE = CONVITE.replace('..','.')
         Linking.canOpenURL(`whatsapp://send?text=${CONVITE}`).then(supported => {
             if (supported) {
                 return Linking.openURL(`whatsapp://send?text=${CONVITE}&phone=+55${telefone}`);
@@ -74,20 +80,34 @@ export default function AdicionarExtras({ route, navigation }) {
         })
 
     }
-console.log(convidados)
-    async function next() {
+
+    async function updateValorPagar(convidado) {
+        await carregaConvidados();
+        var valorAPagar = convidado.valorTotal / convidadosQtd;
+        var valorPagarFinal = valorAPagar.toFixed(2)
         
-        await LISTADECONVIDADOS.map(convid => enviaMensagens(convid.telefone, CONVITE))
-        await convidados.map(convid => enviaNotificacao(convid.usuario_id))
+        await api.put(`/atualizarValor/${convidado.id}`,{
+            valorPagar:valorPagarFinal
+        })
+
+        
+    }     
+    
+    async function next() {
+
+        await convidados.map(convid => updateValorPagar(convid))
+        await convidados.map(convid => enviaMensagens(convid))
+        await convidados.map(convid => enviaNotificacao(convid))
 
         setLoading(false)
         navigation.navigate('FinalCriaChurras');
     }
 
 
-    async function enviaNotificacao(convidId) {
-        await api.post(`/notificacoes/${convidId}/${churrascode}`, {
-            mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${convidados[0].nomeChurras}, e o valor por pessoa é de ${convidados[0].valorPagar}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+    async function enviaNotificacao(convid) {
+        var valorFinal = (convid.valorTotal / convidadosQtd).toFixed(2);
+        await api.post(`/notificacoes/${convid.usuario_id}/${churrascode}`, {
+            mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${convid.nomeChurras}, e o valor por pessoa é de R$${valorFinal}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
             negar: "Não vou",
             confirmar: "Vou"
         })
@@ -117,24 +137,29 @@ console.log(convidados)
 
     async function deleteItem(item) {
         setLoading(true)
-        await api.delete(`/listadochurras/${item.id}`)
+        var precoFinalTotal = item.precoItem * item.quantidade;
+        await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
+            valorTotal: -precoFinalTotal
+        }).then(async function(){
+            await api.delete(`/listadochurras/${item.id}`)
             .then(function (res) {
                 setIsEnabled(false)
                 setIsVisible(false)
                 setReload(!reload)
                 setLoading(false)
             })
+        }) 
     }
 
     function updateValue(qtdSugestao) {
         if (isSugestao) {
             if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
-                return (qtdSugestao)
+                return (qtdSugestao).toFixed(2)
             } else {
-                return (qtdSugestao * (convidadosQtd))
+                return (qtdSugestao * (convidadosQtd)).toFixed(2)
             }
         }
-        return qtdSugestao
+        return qtdSugestao.toFixed(2)
     }
 
 
@@ -154,37 +179,41 @@ console.log(convidados)
                         formato_id: 7,
                         precoItem: item.precoMedio,
                     }).then(async function (res) {
-                        var precoFinalTotal = item.precoMedio * item.quantidade;
+                        var precoFinalTotal = item.precoMedio * quantidadeFinal;
                         await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
                             valorTotal: precoFinalTotal
                         })
                     })
                 })
             }
+            console.log("ola")
+            carregaConvidados();
             setIsSugestao(false)
             setReload(!reload)
             setLoading(false)
         } else {
-            await api.get(`/sugestao/${1}`).then(function (response) {
-                response.data.map(async item => {
-                    var quantidadeFinal = item.quantidade * convidadosQtd
-                    await api.post('/listadochurras', {
-                        quantidade: -quantidadeFinal,
-                        churras_id: churrascode,
-                        unidade_id: item.unidade_id,
-                        item_id: item.item_id,
-                        formato_id: 7,
-                        precoItem: item.precoMedio,
-                    }).then(async function (res) {
-                        var precoFinalTotal = item.precoMedio * item.quantidade;
-                        await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
-                            valorTotal: -precoFinalTotal
-                        })
-                    })
-                })
-                setReload(!reload)
-            });
+            console.log('Se der ruim foi aqui')
+            // await api.get(`/sugestao/${1}`).then(function (response) {
+            //     response.data.map(async item => {
+            //         var quantidadeFinal = item.quantidade * convidadosQtd
+            //         await api.post('/listadochurras', {
+            //             quantidade: -quantidadeFinal,
+            //             churras_id: churrascode,
+            //             unidade_id: item.unidade_id,
+            //             item_id: item.item_id,
+            //             formato_id: 7,
+            //             precoItem: item.precoMedio,
+            //         }).then(async function (res) {
+            //             var precoFinalTotal = item.precoMedio * item.quantidade;
+            //             await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
+            //                 valorTotal: -precoFinalTotal
+            //             })
+            //         })
+            //     })
+            //     setReload(!reload)
+            // });
         }
+        carregaConvidados();
         setLoading(false)
     }
 

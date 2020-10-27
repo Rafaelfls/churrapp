@@ -47,7 +47,6 @@ export default function OpenContactList() {
 
       return contactLowercase.indexOf(searchTermLowercase) > -1;
     });
-    console.log(filteredContacts)
     setContacts(filteredContacts)
   };
 

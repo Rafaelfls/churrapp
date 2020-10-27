@@ -20,13 +20,12 @@ export default function AdicionaConvidados({ route, navigation }) {
 
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
-  const [value, onChangeValue] = React.useState(20.50);
   var $val0 = `Olá, estou te convidando para o churrasco ${churrasAtual.nomeChurras}${churrasAtual.descricao == undefined ? '' : `, ${churrasAtual.descricao}`}`
   var $val1 = `, no local ${churrasAtual.local}`
   var $val2 = `, no dia ${churrasAtual.data}`
   var $val3 = `, com início às ${churrasAtual.hrInicio}${churrasAtual.hrFim == undefined ? "" : ` e término ${churrasAtual.hrFim}`}`
-  var $val4 = `, o valor do churrasco por pessoa ficou R$${value}`
-  var $val5 = `. Acesse o Churrapp para confirmar a sua presença${churrasAtual.limiteConfirmacao == null ? "" : ` até o dia ${churrasAtual.limiteConfirmacao}`}`
+  var $val4 = `, o valor do churrasco por pessoa ficou R$XX,XX`
+  var $val5 = `. Acesse o Churrapp para confirmar a sua presença${churrasAtual.limiteConfirmacao == null ? "" : ` até o dia ${churrasAtual.limiteConfirmacao}`}.`
 
   //convite [mensagem, local, data, horarios, valor por pessoa, limite de confirmação de presença]
   const [convite2, setConvite2] = React.useState($val2);
@@ -104,7 +103,7 @@ export default function AdicionaConvidados({ route, navigation }) {
       acompanhamentoPreferido_id: 0
     }).then(async function (response) {
       await api.post(`/convidadosChurras/${response.data.usuario[0].id}`, {
-        valorPagar: value,
+        valorPagar: "00",
         churras_id: churrasAtual.churrasCode
       })
     })

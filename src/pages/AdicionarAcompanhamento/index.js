@@ -84,12 +84,13 @@ export default function AdicionarAcompanhamento({ route, navigation }) {
     function updateValue(qtdSugestao) {
         if (isSugestao) {
             if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
-                return (qtdSugestao)
+                return (qtdSugestao).toFixed(2)
             } else {
-                return (qtdSugestao * (convidadosQtd))
+                return (qtdSugestao * (convidadosQtd)).toFixed(2)
             }
         }
-        return qtdSugestao
+        var val = qtdSugestao.toFixed(2)
+        return val
     }
 
     function onChangeVar(text, varivael) {
@@ -98,13 +99,18 @@ export default function AdicionarAcompanhamento({ route, navigation }) {
 
     async function deleteItem(item) {
         setLoading(true)
-        await api.delete(`/listadochurras/${item.id}`)
+        var precoFinalTotal = item.precoItem * item.quantidade;
+        await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
+            valorTotal: -precoFinalTotal
+        }).then(async function(){
+            await api.delete(`/listadochurras/${item.id}`)
             .then(function (res) {
                 setIsEnabled(false)
                 setIsVisible(false)
                 setReload(!reload)
                 setLoading(false)
             })
+        }) 
     }
 
     async function adicionarSugestao() {
@@ -123,7 +129,7 @@ export default function AdicionarAcompanhamento({ route, navigation }) {
                         formato_id: 7,
                         precoItem: item.precoMedio,
                     }).then(async function (res) {
-                        var precoFinalTotal = item.precoMedio * item.quantidade;
+                        var precoFinalTotal = item.precoMedio * quantidadeFinal;
                         await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
                             valorTotal: precoFinalTotal
                         })

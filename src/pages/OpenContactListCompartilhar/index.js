@@ -48,7 +48,6 @@ export default function OpenContactListCompartilhar() {
 
       return contactLowercase.indexOf(searchTermLowercase) > -1;
     });
-    console.log(filteredContacts)
     setContacts(filteredContacts)
   };
 

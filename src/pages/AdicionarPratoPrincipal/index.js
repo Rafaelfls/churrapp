@@ -81,23 +81,23 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
         setLoading(true)
         setItemList([])
         setLoading(false)
-        navigation.goBack()
+        navigation.navigate('AdicionaConvidados',)
     }
 
     function updateValue(qtdSugestao) {
         if (isSugestao) {
             if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
-                return (qtdSugestao)
+                return (qtdSugestao).toFixed(2)
             } else {
-                return (qtdSugestao * (convidadosQtd))
+                return (qtdSugestao * (convidadosQtd)).toFixed(2)
             }
         }
-        return qtdSugestao
+        var val = qtdSugestao.toFixed(2)
+        return val
     }
 
     async function deleteItem(item) {
         setLoading(true)
-        console.log(item)
         var precoFinalTotal = item.precoItem * item.quantidade;
         await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
             valorTotal: -precoFinalTotal
@@ -120,7 +120,6 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                 setLoading(true)
                 itemList.map(async item => {
                     var quantidadeFinal = item.quantidade * convidadosQtd
-                    console.log(quantidadeFinal, item.quantidade, convidadosQtd)
                     await api.post('/listadochurras', {
                         quantidade: quantidadeFinal,
                         churras_id: churrascode,
@@ -129,7 +128,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                         formato_id: 2,
                         precoItem: item.precoMedio,
                     }).then(async function (res) {
-                        var precoFinalTotal = item.precoMedio * item.quantidade;
+                        var precoFinalTotal = item.precoMedio * quantidadeFinal;
                         await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
                             valorTotal: precoFinalTotal
                         })
@@ -160,9 +159,9 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                 setReload(!reload)
             });
         }
+        setReload(!reload)
         setLoading(false)
     }
-
 
     return (
         <View style={style.container}>

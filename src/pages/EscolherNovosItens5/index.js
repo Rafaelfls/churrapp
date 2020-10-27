@@ -82,7 +82,13 @@ export default function EscolherNovosItens5({ route, navigation }) {
             item_id: item,
             precoItem: precoFinal,
         }).then(async function (res) {
-            var precoFinalTotal = precoFinal * qtdNova;
+            if(res.data.quantidadeAntiga){
+                var sub = res.data.quantidadeAntiga*res.data.precoAntigo;
+                var sum = precoFinal * (qtdNova+res.data.quantidadeAntiga);
+                var precoFinalTotal = sum-sub;
+            }else{
+                var precoFinalTotal = precoFinal * qtdNova;
+            }
             await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
                 valorTotal: precoFinalTotal
             }).then(function (res) {
