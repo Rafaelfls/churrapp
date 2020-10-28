@@ -64,48 +64,53 @@ export default function AdicionarExtras({ route, navigation }) {
             })
     }
 
-    function enviaMensagens(convid) { 
+    function enviaMensagens(convid, todosConvid) { 
         var telefone = convid.celular
-        var valorFinal = (convid.valorTotal / convidadosQtd).toFixed(2);
-        CONVITE = CONVITE.replace('R$XX,XX.','R$'+valorFinal+".")
-        CONVITE = CONVITE.replace(',,',',')
-        CONVITE = CONVITE.replace(',.','.')
-        CONVITE = CONVITE.replace('..','.')
-        Linking.canOpenURL(`whatsapp://send?text=${CONVITE}`).then(supported => {
+        var valorFinal = (convid.valorTotal / todosConvid).toFixed(2);
+        console.log("enviaMensagens",valorFinal,convid.valorTotal , todosConvid)
+        var cvt = CONVITE
+        console.log(cvt)
+        cvt = cvt.replace('R$XX,XX.','R$'+valorFinal+".")
+        cvt = cvt.replace('R$0.00.','R$'+valorFinal+".")
+        cvt = cvt.replace(',,',',')
+        cvt = cvt.replace(',.','.')
+        cvt = cvt.replace('..','.')
+        Linking.canOpenURL(`whatsapp://send?text=${cvt}`).then(supported => {
             if (supported) {
-                return Linking.openURL(`whatsapp://send?text=${CONVITE}&phone=+55${telefone}`);
+                return Linking.openURL(`whatsapp://send?text=${cvt}&phone=+55${telefone}`);
             } else {
-                return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${telefone}&text=${CONVITE}`)
+                return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${telefone}&text=${cvt}`)
             }
         })
 
     }
 
-    async function updateValorPagar(convidado) {
-        await carregaConvidados();
-        var valorAPagar = convidado.valorTotal / convidadosQtd;
-        var valorPagarFinal = valorAPagar.toFixed(2)
-        
+    async function updateValorPagar(convidado, quantosConvid) {
+        var valorAPagar = convidado.valorTotal / quantosConvid;
+        console.log("updateValorPagar",valorAPagar, convidado.valorTotal , quantosConvid)
         await api.put(`/atualizarValor/${convidado.id}`,{
-            valorPagar:valorPagarFinal
+            valorPagar:valorAPagar
         })
 
         
     }     
     
     async function next() {
-
-        await convidados.map(convid => updateValorPagar(convid))
-        await convidados.map(convid => enviaMensagens(convid))
-        await convidados.map(convid => enviaNotificacao(convid))
+        await carregaConvidados()
+        var convidQtd = convidados.length +1 
+        await convidados.map(convid => updateValorPagar(convid,convidQtd))
+        await carregaConvidados()
+        await convidados.map(convid => enviaMensagens(convid,convidQtd))
+        await convidados.map(convid => enviaNotificacao(convid,convidQtd))
 
         setLoading(false)
-        navigation.navigate('FinalCriaChurras');
+        navigation.replace('FinalCriaChurras');
     }
 
 
-    async function enviaNotificacao(convid) {
-        var valorFinal = (convid.valorTotal / convidadosQtd).toFixed(2);
+    async function enviaNotificacao(convid,todosConvid) {
+        var valorFinal = (convid.valorTotal / todosConvid).toFixed(2);
+        console.log("enviaNotificacao",valorFinal, convid.valorTotal , todosConvid)
         await api.post(`/notificacoes/${convid.usuario_id}/${churrascode}`, {
             mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${convid.nomeChurras}, e o valor por pessoa é de R$${valorFinal}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
             negar: "Não vou",
@@ -152,11 +157,12 @@ export default function AdicionarExtras({ route, navigation }) {
     }
 
     function updateValue(qtdSugestao) {
+        var convidQtd = convidados.length +1 
         if (isSugestao) {
-            if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
+            if (convidQtd == 0 || convidQtd == undefined || convidQtd == null) {
                 return (qtdSugestao).toFixed(2)
             } else {
-                return (qtdSugestao * (convidadosQtd)).toFixed(2)
+                return (qtdSugestao * (convidQtd)).toFixed(2)
             }
         }
         return qtdSugestao.toFixed(2)
@@ -164,13 +170,14 @@ export default function AdicionarExtras({ route, navigation }) {
 
 
     async function adicionarSugestao() {
+        var convidQtd = convidados.length +1 
         setLoading(true)
         setIsEnabled(previousState => !previousState)
         if (!isEnabled) {
             if (isSugestao) {
                 setLoading(true)
                 itemList.map(async item => {
-                    var quantidadeFinal = item.quantidade * convidadosQtd
+                    var quantidadeFinal = item.quantidade * convidQtd
                     await api.post('/listadochurras', {
                         quantidade: quantidadeFinal,
                         churras_id: churrascode,
@@ -182,12 +189,12 @@ export default function AdicionarExtras({ route, navigation }) {
                         var precoFinalTotal = item.precoMedio * quantidadeFinal;
                         await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
                             valorTotal: precoFinalTotal
+                        }).then((res) =>{
+                            carregaConvidados();
                         })
                     })
                 })
             }
-            console.log("ola")
-            carregaConvidados();
             setIsSugestao(false)
             setReload(!reload)
             setLoading(false)
