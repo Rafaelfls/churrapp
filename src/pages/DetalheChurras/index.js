@@ -53,8 +53,8 @@ export default function DetalheChurras() {
   const [editChurrasDescricao, setEditChurrasDescricao] = useState('')
   const [editChurrasFotoUrlC, setEditChurrasFotoUrlC] = useState('')
   const [editChurrasFotoUrlU, setEditChurrasFotoUrlU] = useState('')
-  const [editChurrasValorTotal, setEditChurrasValorTotal] = useState('')
-  const [editChurrasValorPago, setEditChurrasValorPago] = useState('')
+  const [editChurrasValorTotal, setEditChurrasValorTotal] = useState(0)
+  const [editChurrasValorPago, setEditChurrasValorPago] = useState(0)
 
   const [modalTipoVisivel, setModalTipoVisivel] = useState(false);
   const [modalItemVisivel, setModalItemVisivel] = useState(false);
@@ -72,7 +72,9 @@ export default function DetalheChurras() {
   const [opcaoItensVisible, setOpcaoItensVisible] = useState([false])
   const navigation = useNavigation();
   const [churrasAtual, setChurrasAtual] = useState([])
-
+  const [nomeUnidadeSelecionada, setNomeUnidadeSelecionada] = useState('Unidade de medida')
+  const [precoModal, setPrecoModal] = useState(0)
+  const [precoMedioModal, setPrecoMedioModal] = useState(0);
 
   //editar Churras
   const [allowEditing, setAllowEditing] = useState([false, 'darkgray'])
@@ -107,8 +109,9 @@ export default function DetalheChurras() {
     setFormato(responseFormato.data);
   }
 
-  async function setVisibility(isVisible, item, unidade, id) {
+  async function setVisibility(isVisible, item, unidade, id, precoMedio) {
     setLoading(true)
+    setPrecoMedioModal(precoMedio)
     setQuantidadeModal(0)
     setIsVisivel(isVisible)
     setItemModal(item)
@@ -225,11 +228,18 @@ export default function DetalheChurras() {
     return setConfirmados(qtd);
   }
 
-  async function addItem(isVisible, item, unidadeDrop, qtdNova, formato) {
+  async function addItem(isVisible, item, unidadeDrop, qtdNova, formato, precoModal) {
     var form = formato;
+    var precoFinal;
     if (form == 1) { form = 7 }
     if (unidadeDrop == 'Selecione...' || unidadeDrop == 0) {
       return setUnidadeInvalidaVisivel(true);
+    }
+
+    if (precoModal == 0) {
+      precoFinal = precoMedioModal;
+    } else {
+      precoFinal = precoModal
     }
     setIsVisivel(isVisible)
     setLoading(true)
@@ -249,12 +259,18 @@ export default function DetalheChurras() {
     })
   }
 
-  async function updateItem(item, quantidade, unidade, formato) {
-    console.log(item, quantidade, unidade, formato)
+  async function updateItem(item, quantidade, unidade, formato, precoModal) {
     var form = formato;
+    var precoFinal;
     if (form == 1) { form = 7 }
     if (unidade == 'Selecione...' || unidade == 0) {
       return setUnidadeInvalidaVisivel(true);
+    }
+
+    if (precoModal == 0) {
+      precoFinal = precoMedioModal;
+    } else {
+      precoFinal = precoModal
     }
     setLoading(true)
     await api.put(`/listadochurras/${item}`, {
@@ -273,15 +289,15 @@ export default function DetalheChurras() {
     })
   }
 
-  function passouDoLimite(){
+  function passouDoLimite() {
     var dataLimite = new Date(churrasAtual.limiteConfirmacao).getTime()
-    if(dataLimite == 0 ){
+    if (dataLimite == 0) {
       return false
     }
     var hoje = new Date().getTime()
-    if(dataLimite <= hoje){
+    if (dataLimite <= hoje) {
       return true
-    }else{
+    } else {
       return false
     }
   }
@@ -382,9 +398,14 @@ export default function DetalheChurras() {
     setEditChurrasNomeUsuario(res.data[0].nome)
     setEditChurrasLocal(res.data[0].local)
     const dataFormatada = formatData(res.data[0].data)
-    const dataFormatadaLimite = formatData(res.data[0].limiteConfirmacao)
+    if (res.data[0].limiteConfirmacao === null) {
+      setEditChurrasDataLimite(dataFormatada)
+    } else {
+      const dataFormatadaLimite = formatData(res.data[0].limiteConfirmacao)
+      setEditChurrasDataLimite(dataFormatadaLimite)
+
+    }
     setEditChurrasData(dataFormatada)
-    setEditChurrasDataLimite(dataFormatadaLimite)
     setEditChurrasInicio(res.data[0].hrInicio)
     setEditChurrasFim(res.data[0].hrFim)
     setEditChurrasDescricao(res.data[0].descricao)
@@ -473,7 +494,7 @@ export default function DetalheChurras() {
             }
             <Switch
               trackColor={{ false: "gray", true: "green" }}
-              thumbColor={passouDoLimite()?isEnabled ? "gray" : "gray":isEnabled ? "white" : "white"}
+              thumbColor={passouDoLimite() ? isEnabled ? "gray" : "gray" : isEnabled ? "white" : "white"}
               ios_backgroundColor="#3e3e3e"
               onValueChange={atualizaPresença}
               disabled={passouDoLimite()}
@@ -704,14 +725,14 @@ export default function DetalheChurras() {
                 <IconMa name="attach-money" size={22} style={style.icons} />
                 <Text style={style.churrasNome}>Valor total: </Text>
               </View>
-              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : editChurrasValorTotal}</Text>
+              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal).toFixed(2)}</Text>
             </View>
             <View style={style.formGroup}>
               <View style={{ flexDirection: 'row' }}>
                 <Icon name="money-bill-wave" size={17} style={style.icons} />
                 <Text style={style.churrasNome}>Valor recebido: </Text>
               </View>
-              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorPago == null ? "R$ 00.00" : editChurrasValorPago}</Text>
+              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorPago == null ? "R$ 00.00" : "R$ " + (editChurrasValorPago).toFixed(2)}</Text>
             </View>
             <View style={style.formGroup}>
               <View style={{ flexDirection: 'row' }}>
@@ -742,8 +763,6 @@ export default function DetalheChurras() {
 
             : null
           }
-
-
         </View>
         {editavel
           ? (<View tabLabel='Convidados' style={{ height: '100%', width: "100%" }}>
@@ -943,7 +962,7 @@ export default function DetalheChurras() {
                           <Text style={style.qtdItemAdc}>{itens.quantidade} {itens.unidade}</Text>
                           <Text style={style.locDatSeparatorModal}>  |  </Text>
                           <Icon style={style.localIconModal} name="coins" size={15} />
-                          <Text style={style.churrasLocalModal}> {itens.precoMedio == null ? '-' : "R$ " + itens.precoMedio}</Text>
+                          <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
                         </View>
                       </View>
                     </TouchableOpacity>
@@ -972,7 +991,7 @@ export default function DetalheChurras() {
                         <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
                         <Text style={style.locDatSeparatorModal}>  |  </Text>
                         <Icon style={style.localIconModal} name="coins" size={15} />
-                        <Text style={style.churrasLocalModal}> {itens.precoMedio == null ? '-' : "R$ " + itens.precoMedio}</Text>
+                        <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + itens.precoItem}</Text>
                       </View>
                     </View>
                   </View>
@@ -1064,7 +1083,7 @@ export default function DetalheChurras() {
               keyExtractor={todosItens => String(todosItens.id)}
               renderItem={({ item: todosItens }) => (
                 <View>
-                  <TouchableOpacity style={style.card} onPress={() => setVisibility(true, todosItens.nomeItem, todosItens.unidade_id, todosItens.id)}>
+                  <TouchableOpacity style={style.card} onPress={() => setVisibility(true, todosItens.nomeItem, todosItens.unidade_id, todosItens.id, todosItens.precoMedio)}>
                     {todosItens.fotoUrlI == null
                       ? <Image source={{ uri: "https://churrappuploadteste.s3.amazonaws.com/default/tipo_" + todosItens.tipo_id + ".jpg" }} style={style.churrasFotoModal} />
                       : <Image source={{ uri: todosItens.fotoUrlI }} style={style.churrasFotoModal} />}
@@ -1131,7 +1150,7 @@ export default function DetalheChurras() {
                 style={style.boxDropdownQtd}
                 itemStyle={style.itemDropdown}
                 mode="dropdown"
-                onValueChange={itemValue => setSelectedUnidade(itemValue)}
+                onValueChange={itemValue => { setSelectedUnidade(itemValue); setNomeUnidadeSelecionada(unidades[itemValue].unidade) }}
               >
                 {unidades.map((unity, idx) => (
                   <Picker.Item label={unity.unidade} key={idx} value={unity.id} />
@@ -1139,12 +1158,28 @@ export default function DetalheChurras() {
               </Picker>
             </View>
             {ativarFormatoPicker()}
+
+            <View style={style.selectionFormQtd}>
+              <Text style={style.modalTextLabel}>Preço por {nomeUnidadeSelecionada}:</Text>
+              <NumericInput
+                value={precoModal}
+                onChange={precoNova => setPrecoModal(precoNova)}
+                totalWidth={150}
+                totalHeight={30}
+                iconSize={15}
+                minValue={0}
+                initValue={precoModal}
+                valueType='real'
+                rounded
+                textColor='black'
+                iconStyle={{ color: 'maroon' }} />
+            </View>
             <View style={style.footerModalQtd}>
               <TouchableOpacity style={style.exitBtnFooterQtd} onPress={() => setVisibility(false, "", '', '')}>
                 <Icon style={style.iconSalvarBtnQtd} name="times" size={15} />
                 <Text style={style.iconSalvarBtnQtd}>Cancelar</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={style.salvarBtnQtd} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal, selectedFormato)}>
+              <TouchableOpacity style={style.salvarBtnQtd} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal, selectedFormato, precoModal)}>
                 <Icon style={style.iconSalvarBtnQtd} name="check" size={15} />
                 <Text style={style.iconSalvarBtnQtd}>Confirmar</Text>
               </TouchableOpacity>
@@ -1311,7 +1346,7 @@ export default function DetalheChurras() {
                 style={style.boxDropdownQtd}
                 itemStyle={style.itemDropdown}
                 mode="dropdown"
-                onValueChange={itemValue => setSelectedUnidade(itemValue)}
+                onValueChange={itemValue => { setSelectedUnidade(itemValue); setNomeUnidadeSelecionada(unidades[itemValue].unidade) }}
               >
                 {unidades.map((unity, idx) => (
                   <Picker.Item label={unity.unidade} key={idx} value={unity.id} />
@@ -1335,12 +1370,27 @@ export default function DetalheChurras() {
                 </Picker>
               </View>
               : null}
+            <View style={style.selectionFormQtd}>
+              <Text style={style.modalTextLabel}>Preço por {nomeUnidadeSelecionada}:</Text>
+              <NumericInput
+                value={precoModal}
+                onChange={precoNova => setPrecoModal(precoNova)}
+                totalWidth={150}
+                totalHeight={30}
+                iconSize={15}
+                minValue={0}
+                initValue={precoModal}
+                valueType='real'
+                rounded
+                textColor='black'
+                iconStyle={{ color: 'maroon' }} />
+            </View>
             <View style={style.footerModalQtd}>
               <TouchableOpacity style={style.exitBtnFooterQtd} onPress={() => setVisibility2([false])}>
                 <Icon style={style.iconSalvarBtnQtd} name="times" size={15} />
                 <Text style={style.iconSalvarBtnQtd}>Cancelar</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={style.salvarBtnQtd} onPress={() => updateItem(visivel2[2], quantidadeModal, selectedUnidade, selectedFormato)}>
+              <TouchableOpacity style={style.salvarBtnQtd} onPress={() => updateItem(visivel2[2], quantidadeModal, selectedUnidade, selectedFormato, precoModal)}>
                 <Icon style={style.iconSalvarBtnQtd} name="check" size={15} />
                 <Text style={style.iconSalvarBtnQtd}>Confirmar</Text>
               </TouchableOpacity>

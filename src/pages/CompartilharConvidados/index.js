@@ -1,7 +1,8 @@
-import React, { Component, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, SafeAreaView, RefreshControl, FlatList, Linking } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView, Modal, CheckBox, FlatList, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
+import IconFat from 'react-native-vector-icons/Feather';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
@@ -18,7 +19,6 @@ export default function CompartilharConvidados({ route, navigation }) {
   const criarModal = createLoadingModal(loading);
   const [value, onChangeValue] = React.useState(20.50);
   const [convite, onChangeText] = React.useState('');
-  const [maxChar, setMaxChar] = React.useState(190);
   const [updatePage, setUpdatePage] = React.useState(false)
 
   const config = {
@@ -28,6 +28,26 @@ export default function CompartilharConvidados({ route, navigation }) {
   const { nomeContato } = route.params;
   const { telefoneContato } = route.params;
   const { churrasAtual } = route.params;
+  var $val0 = `Olá, estou te convidando para o churrasco ${churrasAtual.nomeChurras}${churrasAtual.descricao == undefined ? '' : `, ${churrasAtual.descricao}`}`
+  var $val1 = `, no local ${churrasAtual.local}`
+  var $val2 = `, no dia ${churrasAtual.data}`
+  var $val3 = `, com início às ${churrasAtual.hrInicio}${churrasAtual.hrFim == undefined ? "" : ` e término ${churrasAtual.hrFim}`}`
+  var $val4 = `, o valor do churrasco por pessoa ficou R$${value}`
+  var $val5 = `. Acesse o Churrapp para confirmar a sua presença${churrasAtual.limiteConfirmacao == null ? "" : ` até o dia ${churrasAtual.limiteConfirmacao}`}`
+
+  //convite [mensagem, local, data, horarios, valor por pessoa, limite de confirmação de presença]
+  const [convite2, setConvite2] = React.useState($val2);
+  const [convite3, setConvite3] = React.useState($val3);
+  const [convite1, setConvite1] = React.useState($val1);
+  const [convite4, setConvite4] = React.useState($val4);
+  const [convite5, setConvite5] = React.useState($val5);
+  const [convite0, setConvite0] = React.useState($val0);
+  const [editaConvite, setEditaConvite] = React.useState(false);
+  const [isSelected1, setSelection1] = useState(true);
+  const [isSelected2, setSelection2] = useState(true);
+  const [isSelected3, setSelection3] = useState(true);
+  const [isSelected4, setSelection4] = useState(true);
+  const [isSelected5, setSelection5] = useState(true);
 
   useEffect(() => {
     if (telefoneContato != null) {
@@ -36,6 +56,7 @@ export default function CompartilharConvidados({ route, navigation }) {
   }, [telefoneContato]);
 
   useEffect(() => { }, [updatePage])
+  useEffect(() => { }, [editaConvite])
 
   function setConvidadosList($nome, $telefone) {
     convidadosList.push({
@@ -47,19 +68,10 @@ export default function CompartilharConvidados({ route, navigation }) {
     setUpdatePage(!updatePage)
   }
 
-  const inviteStandard = `Olá, estou te convidando para o churrasco ${churrasAtual.nomeChurras}, no dia ${churrasAtual.data} as ${churrasAtual.hrInicio} no local ${churrasAtual.local} o valor do churrasco por pessoa ficou R$${value}. Acesse o Churrapp para confirmar a sua presença.`
-
-  function updateMsg(text) {
-    onChangeText(text)
-    var atual = 190 - text.length
-    setMaxChar(atual)
-  }
-
-
-  async function criaSenha(convid,telefone) {
+  async function criaSenha(convid, telefone) {
     convid.senha = await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA512,
-       telefone
+      telefone
     );
   }
 
@@ -67,13 +79,13 @@ export default function CompartilharConvidados({ route, navigation }) {
     convid.telefone = convid.telefone.replace("+55", "").replace(/-/g, "").replace(/\s/g, "").replace(/[()]/g, "");
 
 
-    if(convid.telefone.length > 11){
-      convid.telefone = convid.telefone.substring(convid.telefone.length-11)
+    if (convid.telefone.length > 11) {
+      convid.telefone = convid.telefone.substring(convid.telefone.length - 11)
     }
-    
-    let senhaProvisoria = convid.telefone.substring(convid.telefone.length-9)
+
+    let senhaProvisoria = convid.telefone.substring(convid.telefone.length - 9)
     await criaSenha(convid, senhaProvisoria)
-    
+
     const response = await api.post('/usuarios', {
       nome: convid.nome,
       sobrenome: "sobrenome",
@@ -111,9 +123,10 @@ export default function CompartilharConvidados({ route, navigation }) {
 
   async function next() {
     const convidadosQtd = convidadosList.length
+    var conviteFinal2 = convite0 + convite1 + convite2 + convite3 + convite4 + convite5 +".";
     setLoading(true)
     await convidadosList.map(convid => criaListaConvidados(convid))
-    await convidadosList.map(convid => enviaMensagens(convid.telefone, convite))
+    await convidadosList.map(convid => enviaMensagens(convid.telefone, conviteFinal2))
 
     var churrascode = churrasAtual.churrasCode
     setLoading(false)
@@ -121,14 +134,14 @@ export default function CompartilharConvidados({ route, navigation }) {
 
     convidadosList = []
   }
-  
-  async function enviaNotificacao(convidId){
-    await api.post(`/notificacoes/${convidId}/${churrasAtual.churrasCode}`,{
-        mensagem:`${USUARIOLOGADO.nome} está te convidando para o churras ${churrasAtual.nomeChurras}. Para mais informações acesse o churrasco na pagina de churras futuros. `, 
-        negar:"Não vou", 
-        confirmar:"Vou"
+
+  async function enviaNotificacao(convidId) {
+    await api.post(`/notificacoes/${convidId}/${churrasAtual.churrasCode}`, {
+      mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${churrasAtual.nomeChurras}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+      negar: "Não vou",
+      confirmar: "Vou"
     })
-}
+  }
 
   function backHome() {
     convidadosList = []
@@ -137,6 +150,35 @@ export default function CompartilharConvidados({ route, navigation }) {
 
   function openContactList() {
     navigation.push('OpenContactListCompartilhar')
+  }
+
+  function defineConvite() {
+    if (!isSelected1) {
+      setConvite1('')
+    } else {
+      setConvite1($val1)
+    }
+    if (!isSelected2) {
+      setConvite2('')
+    } else {
+      setConvite2($val2)
+    }
+    if (!isSelected3) {
+      setConvite3('')
+    } else {
+      setConvite3($val3)
+    }
+    if (!isSelected4) {
+      setConvite4('')
+    } else {
+      setConvite4($val4)
+    }
+    if (!isSelected5) {
+      setConvite5('')
+    } else {
+      setConvite5($val5)
+    }
+    setEditaConvite(false)
   }
 
   function enviaMensagens(telefone, convite) {
@@ -157,21 +199,21 @@ export default function CompartilharConvidados({ route, navigation }) {
     <View style={style.container}>
       <SafeAreaView style={style.body}>
         <View style={style.headerGroup}>
-          <Text style={style.textHeader}>Convide seus amigos!</Text>
           <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
-            <Icon style={style.iconHeaderBtn} name="md-exit" size={22} />
+            <IconFat style={style.iconHeaderBtn} name="chevron-left" size={22} />
           </TouchableOpacity>
+          <Text style={style.textHeader}>Convide seus amigos!</Text>
         </View>
         <View style={style.formGroup}>
-          <Text style={style.textLabel}>Mensagem ({maxChar})</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={style.textLabel}>Convite:</Text>
+            <TouchableOpacity style={{ justifyContent: 'center', alignContent: 'center' }} onPress={() => setEditaConvite(true)}><Text style={style.editarConvite}>Editar convite</Text></TouchableOpacity>
+          </View>
           <TextInput
-            style={[style.inputStandard, { height: 100 }]}
+            style={[style.inputStandard, { marginTop: 5, height: 40 }]}
             multiline={true}
-            numberOfLines={2}
-            maxLength={190}
-            onChange={text => onChangeText('')}
-            onChangeText={text => updateMsg(text)}
-            placeholder={inviteStandard}
+            numberOfLines={1}
+            value={convite0 + convite1 + convite2 + convite3 + convite4 + convite5 +"."}
           />
         </View>
 
@@ -199,6 +241,82 @@ export default function CompartilharConvidados({ route, navigation }) {
             <Text style={style.textBtn}>Convidar</Text>
           </TouchableOpacity>
         </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={editaConvite}
+        >
+          <View style={style.centeredView}>
+            <View style={style.modalView}>
+              <Text style={style.modalTitleConvite}>Editar convite</Text>
+              <Text style={style.subTitleConvite}>(Nós montamos um padrão, edite a vontade!)</Text>
+              <View style={style.formGroupConvite}>
+                <Text style={style.modalTextConvite}>Qual mensagem deseja colocar?</Text>
+                <TextInput
+                  style={[style.inputStandardConvite, { marginTop: 5, height: 40, }]}
+                  multiline={true}
+                  onChangeText={text => setConvite0(text)}
+                  placeholder={'Mensagem'}
+                  numberOfLines={1}
+                  value={convite0}
+                />
+                <TouchableOpacity onPress={() => setSelection1(!isSelected1)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <CheckBox
+                    value={isSelected1}
+                    onValueChange={setSelection1}
+                    tintColors={{ true: 'maroon' }}
+                    style={style.checkbox}
+                  />
+                  <Text style={style.modalTextConvite}>Adicionar o local?</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelection2(!isSelected2)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <CheckBox
+                    value={isSelected2}
+                    onValueChange={setSelection2}
+                    tintColors={{ true: 'maroon' }}
+                    style={style.checkbox}
+                  />
+                  <Text style={style.modalTextConvite}>Adicionar a Data?</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelection3(!isSelected3)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <CheckBox
+                    value={isSelected3}
+                    onValueChange={setSelection3}
+                    tintColors={{ true: 'maroon' }}
+                    style={style.checkbox}
+                  />
+                  <Text style={style.modalTextConvite}>Adicionar o Horario?</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelection4(!isSelected4)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <CheckBox
+                    value={isSelected4}
+                    onValueChange={setSelection4}
+                    tintColors={{ true: 'maroon' }}
+                    style={style.checkbox}
+                  />
+                  <Text style={style.modalTextConvite}>Adicionar o valor por pessoa?</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelection5(!isSelected5)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <CheckBox
+                    value={isSelected5}
+                    onValueChange={setSelection5}
+                    tintColors={{ true: 'maroon' }}
+                    style={style.checkbox}
+                  />
+                  <Text style={style.modalTextConvite}>Adicionar data limite de confirmação?</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={style.footerModal}>
+                <TouchableOpacity style={style.sairBtn} onPress={() => setEditaConvite(false)}>
+                  <Text style={style.textBtn}>Não</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={style.sairBtn} onPress={()=>{defineConvite();defineConvite()}}>
+                  <Text style={style.textBtn}>Sim</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal >
         {criarModal}
       </SafeAreaView>
     </View>

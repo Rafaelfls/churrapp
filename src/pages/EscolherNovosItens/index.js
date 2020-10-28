@@ -25,6 +25,9 @@ export default function EscolherNovosItens({ route, navigation }) {
     const [selectedUnidade, setSelectedUnidade] = useState("Selecione...");
     const [selectedFormato, setSelectedFormato] = useState(1);
     const [quantidadeModal, setQuantidadeModal] = useState(0)
+    const [nomeUnidadeSelecionada, setNomeUnidadeSelecionada] = useState('Unidade de medida')
+    const [precoMedioModal, setPrecoMedioModal] = useState(0);
+    const [precoModal, setPrecoModal] = useState(0)
     const [idItem, setIdItem] = useState(null)
     const [filtro, setFiltro] = useState(null)
     const { churrascode } = route.params;
@@ -66,32 +69,56 @@ export default function EscolherNovosItens({ route, navigation }) {
         firstLoad();
     }, []);
 
-    function setVisibility(isVisible, item, unidade, id) {
-
+    function setVisibility(isVisible, item, unidade, id, precoMedio) {
+        setPrecoMedioModal(precoMedio)
         setQuantidadeModal(0)
         setIsVisivel(isVisible)
         setItemModal(item)
         setIdItem(id)
     }
 
-    async function addItem(isVisible, item, unidadeDrop, formatoDrop, qtdNova) {
+    async function addItem(isVisible, item, unidadeDrop, formatoDrop, qtdNova, precoModal) {
         setIsVisivel(isVisible)
         setLoading(true)
         var formatoFinal;
-        if(formatoDrop == 1){
+        var precoFinal;
+
+        if (formatoDrop == 1) {
             formatoFinal = 7;
-        }else{
+        } else {
             formatoFinal = formatoDrop
         }
+
+        if (precoModal == 0) {
+            precoFinal = precoMedioModal;
+        } else {
+            precoFinal = precoModal
+        }
+
         await api.post('/listadochurras', {
             quantidade: qtdNova,
             churras_id: churrascode,
             unidade_id: unidadeDrop,
             formato_id: formatoFinal,
             item_id: item,
-        }).then(function (res) {
-            setQuantidadeModal(0)
-            setLoading(false)
+            precoItem: precoFinal,
+        }).then(async function (res) {
+            if(res.data.quantidadeAntiga){
+                console.log("ola ")
+                var sub = res.data.quantidadeAntiga*res.data.precoAntigo;
+                var sum = precoFinal * (qtdNova+res.data.quantidadeAntiga);
+                var precoFinalTotal = sum-sub;
+                console.log("ola ",sub,sum,precoFinalTotal)
+            }else{
+                var precoFinalTotal = precoFinal * qtdNova;
+            }
+            await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
+                valorTotal: precoFinalTotal
+            }).then(function (res) {
+                setQuantidadeModal(0)
+                setPrecoModal(0)
+                setLoading(false)
+            })
         })
     }
 
@@ -107,17 +134,16 @@ export default function EscolherNovosItens({ route, navigation }) {
         }
     }
 
-
     return (
         <View style={style.container}>
             <SafeAreaView style={style.body}>
                 <View style={style.headerGroup}>
+                    <TouchableOpacity style={style.exitBtn} onPress={backHome}>
+                        <IconFea style={style.iconHeaderBtn} name="chevron-left" size={22} />
+                    </TouchableOpacity>
                     <View style={style.headerTextGroup}>
                         <Text style={style.textHeader}>Adicionar carnes</Text>
                     </View>
-                    <TouchableOpacity style={style.exitBtn} onPress={backHome}>
-                        <Icon style={style.iconHeaderBtn} name="arrow-alt-circle-left" size={20} />
-                    </TouchableOpacity>
                 </View>
                 <View style={{ height: 70 }}>
                     <FlatList
@@ -141,7 +167,7 @@ export default function EscolherNovosItens({ route, navigation }) {
                     renderItem={({ item: item }) => (
                         <View >
                             {filtro == null ? (
-                                <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
+                                <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id, item.precoMedio)}>
                                     {item.fotoUrlI == null
                                         ? <Image source={{ uri: item.fotoUrlT }} style={style.churrasFoto} />
                                         : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
@@ -195,6 +221,7 @@ export default function EscolherNovosItens({ route, navigation }) {
                                     onChange={quantNova => setQuantidadeModal(quantNova)}
                                     totalWidth={150}
                                     totalHeight={30}
+                                    minValue={0}
                                     iconSize={15}
                                     initValue={quantidadeModal}
                                     valueType='real'
@@ -209,7 +236,7 @@ export default function EscolherNovosItens({ route, navigation }) {
                                     style={style.boxDropdown}
                                     itemStyle={style.itemDropdown}
                                     mode="dropdown"
-                                    onValueChange={itemValue => setSelectedUnidade(itemValue)}
+                                    onValueChange={itemValue => { setSelectedUnidade(itemValue); setNomeUnidadeSelecionada(unidades[itemValue].unidade) }}
                                 >
                                     {unidades.map((unity, idx) => (
                                         <Picker.Item label={unity.unidade} value={unity.id} key={idx} />
@@ -230,12 +257,27 @@ export default function EscolherNovosItens({ route, navigation }) {
                                     ))}
                                 </Picker>
                             </View>
+                            <View style={style.selectionForm}>
+                                <Text style={style.modalTextLabel}>Preço por {nomeUnidadeSelecionada}:</Text>
+                                <NumericInput
+                                    value={precoModal}
+                                    onChange={precoNova => setPrecoModal(precoNova)}
+                                    totalWidth={150}
+                                    totalHeight={30}
+                                    iconSize={15}
+                                    minValue={0}
+                                    initValue={precoModal}
+                                    valueType='real'
+                                    rounded
+                                    textColor='black'
+                                    iconStyle={{ color: 'maroon' }} />
+                            </View>
                             <View style={style.footerModal}>
                                 <TouchableOpacity style={style.exitBtnFooter} onPress={() => setVisibility(false, "", '', '', '')}>
                                     <Icon style={style.iconSalvarBtn} name="times" size={15} />
                                     <Text style={style.iconSalvarBtn}>Cancelar</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, selectedFormato, quantidadeModal)}>
+                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, selectedFormato, quantidadeModal, precoModal)}>
                                     <Icon style={style.iconSalvarBtn} name="check" size={15} />
                                     <Text style={style.iconSalvarBtn}>Confirmar</Text>
                                 </TouchableOpacity>

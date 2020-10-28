@@ -27,6 +27,6 @@ export default StyleSheet.create({
     fontSize: 20,
     fontFamily: 'poppins-semi-bold',
     color: 'black',
-    marginHorizontal: 20,
+    marginHorizontal: 10,
   },
 })

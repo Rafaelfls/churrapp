@@ -75,16 +75,11 @@ export default function CriarChurrasco() {
 
   }
 
-  function backHome(sair, ficar) {
-    if(sair === true) {
+  function backHome() {
       newChurrasCriados = churrasCount - 1;
       api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: newChurrasCriados });
       navigation.replace('Tabs');
       setModalSair(false)
-    }
-    if(ficar === true){
-      setModalSair(false)
-    }
     
   }
 
@@ -353,14 +348,14 @@ export default function CriarChurrasco() {
           <View style={style.centeredView}>
             <View style={style.modalView}>
               <Text style={style.modalTitle}>Quer sair?</Text>
-              <Text style={style.modalText}>Você deseja mesmo desfazer este churras?</Text>
-              <Text style={style.confirmarSairSubTitle}>(Ele sera completamente perdido, mas nunca esquecido)</Text>
+              <Text style={style.modalText}>Você deseja mesmo cancelar este churrasco?</Text>
+              <Text style={style.confirmarSairSubTitle}>(Tudo que fez até aqui sera perdido)</Text>
               <View style={style.footerModal}>
-                 <TouchableOpacity style={style.sairBtn} onPress={() => backHome(false, true)}>
+                 <TouchableOpacity style={style.sairBtn} onPress={() => setModalSair(false)}>
                   <Text style={style.textBtn}>Não</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={style.sairBtn} onPress={() => backHome(true, false)}>
-                  <Text style={style.textBtn}>Claro</Text>
+                <TouchableOpacity style={style.sairBtn} onPress={() => backHome()}>
+                  <Text style={style.textBtn}>Sim</Text>
                 </TouchableOpacity>
               </View>
             </View>

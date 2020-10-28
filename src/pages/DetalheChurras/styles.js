@@ -679,6 +679,8 @@ export default StyleSheet.create({
     marginRight:15,
     color:'#800000',
     fontFamily: 'poppins-light',
+    maxWidth:'45%',
+    width:'45%'
   },
   selectionFormQtdLabel: {
     fontSize: 18,

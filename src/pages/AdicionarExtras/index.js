@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Linking, Modal, SafeAreaView, FlatList,Switch} from 'react-native';
+import { View, Text, TouchableOpacity, Linking, Modal, SafeAreaView, FlatList, Switch } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import NumericInput from 'react-native-numeric-input';
@@ -8,6 +8,7 @@ import api from '../../services/api';
 //Icones imports
 import IconF5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Ionicons';
+import IconFat from 'react-native-vector-icons/Feather';
 
 
 import style from './styles';
@@ -63,42 +64,55 @@ export default function AdicionarExtras({ route, navigation }) {
             })
     }
 
-    function enviaMensagens(telefone, CONVITE) {
-        Linking.canOpenURL(`whatsapp://send?text=${CONVITE}`).then(supported => {
+    function enviaMensagens(convid, todosConvid) { 
+        var telefone = convid.celular
+        var valorFinal = (convid.valorTotal / todosConvid).toFixed(2);
+        console.log("enviaMensagens",valorFinal,convid.valorTotal , todosConvid)
+        var cvt = CONVITE
+        console.log(cvt)
+        cvt = cvt.replace('R$XX,XX.','R$'+valorFinal+".")
+        cvt = cvt.replace('R$0.00.','R$'+valorFinal+".")
+        cvt = cvt.replace(',,',',')
+        cvt = cvt.replace(',.','.')
+        cvt = cvt.replace('..','.')
+        Linking.canOpenURL(`whatsapp://send?text=${cvt}`).then(supported => {
             if (supported) {
-                return Linking.openURL(`whatsapp://send?text=${CONVITE}&phone=+55${telefone}`);
+                return Linking.openURL(`whatsapp://send?text=${cvt}&phone=+55${telefone}`);
             } else {
-                return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${telefone}&text=${CONVITE}`)
+                return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${telefone}&text=${cvt}`)
             }
         })
 
     }
 
-    async function next() {
-        // if (isSugestao) {
-        //     setLoading(true)
-        //     itemList.map(async item => {
-        //         await api.post('/listadochurras', {
-        //             quantidade: item.quantidade,
-        //             churras_id: churrascode,
-        //             unidade_id: item.unidade_id,
-        //             item_id: item.item_id,
-        //             formato_id:7
-        //         })
-        //     })
-        // }
+    async function updateValorPagar(convidado, quantosConvid) {
+        var valorAPagar = convidado.valorTotal / quantosConvid;
+        console.log("updateValorPagar",valorAPagar, convidado.valorTotal , quantosConvid)
+        await api.put(`/atualizarValor/${convidado.id}`,{
+            valorPagar:valorAPagar
+        })
 
-        await LISTADECONVIDADOS.map(convid => enviaMensagens(convid.telefone, CONVITE))
-        await convidados.map(convid => enviaNotificacao(convid.usuario_id))
+        
+    }     
+    
+    async function next() {
+        await carregaConvidados()
+        var convidQtd = convidados.length +1 
+        await convidados.map(convid => updateValorPagar(convid,convidQtd))
+        await carregaConvidados()
+        await convidados.map(convid => enviaMensagens(convid,convidQtd))
+        await convidados.map(convid => enviaNotificacao(convid,convidQtd))
 
         setLoading(false)
-        navigation.navigate('FinalCriaChurras');
+        navigation.replace('FinalCriaChurras');
     }
 
 
-    async function enviaNotificacao(convidId) {
-        await api.post(`/notificacoes/${convidId}/${churrascode}`, {
-            mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${convidados[0].nomeChurras}, e o valor por pessoa é de ${convidados[0].valorPagar}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+    async function enviaNotificacao(convid,todosConvid) {
+        var valorFinal = (convid.valorTotal / todosConvid).toFixed(2);
+        console.log("enviaNotificacao",valorFinal, convid.valorTotal , todosConvid)
+        await api.post(`/notificacoes/${convid.usuario_id}/${churrascode}`, {
+            mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${convid.nomeChurras}, e o valor por pessoa é de R$${valorFinal}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
             negar: "Não vou",
             confirmar: "Vou"
         })
@@ -108,65 +122,76 @@ export default function AdicionarExtras({ route, navigation }) {
         navigation.push('EscolherNovosItens4', { churrascode })
     }
 
-    function backHome(sair, ficar) {
-        if(sair === true) {
-            LISTADECONVIDADOS = null;
-            CONVITE = null;
-            setLoading(true)
-            api.delete(`/churras/${churrascode}`, config)
-                .then(function (response) {
-                    setLoading(false)
-                    navigation.replace('Tabs');
-                })
-          setModalSair(false)
-        }
-        if(ficar === true){
-          setModalSair(false)
-        }
+    function backHome() {
+        LISTADECONVIDADOS = null;
+        CONVITE = null;
+        setLoading(true)
+        api.delete(`/churras/${churrascode}`, config)
+            .then(function (response) {
+                setLoading(false)
+                navigation.replace('Tabs');
+            })
+        setModalSair(false)
     }
-    function backOnePage(){
+    function backOnePage() {
         setLoading(true)
         setItemList([])
         setLoading(false)
         navigation.goBack()
-   }
+    }
 
     async function deleteItem(item) {
         setLoading(true)
-        await api.delete(`/listadochurras/${item.id}`)
+        var precoFinalTotal = item.precoItem * item.quantidade;
+        await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
+            valorTotal: -precoFinalTotal
+        }).then(async function(){
+            await api.delete(`/listadochurras/${item.id}`)
             .then(function (res) {
                 setIsEnabled(false)
                 setIsVisible(false)
                 setReload(!reload)
                 setLoading(false)
             })
+        }) 
     }
 
     function updateValue(qtdSugestao) {
+        var convidQtd = convidados.length +1 
         if (isSugestao) {
-            if (convidadosQtd == 0 || convidadosQtd == undefined || convidadosQtd == null) {
-                return (qtdSugestao)
+            if (convidQtd == 0 || convidQtd == undefined || convidQtd == null) {
+                return (qtdSugestao).toFixed(2)
             } else {
-                return (qtdSugestao * convidadosQtd)
+                return (qtdSugestao * (convidQtd)).toFixed(2)
             }
         }
-        return qtdSugestao
+        return qtdSugestao.toFixed(2)
     }
 
-    
+
     async function adicionarSugestao() {
+        var convidQtd = convidados.length +1 
         setLoading(true)
         setIsEnabled(previousState => !previousState)
         if (!isEnabled) {
             if (isSugestao) {
                 setLoading(true)
                 itemList.map(async item => {
+                    var quantidadeFinal = item.quantidade * convidQtd
                     await api.post('/listadochurras', {
-                        quantidade: item.quantidade,
+                        quantidade: quantidadeFinal,
                         churras_id: churrascode,
                         unidade_id: item.unidade_id,
                         item_id: item.item_id,
-                        formato_id: 7
+                        formato_id: 7,
+                        precoItem: item.precoMedio,
+                    }).then(async function (res) {
+                        var precoFinalTotal = item.precoMedio * quantidadeFinal;
+                        await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
+                            valorTotal: precoFinalTotal
+                        }).then((res) =>{
+                            carregaConvidados();
+                        })
                     })
                 })
             }
@@ -174,19 +199,28 @@ export default function AdicionarExtras({ route, navigation }) {
             setReload(!reload)
             setLoading(false)
         } else {
-            await api.get(`/sugestao/${1}`).then(function (response) {
-                response.data.map(async item => {
-                    await api.post('/listadochurras', {
-                        quantidade: -item.quantidade,
-                        churras_id: churrascode,
-                        unidade_id: item.unidade_id,
-                        item_id: item.item_id,
-                        formato_id: 7
-                    })
-                })
-                setReload(!reload)
-            });
+            console.log('Se der ruim foi aqui')
+            // await api.get(`/sugestao/${1}`).then(function (response) {
+            //     response.data.map(async item => {
+            //         var quantidadeFinal = item.quantidade * convidadosQtd
+            //         await api.post('/listadochurras', {
+            //             quantidade: -quantidadeFinal,
+            //             churras_id: churrascode,
+            //             unidade_id: item.unidade_id,
+            //             item_id: item.item_id,
+            //             formato_id: 7,
+            //             precoItem: item.precoMedio,
+            //         }).then(async function (res) {
+            //             var precoFinalTotal = item.precoMedio * item.quantidade;
+            //             await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
+            //                 valorTotal: -precoFinalTotal
+            //             })
+            //         })
+            //     })
+            //     setReload(!reload)
+            // });
         }
+        carregaConvidados();
         setLoading(false)
     }
 
@@ -196,17 +230,17 @@ export default function AdicionarExtras({ route, navigation }) {
             <SafeAreaView style={style.body}>
                 <View style={style.headerGroup}>
                     <TouchableOpacity style={style.exitBtn} onPress={() => backOnePage()}>
-                        <Icon style={style.iconHeaderBtn} name="md-arrow-back" size={22} />
+                        <IconFat style={style.iconHeaderBtn} name="chevron-left" size={22} />
                     </TouchableOpacity>
                     <View style={style.headerTextGroup}>
-                        <Text style={style.textHeader}>Outros itens:</Text>
+                        <Text style={style.textHeader}>Outros itens</Text>
                     </View>
                     <TouchableOpacity style={style.exitBtn} onPress={() => setModalSair(true)}>
                         <Icon style={style.iconHeaderBtn} name="md-close" size={22} />
                     </TouchableOpacity>
                 </View>
                 {isSugestao
-                    ? <View style={{ flexDirection: 'row',marginTop:5, justifyContent: "center", alignItems: "center" }}>
+                    ? <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: "center", alignItems: "center" }}>
                         {isEnabled
                             ? <Text style={style.textLabel}>Apagar sugestão?</Text>
                             : <Text style={style.textLabel}>Manter sugestão?</Text>
@@ -278,27 +312,27 @@ export default function AdicionarExtras({ route, navigation }) {
                         <Text style={style.textBtn}>Continuar</Text>
                     </TouchableOpacity>
                 </View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalSair}
-        >
-          <View style={style.centeredView}>
-            <View style={style.modalView}>
-              <Text style={style.modalTitle}>Quer sair?</Text>
-              <Text style={style.modalTextSair}>Você deseja mesmo desfazer este churras?</Text>
-              <Text style={style.confirmarSairSubTitle}>(Ele sera completamente perdido, mas nunca esquecido)</Text>
-              <View style={style.footerModal}>
-                 <TouchableOpacity style={style.sairBtn} onPress={() => backHome(false, true)}>
-                  <Text style={style.textBtn}>Não</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={style.sairBtn} onPress={() => backHome(true, false)}>
-                  <Text style={style.textBtn}>Claro</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalSair}
+                >
+                    <View style={style.centeredView}>
+                        <View style={style.modalView}>
+                            <Text style={style.modalTitle}>Quer sair?</Text>
+                            <Text style={style.modalText}>Você deseja mesmo cancelar este churrasco?</Text>
+                            <Text style={style.confirmarSairSubTitle}>(Tudo que fez até aqui sera perdido)</Text>
+                            <View style={style.footerModalSair}>
+                                <TouchableOpacity style={style.sairBtn} onPress={() => setModalSair(false)}>
+                                    <Text style={style.textBtn}>Não</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={style.sairBtn} onPress={() => backHome()}>
+                                    <Text style={style.textBtn}>Sim</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
                 {criarModal}
             </SafeAreaView>
         </View>

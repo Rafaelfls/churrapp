@@ -14,8 +14,8 @@ import { useLoadingModal, createLoadingModal } from '../../context/churrasContex
 
 export default function EscolherNovosItens3({ route, navigation }) {
 
-  const { loading, setLoading } = useLoadingModal();
-  const criarModal = createLoadingModal(loading);
+    const { loading, setLoading } = useLoadingModal();
+    const criarModal = createLoadingModal(loading);
     const [item, setItem] = useState([]);
     const [unidades, setUnidades] = useState([]);
     const [tipo, setTipo] = useState([]);
@@ -23,6 +23,9 @@ export default function EscolherNovosItens3({ route, navigation }) {
     const [itemModal, setItemModal] = React.useState('');
     const [selectedUnidade, setSelectedUnidade] = useState("Selecione...");
     const [quantidadeModal, setQuantidadeModal] = useState(0)
+    const [nomeUnidadeSelecionada, setNomeUnidadeSelecionada] = useState('Unidade de medida')
+    const [precoMedioModal, setPrecoMedioModal] = useState(0);
+    const [precoModal, setPrecoModal] = useState(0)
     const [idItem, setIdItem] = useState(null)
     const [filtro, setFiltro] = useState(null)
     const { churrascode } = route.params;
@@ -53,25 +56,46 @@ export default function EscolherNovosItens3({ route, navigation }) {
         firstLoad();
     }, []);
 
-    function setVisibility(isVisible, item, unidade, id) {
+    function setVisibility(isVisible, item, unidade, id, precoMedio) {
+        setPrecoMedioModal(precoMedio)
         setIsVisivel(isVisible)
         setItemModal(item)
         setQuantidadeModal(0)
         setIdItem(id)
     }
 
-    async function addItem(isVisible, item, unidadeDrop, qtdNova) {
+    async function addItem(isVisible, item, unidadeDrop, qtdNova, precoModal) {
         setIsVisivel(isVisible)
         setLoading(true)
+        var precoFinal;
+
+        if (precoModal == 0) {
+            precoFinal = precoMedioModal;
+        } else {
+            precoFinal = precoModal
+        }
         await api.post('/listadochurras', {
             quantidade: qtdNova,
             churras_id: churrascode,
             unidade_id: unidadeDrop,
-            formato_id:7,
+            formato_id: 7,
             item_id: item,
-        }).then(function (res) {
-            setQuantidadeModal(0)
-        setLoading(false)
+            precoItem: precoFinal,
+        }).then(async function (res) {
+            if(res.data.quantidadeAntiga){
+                var sub = res.data.quantidadeAntiga*res.data.precoAntigo;
+                var sum = precoFinal * (qtdNova+res.data.quantidadeAntiga);
+                var precoFinalTotal = sum-sub;
+            }else{
+                var precoFinalTotal = precoFinal * qtdNova;
+            }
+            await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
+                valorTotal: precoFinalTotal
+            }).then(function (res) {
+                setQuantidadeModal(0)
+                setPrecoModal(0)
+                setLoading(false)
+            })
         })
     }
 
@@ -92,12 +116,12 @@ export default function EscolherNovosItens3({ route, navigation }) {
         <View style={style.container}>
             <SafeAreaView style={style.body}>
                 <View style={style.headerGroup}>
+                    <TouchableOpacity style={style.exitBtn} onPress={backHome}>
+                        <IconFea style={style.iconHeaderBtn} name="chevron-left" size={22} />
+                    </TouchableOpacity>
                     <View style={style.headerTextGroup}>
                         <Text style={style.textHeader}>Adicionar extras</Text>
                     </View>
-                    <TouchableOpacity style={style.exitBtn} onPress={backHome}>
-                        <Icon style={style.iconHeaderBtn} name="arrow-alt-circle-left" size={20} />
-                    </TouchableOpacity>
                 </View>
                 <View style={{ height: 70 }}>
                     <FlatList
@@ -122,7 +146,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                     renderItem={({ item: item }) => (
                         <View >
                             {filtro == null ? (
-                                <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id)}>
+                                <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id,item.precoMedio)}>
                                     {item.fotoUrlI == null
                                         ? <Image source={{ uri: item.fotoUrlT }} style={style.churrasFoto} />
                                         : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
@@ -176,6 +200,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                                     totalWidth={150}
                                     totalHeight={30}
                                     iconSize={15}
+                                    minValue={0}
                                     initValue={quantidadeModal}
                                     valueType='real'
                                     rounded
@@ -189,19 +214,34 @@ export default function EscolherNovosItens3({ route, navigation }) {
                                     style={style.boxDropdown}
                                     itemStyle={style.itemDropdown}
                                     mode="dropdown"
-                                    onValueChange={itemValue => setSelectedUnidade(itemValue)}
+                                    onValueChange={itemValue => {setSelectedUnidade(itemValue);setNomeUnidadeSelecionada(unidades[itemValue].unidade)}}
                                 >
                                     {unidades.map((unity, idx) => (
                                         <Picker.Item label={unity.unidade} value={unity.id} key={idx} />
                                     ))}
                                 </Picker>
                             </View>
+                            <View style={style.selectionForm}>
+                                <Text style={style.modalTextLabel}>Preço por {nomeUnidadeSelecionada}:</Text>
+                                <NumericInput
+                                    value={precoModal}
+                                    onChange={precoNova => setPrecoModal(precoNova)}
+                                    totalWidth={150}
+                                    totalHeight={30}
+                                    iconSize={15}
+                                    minValue={0}
+                                    initValue={precoModal}
+                                    valueType='real'
+                                    rounded
+                                    textColor='black'
+                                    iconStyle={{ color: 'maroon' }} />
+                            </View>
                             <View style={style.footerModal}>
                                 <TouchableOpacity style={style.exitBtnFooter} onPress={() => setVisibility(false, "", '', '', '')}>
                                     <Icon style={style.iconSalvarBtn} name="times" size={15} />
                                     <Text style={style.iconSalvarBtn}>Cancelar</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal)}>
+                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal,precoModal)}>
                                     <Icon style={style.iconSalvarBtn} name="check" size={15} />
                                     <Text style={style.iconSalvarBtn}>Confirmar</Text>
                                 </TouchableOpacity>
@@ -210,7 +250,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                     </View>
                 </Modal>
 
-{criarModal}
+                {criarModal}
 
             </SafeAreaView>
         </View>
