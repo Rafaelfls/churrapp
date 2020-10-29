@@ -55,7 +55,7 @@ export default StyleSheet.create({
   modalViewNotificacaoQtd: {
     backgroundColor: "rgba(114,114,114,0.5)",
     borderRadius: 100,
-    alignItems: "center",
+    alignItems: "center"
   },
   textBtnNotificacaoQtd: {
     color: 'white',
@@ -102,12 +102,12 @@ export default StyleSheet.create({
   //imagem Quando nao tem churras
 
   semChurras: {
-    marginTop:60,
+    marginTop:'40%',
     height: "100%",
     width:'100%',
     alignSelf: "center",
     position:'absolute',
-    top:0
+    top:0,
   },
 
   // fim imagem quando nao tem churras

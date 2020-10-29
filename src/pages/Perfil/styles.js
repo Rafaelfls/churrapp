@@ -34,17 +34,17 @@ export default StyleSheet.create({
     fontFamily: 'poppins-light',
     fontSize: 16,
   },
-  mudarSenhaTO:{
-    position:'absolute',
-    right:5,
-    top:35,
-    backgroundColor:'maroon',
-    borderRadius:8
+  mudarSenhaTO: {
+    position: 'absolute',
+    right: 5,
+    top: 35,
+    backgroundColor: 'maroon',
+    borderRadius: 8
   },
-  mudarSenha:{
-    color:'white',
-    paddingHorizontal:10,
-    paddingVertical:3,
+  mudarSenha: {
+    color: 'white',
+    paddingHorizontal: 10,
+    paddingVertical: 3,
   },
   icons: {
     color: 'maroon',
@@ -336,4 +336,35 @@ export default StyleSheet.create({
     textAlign: 'center',
   },
   //fim editar foto perfil
+  // Dados Filtrados
+  viewDadosFiltrados: {
+    backgroundColor: 'transparent',
+    margin: 0,
+  },
+  flatDadosFiltrados: {
+    backgroundColor: 'lightgray',
+    borderRadius: 8,
+    margin: 10,
+  },
+  linha: {
+      width: "90%",
+      height: 1,
+      backgroundColor: 'gray',
+  },
+  flatItemDadosFiltrados: {
+    margin: 10,
+  },
+  textoDadosFiltrados: {
+    color: 'maroon',
+    fontFamily: 'poppins-semi-bold',
+  },
+  flatCloseBtn: {
+    color: 'maroon',
+    textAlign: 'center',
+    backgroundColor: 'lightgray',
+    borderRadius: 8,
+    width: 60,
+    fontSize: 14
+  },
+  // Fim Dados Filtrados
 });

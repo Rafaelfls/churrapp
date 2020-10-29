@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation, useRoute } from '@react-navigation/native';
+
+import { useAppState } from '../../context/churrasContext'
 
 import style from './styles';
 
 export default function InicioCriaChurras() {
 
     const navigation = useNavigation();
+    const { appStateVisible, setAppStateVisible } = useAppState()
+    console.log(appStateVisible)
+
 
     function next() {
         navigation.navigate('CriarChurrasco');

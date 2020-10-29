@@ -1,6 +1,8 @@
 import 'react-native-gesture-handler';
 import React, { useState } from 'react';
 
+import { AppRegistry } from 'react-native';
+
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 
@@ -38,4 +40,6 @@ export default function App() {
     <Routes />
   );
 }
+
+AppRegistry.registerComponent('Churrapp', () => App);
 

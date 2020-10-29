@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, Vibration, ActivityIndicator, Modal, RefreshControl, AppState } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, Vibration, ActivityIndicator, Modal, RefreshControl, AppState, Platform } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { FloatingAction } from "react-native-floating-action";
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -15,13 +15,13 @@ import semChurras from '../../assets/semChurras.png'
 
 import style from './styles';
 
-import { useChurrasCount, useChurrasParticipado } from '../../context/churrasContext';
+import { useChurrasCount, useChurrasParticipado, useAppState } from '../../context/churrasContext';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function ResumoChurras() {
     const { churrasCount, setChurrasCount } = useChurrasCount();
     const { churrasParticipado, setChurrasParticipado } = useChurrasParticipado();
-    const [ contadorCriado, setContadorCriado ] = useState(USUARIOLOGADO.churrasCriados);
+    const [contadorCriado, setContadorCriado] = useState(USUARIOLOGADO.churrasCriados);
 
     const route = useRoute();
     const [churras, setChurras] = useState([]);
@@ -33,8 +33,46 @@ export default function ResumoChurras() {
     const [refreshChurras, setRefreshChurras] = useState(true);
     const [test, setTest] = useState([]);
     var newChurrasCriados;
+    const [direcao, setDirecao] = useState();
 
-    
+    //Começo Ouvir Estado do App
+    const appState = useRef(AppState.currentState);
+    const { appStateVisible, setAppStateVisible } = useAppState(appState.current);
+
+    useEffect(() => {
+        AppState.addEventListener("change", _handleAppStateChange);
+        if (Platform.OS == "android") {
+            AppState.addEventListener("blur", _handleBlurState);
+        }
+        return () => {
+            AppState.removeEventListener("change", _handleAppStateChange);
+            if (Platform.OS == "android") {
+                AppState.removeEventListener("blur", _handleBlurState);
+            }
+
+        };
+    }, []);
+
+    const _handleBlurState = (nextAppState) => {
+        if (appState.current.match(/active/) && nextAppState === "active") {
+            console.log("Blur");
+        }
+        appState.current = nextAppState;
+        setAppStateVisible(appState.current);
+        console.log("AppState", appState.current);
+    }
+
+    const _handleAppStateChange = (nextAppState) => {
+        if (appState.current.match(/inactive|background/) && nextAppState === "active") {
+            console.log("App ativo novamente!");
+        }
+
+        appState.current = nextAppState;
+        setAppStateVisible(appState.current);
+        console.log("AppState", appState.current);
+    };
+    // Fim Ouvir Estado do App
+
 
     const btns = [
         {
@@ -64,7 +102,7 @@ export default function ResumoChurras() {
         api.delete(`/churras/${churrass.id}`, config).then(function () {
             setVisivel(!visivel)
             setLoading(false)
-            setChurrasCount(churrasCount-1)
+            setChurrasCount(churrasCount - 1)
             setContadorCriado(contadorCriado - 1)
             api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: contadorCriado });
             setRefreshChurras(!refreshChurras)
@@ -93,8 +131,8 @@ export default function ResumoChurras() {
         setRefreshChurras(!refreshChurras);
         newChurrasCriados = churrasCount + 1;
         api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: newChurrasCriados });
-        navigation.navigate('InicioCriaChurras');
-        
+        navigation.navigate('InicioCriaChurras', { appStateVisible: appStateVisible });
+
     }
 
     function ParticiparChurras() {
@@ -121,11 +159,11 @@ export default function ResumoChurras() {
         var date = new Date(data).getDate() + 1
         var month = new Date(data).getMonth() + 1
         var year = new Date(data).getFullYear()
-        if (date<10){
-            date = "0"+date
+        if (date < 10) {
+            date = "0" + date
         }
-        if (month<10){
-            month = "0"+month
+        if (month < 10) {
+            month = "0" + month
         }
         return date + '/' + month + '/' + year
     }
@@ -197,12 +235,13 @@ export default function ResumoChurras() {
 
                     <Text style={style.textSubHeader}>Você tem {contadorCriado} eventos criados</Text>
                 </View>
-                    
+
                 <View style={style.signOutBtn}>
-                    <TouchableOpacity onPress={logout}>
+                    <TouchableOpacity onPress={() => logout()} >
                         <IconMCI style={style.signOutIcon} name="logout" size={25} />
                     </TouchableOpacity>
                 </View>
+
             </View>
 
             <FlatList
@@ -218,7 +257,7 @@ export default function ResumoChurras() {
                                     style={{ backgroundColor: 'white', width: "95%" }}
                                     height={100}
                                     onSlidingSuccessLeft={() => { setVisivel(true); setChurrasDeletar(churras) }}
-                                    onSlidingSuccessRight={() => detalheChurras(churras.id)}
+                                    onSlidingSuccess={() => {detalheChurras(churras.id)}}
                                     slideDirection={SlideDirection.ANY}>
                                     <View style={{ flexDirection: "row", width: '100%' }}>
                                         <View style={style.detalheSlide}>
@@ -235,7 +274,7 @@ export default function ResumoChurras() {
                                                     <Text style={style.locDatSeparator}>  |  </Text>
                                                     <IconEnt style={style.localIcon} name="location-pin" size={15} />
                                                     <ScrollView
-                                                        style={style.churrasLocalSV}                                                       
+                                                        style={style.churrasLocalSV}
                                                         horizontal={true}
                                                     >
                                                         <Text style={style.churrasLocal}> {churras.local}</Text>
