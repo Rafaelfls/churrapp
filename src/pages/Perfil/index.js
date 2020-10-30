@@ -26,6 +26,26 @@ export default function Perfil() {
     const [quantidadeComeLista, setQuantidadeComeLista] = useState([]);
     const [isBirthday, setIsBirthday] = useState(false);
 
+    const [search, setSearchCarne] = useState('');
+    const [tipo, setTipo] = useState([]);
+    const [dadoFiltrado, setDadoFiltrado] = useState(null);
+
+    const [searchAcompanhamento, setSearchAcompanhamento] = useState('');
+    const [tipoAcompanhamento, setTipoAcompanhamento] = useState([]);
+    const [dadoFiltradoAcompanhamento, setDadoFiltradoAcompanhamento] = useState(null);
+    const [acompanhamentoPreferidoNovo, setAcompanhamentoPreferidoNovo] = useState(0);
+
+    const [searchBebida, setSearchBebida] = useState('');
+    const [tipoBebida, setTipoBebida] = useState([]);
+    const [dadoFiltradoBebida, setDadoFiltradoBebida] = useState(null);
+    const [bebidaPreferidaNovo, setBebidaPreferidaNovo] = useState(0)
+
+    const [searchSobremesa, setSearchSobremesa] = useState('');
+    const [tipoSobremesa, setTipoSobremesa] = useState([]);
+    const [dadoFiltradoSobremesa, setDadoFiltradoSobremesa] = useState(null);
+    const [sobremesaPreferidaNovo, setSobremesaPreferidaNovo] = useState(0)
+
+
     // Dados do usuario
     const [usuario, setUsuario] = useState([]);
     const [image, setImage] = useState({ cancelled: true, uri: null });
@@ -49,13 +69,172 @@ export default function Perfil() {
     const [pontoCarneNovo_id, setPontoCarneNovo_id] = useState(null);
     const [quantidadeComeNovo_id, setQuantidadeComeNovo_id] = useState(null);
     const [idadeformatada, setIdadeFormatada] = useState(null);
-    const [pickImageOptions, setPickImageOptions] = useState([false])
+    const [pickImageOptions, setPickImageOptions] = useState([false]);
+    const [carnePreferidaNovo, setCarnePreferidaNovo] = useState(0);
     //Fim editar perfil
     const [churrasParticipados, setChurrasParticipados] = useState(0);
 
 
     const { loading, setLoading } = useLoadingModal();
     const criarModal = createLoadingModal(loading);
+
+    async function pegarItemPorTipo(carneVisivel, acompanhamentoVisivel, bebidaVisivel, sobremesaVisivel) {
+        // setLoading(true)
+        //Carnes
+        if (carneVisivel === true) {
+            await api.get(`/listItem?subTipo=${1}`)
+                .then(function (response) {
+                    setTipo(response.data);
+                    setDadoFiltrado(response.data)
+                    setLoading(false)
+                });
+        } else if (carneVisivel === false) {
+            setDadoFiltrado(null)
+        }
+        //Acompanhamento
+        if (acompanhamentoVisivel) {
+            await api.get(`/listItem?subTipo=${2}`)
+                .then(function (response) {
+                    setTipoAcompanhamento(response.data);
+                    setDadoFiltradoAcompanhamento(response.data)
+                    setLoading(false)
+                });
+        } else if (acompanhamentoVisivel === false) {
+            setDadoFiltradoAcompanhamento(null)
+        }
+        //Bebidas
+        if (bebidaVisivel) {
+            await api.get(`/listItem?subTipo=${3}`)
+                .then(function (response) {
+                    setTipoBebida(response.data);
+                    setDadoFiltradoBebida(response.data)
+                    setLoading(false)
+                });
+        } else if (bebidaVisivel === false) {
+            setDadoFiltradoBebida(null)
+        }
+        //Sobremesas
+        if (sobremesaVisivel) {
+            await api.get(`/listItem?subTipo=${5}`)
+                .then(function (response) {
+                    setTipoSobremesa(response.data);
+                    setDadoFiltradoSobremesa(response.data)
+                    setLoading(false)
+                });
+        } else if (sobremesaVisivel === false) {
+            setDadoFiltradoSobremesa(null)
+        }
+    }
+
+    function getItem(item) {
+        if (item.subTipo_id === 1) {
+            setSearchCarne(item.nomeItem)
+            setCarnePreferidaNovo(item.id)
+            pegarItemPorTipo(false, false, false, false)
+        }
+        if (item.subTipo_id === 2) {
+            setSearchAcompanhamento(item.nomeItem)
+            setAcompanhamentoPreferidoNovo(item.id)
+            pegarItemPorTipo(false, false, false, false)
+        }
+        if (item.subTipo_id === 3) {
+            setSearchBebida(item.nomeItem)
+            setBebidaPreferidaNovo(item.id)
+            pegarItemPorTipo(false, false, false, false)
+        }
+        if (item.subTipo_id === 5) {
+            setSearchSobremesa(item.nomeItem)
+            setSobremesaPreferidaNovo(item.id)
+            pegarItemPorTipo(false, false, false, false)
+        }
+    }
+
+    const searchFilterFunction = (text, id) => {
+        if (id === 1) {
+            if (text) {
+                const newData = tipo.filter(
+                    function (item) {
+                        const itemData = item.nomeItem
+                            ? item.nomeItem.toUpperCase()
+                            : ''.toUpperCase();
+                        const itemDataType = item.tipo
+                            ? item.tipo.toUpperCase()
+                            : ''.toUpperCase();
+                        const textData = text.toUpperCase();
+                        const result = itemDataType + itemData
+                        return result.indexOf(textData) > -1;
+                    });
+                setDadoFiltrado(newData);
+                setSearchCarne(text);
+            } else {
+                setDadoFiltrado(tipo);
+                setSearchCarne(text);
+            }
+        }
+        if (id === 2) {
+            if (text) {
+                const newDataAcompanhamento = tipoAcompanhamento.filter(
+                    function (item) {
+                        const itemData = item.nomeItem
+                            ? item.nomeItem.toUpperCase()
+                            : ''.toUpperCase();
+                        const itemDataType = item.tipo
+                            ? item.tipo.toUpperCase()
+                            : ''.toUpperCase();
+                        const textData = text.toUpperCase();
+                        const result = itemDataType + itemData
+                        return result.indexOf(textData) > -1;
+                    });
+                setDadoFiltradoAcompanhamento(newDataAcompanhamento)
+                setSearchAcompanhamento(text);
+            } else {
+                setDadoFiltradoAcompanhamento(tipoAcompanhamento);
+                setSearchAcompanhamento(text);
+            }
+        }
+        if (id === 3) {
+            if (text) {
+                const newDataBebida = tipoBebida.filter(
+                    function (item) {
+                        const itemData = item.nomeItem
+                            ? item.nomeItem.toUpperCase()
+                            : ''.toUpperCase();
+                        const itemDataType = item.tipo
+                            ? item.tipo.toUpperCase()
+                            : ''.toUpperCase();
+                        const textData = text.toUpperCase();
+                        const result = itemDataType + itemData
+                        return result.indexOf(textData) > -1;
+                    });
+                setDadoFiltradoBebida(newDataBebida);
+                setSearchBebida(text);
+            } else {
+                setDadoFiltradoBebida(tipoBebida);
+                setSearchBebida(text);
+            }
+        }
+        if (id === 5) {
+            if (text) {
+                const newDataSobremesa = tipoSobremesa.filter(
+                    function (item) {
+                        const itemData = item.nomeItem
+                            ? item.nomeItem.toUpperCase()
+                            : ''.toUpperCase();
+                        const itemDataType = item.tipo
+                            ? item.tipo.toUpperCase()
+                            : ''.toUpperCase();
+                        const textData = text.toUpperCase();
+                        const result = itemDataType + itemData
+                        return result.indexOf(textData) > -1;
+                    });
+                setDadoFiltradoSobremesa(newDataSobremesa);
+                setSearchSobremesa(text);
+            } else {
+                setDadoFiltradoSobremesa(tipoSobremesa);
+                setSearchSobremesa(text);
+            }
+        }
+    };
 
     async function loadPerfil() {
         setLoading(true)
@@ -77,6 +256,10 @@ export default function Perfil() {
             setQuantidadeComeNovo_id(response.data[0].quantidadeCome_id)
             setSenhaUpdate(response.data[0].senha)
             setPontoCarneNovo_id(response.data[0].pontoCarne_id)
+            setCarnePreferidaNovo(response.data[0].carnePreferida_id)
+            setAcompanhamentoPreferidoNovo(response.data[0].acompanhamentoPreferido_id)
+            setBebidaPreferidaNovo(response.data[0].bebidaPreferida_id)
+            setSobremesaPreferidaNovo(response.data[0].sobremesaPreferida_id)
             if (idadeformatada != "02/01/1900") {
                 setIdadeNovo(idadeformatada)
             }
@@ -152,6 +335,24 @@ export default function Perfil() {
         } else {
             var novaUrl = fotoUrlUNovo;
         }
+
+        if (search === "") {
+            setSearchCarne(usuario.carnePreferida);
+            setCarnePreferidaNovo(usuario.carnePreferida_id);
+        }
+        if (searchAcompanhamento === "") {
+            setSearchAcompanhamento(usuario.acompanhamentoPreferido);
+            setAcompanhamentoPreferidoNovo(usuario.acompanhamentoPreferido_id);
+        }
+        if (searchBebida === "") {
+            setSearchBebida(usuario.bebidaPreferida);
+            setBebidaPreferidaNovo(usuario.bebidaPreferida_id);
+        }
+        if (searchSobremesa === "") {
+            setSearchSobremesa(usuario.sobremesaPreferida);
+            setSobremesaPreferidaNovo(usuario.sobremesaPreferida_id);
+        }
+        console.log("SOBREMESA ID " + sobremesaPreferidaNovo)
         console.log(idadeNovo)
         api.put(`/usuarios/${id}`, {
             nome: nomeNovo,
@@ -165,10 +366,11 @@ export default function Perfil() {
             celular: celularNovo,
             apelido: apelidoNovo,
             pontoCarne_id: pontoCarneNovo_id,
-            carnePreferida_id: usuario.carnePreferida_id,
+            carnePreferida_id: carnePreferidaNovo,
             quantidadeCome_id: quantidadeComeNovo_id,
-            bebidaPreferida_id: usuario.bebidaPreferida_id,
-            acompanhamentoPreferido_id: usuario.acompanhamentoPreferido_id,
+            bebidaPreferida_id: bebidaPreferidaNovo,
+            acompanhamentoPreferido_id: acompanhamentoPreferidoNovo,
+            sobremesaPreferida_id: sobremesaPreferidaNovo
         }).then(function (response) {
             setReturnVisivel([true, response.data.mensagem, "Editar perfil!"])
             setRefreshPerfil(!refreshPerfil)
@@ -189,7 +391,7 @@ export default function Perfil() {
                 } else {
                     return setReturnVisivel([true, "Novas senhas não conferem.", "Alterar senha!"])
                 }
-            }else{
+            } else {
                 return setReturnVisivel([true, "A senha deve ter no minimo 8 caracteres.", "Alterar senha!"])
             }
         } else {
@@ -501,44 +703,198 @@ export default function Perfil() {
                                 <IconMCI name="pig" size={18} style={style.icons} />
                                 <Text style={style.textoItem}>Carne preferida:</Text>
                             </View>
-                            <TextInput
-                                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
-                                editable={allowEditing[0]}
-                                value={usuario.carnePreferida}
-                            />
+                            {allowEditing[0]
+                                ? <View>
+                                    <TextInput
+                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                        editable={allowEditing[0]}
+                                        onChangeText={(text) => { searchFilterFunction(text, 1) }}
+                                        onFocus={() => pegarItemPorTipo(true, false, false, false)}
+                                        value={search}
+                                    />
+                                    {dadoFiltrado === null
+                                        ? null
+                                        : <TouchableOpacity style={{ alignItems: 'flex-end' }} onPress={() => pegarItemPorTipo(false, false, false, false)}>
+                                            <Text style={style.flatCloseBtn} >Fechar</Text>
+                                        </TouchableOpacity>
+                                    }
+                                    <View style={style.viewDadosFiltrados}>
+                                        <FlatList
+                                            showsVerticalScrollIndicator={false}
+                                            style={style.flatDadosFiltrados}
+                                            data={dadoFiltrado}
+                                            keyExtractor={todosItens => String(todosItens.id)}
+                                            renderItem={({ item: todosItens }) => (
+                                                <View style={style.flatItemDadosFiltrados}>
+                                                    <Text
+                                                        style={style.textoDadosFiltrados}
+                                                        onPress={() => getItem(todosItens)}
+                                                    >
+                                                        {todosItens.tipo} {"-"} {todosItens.nomeItem.toUpperCase()}
+                                                    </Text>
+                                                    <View style={style.linha}></View>
+                                                </View>
+                                            )}
+                                        />
+                                    </View>
+                                </View>
+
+                                : <TextInput
+                                    style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                    editable={allowEditing[0]}
+                                    onChangeText={(text) => searchFilterFunction(text)}
+                                    value={usuario.carnePreferida} />
+                            }
+
                         </View>
                         <View style={style.formGroup}>
                             <View style={{ flexDirection: 'row' }}>
                                 <Icon name="bread-slice" size={18} style={style.icons} />
                                 <Text style={style.textoItem}>Acompanhamento preferido:</Text>
                             </View>
-                            <TextInput
-                                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
-                                editable={allowEditing[0]}
-                                value={usuario.acompanhamentoPreferido}
-                            />
+                            {allowEditing[0]
+                                ? <View>
+                                    <TextInput
+                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                        editable={allowEditing[0]}
+                                        onChangeText={(text) => { searchFilterFunction(text, 2) }}
+                                        onFocus={() => pegarItemPorTipo(false, true, false, false)}
+                                        value={searchAcompanhamento}
+                                    />
+                                    {dadoFiltradoAcompanhamento === null
+                                        ? null
+                                        : <TouchableOpacity style={{ alignItems: 'flex-end' }} onPress={() => pegarItemPorTipo(false, false, false, false)}>
+                                            <Text style={style.flatCloseBtn}>Fechar</Text>
+                                        </TouchableOpacity>
+                                    }
+                                    <View style={style.viewDadosFiltrados}>
+                                        <FlatList
+                                            showsVerticalScrollIndicator={false}
+                                            style={style.flatDadosFiltrados}
+                                            data={dadoFiltradoAcompanhamento}
+                                            keyExtractor={todosItens => String(todosItens.id)}
+                                            renderItem={({ item: todosItens }) => (
+                                                <View style={style.flatItemDadosFiltrados}>
+                                                    <Text
+                                                        style={style.textoDadosFiltrados}
+                                                        onPress={() => getItem(todosItens)}
+                                                    >
+                                                        {todosItens.nomeItem.toUpperCase()}
+                                                    </Text>
+                                                    <View style={style.linha}></View>
+                                                </View>
+                                            )}
+                                        />
+                                    </View>
+                                </View>
+
+                                : <TextInput
+                                    style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                    editable={allowEditing[0]}
+                                    value={usuario.acompanhamentoPreferido}
+                                />
+                            }
+
                         </View>
                         <View style={style.formGroup}>
                             <View style={{ flexDirection: 'row' }}>
                                 <Icon name="beer" size={18} style={style.icons} />
                                 <Text style={style.textoItem}>Bebida preferida:</Text>
                             </View>
-                            <TextInput
-                                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
-                                editable={allowEditing[0]}
-                                value={usuario.bebidaPreferida}
-                            />
+                            {allowEditing[0]
+                                ? <View>
+                                    <TextInput
+                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                        editable={allowEditing[0]}
+                                        onChangeText={(text) => { searchFilterFunction(text, 3) }}
+                                        onFocus={() => pegarItemPorTipo(false, false, true, false)}
+                                        value={searchBebida}
+                                    />
+                                    {dadoFiltradoBebida === null
+                                        ? null
+                                        : <TouchableOpacity style={{ alignItems: 'flex-end' }} onPress={() => pegarItemPorTipo(false, false, false, false)}>
+                                            <Text style={style.flatCloseBtn}>Fechar</Text>
+                                        </TouchableOpacity>
+                                    }
+
+                                    <View style={style.viewDadosFiltrados}>
+                                        <FlatList
+                                            showsVerticalScrollIndicator={false}
+                                            style={style.flatDadosFiltrados}
+                                            data={dadoFiltradoBebida}
+                                            keyExtractor={todosItens => String(todosItens.id)}
+                                            renderItem={({ item: todosItens }) => (
+                                                <View style={style.flatItemDadosFiltrados}>
+                                                    <Text
+                                                        style={style.textoDadosFiltrados}
+                                                        onPress={() => getItem(todosItens)}
+                                                    >
+                                                        {todosItens.nomeItem.toUpperCase()}
+                                                    </Text>
+                                                    <View style={style.linha}></View>
+
+                                                </View>
+                                            )}
+                                        />
+                                    </View>
+                                </View>
+
+                                : <TextInput
+                                    style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                    editable={allowEditing[0]}
+                                    value={usuario.bebidaPreferida}
+                                />
+                            }
+
                         </View>
                         <View style={style.formGroup}>
                             <View style={{ flexDirection: 'row' }}>
                                 <Icon name="birthday-cake" size={18} style={style.icons} />
                                 <Text style={style.textoItem}>Sobremesa preferida:</Text>
                             </View>
-                            <TextInput
-                                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
-                                editable={allowEditing[0]}
-                                value={usuario.sobremesaPreferida}
-                            />
+                            {allowEditing[0]
+                                ? <View>
+                                    <TextInput
+                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                        editable={allowEditing[0]}
+                                        onChangeText={(text) => { searchFilterFunction(text, 5) }}
+                                        onFocus={() => pegarItemPorTipo(false, false, false, true)}
+                                        value={searchSobremesa}
+                                    />
+                                    {dadoFiltradoSobremesa === null
+                                        ? null
+                                        : <TouchableOpacity style={{ alignItems: 'flex-end' }} onPress={() => pegarItemPorTipo(false, false, false, false)}>
+                                            <Text style={style.flatCloseBtn}>Fechar</Text>
+                                        </TouchableOpacity>
+                                    }
+                                    <View style={style.viewDadosFiltrados}>
+                                        <FlatList
+                                            showsVerticalScrollIndicator={false}
+                                            style={style.flatDadosFiltrados}
+                                            data={dadoFiltradoSobremesa}
+                                            keyExtractor={todosItens => String(todosItens.id)}
+                                            renderItem={({ item: todosItens }) => (
+                                                <View style={style.flatItemDadosFiltrados}>
+                                                    <Text
+                                                        style={style.textoDadosFiltrados}
+                                                        onPress={() => getItem(todosItens)}
+                                                    >
+                                                        {todosItens.nomeItem.toUpperCase()}
+                                                    </Text>
+                                                    <View style={style.linha}></View>
+                                                </View>
+                                            )}
+                                        />
+                                    </View>
+                                </View>
+
+                                : <TextInput
+                                    style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                    editable={allowEditing[0]}
+                                    value={usuario.sobremesaPreferida}
+                                />
+                            }
+
                         </View>
                     </View>
                 )} />

@@ -43,6 +43,7 @@ import ChurrasProvider from './context/churrasContext';
 
 const Tab = createBottomTabNavigator();
 
+
 function CriarTabs() {
     return (
 
