@@ -340,6 +340,7 @@ export default StyleSheet.create({
   viewDadosFiltrados: {
     backgroundColor: 'transparent',
     margin: 0,
+    flex: 1,
   },
   flatDadosFiltrados: {
     backgroundColor: 'lightgray',
@@ -352,11 +353,15 @@ export default StyleSheet.create({
       backgroundColor: 'gray',
   },
   flatItemDadosFiltrados: {
-    margin: 10,
+    margin: 8,
+    // borderWidth: 1,
+    // borderRadius: 8,
+    
   },
   textoDadosFiltrados: {
     color: 'maroon',
     fontFamily: 'poppins-semi-bold',
+    padding: 2
   },
   flatCloseBtn: {
     color: 'maroon',

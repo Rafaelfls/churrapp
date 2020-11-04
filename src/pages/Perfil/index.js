@@ -704,7 +704,7 @@ export default function Perfil() {
                                 <Text style={style.textoItem}>Carne preferida:</Text>
                             </View>
                             {allowEditing[0]
-                                ? <View>
+                                ? <View style={{flex:1}}>
                                     <TextInput
                                         style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
                                         editable={allowEditing[0]}
@@ -720,8 +720,9 @@ export default function Perfil() {
                                     }
                                     <View style={style.viewDadosFiltrados}>
                                         <FlatList
-                                            showsVerticalScrollIndicator={false}
+                                            showsVerticalScrollIndicator={true}
                                             style={style.flatDadosFiltrados}
+                                            scrollEnabled={true}
                                             data={dadoFiltrado}
                                             keyExtractor={todosItens => String(todosItens.id)}
                                             renderItem={({ item: todosItens }) => (

@@ -66,6 +66,10 @@ export default function LoginCelular() {
         }
     }
 
+    function esqueciSenha() {
+        navigation.replace('EsqueciSenha');
+    }
+
     async function criptoSenha(senha) {
         return await Crypto.digestStringAsync(
             Crypto.CryptoDigestAlgorithm.SHA512,
@@ -132,7 +136,7 @@ export default function LoginCelular() {
                 </View>
 
                 <View style={style.esqueciSenha}>
-                    <TouchableOpacity><Text style={style.esqueciSenhaBtn}>Esqueci minha senha</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={esqueciSenha}><Text style={style.esqueciSenhaBtn}>Esqueci minha senha</Text></TouchableOpacity>
                 </View>
             </ScrollView>
             <Modal
