@@ -117,9 +117,28 @@ export default StyleSheet.create({
       width: 0,
       height: 2
     },
+    
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5
+  },
+  modalTermoView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 8,
+    paddingHorizontal: 35,
+    paddingVertical: 25,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    height: 600
   },
   modalTitle:{
     color:"#800000",
@@ -129,6 +148,9 @@ export default StyleSheet.create({
   modalText:{
     fontSize:17,
     textAlign:'center'
+  },
+  modalTermoText: {
+    textAlign: 'justify'
   },
   footerModal:{    
     height: 90,
@@ -153,6 +175,15 @@ export default StyleSheet.create({
     justifyContent: 'center',
     borderRadius:8,
     backgroundColor: 'maroon',
+    height: '60%',
+    width: '85%',
+    paddingVertical: 5,
+  },
+  continueBtnDisabled: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'lightgray',
     height: '60%',
     width: '85%',
     paddingVertical: 5,
