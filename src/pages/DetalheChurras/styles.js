@@ -59,6 +59,9 @@ export default StyleSheet.create({
     marginTop: 15,
     justifyContent: "center",
   },
+  formGroupRow: {
+    flexDirection: 'column'
+  },
   textLabel:{
     fontSize: 17,
     color:"maroon",

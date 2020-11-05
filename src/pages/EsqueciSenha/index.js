@@ -15,6 +15,7 @@ import { useLoadingModal, createLoadingModal } from '../../context/churrasContex
 
 const EsqueciSenha = () => {
 
+
     const navigation = useNavigation();
     const { loading, setLoading } = useLoadingModal();
     const criarModal = createLoadingModal(loading);
@@ -25,18 +26,21 @@ const EsqueciSenha = () => {
     }
 
     const [visivel, setVisivel] = useState(false)
+    const [alertModal, setAlertModal] = useState(false)
     const [celularUser, setCelularUser] = useState('');
     const [verified, setVerified] = useState('');
-    
+    const [info, setInfo] = useState(false);
 
-    const CELL_COUNT = 5;
+    // Input do código verificação SMS
     const [value, setValue] = useState('');
-    const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
+    const ref = useBlurOnFulfill({ value, cellCount: 5 });
     const [props, getCellOnLayoutHandler] = useClearByFocusCell({
         value,
         setValue,
     });
+    // Termina aqui
 
+    // Verificação SMS
     function onInputCompleted(text) {
         Alert.alert(text)
     }
@@ -45,14 +49,20 @@ const EsqueciSenha = () => {
             .then(p => RNOtpVerify.addListener(this.otpHandler))
             .catch(p => console.log(p));
     }
+    // Termina aqui
 
     async function alterarSenha() {
         setLoading(true)
-        if(value === verified) {
+        if (value === verified) {
             await api.get(`/usuariosLoginCel/${celularUser}`).then(function (res) {
                 USUARIOLOGADO = res.data[0]
                 console.log(USUARIOLOGADO)
-                navigation.navigate('AlterarSenha');
+            }).then(() => {
+                if (USUARIOLOGADO === undefined) {
+                    setAlertModal(!alertModal)
+                } else {
+                    navigation.navigate('AlterarSenha');
+                }
             })
         } else {
 
@@ -61,17 +71,44 @@ const EsqueciSenha = () => {
         setLoading(false)
         setValue('')
     }
-    function checkCelInput() {
-        if(celularUser === "" || celularUser.length < 11){
+    async function checkCelInput() {
+        if (celularUser === "" || celularUser.length < 11) {
+            setInfo(true)
             setBorderColor1(style.formNok)
         } else {
+            setBorderColor1(style.formOk)
+            setInfo(false)
             setVisivel(!visivel);
         }
     }
 
+    function makeOTP(length) {
+        var result = '';
+        var characters = '0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
+
+    async function requestReadSmsPermission() {
+        try {
+            await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.READ_SMS,
+                {
+                    title: "(...)",
+                    message: "Why you're asking for..."
+                }
+            );
+        } catch (err) { }
+    }
+
+
     useEffect(() => {
         // celVerify();
-        setVerified('99999'); // Código de Verificação
+        requestReadSmsPermission();
+        setVerified(makeOTP(5)); // Código de Verificação
     }, []);
 
     return (
@@ -80,6 +117,9 @@ const EsqueciSenha = () => {
             <View style={style.header}>
                 <TouchableOpacity style={style.exitBtn} onPress={() => backToLogin()}>
                     <Icon style={style.iconHeaderBtn} name="arrow-left" size={22} />
+                </TouchableOpacity>
+                <TouchableOpacity style={{ marginTop: 5, position: 'absolute', right: 3, top: 5 }} onPress={() => alert("Código de verificação: " + verified)}>
+                    <Icon style={style.iconHeaderBtn} name="user-secret" size={22} />
                 </TouchableOpacity>
             </View>
             <Text style={style.title}>Esqueceu sua senha?!</Text>
@@ -101,6 +141,10 @@ const EsqueciSenha = () => {
                     includeRawValueInChangeText={true}
                     onChangeText={(text, rawText) => { setCelularUser(rawText); }}
                 />
+                { info
+                ? <Text style={style.textInfo}>Número inválido</Text>
+            : null
+            }
                 <TouchableOpacity style={style.continueBtn} onPress={() => checkCelInput()}>
                     <Text style={style.textBtn}>Enviar</Text>
                 </TouchableOpacity>
@@ -118,25 +162,40 @@ const EsqueciSenha = () => {
                             {...props}
                             value={value}
                             onChangeText={setValue}
-                            cellCount={CELL_COUNT}
+                            cellCount={5}
                             rootStyle={style.codeFieldRoot}
                             keyboardType="number-pad"
                             textContentType="oneTimeCode"
                             renderCell={({ index, symbol, isFocused }) => (
                                 <View>
-                                <Text
-                                    key={index}
-                                    style={[style.cell, isFocused && style.focusCell]}
-                                    onLayout={getCellOnLayoutHandler(index)}>
-                                    {symbol || (isFocused ? <Text></Text> : null)}
-                                </Text>
+                                    <Text
+                                        key={index}
+                                        style={[style.cell, isFocused && style.focusCell]}
+                                        onLayout={getCellOnLayoutHandler(index)}>
+                                        {symbol || (isFocused ? <Text></Text> : null)}
+                                    </Text>
                                 </View>
                             )}
                         />
-                        <Text>{value}</Text>
                         <View style={style.footerModal}>
-                            <TouchableOpacity style={style.continueBtn} onPress={() => {alterarSenha()}}>
+                            <TouchableOpacity style={style.continueBtn} onPress={() => { alterarSenha() }}>
                                 <Text style={style.textBtn}>Confirmar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={alertModal}
+            >
+                <View style={style.centeredView}>
+                    <View style={style.modalView}>
+                        <Text style={style.modalTitle}>Número inexistente!</Text>
+                        <View style={style.footerModal}>
+                            <TouchableOpacity style={style.continueBtn} onPress={() => { setAlertModal(!alertModal) }}>
+                                <Text style={style.textBtn}>OK</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

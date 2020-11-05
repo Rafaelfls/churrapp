@@ -17,6 +17,7 @@ const AlterarSenha = () => {
     const [confirmaSenhaUser, setConfirmaSenhaUser] = useState('');
     const [borderColor1, setBorderColor1] = useState(style.formOk);
     const [borderColor2, setBorderColor2] = useState(style.formOk);
+    const [info, setInfo] = useState(false)
 
     async function criptoSenha1(senha) {
         setSenhaUserUncrpt1(senha)
@@ -55,9 +56,13 @@ const AlterarSenha = () => {
                     senha: senhaUser,
 
                 }).then(function (res) {
+                    setBorderColor1(style.formOk)
+                    setBorderColor2(style.formOk)
+                    setInfo(false)
                     navigation.replace('LoginCelular')
                 })
             } else {
+                setInfo(true)
                 setBorderColor1(style.formNok)
                 setBorderColor2(style.formNok)
             }
@@ -93,6 +98,11 @@ const AlterarSenha = () => {
                     secureTextEntry={true}
                     onChangeText={(rawText) => { criptoSenha2(rawText); }}
                 />
+                {info
+                    ? <Text style={style.textInfo}>As senhas não coincidem</Text>
+                    : null
+                }
+
                 <TouchableOpacity style={style.continueBtn} onPress={() => validarSenha()}>
                     <Text style={style.textBtn}>Enviar</Text>
                 </TouchableOpacity>

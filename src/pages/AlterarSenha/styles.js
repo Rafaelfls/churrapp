@@ -159,5 +159,9 @@ export default StyleSheet.create({
   formNok:{
     borderColor: 'red', 
   },
+  textInfo :{
+    color: 'gray',
+    marginBottom: 10
+  },
   
 });

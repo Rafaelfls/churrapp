@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
+    "@react-native-community/checkbox": "^0.5.5",
     "@react-native-community/masked-view": "0.1.6",
     "@react-navigation/bottom-tabs": "^5.5.1",
     "@react-navigation/native": "^5.5.0",
@@ -37,6 +38,7 @@
     "react-native-custom-qr-codes-expo": "^2.2.0",
     "react-native-date-picker": "^2.7.10",
     "react-native-datepicker": "^1.7.2",
+    "react-native-elements": "^3.0.0-alpha.1",
     "react-native-firebase": "^5.6.0",
     "react-native-floating-action": "^1.21.0",
     "react-native-fontawesome": "^7.0.0",
@@ -51,7 +53,7 @@
     "react-native-sms": "^1.11.0",
     "react-native-sms-verifycode": "^2.4.3",
     "react-native-svg": "11.0.1",
-    "react-native-vector-icons": "^6.6.0",
+    "react-native-vector-icons": "^6.7.0",
     "react-native-web": "^0.11.7",
     "rn-sliding-button": "^1.1.5",
     "typeface-bree-serif": "0.0.72"

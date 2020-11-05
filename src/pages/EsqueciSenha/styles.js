@@ -49,6 +49,7 @@ export default StyleSheet.create({
     width: '100%',
     height:40,
     paddingVertical: 5,
+    marginTop: 10
   },
   textBtn:{
     color: 'white',
@@ -86,7 +87,7 @@ export default StyleSheet.create({
     fontFamily: 'poppins-regular',
     borderBottomWidth: 0.5,
     paddingHorizontal: 5,
-    marginBottom: 10,
+    marginBottom: 2,
     fontSize:17,
   },
 
@@ -159,5 +160,8 @@ export default StyleSheet.create({
   formNok:{
     borderColor: 'red', 
   },
-  
+  textInfo :{
+    color: 'gray',
+    marginBottom: 10
+  },
 });
