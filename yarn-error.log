@@ -72,7 +72,7 @@ npm manifest:
       "react-native-svg": "11.0.1",
       "react-native-vector-icons": "^6.6.0",
       "react-native-web": "^0.11.7",
-      "rn-sliding-button": "^1.1.5",
+      "rn-sliding-button": "1.1.5",
       "typeface-bree-serif": "0.0.72"
     },
     "devDependencies": {
