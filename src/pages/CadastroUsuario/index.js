@@ -64,7 +64,8 @@ export default function CadastroUsuario() {
         await api.post(`/notificacoesGeral/${convidId}`, {
             mensagem: `Seja bem vind@ ao Churrapp, nós estamos muito felizes com a sua chegada!`,
             negar: null,
-            confirmar: "Legal"
+            confirmar: "Legal",
+            validade: null
         })
     }
 

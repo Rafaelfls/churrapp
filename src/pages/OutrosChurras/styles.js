@@ -80,7 +80,7 @@ churrasLocal: {
   color: 'steelblue',
   marginBottom: 2,
   fontFamily: 'poppins-medium',
-  width:'45%',
+  width:'100%',
 },
 locDatSeparator: {
   fontSize: 13,

@@ -272,13 +272,8 @@ export default function ResumoChurras() {
                                                     <IconFea style={style.dataIcon} name="calendar" size={15} />
                                                     <Text style={style.churrasData}> {formatData(churras.data)}</Text>
                                                     <Text style={style.locDatSeparator}>  |  </Text>
-                                                    <IconEnt style={style.localIcon} name="location-pin" size={15} />
-                                                    <ScrollView
-                                                        style={style.churrasLocalSV}
-                                                        horizontal={true}
-                                                    >
-                                                        <Text style={style.churrasLocal}> {churras.local}</Text>
-                                                    </ScrollView>
+                                                    <IconMI style={style.localIcon} name="access-time" size={15} />
+                                                    <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - "+churras.hrFim: ''}</Text>
                                                 </View>
                                             </View>
                                         </View>

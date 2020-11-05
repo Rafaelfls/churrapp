@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, SafeAreaView, FlatList, Modal, CheckBox } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView, FlatList, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconFat from 'react-native-vector-icons/Feather';
 import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
 import * as Crypto from 'expo-crypto';
+import CheckBox from '@react-native-community/checkbox';
 
 import style from './styles';
 import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';

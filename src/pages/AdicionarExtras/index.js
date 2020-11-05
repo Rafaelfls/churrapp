@@ -109,13 +109,24 @@ export default function AdicionarExtras({ route, navigation }) {
 
 
     async function enviaNotificacao(convid,todosConvid) {
+        console.log(convid)
         var valorFinal = (convid.valorTotal / todosConvid).toFixed(2);
         console.log("enviaNotificacao",valorFinal, convid.valorTotal , todosConvid)
-        await api.post(`/notificacoes/${convid.usuario_id}/${churrascode}`, {
-            mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${convid.nomeChurras}, e o valor por pessoa é de R$${valorFinal}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
-            negar: "Não vou",
-            confirmar: "Vou"
-        })
+        if(convid.limiteConfirmacao == null){
+            await api.post(`/notificacoes/${convid.usuario_id}/${churrascode}`, {
+                mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${convid.nomeChurras}, e o valor por pessoa é de R$${valorFinal}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+                negar: "Não vou",
+                confirmar: "Vou",
+                validade: convid.date,
+            })
+        }else{
+            await api.post(`/notificacoes/${convid.usuario_id}/${churrascode}`, {
+                mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${convid.nomeChurras}, e o valor por pessoa é de R$${valorFinal}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+                negar: "Não vou",
+                confirmar: "Vou",
+                validade: convid.limiteConfirmacao,
+            })
+        }
     }
 
     function escolherNovosItens() {

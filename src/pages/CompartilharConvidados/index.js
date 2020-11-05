@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, SafeAreaView, Modal, CheckBox, FlatList, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView, Modal, FlatList, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconFat from 'react-native-vector-icons/Feather';
@@ -7,6 +7,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
 import * as Crypto from 'expo-crypto';
+import CheckBox from '@react-native-community/checkbox';
 
 import style from './styles';
 import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
@@ -108,7 +109,7 @@ export default function CompartilharConvidados({ route, navigation }) {
         valorPagar: value,
         churras_id: churrasAtual.churrasCode
       })
-      enviaNotificacao(response.data.usuario[0].id)
+      enviaNotificacao(response.data.usuario[0])
     })
 
   }
@@ -135,12 +136,23 @@ export default function CompartilharConvidados({ route, navigation }) {
     convidadosList = []
   }
 
-  async function enviaNotificacao(convidId) {
-    await api.post(`/notificacoes/${convidId}/${churrasAtual.churrasCode}`, {
-      mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${churrasAtual.nomeChurras}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
-      negar: "Não vou",
-      confirmar: "Vou"
-    })
+  async function enviaNotificacao(convid) {
+    console.log(churrasAtual)
+    if(churrasAtual.limiteConfirmacao == null){
+      await api.post(`/notificacoes/${convid.id}/${churrasAtual.churrasCode}`, {
+        mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${churrasAtual.nomeChurras}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+        negar: "Não vou",
+        confirmar: "Vou",
+        validade: churrasAtual.data,
+      })
+    }else{
+      await api.post(`/notificacoes/${convid.id}/${churrasAtual.churrasCode}`, {
+        mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${churrasAtual.nomeChurras}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+        negar: "Não vou",
+        confirmar: "Vou",
+        validade: churrasAtual.limiteConfirmacao,
+      })
+    }
   }
 
   function backHome() {
