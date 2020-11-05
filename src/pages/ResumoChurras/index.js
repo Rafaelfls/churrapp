@@ -255,9 +255,9 @@ export default function ResumoChurras() {
                             <View style={style.churrasDescricao}>
                                 <RNSlidingButton
                                     style={{ backgroundColor: 'white', width: "95%" }}
-                                    height={100}
+                                    height={100}                                    
                                     onSlidingSuccessLeft={() => { setVisivel(true); setChurrasDeletar(churras) }}
-                                    onSlidingSuccess={() => {detalheChurras(churras.id)}}
+                                    onSlidingSuccessRight={() => {detalheChurras(churras.id)}}
                                     slideDirection={SlideDirection.ANY}>
                                     <View style={{ flexDirection: "row", width: '100%' }}>
                                         <View style={style.detalheSlide}>
