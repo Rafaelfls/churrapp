@@ -17,6 +17,7 @@ import api from '../../services/api';
 import * as ImagePicker from 'expo-image-picker';
 import { FloatingAction } from "react-native-floating-action";
 import DatePicker from 'react-native-datepicker';
+// import { Rating, AirbnbRating } from 'react-native-elements'
 
 
 import style from './styles';

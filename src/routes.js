@@ -37,6 +37,8 @@ import AdicionarBebidas from './pages/AdicionarBebidas';
 import AdicionarExtras from './pages/AdicionarExtras';
 import AdicionarSobremesas from './pages/AdicionarSobremesas';
 import FinalCriaChurras from './pages/FinalCriaChurras';
+import EsqueciSenha from './pages/EsqueciSenha';
+import AlterarSenha from './pages/AlterarSenha';
 
 import ChurrasProvider from './context/churrasContext';
 
@@ -87,6 +89,8 @@ export default function Routes() {
                     {/* Telas fora do app */}
                     <AppStack.Screen name="Login" component={Login} />
                     <AppStack.Screen name="LoginCelular" component={LoginCelular} />
+                    <AppStack.Screen name='EsqueciSenha' component={EsqueciSenha} />
+                    <AppStack.Screen name='AlterarSenha' component={AlterarSenha} />
                     <AppStack.Screen name="CadastroUsuario" component={CadastroUsuario} />
                     {/* Fim telas fora do app */}
 
