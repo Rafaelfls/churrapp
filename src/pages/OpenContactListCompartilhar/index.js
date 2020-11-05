@@ -57,7 +57,7 @@ export default function OpenContactListCompartilhar() {
       <SafeAreaView style={style.body}>
         <View style={{flexDirection:"row", marginLeft:10, alignItems:'center'}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('AdicionaConvidados', {
+            onPress={() => navigation.navigate('CompartilharConvidados', {
               nomeContato: null,
               telefoneContato: null,
               churrasCodeAtual: null

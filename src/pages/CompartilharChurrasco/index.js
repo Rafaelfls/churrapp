@@ -17,6 +17,7 @@ export default function CompartilharChurrasco({ route, navigation }) {
     const rota = useRoute();
     const churras = rota.params.churras
     const [churrasDateFormatted, setChurrasDateFormatted] = useState();
+    const [churrasDateFormattedConf, setChurrasDateFormattedConf] = useState();
 
     function goBack() {
         navigation.replace('DetalheChurras',{churras:churras.id, editavel:true})
@@ -35,6 +36,7 @@ export default function CompartilharChurrasco({ route, navigation }) {
               hrFim: churras.hrFim,
               descricao: churras.descricao,
               data: churrasDateFormatted,
+              limiteConfirmacao:churrasDateFormattedConf,
             },
           });
     }
@@ -52,6 +54,12 @@ export default function CompartilharChurrasco({ route, navigation }) {
         var month = new Date(churras.data).getMonth() + 1
         var year = new Date(churras.data).getFullYear()
         setChurrasDateFormatted(date + '/' + month + '/' + year)
+
+        
+        var date2 = new Date(churras.limiteConfirmacao).getDate() + 1
+        var month2 = new Date(churras.limiteConfirmacao).getMonth() + 1
+        var year2 = new Date(churras.limiteConfirmacao).getFullYear()
+        setChurrasDateFormattedConf(date2 + '/' + month2 + '/' + year2)
     }
 
 

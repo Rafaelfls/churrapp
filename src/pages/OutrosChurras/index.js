@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 import IconEnt from 'react-native-vector-icons/Entypo';
 import IconFea from 'react-native-vector-icons/Feather';
+import IconMI from 'react-native-vector-icons/MaterialIcons';
 
 import style from './styles';
 import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
@@ -113,8 +114,8 @@ export default function OutrosChurras() {
                                                     <IconFea style={style.dataIcon} name="calendar" size={15} />
                                                     <Text style={style.churrasData}> {formatData(churras.data)}</Text>
                                                     <Text style={style.locDatSeparator}>  |  </Text>
-                                                    <IconEnt style={style.localIcon} name="location-pin" size={15} />
-                                                    <Text style={style.churrasLocal}> {churras.local}</Text>
+                                                    <IconMI style={style.localIcon} name="access-time" size={15} />
+                                                    <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - "+churras.hrFim: ''}</Text>
                                                 </View>
                                             </View>
                                         </View>
@@ -146,8 +147,8 @@ export default function OutrosChurras() {
                                                 <IconFea style={style.dataIcon} name="calendar" size={15} />
                                                     <Text style={style.churrasData}> {formatData(churras.data)}</Text>
                                                     <Text style={style.locDatSeparator}>  |  </Text>
-                                                    <IconEnt style={style.localIcon} name="location-pin" size={15} />
-                                                    <Text style={style.churrasLocal}> {churras.local}</Text>
+                                                    <IconMI style={style.localIcon} name="access-time" size={15} />
+                                                    <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - "+churras.hrFim: ''}</Text>
                                                 </View>
                                             </View>
                                         </View>

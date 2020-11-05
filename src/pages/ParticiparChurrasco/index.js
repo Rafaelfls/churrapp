@@ -52,11 +52,22 @@ export default function ParticiparChurrasco() {
                             valorPagar: 30,
                             churras_id: churras_id
                         }).then(async function (res) {
-                            await api.post(`/notificacoes/${USUARIOLOGADO.id}/${churras_id}`, {
-                                mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de ${res.data[0].valorPagar}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
-                                negar: "Não vou",
-                                confirmar: "Vou"
-                            })
+                            console.log(res.data[0])
+                            if(res.data[0].limiteConfirmacao == null){
+                                await api.post(`/notificacoes/${USUARIOLOGADO.id}/${churras_id}`, {
+                                    mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de ${res.data[0].valorPagar}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+                                    negar: "Não vou",
+                                    confirmar: "Vou",
+                                    validade: res.data[0].data,
+                                })
+                            }else{
+                                await api.post(`/notificacoes/${USUARIOLOGADO.id}/${churras_id}`, {
+                                    mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de ${res.data[0].valorPagar}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+                                    negar: "Não vou",
+                                    confirmar: "Vou",
+                                    validade: res.data[0].limiteConfirmacao,
+                                })
+                            }
                         });
                         setLoading(false)
                         navigation.replace('Tabs')
