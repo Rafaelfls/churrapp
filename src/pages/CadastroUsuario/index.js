@@ -15,6 +15,7 @@ import { FlatList } from 'react-native-gesture-handler';
 
 //Documentos
 import TermoDeUso from '../../docs/TermoDeUso/TermoDeUso'
+import PoliticasDePrivacidade from '../../docs/PoliticasDePrivacidade/PoliticasDePrivacidade'
 
 export default function CadastroUsuario() {
 
@@ -249,7 +250,7 @@ export default function CadastroUsuario() {
                     <View style={style.modalTermoView}>
                         <Text style={style.modalTitle}><Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>Termos de Uso</Text></Text>
                         <ScrollView>
-                            <TermoDeUso/>
+                            <PoliticasDePrivacidade/>
                         </ScrollView>
                         <View style={style.footerModal}>
                             <TouchableOpacity style={style.continueBtn} onPress={() => setTermoModal(false)}>
