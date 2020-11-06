@@ -250,7 +250,7 @@ export default function CadastroUsuario() {
                     <View style={style.modalTermoView}>
                         <Text style={style.modalTitle}><Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>Termos de Uso</Text></Text>
                         <ScrollView>
-                            <PoliticasDePrivacidade/>
+                            <TermoDeUso/>
                         </ScrollView>
                         <View style={style.footerModal}>
                             <TouchableOpacity style={style.continueBtn} onPress={() => setTermoModal(false)}>
