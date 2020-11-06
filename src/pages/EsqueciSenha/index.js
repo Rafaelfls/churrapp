@@ -28,7 +28,7 @@ const EsqueciSenha = () => {
     const [visivel, setVisivel] = useState(false)
     const [alertModal, setAlertModal] = useState(false)
     const [celularUser, setCelularUser] = useState('');
-    const [verified, setVerified] = useState('');
+    const [pin, setPin] = useState('');
     const [info, setInfo] = useState(false);
 
     // Input do código verificação SMS
@@ -52,23 +52,13 @@ const EsqueciSenha = () => {
     // Termina aqui
 
     async function alterarSenha() {
-        setLoading(true)
-        if (value === verified) {
-            await api.get(`/usuariosLoginCel/${celularUser}`).then(function (res) {
-                USUARIOLOGADO = res.data[0]
-                console.log(USUARIOLOGADO)
-            }).then(() => {
-                if (USUARIOLOGADO === undefined) {
-                    setAlertModal(!alertModal)
-                } else {
-                    navigation.navigate('AlterarSenha');
-                }
-            })
+        if (value == pin) {
+            sendPIN(null)
+            navigation.replace('AlterarSenha');
         } else {
 
         }
         setVisivel(!visivel);
-        setLoading(false)
         setValue('')
     }
     async function checkCelInput() {
@@ -76,15 +66,39 @@ const EsqueciSenha = () => {
             setInfo(true)
             setBorderColor1(style.formNok)
         } else {
+            setLoading(true)
+            await api.get(`/usuariosLoginCel/${celularUser}`)
+                .then(async function (res) {
+                    USUARIOLOGADO = res.data[0]
+                    console.log(USUARIOLOGADO)
+                    if (USUARIOLOGADO != undefined) {
+                        await pegarPIN();
+                        if (pin === null || pin === '') {
+                            await sendPIN(makeOTP(5));
+                            console.log("ENTREI")
+                            console.log(pin)
+                        }
+                        setVisivel(!visivel);
+                    } else {
+                        setAlertModal(!alertModal)
+                        setVisivel(false);
+                    }
+                })
             setBorderColor1(style.formOk)
             setInfo(false)
-            setVisivel(!visivel);
+            setLoading(false);
         }
+    }
+    async function pegarPIN() {
+        await api.get(`/getPIN/${USUARIOLOGADO.id}`)
+            .then((res) => {
+                setPin(res.data[0].pin);
+            })
     }
 
     function makeOTP(length) {
         var result = '';
-        var characters = '0123456789';
+        var characters = '123456789';
         var charactersLength = characters.length;
         for (var i = 0; i < length; i++) {
             result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -104,11 +118,28 @@ const EsqueciSenha = () => {
         } catch (err) { }
     }
 
+    async function sendPIN($pin) {
+        setPin($pin)
+        await api.put(`/usuarios/${USUARIOLOGADO.id}`, {
+            nome: USUARIOLOGADO.nome,
+            sobrenome: USUARIOLOGADO.sobrenome,
+            email: USUARIOLOGADO.email,
+            cidade: USUARIOLOGADO.cidade,
+            uf: USUARIOLOGADO.uf,
+            idade: USUARIOLOGADO.idade,
+            joined: USUARIOLOGADO.joined,
+            celular: USUARIOLOGADO.celular,
+            apelido: USUARIOLOGADO.apelido,
+            senha: USUARIOLOGADO.senha,
+            pin: $pin
+
+        })
+    }
 
     useEffect(() => {
         // celVerify();
         requestReadSmsPermission();
-        setVerified(makeOTP(5)); // Código de Verificação
+        pegarPIN();
     }, []);
 
     return (
@@ -118,7 +149,7 @@ const EsqueciSenha = () => {
                 <TouchableOpacity style={style.exitBtn} onPress={() => backToLogin()}>
                     <Icon style={style.iconHeaderBtn} name="arrow-left" size={22} />
                 </TouchableOpacity>
-                <TouchableOpacity style={{ marginTop: 5, position: 'absolute', right: 3, top: 5 }} onPress={() => alert("Código de verificação: " + verified)}>
+                <TouchableOpacity style={{ marginTop: 5, position: 'absolute', right: 3, top: 5 }} onPress={() => alert("Código de verificação: " + pin)}>
                     <Icon style={style.iconHeaderBtn} name="user-secret" size={22} />
                 </TouchableOpacity>
             </View>
@@ -141,10 +172,10 @@ const EsqueciSenha = () => {
                     includeRawValueInChangeText={true}
                     onChangeText={(text, rawText) => { setCelularUser(rawText); }}
                 />
-                { info
-                ? <Text style={style.textInfo}>Número inválido</Text>
-            : null
-            }
+                {info
+                    ? <Text style={style.textInfo}>Número inválido</Text>
+                    : null
+                }
                 <TouchableOpacity style={style.continueBtn} onPress={() => checkCelInput()}>
                     <Text style={style.textBtn}>Enviar</Text>
                 </TouchableOpacity>
