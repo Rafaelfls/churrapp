@@ -81,23 +81,6 @@ export default StyleSheet.create({
     position: 'absolute',
   },
 
-  //CadastroBtn
-  continueBtn:{
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius:8,
-    backgroundColor: 'maroon',
-    width: '100%',
-    height:40,
-    paddingVertical: 5,
-  },
-  textBtn:{
-    color: 'white',
-    fontSize: 17,
-    fontFamily: 'poppins-medium',
-    textAlign: 'center',
-  },
-
   //modal
   centeredView: {
     flex: 1,
@@ -133,12 +116,10 @@ export default StyleSheet.create({
     shadowOffset: {
       width: 0,
       height: 2
-    },
-    
+    },    
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    height: 600
   },
   modalTitle:{
     color:"#800000",
@@ -150,7 +131,7 @@ export default StyleSheet.create({
     textAlign:'center'
   },
   modalTermoText: {
-    textAlign: 'justify'
+    textAlign: 'justify',
   },
   footerModal:{    
     height: 90,
