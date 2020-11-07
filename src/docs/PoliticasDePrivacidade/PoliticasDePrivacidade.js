@@ -7,12 +7,12 @@ const PoliticasDePrivacidade = () => {
         <Text style={{ textAlign: 'justify' }}>
               Churrapp construiu o aplicativo Churrapp como um aplicativo gratuito. Este SERVIÇO é fornecido pela Churrapp sem nenhum custo e deve ser usado como está.{'\n'}
               Esta página é usada para informar os visitantes sobre nossas políticas de coleta, uso e divulgação de Informações Pessoais, caso alguém decida usar nosso Serviço.{'\n'}
-              Se você optar por usar nosso Serviço, você concorda com a coleta e uso de informações em relação a esta política. As informações pessoais que coletamos são usadas para fornecer e melhorar o serviço. Não usaremos ou compartilharemos suas informações com ninguém, exceto conforme descrito nesta Política de Privacidade.{'\n'}
-              Os termos usados ​​nesta Política de Privacidade têm os mesmos significados que em nossos Termos e Condições, que podem ser acessados ​​no Churrapp, a menos que definido de outra forma nesta Política de Privacidade.{'\n'}
+              Se você optar por usar nosso Serviço, você concorda com a coleta e uso de informações em relação a esta política. As informações pessoais que coletamos são usadas para fornecer e melhorar o serviço. Não usaremos ou compartilharemos suas informações com ninguém, exceto conforme descrito nesta <Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>Política de Privacidade</Text>.{'\n'}
+              Os termos usados ​​nesta <Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>Política de Privacidade</Text> têm os mesmos significados que em nossos <Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>Termos de Uso</Text>, que podem ser acessados ​​no Churrapp, a menos que definido de outra forma nesta Política de Privacidade.{'\n'}
         </Text>
         <Text style={{ textAlign: 'justify' }}>
             <Text style={{ fontWeight: 'bold' }}>Coleta e uso de informações</Text>
-              Para uma melhor experiência, ao usar nosso Serviço, podemos exigir que você nos forneça certas informações de identificação pessoal, incluindo, mas não se limitando a Nome, Sobrenome, Email, Cidade, UF, Idade, Celular, Foto. As informações que solicitamos serão retidas por nós e usadas conforme descrito nesta política de privacidade.{'\n'}
+              Para uma melhor experiência, ao usar nosso Serviço, podemos exigir que você nos forneça certas informações de identificação pessoal, incluindo, mas não se limitando a Nome, Sobrenome, Email, Cidade, UF, Idade, Celular, Foto. As informações que solicitamos serão retidas por nós e usadas conforme descrito nesta <Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>Política de Privacidade</Text>.{'\n'}
         </Text>
         <Text style={{ textAlign: 'justify' }}>
             <Text style={{ fontWeight: 'bold' }}>Dados de registro</Text>
