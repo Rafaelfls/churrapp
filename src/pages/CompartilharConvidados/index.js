@@ -90,7 +90,7 @@ export default function CompartilharConvidados({ route, navigation }) {
     const response = await api.post('/usuarios', {
       nome: convid.nome,
       sobrenome: "sobrenome",
-      email: convid.nome + "@churrapp",
+      email: convid.telefone + "@churrapp",
       cidade: "cidade",
       uf: "uf",
       idade: "20/02/2002",
