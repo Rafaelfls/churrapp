@@ -186,11 +186,13 @@ export default function ResumoChurras() {
         if (notificacao.churras_id == null) {
             await api.delete(`/notificacoes/${notificacao.id}`)
             setIsNotificacoesOpen(false)
+            console.log("DOIDERA")
             setRefreshChurras(!refreshChurras);
         } else {
             await api.put(`/negarPresenca/${notificacao.usuario_id}/${notificacao.churras_id}`)
             await api.delete(`/notificacoes/${notificacao.id}`)
             setIsNotificacoesOpen(false)
+            console.log("DOIDERA")
             setRefreshChurras(!refreshChurras);
         }
     }
@@ -210,6 +212,10 @@ export default function ResumoChurras() {
             navigation.navigate('DetalheChurras', { churras: churrasId, editavel: false })
         }
     }
+    function abrirDrawer() {
+        navigation.openDrawer();
+    }
+
 
     return (
         <View style={style.container}>
@@ -217,18 +223,17 @@ export default function ResumoChurras() {
             <View style={style.header}>
                 <View style={style.menuBtn}>
                     <View style={style.centeredViewNotificacaoQtd}>
-                        {notificacoes.length > 0
-                            ? <View style={style.modalViewNotificacaoQtd}>
-                                <Text style={style.textBtnNotificacaoQtd}>{notificacoes.length}</Text>
-                            </View>
-                            : null}
+                        <TouchableOpacity onPress={abrirDrawer}>
+                            {notificacoes.length > 0
+                                ? <View style={style.modalViewNotificacaoQtd}>
+                                    <Text style={style.textBtnNotificacaoQtd}>{notificacoes.length}</Text>
+                                </View>
+                                : null}
+                        </TouchableOpacity>
                     </View>
-                    {notificacoes.length > 0
-                        ? (<TouchableOpacity onPress={notificacao}>
-                            <IconMI style={{ color: "#800000" }} name="notifications" size={30} />
-                        </TouchableOpacity>)
-                        : <IconMI style={style.menuIcon} name="notifications-none" size={30} />
-                    }
+                    <TouchableOpacity onPress={() => abrirDrawer()}>
+                        <IconMI name='menu' size={30} />
+                    </TouchableOpacity>
                 </View>
                 <View style={style.titulo}>
                     <Text style={style.textHeader}>Meus churras</Text>
@@ -255,9 +260,9 @@ export default function ResumoChurras() {
                             <View style={style.churrasDescricao}>
                                 <RNSlidingButton
                                     style={{ backgroundColor: 'white', width: "95%" }}
-                                    height={100}                                    
+                                    height={100}
                                     onSlidingSuccessLeft={() => { setVisivel(true); setChurrasDeletar(churras) }}
-                                    onSlidingSuccessRight={() => {detalheChurras(churras.id)}}
+                                    onSlidingSuccessRight={() => { detalheChurras(churras.id) }}
                                     slideDirection={SlideDirection.ANY}>
                                     <View style={{ flexDirection: "row", width: '100%' }}>
                                         <View style={style.detalheSlide}>
@@ -273,7 +278,7 @@ export default function ResumoChurras() {
                                                     <Text style={style.churrasData}> {formatData(churras.data)}</Text>
                                                     <Text style={style.locDatSeparator}>  |  </Text>
                                                     <IconMI style={style.localIcon} name="access-time" size={15} />
-                                                    <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - "+churras.hrFim: ''}</Text>
+                                                    <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - " + churras.hrFim : ''}</Text>
                                                 </View>
                                             </View>
                                         </View>

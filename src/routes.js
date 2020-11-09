@@ -1,10 +1,12 @@
-import React from 'react';
-import { Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, Button, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import IconMI from 'react-native-vector-icons/FontAwesome';
 import { Linking } from 'expo';
+import { createDrawerNavigator } from '@react-navigation/drawer'
 
 const AppStack = createStackNavigator();
 const prefix = Linking.makeUrl('/');
@@ -39,13 +41,105 @@ import AdicionarSobremesas from './pages/AdicionarSobremesas';
 import FinalCriaChurras from './pages/FinalCriaChurras';
 import EsqueciSenha from './pages/EsqueciSenha';
 import AlterarSenha from './pages/AlterarSenha';
+import Notificacoes from './pages/Notificacoes';
+
+import CustomSideBarMenu from './components/CustomSideBarMenu'
 
 import ChurrasProvider from './context/churrasContext';
 
+import style from './styles.js'
+import api from './services/api'
+
+//Criando Icone Customizável
+import { createIconSetFromIcoMoon } from '@expo/vector-icons';
+import icoMoonConfig from '../selection.json';
+const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig, 'zondicon-icon', 'icomoon.ttf');
+//Fim
+
 
 const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
 
+function badgeIconeNotificacao(focused) {
+    const [notificacoes, setnotificacoes] = useState([]);
+    function loadNotificacoes() {
+        api.get(`/notificacoes/${USUARIOLOGADO.id}`).then(function (res) {
+            setnotificacoes(res.data)
+        })
+    }
+
+    useEffect(() => {
+        loadNotificacoes();
+    }, []);
+
+    return (
+        <View>
+            <View style={style.centeredViewNotificacaoQtd}>
+                {notificacoes.length > 0
+                    ? <View style={style.modalViewNotificacaoQtd}>
+                        <Text style={style.textBtnNotificacaoQtd}>{notificacoes.length}</Text>
+                    </View>
+                    : null}
+            </View>
+            <IconMI size={25} name={focused ? 'bell-o' : 'bell'}  ></IconMI>
+        </View>
+    )
+}
+function criarDrawer() {
+    return (
+        <Drawer.Navigator
+            initialRouteName='Início'
+            drawerType={'back'}
+            drawerStyle={{ width: '60%', backgroundColor: 'lightgray' }}
+            overlayColor={'rgba(0,0,0,0.8)'}
+            drawerContentOptions={{
+                activeTintColor: 'white',
+                inactiveTintColor: 'maroon',
+                activeBackgroundColor: 'rgba(128,0,0,0.8)',
+                labelStyle: { fontFamily: 'poppins-medium', fontSize: 15, alignSelf: 'flex-start' },
+                itemStyle: { marginHorizontal: 8 }
+            }}
+            drawerContent={(props) => <CustomSideBarMenu {...props} />}
+        >
+            <Drawer.Screen name='Início' component={CriarTabs}
+                options={{
+                    drawerIcon: (({ focused }) => <IconMI size={25} name={focused ? 'home' : 'home'} ></IconMI>)
+                }}
+            />
+            <Drawer.Screen name='Notificações' component={Notificacoes}
+                options={{
+                    drawerIcon: (({ focused }) => badgeIconeNotificacao(focused))
+                }}
+            />
+            <Drawer.Screen name='Criar Item' component={Perfil}
+                options={{
+                    drawerIcon: (({ focused }) => <CustomIcon name="list-add" size={25} />)
+                }}
+            />
+            <Drawer.Screen name='Perfil' component={Perfil}
+                options={{
+                    drawerIcon: (({ focused }) => <CustomIcon name="user" size={25} />)
+                }}
+            />
+            <Drawer.Screen name='Guia' component={Perfil}
+                options={{
+                    drawerIcon: (({ focused }) => <Image source={require('../assets/icon.png')} style={{ width: 25, height: 25 }} />)
+                }}
+            />
+            <Drawer.Screen name='Promoções' component={Perfil}
+                options={{
+                    drawerIcon: (({ focused }) => <Image source={require('../assets/icon.png')} style={{ width: 25, height: 25 }} />)
+                }}
+            />
+            <Drawer.Screen name='Lojas' component={Perfil}
+                options={{
+                    drawerIcon: (({ focused }) => <Image source={require('../assets/icon.png')} style={{ width: 25, height: 25 }} />)
+                }}
+            />
+        </Drawer.Navigator>
+    );
+}
 function CriarTabs() {
     return (
 
@@ -60,18 +154,13 @@ function CriarTabs() {
                     iconName = focused
                         ? 'home'
                         : 'home';
-                } else if (route.name === "Perfil") {
-                    iconName = focused
-                        ? 'creative-commons-by'
-                        : 'creative-commons-by';
-                }
+                } 
                 return <Icon name={iconName} size={size} color={color} />;
 
             }
         })} initialRouteName={'Meu Churras'} tabBarOptions={{ activeTintColor: "maroon", inactiveTintColor: "gray" }}>
             <Tab.Screen name="Outros Churras" component={OutrosChurras} />
             <Tab.Screen name="Meu Churras" component={ResumoChurras} />
-            <Tab.Screen name="Perfil" component={Perfil} />
         </Tab.Navigator>
     );
 }
@@ -95,7 +184,7 @@ export default function Routes() {
                     {/* Fim telas fora do app */}
 
                     {/* Paginas principais */}
-                    <AppStack.Screen name="Tabs" component={CriarTabs} />
+                    <AppStack.Screen name="Tabs" component={criarDrawer} />
                     <AppStack.Screen name="Perfil" component={Perfil} />
                     <AppStack.Screen name="ResumoChurras" component={ResumoChurras} />
                     <AppStack.Screen name="OutrosChurras" component={OutrosChurras} />
