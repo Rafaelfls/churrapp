@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import IconIo from 'react-native-vector-icons/Ionicons';
 import IconMI from 'react-native-vector-icons/FontAwesome';
 import { Linking } from 'expo';
 import { createDrawerNavigator } from '@react-navigation/drawer'
@@ -91,20 +92,21 @@ function criarDrawer() {
         <Drawer.Navigator
             initialRouteName='Início'
             drawerType={'back'}
-            drawerStyle={{ width: '60%', backgroundColor: 'lightgray' }}
+            drawerStyle={{ width: '65%', backgroundColor: 'lightgray' }}
             overlayColor={'rgba(0,0,0,0.8)'}
             drawerContentOptions={{
                 activeTintColor: 'white',
                 inactiveTintColor: 'maroon',
                 activeBackgroundColor: 'rgba(128,0,0,0.8)',
                 labelStyle: { fontFamily: 'poppins-medium', fontSize: 15, alignSelf: 'flex-start' },
-                itemStyle: { marginHorizontal: 8 }
+                itemStyle: { marginHorizontal: 8, top: -30 }
             }}
             drawerContent={(props) => <CustomSideBarMenu {...props} />}
         >
             <Drawer.Screen name='Início' component={CriarTabs}
                 options={{
-                    drawerIcon: (({ focused }) => <IconMI size={25} name={focused ? 'home' : 'home'} ></IconMI>)
+                    drawerIcon: (({ focused }) => <IconMI size={25} name={focused ? 'home' : 'home'} ></IconMI>),
+                    title: "Início",
                 }}
             />
             <Drawer.Screen name='Notificações' component={Notificacoes}
@@ -114,7 +116,12 @@ function criarDrawer() {
             />
             <Drawer.Screen name='Criar Item' component={Perfil}
                 options={{
-                    drawerIcon: (({ focused }) => <CustomIcon name="list-add" size={25} />)
+                    drawerIcon: (({ focused }) => <CustomIcon name={focused ? "add-outline" : "add-solid"} size={25} />)
+                }}
+            />
+            <Drawer.Screen name='Lista de Compras' component={Perfil}
+                options={{
+                    drawerIcon: (({ focused }) => <CustomIcon name="list-bullet" size={25} />)
                 }}
             />
             <Drawer.Screen name='Perfil' component={Perfil}
@@ -124,17 +131,17 @@ function criarDrawer() {
             />
             <Drawer.Screen name='Guia' component={Perfil}
                 options={{
-                    drawerIcon: (({ focused }) => <Image source={require('../assets/icon.png')} style={{ width: 25, height: 25 }} />)
+                    drawerIcon: (({ focused }) => <CustomIcon name="location-food" size={25} />)
                 }}
             />
             <Drawer.Screen name='Promoções' component={Perfil}
                 options={{
-                    drawerIcon: (({ focused }) => <Image source={require('../assets/icon.png')} style={{ width: 25, height: 25 }} />)
+                    drawerIcon: (({ focused }) => <IconIo name={focused ? "md-pricetag" : "md-pricetag"} size={25} />)
                 }}
             />
             <Drawer.Screen name='Lojas' component={Perfil}
                 options={{
-                    drawerIcon: (({ focused }) => <Image source={require('../assets/icon.png')} style={{ width: 25, height: 25 }} />)
+                    drawerIcon: (({ focused }) => <CustomIcon name="location-shopping" size={25} />)
                 }}
             />
         </Drawer.Navigator>
@@ -154,7 +161,7 @@ function CriarTabs() {
                     iconName = focused
                         ? 'home'
                         : 'home';
-                } 
+                }
                 return <Icon name={iconName} size={size} color={color} />;
 
             }

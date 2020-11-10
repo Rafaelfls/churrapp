@@ -45,11 +45,12 @@ export default StyleSheet.create({
     padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
+    top: -15
   },
   // Fim
   // Pefil
   perfilInfo: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   perfilChurrasInfo: {
     flexDirection: 'row'
@@ -72,13 +73,98 @@ export default StyleSheet.create({
   },
   // Fim
   linha: {
-    backgroundColor: 'gray', 
-    width: '100%', 
-    height: 8
+    backgroundColor: 'gray',
+    width: '100%',
+    height: 4,
   },
   signOutBtn: {
   },
   signOutIcon: {
     color: 'black',
   },
+  //Modal
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 8,
+    paddingHorizontal: 35,
+    paddingVertical: 25,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  modalTitle: {
+    color: "#800000",
+    fontSize: 26,
+    marginBottom: 15,
+  },
+  modalText: {
+    fontSize: 17,
+    textAlign: 'center'
+  },
+  footerModal: {
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    backgroundColor: 'white',
+  },
+  inputArea: {
+    marginHorizontal: 30,
+    marginTop: 50,
+    width: 200
+  },
+  textLabel: {
+    fontSize: 17,
+    color: "black",
+    fontFamily: 'poppins-medium',
+    marginBottom: 5,
+  },
+  inputStandard: {
+    height: 40,
+    borderColor: 'gray',
+    fontFamily: 'poppins-regular',
+    borderBottomWidth: 0.5,
+    paddingHorizontal: 5,
+    marginBottom: 2,
+    fontSize: 17,
+  },
+  inputStandardAssunto:{
+    height: 40,
+    borderColor: 'gray',
+    fontFamily: 'poppins-regular',
+    borderBottomWidth: 0.5,
+    paddingHorizontal: 5,
+    marginBottom: 2,
+    fontSize: 17,
+  },
+  continueBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    backgroundColor: 'maroon',
+    width: '100%',
+    height: 40,
+    paddingVertical: 5,
+    marginTop: 10
+  },
+  textBtn: {
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
+  //Fim
 })

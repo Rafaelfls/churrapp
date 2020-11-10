@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, Vibration, ActivityIndicator, Modal, RefreshControl, AppState, Platform } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, Vibration, ActivityIndicator, Modal, RefreshControl, AppState, Platform, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { FloatingAction } from "react-native-floating-action";
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -8,6 +8,7 @@ import IconMI from 'react-native-vector-icons/MaterialIcons';
 import IconEnt from 'react-native-vector-icons/Entypo';
 import IconFea from 'react-native-vector-icons/Feather';
 import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
+import { useIsDrawerOpen } from '@react-navigation/drawer'
 
 import api from '../../services/api';
 
@@ -34,6 +35,8 @@ export default function ResumoChurras() {
     const [test, setTest] = useState([]);
     var newChurrasCriados;
     const [direcao, setDirecao] = useState();
+
+    const isDrawerOpen = useIsDrawerOpen();
 
     //Começo Ouvir Estado do App
     const appState = useRef(AppState.currentState);
@@ -109,11 +112,6 @@ export default function ResumoChurras() {
 
         });
 
-    }
-
-    function logout() {
-        USUARIOLOGADO = null
-        navigation.replace('Login');
     }
 
     function apertaFabBtn(btn) {
@@ -213,7 +211,7 @@ export default function ResumoChurras() {
         }
     }
     function abrirDrawer() {
-        navigation.openDrawer();
+        navigation.toggleDrawer()
     }
 
 
@@ -231,22 +229,15 @@ export default function ResumoChurras() {
                                 : null}
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity onPress={() => abrirDrawer()}>
-                        <IconMI name='menu' size={30} />
-                    </TouchableOpacity>
+                    <TouchableWithoutFeedback onPressIn={() => abrirDrawer()} >
+                            <IconMI name='menu' size={30} />
+                    </TouchableWithoutFeedback>
                 </View>
                 <View style={style.titulo}>
                     <Text style={style.textHeader}>Meus churras</Text>
 
                     <Text style={style.textSubHeader}>Você tem {contadorCriado} eventos criados</Text>
                 </View>
-
-                <View style={style.signOutBtn}>
-                    <TouchableOpacity onPress={() => logout()} >
-                        <IconMCI style={style.signOutIcon} name="logout" size={25} />
-                    </TouchableOpacity>
-                </View>
-
             </View>
 
             <FlatList
