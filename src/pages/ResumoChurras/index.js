@@ -112,7 +112,9 @@ export default function ResumoChurras() {
     }
 
     function logout() {
-        USUARIOLOGADO = null
+        USUARIOLOGADO = {};
+        LISTADECONVIDADOS = null;
+        CONVITE = null;
         navigation.replace('Login');
     }
 

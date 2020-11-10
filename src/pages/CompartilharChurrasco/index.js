@@ -55,11 +55,14 @@ export default function CompartilharChurrasco({ route, navigation }) {
         var year = new Date(churras.data).getFullYear()
         setChurrasDateFormatted(date + '/' + month + '/' + year)
 
-        
-        var date2 = new Date(churras.limiteConfirmacao).getDate() + 1
-        var month2 = new Date(churras.limiteConfirmacao).getMonth() + 1
-        var year2 = new Date(churras.limiteConfirmacao).getFullYear()
-        setChurrasDateFormattedConf(date2 + '/' + month2 + '/' + year2)
+        if(churras.limiteConfirmacao != null){
+            var date2 = new Date(churras.limiteConfirmacao).getDate() + 1
+            var month2 = new Date(churras.limiteConfirmacao).getMonth() + 1
+            var year2 = new Date(churras.limiteConfirmacao).getFullYear()
+            setChurrasDateFormattedConf(date2 + '/' + month2 + '/' + year2)
+        }else{
+            setChurrasDateFormattedConf(churrasDateFormatted)
+        }
     }
 
 

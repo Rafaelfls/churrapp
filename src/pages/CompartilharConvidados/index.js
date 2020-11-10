@@ -18,7 +18,6 @@ export default function CompartilharConvidados({ route, navigation }) {
 
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
-  const [value, onChangeValue] = React.useState(20.50);
   const [convite, onChangeText] = React.useState('');
   const [updatePage, setUpdatePage] = React.useState(false)
 
@@ -33,7 +32,7 @@ export default function CompartilharConvidados({ route, navigation }) {
   var $val1 = `, no local ${churrasAtual.local}`
   var $val2 = `, no dia ${churrasAtual.data}`
   var $val3 = `, com início às ${churrasAtual.hrInicio}${churrasAtual.hrFim == undefined ? "" : ` e término ${churrasAtual.hrFim}`}`
-  var $val4 = `, o valor do churrasco por pessoa ficou R$${value}`
+  var $val4 = `, o valor do churrasco por pessoa ficou R$XX,XX`
   var $val5 = `. Acesse o Churrapp para confirmar a sua presença${churrasAtual.limiteConfirmacao == null ? "" : ` até o dia ${churrasAtual.limiteConfirmacao}`}`
 
   //convite [mensagem, local, data, horarios, valor por pessoa, limite de confirmação de presença]
@@ -77,6 +76,8 @@ export default function CompartilharConvidados({ route, navigation }) {
   }
 
   async function criaListaConvidados(convid) {
+    
+    var conviteFinal2 = convite0 + convite1 + convite2 + convite3 + convite4 + convite5 +".";
     convid.telefone = convid.telefone.replace("+55", "").replace(/-/g, "").replace(/\s/g, "").replace(/[()]/g, "");
 
 
@@ -105,10 +106,10 @@ export default function CompartilharConvidados({ route, navigation }) {
       bebidaPreferida_id: 0,
       acompanhamentoPreferido_id: 0
     }).then(async function (response) {
-      await api.post(`/convidadosChurras/${response.data.usuario[0].id}`, {
-        valorPagar: value,
+      await api.post(`/convidadosChurrasCriado/${response.data.usuario[0].id}`, {
         churras_id: churrasAtual.churrasCode
       })
+      enviaMensagens(convid, conviteFinal2)
       enviaNotificacao(response.data.usuario[0])
     })
 
@@ -127,7 +128,7 @@ export default function CompartilharConvidados({ route, navigation }) {
     var conviteFinal2 = convite0 + convite1 + convite2 + convite3 + convite4 + convite5 +".";
     setLoading(true)
     await convidadosList.map(convid => criaListaConvidados(convid))
-    await convidadosList.map(convid => enviaMensagens(convid.telefone, conviteFinal2))
+    await convidadosList.map(convid => enviaMensagens(convid, conviteFinal2))
 
     var churrascode = churrasAtual.churrasCode
     setLoading(false)
@@ -137,7 +138,6 @@ export default function CompartilharConvidados({ route, navigation }) {
   }
 
   async function enviaNotificacao(convid) {
-    console.log(churrasAtual)
     if(churrasAtual.limiteConfirmacao == null){
       await api.post(`/notificacoes/${convid.id}/${churrasAtual.churrasCode}`, {
         mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${churrasAtual.nomeChurras}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
@@ -193,18 +193,25 @@ export default function CompartilharConvidados({ route, navigation }) {
     setEditaConvite(false)
   }
 
-  function enviaMensagens(telefone, convite) {
-    Linking.canOpenURL(`whatsapp://send?text=${convite}`).then(supported => {
+  async function enviaMensagens(convid, convite) {
+    var valorFinal = 0;
+    await api.get(`/convidadosPorCelular/${churrasAtual.churrasCode}/${convid.telefone}`)
+    .then((res) =>{
+      valorFinal = (res.data[0].valorPagar).toFixed(2);
+    })
+    
+    var cvt = convite.replace('R$XX,XX.','R$'+valorFinal+".")
+    
+    Linking.canOpenURL(`whatsapp://send?text=${cvt}`).then(supported => {
       if (supported) {
-        if (convite === '') {
-          convite = inviteStandard;
+        if (cvt === '') {
+          cvt = inviteStandard;
         }
-        return Linking.openURL(`whatsapp://send?text=${convite}&phone=+55${telefone}`);
+        return Linking.openURL(`whatsapp://send?text=${cvt}&phone=+55${convid.telefone}`);
       } else {
-        return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${telefone}&text=${convite}`)
+        return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${convid.telefone}&text=${cvt}`)
       }
     })
-
   }
 
   return (

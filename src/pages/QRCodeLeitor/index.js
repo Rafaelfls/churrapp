@@ -29,9 +29,8 @@ export default function QRCodeLeitor() {
     async function participarDoChurras() {
         setIsVisivel(false);
         setLoading(true)
-        await api.post(`/convidadosChurras/${USUARIOLOGADO.id}`, {
-            valorPagar: 30,
-            churras_id: qrCodeValue.id
+        await api.post(`/convidadosChurrasCriado/${USUARIOLOGADO.id}`, {
+            churras_id: churras_id
         }).then(async function (res) {
             if(res.data[0].limiteConfirmacao == null){
                 await api.post(`/notificacoes/${USUARIOLOGADO.id}/${qrCodeValue.id}`, {
