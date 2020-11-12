@@ -47,6 +47,13 @@ export default StyleSheet.create({
     alignItems: 'center',
     top: -15
   },
+  contatoLabel: {
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    top: -18,
+    justifyContent: 'center'
+  },
   // Fim
   // Pefil
   perfilInfo: {

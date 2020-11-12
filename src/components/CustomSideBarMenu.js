@@ -9,6 +9,8 @@ import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import style from '../styles';
 
+import { useLoadingModal } from '../context/churrasContext'
+
 //Criando Icone Customizável
 import { createIconSetFromIcoMoon } from '@expo/vector-icons';
 import icoMoonConfig from '../../selection.json';
@@ -21,13 +23,12 @@ const CustomSideBarMenu = (props) => {
     const [modalEmail, setModalEmail] = useState(false)
     const [assunto, setAssunto] = useState('')
     const [msg, setMsg] = useState('')
+    const { loading, setLoading } = useLoadingModal()
 
     function logout() {
         USUARIOLOGADO = null
         navigation.replace('Login');
     }
-    const BASE_PATH =
-        'https://raw.githubusercontent.com/AboutReact/sampleresource/master/';
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View>
@@ -70,6 +71,25 @@ const CustomSideBarMenu = (props) => {
                     label="Nosso Insta"
                     onPress={() => Linking.openURL('https://www.instagram.com/churrappbrasil/')}
                 /> */}
+                <View style={style.contatoLabel}>
+                <View style={style.linha}></View>
+                    <Icon
+                        name='information-solid'
+                        style={style.iconStyle}
+                    />
+                    <Text
+                        style={{
+                            fontSize: 18,
+                            textAlign: 'center',
+                            color: 'maroon',
+                            fontFamily: 'poppins-black',
+                            marginRight: 4
+                        }}
+                    >
+                        Contato
+                    </Text>
+                    <View style={style.linha}></View>
+                </View>
                 <View style={style.customItem}>
                     <Image
                         source={require('../../assets/instaIcon.png')}
@@ -119,7 +139,7 @@ const CustomSideBarMenu = (props) => {
                 <View style={style.centeredView}>
                     <View style={style.modalView}>
                         <Text style={style.modalTitle}>Enviar email!</Text>
-                        <TouchableOpacity style={{position: 'absolute', right: 20, top: 20}}onPress={() => {setModalEmail(!modalEmail); setAssunto(''); setMsg('')}}><Icon name="close" size={25}/></TouchableOpacity>
+                        <TouchableOpacity style={{ position: 'absolute', right: 20, top: 20 }} onPress={() => { setModalEmail(!modalEmail); setAssunto(''); setMsg('') }}><Icon name="close" size={25} /></TouchableOpacity>
                         <View style={style.inputArea}>
                             <Text style={style.textLabel}>Assunto:</Text>
                             <TextInput
@@ -141,7 +161,7 @@ const CustomSideBarMenu = (props) => {
                             />
                         </View>
                         <View style={style.footerModal}>
-                            <TouchableOpacity style={style.continueBtn} onPress={() => { setModalEmail(!modalEmail);  EmailSender('contato@churrapp.com', assunto, msg)}}>
+                            <TouchableOpacity style={style.continueBtn} onPress={() => { setModalEmail(!modalEmail); EmailSender('contato@churrapp.com', assunto, msg) }}>
                                 <Text style={style.textBtn}>OK</Text>
                             </TouchableOpacity>
                         </View>
