@@ -88,7 +88,7 @@ export default function AdicionaConvidados({ route, navigation }) {
     const response = await api.post('/usuarios', {
       nome: convid.nome,
       sobrenome: 'sobrenome',
-      email: convid.nome + "@churrapp",
+      email: convid.telefone + "@churrapp",
       cidade: "cidade",
       uf: "uf",
       idade: "02/01/1900",
