@@ -187,24 +187,25 @@ export default function AdicionarExtras({ route, navigation }) {
         if (!isEnabled) {
             if (isSugestao) {
                 setLoading(true)
+                var precoFinalTotal = 0;
                 itemList.map(async item => {
-                    var quantidadeFinal = item.quantidade * convidQtd
+                    var quantidadeFinal = item.quantidade * convidadosQtd
+                    precoFinalTotal = precoFinalTotal + (item.precoMedio * quantidadeFinal);
                     await api.post('/listadochurras', {
                         quantidade: quantidadeFinal,
                         churras_id: churrascode,
                         unidade_id: item.unidade_id,
                         item_id: item.item_id,
-                        formato_id: 7,
+                        formato_id: 2,
                         precoItem: item.precoMedio,
-                    }).then(async function (res) {
-                        var precoFinalTotal = item.precoMedio * quantidadeFinal;
-                        await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
-                            valorTotal: precoFinalTotal
-                        }).then((res) =>{
-                            carregaConvidados();
-                        })
                     })
                 })
+                
+                await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
+                    valorTotal: precoFinalTotal
+                })
+
+                carregaConvidados();
             }
             setIsSugestao(false)
             setReload(!reload)
