@@ -52,8 +52,8 @@ export default function DetalheChurras() {
   const [editChurrasInicio, setEditChurrasInicio] = useState('')
   const [editChurrasFim, setEditChurrasFim] = useState('')
   const [editChurrasDescricao, setEditChurrasDescricao] = useState('')
-  const [editChurrasFotoUrlC, setEditChurrasFotoUrlC] = useState('')
-  const [editChurrasFotoUrlU, setEditChurrasFotoUrlU] = useState('')
+  const [editChurrasFotoUrlC, setEditChurrasFotoUrlC] = useState('https://churrappuploadteste.s3.amazonaws.com/default/churrapp_default.png')
+  const [editChurrasFotoUrlU, setEditChurrasFotoUrlU] = useState('https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png')
   const [editChurrasValorTotal, setEditChurrasValorTotal] = useState(0)
   const [editChurrasValorPago, setEditChurrasValorPago] = useState(0)
 
@@ -579,7 +579,7 @@ export default function DetalheChurras() {
                   <Icon name="coins" size={22} style={style.icons} />
                   <Text style={style.churrasNome}>Valor por pessoa: </Text>
                 </View>
-                <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount + 1)).toFixed(2)}</Text>
+                <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount+1)).toFixed(2)}</Text>
               </View>}
             {allowEditing[0]
               ? <View style={style.formGroup}>
@@ -777,7 +777,7 @@ export default function DetalheChurras() {
                   <Icon name="coins" size={22} style={style.icons} />
                   <Text style={style.churrasNome}>Valor por pessoa: </Text>
                 </View>
-                <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / convidadosCount).toFixed(2)}</Text>
+                <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount+1)).toFixed(2)}</Text>
               </View>
               : null}
             <View style={style.formGroup}>
@@ -1049,7 +1049,7 @@ export default function DetalheChurras() {
                         <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
                         <Text style={style.locDatSeparatorModal}>  |  </Text>
                         <Icon style={style.localIconModal} name="coins" size={15} />
-                        <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + itens.precoItem}</Text>
+                        <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' :"R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
                       </View>
                     </View>
                   </View>
