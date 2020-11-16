@@ -99,7 +99,7 @@ export default function OpenContactList() {
             ) : null}
           <FlatList
             data={contacts}
-            keyExtractor={item => contacts.celular}
+            keyExtractor={(item,idx) => contacts.celular}
             showsVerticalScrollIndicator={false}
             style={style.churrasList}
             renderItem={({ item: contacts }) => (
@@ -111,7 +111,7 @@ export default function OpenContactList() {
                 <Text style={{ color: 'black', fontFamily: 'poppins-semi-bold', fontSize: 18 }}>
                   {contacts.nome}
                 </Text>
-                <Text style={{ color: 'gray', fontWeight: 'poppins-medium' }}>
+                <Text style={{ color: 'gray', fontFamily: 'poppins-medium' }}>
                   {contacts.celular}
                 </Text>
               </TouchableOpacity>

@@ -52,8 +52,8 @@ export default function DetalheChurras() {
   const [editChurrasInicio, setEditChurrasInicio] = useState('')
   const [editChurrasFim, setEditChurrasFim] = useState('')
   const [editChurrasDescricao, setEditChurrasDescricao] = useState('')
-  const [editChurrasFotoUrlC, setEditChurrasFotoUrlC] = useState('')
-  const [editChurrasFotoUrlU, setEditChurrasFotoUrlU] = useState('')
+  const [editChurrasFotoUrlC, setEditChurrasFotoUrlC] = useState('https://churrappuploadteste.s3.amazonaws.com/default/churrapp_default.png')
+  const [editChurrasFotoUrlU, setEditChurrasFotoUrlU] = useState('https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png')
   const [editChurrasValorTotal, setEditChurrasValorTotal] = useState(0)
   const [editChurrasValorPago, setEditChurrasValorPago] = useState(0)
 
