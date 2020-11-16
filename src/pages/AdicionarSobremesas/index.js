@@ -127,7 +127,7 @@ export default function AdicionarSobremesa({ route, navigation }) {
                         churras_id: churrascode,
                         unidade_id: item.unidade_id,
                         item_id: item.item_id,
-                        formato_id: 2,
+                        formato_id: 7,
                         precoItem: item.precoMedio,
                     })
                 })
