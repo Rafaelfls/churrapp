@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, Vibration, ActivityIndicator, Modal, RefreshControl, AppState, Platform } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, Vibration, ActivityIndicator, Modal, RefreshControl, AppState, Platform, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { FloatingAction } from "react-native-floating-action";
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -8,6 +8,7 @@ import IconMI from 'react-native-vector-icons/MaterialIcons';
 import IconEnt from 'react-native-vector-icons/Entypo';
 import IconFea from 'react-native-vector-icons/Feather';
 import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
+import { useIsDrawerOpen } from '@react-navigation/drawer'
 
 import api from '../../services/api';
 
@@ -36,6 +37,8 @@ export default function ResumoChurras() {
     const [test, setTest] = useState([]);
     var newChurrasCriados;
     const [direcao, setDirecao] = useState();
+
+    const isDrawerOpen = useIsDrawerOpen();
 
     //Começo Ouvir Estado do App
     const appState = useRef(AppState.currentState);
@@ -113,13 +116,6 @@ export default function ResumoChurras() {
 
     }
 
-    function logout() {
-        USUARIOLOGADO = {};
-        LISTADECONVIDADOS = null;
-        CONVITE = null;
-        navigation.replace('Login');
-    }
-
     function apertaFabBtn(btn) {
         console.log(btn)
         if (btn == "criaChurras") {
@@ -190,11 +186,13 @@ export default function ResumoChurras() {
         if (notificacao.churras_id == null) {
             await api.delete(`/notificacoes/${notificacao.id}`)
             setIsNotificacoesOpen(false)
+            console.log("DOIDERA")
             setRefreshChurras(!refreshChurras);
         } else {
             await api.put(`/negarPresenca/${notificacao.usuario_id}/${notificacao.churras_id}`)
             await api.delete(`/notificacoes/${notificacao.id}`)
             setIsNotificacoesOpen(false)
+            console.log("DOIDERA")
             setRefreshChurras(!refreshChurras);
         }
     }
@@ -214,6 +212,10 @@ export default function ResumoChurras() {
             navigation.navigate('DetalheChurras', { churras: churrasId, editavel: false })
         }
     }
+    function abrirDrawer() {
+        navigation.toggleDrawer()
+    }
+
 
     return (
         <View style={style.container}>
@@ -221,31 +223,23 @@ export default function ResumoChurras() {
             <View style={style.header}>
                 <View style={style.menuBtn}>
                     <View style={style.centeredViewNotificacaoQtd}>
-                        {notificacoes.length > 0
-                            ? <View style={style.modalViewNotificacaoQtd}>
-                                <Text style={style.textBtnNotificacaoQtd}>{notificacoes.length}</Text>
-                            </View>
-                            : null}
+                        <TouchableOpacity onPress={abrirDrawer}>
+                            {notificacoes.length > 0
+                                ? <View style={style.modalViewNotificacaoQtd}>
+                                    <Text style={style.textBtnNotificacaoQtd}>{notificacoes.length}</Text>
+                                </View>
+                                : null}
+                        </TouchableOpacity>
                     </View>
-                    {notificacoes.length > 0
-                        ? (<TouchableOpacity onPress={notificacao}>
-                            <IconMI style={{ color: "#800000" }} name="notifications" size={30} />
-                        </TouchableOpacity>)
-                        : <IconMI style={style.menuIcon} name="notifications-none" size={30} />
-                    }
+                    <TouchableWithoutFeedback onPressIn={() => abrirDrawer()} >
+                            <IconMI name='menu' size={30} />
+                    </TouchableWithoutFeedback>
                 </View>
                 <View style={style.titulo}>
                     <Text style={style.textHeader}>Meus churras</Text>
 
                     <Text style={style.textSubHeader}>Você tem {contadorCriado} eventos criados</Text>
                 </View>
-
-                <View style={style.signOutBtn}>
-                    <TouchableOpacity onPress={() => logout()} >
-                        <IconMCI style={style.signOutIcon} name="logout" size={25} />
-                    </TouchableOpacity>
-                </View>
-
             </View>
             
             {churras.length == 0

@@ -6,67 +6,67 @@ import style from './styles';
 const ChurrasContext = createContext();
 
 export default function churrasProvider({ children }) {
-    const [churrasCount, setChurrasCount ] = useState(0);
+    const [churrasCount, setChurrasCount] = useState(0);
     const [churrasParticipado, setChurrasParticipado] = useState(0);
-    const [convidadosCount, setConvidadosCount ] = useState(0);
+    const [convidadosCount, setConvidadosCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [appStateVisible, setAppStateVisible] = useState();
 
-    
 
-  return (
-      <ChurrasContext.Provider 
-      value={{
-          churrasCount, 
-          setChurrasCount,
-          convidadosCount,
-          setConvidadosCount,
-          loading,
-          setLoading,
-          churrasParticipado,
-          setChurrasParticipado,
-          appStateVisible,
-          setAppStateVisible
-          }}>
-          {children}
-      </ChurrasContext.Provider>
-  );
+
+    return (
+        <ChurrasContext.Provider
+            value={{
+                churrasCount,
+                setChurrasCount,
+                convidadosCount,
+                setConvidadosCount,
+                loading,
+                setLoading,
+                churrasParticipado,
+                setChurrasParticipado,
+                appStateVisible,
+                setAppStateVisible
+            }}>
+            {children}
+        </ChurrasContext.Provider>
+    );
 }
 
 export function useChurrasCount() {
     const context = useContext(ChurrasContext);
-    const {churrasCount, setChurrasCount} = context;
-    return {churrasCount, setChurrasCount};
+    const { churrasCount, setChurrasCount } = context;
+    return { churrasCount, setChurrasCount };
 }
 
 export function useChurrasParticipado() {
     const context = useContext(ChurrasContext);
-    const {churrasParticipado, setChurrasParticipado} = context;
-    return {churrasParticipado, setChurrasParticipado};
+    const { churrasParticipado, setChurrasParticipado } = context;
+    return { churrasParticipado, setChurrasParticipado };
 }
 
 export function useConvidadosCount() {
     const context = useContext(ChurrasContext);
-    const {convidadosCount, setConvidadosCount} = context;
-    return {convidadosCount, setConvidadosCount};
+    const { convidadosCount, setConvidadosCount } = context;
+    return { convidadosCount, setConvidadosCount };
 }
 
 export function useLoadingModal() {
     const context = useContext(ChurrasContext)
-    const { loading, setLoading} = context;
-    return {loading, setLoading};
-        
+    const { loading, setLoading } = context;
+    return { loading, setLoading };
+
 }
 
 export function useAppState() {
     const context = useContext(ChurrasContext);
-    const { appStateVisible, setAppStateVisible} = context;
-    return { appStateVisible, setAppStateVisible};
+    const { appStateVisible, setAppStateVisible } = context;
+    return { appStateVisible, setAppStateVisible };
 }
 
 export function createLoadingModal(loading) {
-    if(loading === true) {
-        return(
+    if (loading === true) {
+        return (
             <Modal
                 animationType="fade"
                 transparent={true}

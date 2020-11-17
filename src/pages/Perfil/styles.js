@@ -8,7 +8,48 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-
+  //header
+  container: {
+    flex: 1,
+    paddingTop: Constants.statusBarHeight + 15,
+    backgroundColor: '#fff'
+  },
+  header: {
+    justifyContent: 'center',
+    alignItems: "center",
+    flexDirection: 'row',
+    marginHorizontal: 20,
+    marginBottom: 15,
+  },
+  titulo: {
+  },
+  textHeader: {
+    fontSize: 30,
+    color: 'black',
+    fontFamily: 'poppins-semi-bold',
+  },
+  textSubHeader: {
+    fontSize: 15,
+    color: 'gray',
+    fontFamily: 'poppins-medium',
+  },
+  signOutBtn: {
+    position: "absolute",
+    right: 0,
+    top: 10,
+  },
+  menuBtn: {
+    position: "absolute",
+    left: 15,
+    top: 10,
+  },
+  signOutIcon: {
+    color: 'gray',
+  },
+  menuIcon: {
+    color: 'gray',
+  },
+  //fim
   backgroundProfile: {
     backgroundColor: "maroon",
     marginBottom: 10,
@@ -348,15 +389,15 @@ export default StyleSheet.create({
     margin: 10,
   },
   linha: {
-      width: "90%",
-      height: 1,
-      backgroundColor: 'gray',
+    width: "90%",
+    height: 1,
+    backgroundColor: 'gray',
   },
   flatItemDadosFiltrados: {
     margin: 8,
     // borderWidth: 1,
     // borderRadius: 8,
-    
+
   },
   textoDadosFiltrados: {
     color: 'maroon',

@@ -49,8 +49,9 @@ export default StyleSheet.create({
     position: 'absolute',
     height: 15,
     width: 15,
-    left: 19,
+    left: 24,
     zIndex: 1,
+    top: -5
   },
   modalViewNotificacaoQtd: {
     backgroundColor: "rgba(114,114,114,0.5)",
