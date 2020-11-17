@@ -82,7 +82,7 @@ editarConvite:{
 modalTitleConvite:{
   color:"#800000",
   fontSize:30,
-  fontWeight: "bold"
+  fontFamily: 'poppins-medium', 
 },
 subTitleConvite:{
   fontSize:12,
@@ -96,6 +96,7 @@ modalTextConvite:{
   fontSize:17,
   justifyContent:'flex-start',
   width:'100%',
+  fontFamily: 'poppins-light', 
 },
 inputStandardConvite:{ 
   borderColor: 'gray', 
@@ -121,7 +122,7 @@ footer:{
   justifyContent: "center",
   borderTopColor: 'lightgray',
   borderTopWidth: 1,
-  backgroundColor: 'white',
+  backgroundColor: '#f5f5f5',
 },
 continueBtn:{
   alignItems: 'center',
@@ -131,9 +132,18 @@ continueBtn:{
   height: '60%',
   width: '85%',
   paddingVertical: 5,
-},
-textBtn:{
-  color: 'white',
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 3,
+  },
+  shadowOpacity: 0.27,
+  shadowRadius: 4.65,
+
+  elevation: 6,
+}, 
+iconExitBtn: {
+  color: 'maroon',
   fontSize: 17,
   fontFamily: 'poppins-medium',
   textAlign: 'center',
@@ -164,7 +174,7 @@ modalTitle:{
   color:"#800000",
   fontSize:30,
   marginBottom:15,
-  fontWeight: "bold"
+  fontFamily: 'poppins-medium',
 },
 confirmarSairTitle:{
   color:"#800000",
@@ -174,12 +184,14 @@ confirmarSairTitle:{
 },
 modalText:{
   fontSize:17,
-  textAlign:'center'
+  textAlign:'center',
+  fontFamily: 'poppins-light',
 },
 confirmarSairSubTitle:{
   fontSize:12,
   textAlign:'center',
-  color: "grey"
+  color: "grey",
+  fontFamily: 'poppins-light',
 },
 footerModal:{    
   height: 90,
@@ -190,13 +202,41 @@ footerModal:{
 },
 sairBtn:{
   alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'lightgray',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+},
+salvarBtn: {
+  alignItems: 'center',
   justifyContent: 'center',
   borderRadius:8,
   backgroundColor: 'maroon',
   height: '60%',
   width: 125,
   paddingVertical: 5,
-  marginHorizontal: 10
+  marginHorizontal: 10,
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 3,
+  },
+  shadowOpacity: 0.27,
+  shadowRadius: 4.65,
+
+  elevation: 6,
 },
 textBtn:{
   color: 'white',

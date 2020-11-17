@@ -46,7 +46,7 @@ export default StyleSheet.create({
         justifyContent: 'flex-end',
         borderTopColor: 'lightgray',
         borderTopWidth: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#f5f5f5',
       },
 
     enterBtn:{
@@ -58,6 +58,15 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 3,
+        },
+        shadowOpacity: 0.27,
+        shadowRadius: 4.65,
+    
+        elevation: 6,
     },
 
     textBtn:{
@@ -109,10 +118,12 @@ export default StyleSheet.create({
     color:"#800000",
     fontSize:30,
     marginBottom:15,
+    fontFamily: 'poppins-medium',
   },
   modalText:{
     fontSize:20,
-    textAlign:'center'
+    textAlign:'center',
+    fontFamily: 'poppins-light',
   },
   footerModal:{    
     height: 90,
@@ -129,21 +140,72 @@ export default StyleSheet.create({
     height: '60%',
     width: '85%',
     paddingVertical: 5,
-  },  
-  otherBtnModal:{
-    flexDirection: 'row-reverse',
-    backgroundColor: '#800000',
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-    borderRadius: 8,
-    alignItems: 'center',
-  },  
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },   
   textBtnModal:{
     color: 'white',
     fontSize: 17,
     fontFamily: 'poppins-medium',
     textAlign: 'center',
   },
+  footerModal2: {  
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    backgroundColor: 'white',
+  },
+  exitBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'lightgray',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
 
+    elevation: 6,
+  },  
+  iconExitBtn: {
+    color: 'maroon',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
+  salvarBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },
   //fim modal
 });

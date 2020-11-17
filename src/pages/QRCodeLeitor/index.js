@@ -101,8 +101,8 @@ export default function QRCodeLeitor() {
                         <Text style={style.modalTitle}>Participar!</Text>
                         <Text style={style.modalText}>Deseja participar do churras {qrCodeValue.nomeChurras}?</Text>
                         <View style={style.footer}>
-                            <TouchableOpacity style={style.salvarBtn} onPress={() => setIsVisivel(false)}>
-                                <Text style={style.textSalvarBtn}>Cancelar</Text>
+                            <TouchableOpacity style={style.exitBtn} onPress={() => setIsVisivel(false)}>
+                                <Text style={style.iconExitBtn}>Cancelar</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={style.salvarBtn} onPress={participarDoChurras}>
                                 <Text style={style.textSalvarBtn}>Participar</Text>

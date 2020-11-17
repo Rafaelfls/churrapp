@@ -148,11 +148,11 @@ export default function ParticiparChurrasco() {
                     <View style={style.modalView}>
                         <Text style={style.modalTitle}>Participar!</Text>
                         <Text style={style.modalText}>Deseja participar do churras {confirm[1]}?</Text>
-                        <View style={style.footerModal}>
-                            <TouchableOpacity style={style.otherBtnModal} onPress={() => {setConfirm([false]), setChurras_id(null)}}>
-                                <Text style={style.textBtnModal}>Cancelar</Text>
+                        <View style={style.footerModal2}>
+                            <TouchableOpacity style={style.exitBtn} onPress={() => {setConfirm([false]), setChurras_id(null)}}>
+                                <Text style={style.iconExitBtn}>Cancelar</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={style.otherBtnModal} onPress={entrarChurrasco}>
+                            <TouchableOpacity style={style.salvarBtn} onPress={entrarChurrasco}>
                                 <Text style={style.textBtnModal}>Participar</Text>
                             </TouchableOpacity>
                         </View>

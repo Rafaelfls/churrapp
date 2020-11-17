@@ -200,7 +200,7 @@ export default function CadastroUsuario() {
                         onChangeText={text => criptoSenha2(text)}
                     />
                     <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
-                        <CheckBox value={termoLido} onValueChange={(termoLido) => setTermoLido(termoLido)} />
+                        <CheckBox value={termoLido} tintColors={{ true: 'maroon'}} onValueChange={(termoLido) => setTermoLido(termoLido)} />
                         <TouchableOpacity onPress={() => setTermoModal(!termoModal)}>
                             <Text style={{ textDecorationLine: 'underline', color: 'maroon' }}>Aceito os <Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>Termos de Uso</Text></Text>
                         </TouchableOpacity>
@@ -260,12 +260,12 @@ export default function CadastroUsuario() {
                     </View>
                 </View>
             </Modal>
-            <View style={style.footer}>
+            <View style={style.footer2}>
                 {termoLido
-                    ? <TouchableOpacity style={style.continueBtn} onPress={navigateToResumo}>
+                    ? <TouchableOpacity style={style.continueBtn2} onPress={navigateToResumo}>
                         <Text style={style.textBtn}>Cadastrar</Text>
                     </TouchableOpacity>
-                    : <TouchableOpacity style={style.continueBtnDisabled} onPress={navigateToResumo} disabled>
+                    : <TouchableOpacity style={[style.continueBtn2,{backgroundColor:'lightgray',opacity:0.8}]} onPress={navigateToResumo} disabled>
                         <Text style={style.textBtn}>Cadastrar</Text>
                     </TouchableOpacity>
                 }

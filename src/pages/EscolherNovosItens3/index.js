@@ -82,11 +82,11 @@ export default function EscolherNovosItens3({ route, navigation }) {
             item_id: item,
             precoItem: precoFinal,
         }).then(async function (res) {
-            if(res.data.quantidadeAntiga){
-                var sub = res.data.quantidadeAntiga*res.data.precoAntigo;
-                var sum = precoFinal * (qtdNova+res.data.quantidadeAntiga);
-                var precoFinalTotal = sum-sub;
-            }else{
+            if (res.data.quantidadeAntiga) {
+                var sub = res.data.quantidadeAntiga * res.data.precoAntigo;
+                var sum = precoFinal * (qtdNova + res.data.quantidadeAntiga);
+                var precoFinalTotal = sum - sub;
+            } else {
                 var precoFinalTotal = precoFinal * qtdNova;
             }
             await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
@@ -146,7 +146,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                     renderItem={({ item: item }) => (
                         <View >
                             {filtro == null ? (
-                                <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id,item.precoMedio)}>
+                                <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id, item.precoMedio)}>
                                     {item.fotoUrlI == null
                                         ? <Image source={{ uri: item.fotoUrlT }} style={style.churrasFoto} />
                                         : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
@@ -158,7 +158,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                                             <Text style={style.churrasData}> {item.tipo}</Text>
                                             <Text style={style.locDatSeparator}>  |  </Text>
                                             <Icon style={style.localIcon} name="coins" size={15} />
-                                            <Text style={style.churrasLocal}> {item.precoMedio == null ? '  -  ' : "  R$" + item.precoMedio}</Text>
+                                            <Text style={style.churrasLocal}> {item.precoMedio == null ? '  -  ' : "  R$" + (item.precoMedio).toFixed(2)}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -171,11 +171,11 @@ export default function EscolherNovosItens3({ route, navigation }) {
                                         <Text style={style.churrasTitle}>{item.nomeItem}</Text>
                                         <Text style={style.churrasDono}>{item.descricao} </Text>
                                         <View style={style.churrasLocDat}>
-                                            <Icon style={style.localIcon} name="coins" size={15} />
-                                            <Text style={style.churrasLocal}>{item.precoMedio == null ? '  -  ' : "  R$" + item.precoMedio}</Text>
-                                            <Text style={style.locDatSeparator}>  |  </Text>
-                                            <IconMat style={style.dataIcon} name="cow" size={15} />
+                                            <IconMat style={style.dataIcon} name="cup" size={15} />
                                             <Text style={style.churrasData}> {item.tipo}</Text>
+                                            <Text style={style.locDatSeparator}>  |  </Text>
+                                            <Icon style={style.localIcon} name="coins" size={15} />
+                                            <Text style={style.churrasLocal}>{item.precoMedio == null ? '  -  ' : "  R$" + (item.precoMedio).toFixed(2)}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -215,7 +215,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                                     style={style.boxDropdown}
                                     itemStyle={style.itemDropdown}
                                     mode="dropdown"
-                                    onValueChange={itemValue => {setSelectedUnidade(itemValue);setNomeUnidadeSelecionada(unidades[itemValue].unidade)}}
+                                    onValueChange={itemValue => { setSelectedUnidade(itemValue); setNomeUnidadeSelecionada(unidades[itemValue].unidade) }}
                                 >
                                     {unidades.map((unity, idx) => (
                                         <Picker.Item label={unity.unidade} value={unity.id} key={idx} />
@@ -239,11 +239,9 @@ export default function EscolherNovosItens3({ route, navigation }) {
                             </View>
                             <View style={style.footerModal}>
                                 <TouchableOpacity style={style.exitBtnFooter} onPress={() => setVisibility(false, "", '', '', '')}>
-                                    <Icon style={style.iconSalvarBtn} name="times" size={15} />
-                                    <Text style={style.iconSalvarBtn}>Cancelar</Text>
+                                    <Text style={style.iconExitBtn}>Cancelar</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal,precoModal)}>
-                                    <Icon style={style.iconSalvarBtn} name="check" size={15} />
+                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal, precoModal)}>
                                     <Text style={style.iconSalvarBtn}>Confirmar</Text>
                                 </TouchableOpacity>
                             </View>

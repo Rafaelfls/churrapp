@@ -71,14 +71,39 @@ export default StyleSheet.create({
   },
   
 
-  //footer
-  footer:{    
+  footer2:{    
     height: 90,
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: "center",
     borderTopColor: 'lightgray',
     borderTopWidth: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  continueBtn2: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: '85%',
+    paddingVertical: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },
+  //footer
+  footer:{    
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
     backgroundColor: 'white',
   },
   continueBtn:{
@@ -89,12 +114,6 @@ export default StyleSheet.create({
     height: '60%',
     width: '85%',
     paddingVertical: 5,
-  },
-  textBtn:{
-    color: 'white',
-    fontSize: 17,
-    fontFamily: 'poppins-medium',
-    textAlign: 'center',
   },
   
   //modal
@@ -135,12 +154,6 @@ export default StyleSheet.create({
     fontSize:20,
     fontFamily:'poppins-medium'
   },
-  modalTitle:{
-    color:"#800000",
-    fontSize:30,
-    marginBottom:15,
-    fontWeight: "bold"
-  },
   confirmarSairTitle:{
     color:"#800000",
     fontSize:20,
@@ -152,7 +165,7 @@ export default StyleSheet.create({
     textAlign:'center',
     color: "grey"
   },
-  sairBtn:{
+  salvarBtn: {
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius:8,
@@ -160,29 +173,67 @@ export default StyleSheet.create({
     height: '60%',
     width: 125,
     paddingVertical: 5,
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
-  textBtn:{
-    color: 'white',
+  sairBtn:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'lightgray',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },   
+  iconExitBtn: {
+    color: 'maroon',
     fontSize: 17,
     fontFamily: 'poppins-medium',
     textAlign: 'center',
   },
   footerModal: {    
-    height: 50,
+    height: 90,
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: "center",
     backgroundColor: 'white',
   },
   exitBtnModal: {
-    flexDirection: 'row-reverse',
-    backgroundColor: '#800000',
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-    borderRadius: 8,
     alignItems: 'center',
-    marginHorizontal: 6,
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'lightgray',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
   salvarBtnModal: {
     alignItems: 'center',
@@ -193,6 +244,31 @@ export default StyleSheet.create({
     height: '60%',
     width: '40%',
     paddingVertical: 5,
+  },
+  iconExitBtn: {
+    color: 'maroon',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
+  salvarBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
   iconSalvarBtnModal: {
     color: 'white',
@@ -206,17 +282,12 @@ export default StyleSheet.create({
     color:"#800000",
     fontSize:30,
     marginBottom:15,
-    fontWeight: "bold"
+    fontFamily: 'poppins-medium',
   },
   modalTextSair:{
     fontSize:17,
     textAlign:'center',
     fontFamily:'poppins-light'
-  },
-  confirmarSairSubTitle:{
-    fontSize:12,
-    textAlign:'center',
-    color: "grey"
   },
   footerModalSair:{    
     height: 90,
@@ -224,16 +295,6 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: "center",
     backgroundColor: 'white',
-  },
-  sairBtn:{
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius:8,
-    backgroundColor: 'maroon',
-    height: '60%',
-    width: 125,
-    paddingVertical: 5,
-    marginHorizontal: 10
   },
   textBtn:{
     color: 'white',
