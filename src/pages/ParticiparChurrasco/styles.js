@@ -130,6 +130,14 @@ export default StyleSheet.create({
     width: '85%',
     paddingVertical: 5,
   },  
+  otherBtnModal:{
+    flexDirection: 'row-reverse',
+    backgroundColor: '#800000',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 8,
+    alignItems: 'center',
+  },  
   textBtnModal:{
     color: 'white',
     fontSize: 17,

@@ -52,8 +52,8 @@ export default function DetalheChurras() {
   const [editChurrasInicio, setEditChurrasInicio] = useState('')
   const [editChurrasFim, setEditChurrasFim] = useState('')
   const [editChurrasDescricao, setEditChurrasDescricao] = useState('')
-  const [editChurrasFotoUrlC, setEditChurrasFotoUrlC] = useState('')
-  const [editChurrasFotoUrlU, setEditChurrasFotoUrlU] = useState('')
+  const [editChurrasFotoUrlC, setEditChurrasFotoUrlC] = useState('https://churrappuploadteste.s3.amazonaws.com/default/churrapp_default.png')
+  const [editChurrasFotoUrlU, setEditChurrasFotoUrlU] = useState('https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png')
   const [editChurrasValorTotal, setEditChurrasValorTotal] = useState(0)
   const [editChurrasValorPago, setEditChurrasValorPago] = useState(0)
 
@@ -242,6 +242,9 @@ export default function DetalheChurras() {
     } else {
       precoFinal = precoModal
     }
+
+    precoFinal = (precoFinal * qtdNova).toFixed(2)
+
     setIsVisivel(isVisible)
     setLoading(true)
     await api.post('/listadochurras', {
@@ -249,11 +252,24 @@ export default function DetalheChurras() {
       churras_id: churras,
       unidade_id: unidadeDrop,
       item_id: item,
-      formato_id: form
-    }).then(function (res) {
+      formato_id: form,
+      precoItem: precoFinal
+    }).then(async function (res) {
+      if (res.data.quantidadeAntiga) {
+        var sub = res.data.quantidadeAntiga * res.data.precoAntigo;
+        var sum = precoFinal * (qtdNova + res.data.quantidadeAntiga);
+        var precoFinalTotal = sum - sub;
+      } else {
+        var precoFinalTotal = precoFinal * qtdNova;
+      }
+      await api.put(`/churrasUpdate/valorTotal/${churras}`, {
+        valorTotal: precoFinalTotal,
+      })
       setSelectedFormato(1)
       setSelectedUnidade(0)
       setQuantidadeModal(0)
+      setPrecoModal(0)
+      setPrecoMedioModal(0)
       setModalSubTipoVisivel(false)
       setModalTipoVisivel(false)
       setLoading(false)
@@ -269,16 +285,28 @@ export default function DetalheChurras() {
     }
 
     if (precoModal == 0) {
-      precoFinal = precoMedioModal;
+      precoFinal = (precoMedioModal * quantidade).toFixed(2);
     } else {
-      precoFinal = precoModal
+      precoFinal = (precoModal * quantidade).toFixed(2)
     }
+
     setLoading(true)
     await api.put(`/listadochurras/${item}`, {
       quantidade: quantidade,
       unidade_id: unidade,
-      formato_id: form
-    }).then(function (res) {
+      formato_id: form,
+      precoItem: precoFinal,
+    }).then(async function (res) {
+      if (res.data.quantidadeAntiga) {
+        var sub = res.data.quantidadeAntiga * res.data.precoAntigo;
+        var sum = precoFinal * (qtdNova + res.data.quantidadeAntiga);
+        var precoFinalTotal = sum - sub;
+      } else {
+        var precoFinalTotal = precoFinal * qtdNova;
+      }
+      await api.put(`/churrasUpdate/valorTotal/${churras}`, {
+        valorTotal: precoFinalTotal,
+      })
       setSelectedFormato(1)
       setSelectedUnidade(0)
       setRefresh(!refresh)
@@ -382,13 +410,19 @@ export default function DetalheChurras() {
   }
 
   async function deleteItem(itens) {
+    console.log(itens)
     setLoading(true)
-    await api.delete(`/listadochurras/${itens}`)
-      .then(function (response) {
-        setLoading(false)
-        setOpcaoItensVisible([false])
-        setRefresh(!refresh);
-      })
+    var precoFinalTotal = itens.precoItem * itens.quantidade;
+    await api.put(`/churrasUpdate/valorTotal/${churras}`, {
+      valorTotal: -precoFinalTotal,
+    }).then(async function () {
+      await api.delete(`/listadochurras/${itens.id}`)
+        .then(function (response) {
+          setLoading(false)
+          setOpcaoItensVisible([false])
+          setRefresh(!refresh);
+        })
+    })
   }
 
   async function carregaChurras() {
@@ -538,6 +572,15 @@ export default function DetalheChurras() {
                 <Text style={style.churrasDono}>{editChurrasNomeUsuario}</Text>
               </View>
             </View>
+            {editavel
+              ? null
+              : <View style={style.formGroup}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Icon name="coins" size={22} style={style.icons} />
+                  <Text style={style.churrasNome}>Valor por pessoa: </Text>
+                </View>
+                <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount+1)).toFixed(2)}</Text>
+              </View>}
             {allowEditing[0]
               ? <View style={style.formGroup}>
                 <View style={{ flexDirection: 'row' }}>
@@ -728,6 +771,15 @@ export default function DetalheChurras() {
               </View>
               <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal).toFixed(2)}</Text>
             </View>
+            {editavel
+              ? <View style={style.formGroup}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Icon name="coins" size={22} style={style.icons} />
+                  <Text style={style.churrasNome}>Valor por pessoa: </Text>
+                </View>
+                <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount+1)).toFixed(2)}</Text>
+              </View>
+              : null}
             <View style={style.formGroup}>
               <View style={{ flexDirection: 'row' }}>
                 <Icon name="money-bill-wave" size={17} style={style.icons} />
@@ -953,7 +1005,7 @@ export default function DetalheChurras() {
                 style={{ height: '100%' }}
                 renderItem={({ item: itens }) => (
                   <View>
-                    <TouchableOpacity style={style.cardItemAdicionado} onPress={() => { setOpcaoItensVisible([true, itens.nomeItem, itens.id, itens.subTipo]) }}>
+                    <TouchableOpacity style={style.cardItemAdicionado} onPress={() => { setOpcaoItensVisible([true, itens.nomeItem, itens.id, itens.subTipo, itens]) }}>
                       <Image source={{ uri: itens.fotoUrlT }} style={style.churrasFotoModal} />
                       <View style={style.churrasInfosViewModal}>
                         <Text style={style.churrasTitleModal}>{itens.nomeItem}</Text>
@@ -974,7 +1026,12 @@ export default function DetalheChurras() {
               <ActionButton offsetX={10} style={{ opacity: 0.85 }} offsetY={10} onPress={() => setModalSubTipoVisivel(true)} />
 
             </View>)
-          : (<View tabLabel='Itens'>
+          : (<View tabLabel='Itens'><View style={style.formGroup}>
+            <View style={{ flexDirection: 'row' , justifyContent:'center'}}>
+              <Text style={style.churrasNome}>Valor por pessoa: </Text>
+            </View>
+            <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', textAlign:'center' }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount + 1)).toFixed(2)}</Text>
+          </View>
             <FlatList
               data={itens}
               showsVerticalScrollIndicator={false}
@@ -992,7 +1049,7 @@ export default function DetalheChurras() {
                         <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
                         <Text style={style.locDatSeparatorModal}>  |  </Text>
                         <Icon style={style.localIconModal} name="coins" size={15} />
-                        <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + itens.precoItem}</Text>
+                        <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' :"R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
                       </View>
                     </View>
                   </View>
@@ -1306,7 +1363,7 @@ export default function DetalheChurras() {
             <Text style={style.modalTitleOpt}>{opcaoItensVisible[1]}</Text>
             <Text style={style.modalTextCont}>Deseja remover ou editar?</Text>
             <View style={style.footerModalCont}>
-              <TouchableOpacity style={style.continueBtnCont} onPress={() => deleteItem(opcaoItensVisible[2])}><Text style={style.textBtnCont}>Remover</Text></TouchableOpacity>
+              <TouchableOpacity style={style.continueBtnCont} onPress={() => deleteItem(opcaoItensVisible[4])}><Text style={style.textBtnCont}>Remover</Text></TouchableOpacity>
               <TouchableOpacity style={style.continueBtnCont} onPress={() => {
                 setVisibility2([true, opcaoItensVisible[1], opcaoItensVisible[2], opcaoItensVisible[3]]);
                 setOpcaoItensVisible([false])

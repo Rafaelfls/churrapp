@@ -5,8 +5,8 @@ export default StyleSheet.create({
   //header
   container: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight + 15,
-    backgroundColor: '#fff'
+    // paddingTop: Constants.statusBarHeight + 15,
+    backgroundColor: 'transparent'
   },  
   header: {
     justifyContent: 'space-between',
@@ -123,8 +123,9 @@ export default StyleSheet.create({
   },
   modalTitle:{
     color:"#800000",
-    fontSize:30,
+    fontSize:28,
     marginBottom:15,
+    textAlign: 'center'
   },
   modalText:{
     fontSize:17,
@@ -139,7 +140,6 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: "center",
     backgroundColor: 'white',
-    
   },
 
   //footer

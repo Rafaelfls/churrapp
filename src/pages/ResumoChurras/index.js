@@ -13,6 +13,8 @@ import { useIsDrawerOpen } from '@react-navigation/drawer'
 import api from '../../services/api';
 
 import semChurras from '../../assets/semChurras.png'
+import Component1 from '../../assets/Component1.png'
+import Component2 from '../../assets/Component2.png'
 
 import style from './styles';
 
@@ -239,6 +241,15 @@ export default function ResumoChurras() {
                     <Text style={style.textSubHeader}>Você tem {contadorCriado} eventos criados</Text>
                 </View>
             </View>
+            
+            {churras.length == 0
+                ? (<View style={style.semChurrasbg1}><Image style={style.semChurras1} source={Component1} /></View>)
+                : null
+            }
+            {churras.length == 0
+                ? (<View style={style.semChurrasbg2}><Image style={style.semChurras2} source={Component2} /></View>)
+                : null
+            }
 
             <FlatList
                 data={churras}
@@ -283,11 +294,6 @@ export default function ResumoChurras() {
                     </View>
                 )}
             />
-
-            {churras.length == 0
-                ? <Image style={style.semChurras} source={semChurras} />
-                : null
-            }
 
             <FloatingAction
                 actions={btns}

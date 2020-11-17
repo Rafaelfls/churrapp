@@ -119,8 +119,10 @@ export default function AdicionarBebidas({ route, navigation }) {
         if (!isEnabled) {
             if (isSugestao) {
                 setLoading(true)
+                var precoFinalTotal = 0;
                 itemList.map(async item => {
                     var quantidadeFinal = item.quantidade * convidadosQtd
+                    precoFinalTotal = precoFinalTotal + (item.precoMedio * quantidadeFinal);
                     await api.post('/listadochurras', {
                         quantidade: quantidadeFinal,
                         churras_id: churrascode,
@@ -128,12 +130,11 @@ export default function AdicionarBebidas({ route, navigation }) {
                         item_id: item.item_id,
                         formato_id: 7,
                         precoItem: item.precoMedio,
-                    }).then(async function (res) {
-                        var precoFinalTotal = item.precoMedio * quantidadeFinal;
-                        await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
-                            valorTotal: precoFinalTotal
-                        })
                     })
+                })
+                
+                await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
+                    valorTotal: precoFinalTotal
                 })
             }
             setIsSugestao(false)

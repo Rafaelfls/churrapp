@@ -102,13 +102,24 @@ export default StyleSheet.create({
 
   //imagem Quando nao tem churras
 
-  semChurras: {
-    marginTop:'40%',
-    height: "100%",
-    width:'100%',
-    alignSelf: "center",
+  semChurrasbg1: {
     position:'absolute',
-    top:0,
+    bottom:25,
+    right:85
+  },
+  semChurras1: {
+    width:100,
+    height:100
+  },
+  semChurrasbg2: {
+    position:'absolute',
+    top:180,
+    width:'100%',
+    alignItems:'center'
+  },
+  semChurras2: {
+    width:250,
+    height:160
   },
 
   // fim imagem quando nao tem churras

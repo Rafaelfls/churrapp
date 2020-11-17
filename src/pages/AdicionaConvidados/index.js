@@ -88,7 +88,7 @@ export default function AdicionaConvidados({ route, navigation }) {
     const response = await api.post('/usuarios', {
       nome: convid.nome,
       sobrenome: 'sobrenome',
-      email: convid.nome + "@churrapp",
+      email: convid.telefone + "@churrapp",
       cidade: "cidade",
       uf: "uf",
       idade: "02/01/1900",
@@ -325,10 +325,10 @@ export default function AdicionaConvidados({ route, navigation }) {
               </View>
               <View style={style.footerModal}>
                 <TouchableOpacity style={style.sairBtn} onPress={() => setEditaConvite(false)}>
-                  <Text style={style.textBtn}>Não</Text>
+                  <Text style={style.textBtn}>Cancelar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={style.sairBtn} onPress={defineConvite}>
-                  <Text style={style.textBtn}>Sim</Text>
+                  <Text style={style.textBtn}>Confirmar</Text>
                 </TouchableOpacity>
               </View>
             </View>
