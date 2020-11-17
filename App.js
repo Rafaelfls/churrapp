@@ -19,6 +19,7 @@ const fetchFonts = () => {
     'poppins-semi-bold': require('./src/assets/fonts/Poppins/Poppins-SemiBold.ttf'),
     'poppins-thin': require('./src/assets/fonts/Poppins/Poppins-Thin.ttf'),
     'titulo-logo': require('./src/assets/fonts/candy-inc.ttf'),
+    'zondicon-icon': require('./src/assets/fonts/icomoon.ttf')
   });
 };
 

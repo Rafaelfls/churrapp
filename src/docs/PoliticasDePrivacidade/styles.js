@@ -5,8 +5,8 @@ export default StyleSheet.create({
   //header
   container: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight + 15,
-    backgroundColor: '#fff'
+    // paddingTop: Constants.statusBarHeight + 15,
+    backgroundColor: 'transparent'
   },  
   header: {
     justifyContent: 'space-between',
@@ -123,14 +123,13 @@ export default StyleSheet.create({
   },
   modalTitle:{
     color:"#800000",
-    fontSize:30,
+    fontSize:28,
     marginBottom:15,
-    fontFamily: 'poppins-medium',
+    textAlign: 'center'
   },
   modalText:{
     fontSize:17,
-    textAlign:'center',
-    fontFamily: 'poppins-light',
+    textAlign:'center'
   },
   modalTermoText: {
     textAlign: 'justify',
@@ -141,7 +140,6 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: "center",
     backgroundColor: 'white',
-    
   },
 
   //footer
@@ -160,45 +158,17 @@ export default StyleSheet.create({
     borderRadius:8,
     backgroundColor: 'maroon',
     height: '60%',
-    width: 125,
+    width: '85%',
     paddingVertical: 5,
-    marginHorizontal: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-
-    elevation: 6,
   },
-  footer2:{    
-    height: 90,
-    flexDirection: "row",
-    alignItems: 'center',
-    justifyContent: "center",
-    borderTopColor: 'lightgray',
-    borderTopWidth: 1,
-    backgroundColor: 'white',
-  },
-  continueBtn2: {
+  continueBtnDisabled: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
-    backgroundColor: 'maroon',
+    borderRadius:8,
+    backgroundColor: 'lightgray',
     height: '60%',
     width: '85%',
     paddingVertical: 5,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-
-    elevation: 6,
   },
   textBtn:{
     color: 'white',

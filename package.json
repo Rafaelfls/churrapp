@@ -13,6 +13,7 @@
     "@react-native-community/checkbox": "^0.5.5",
     "@react-native-community/masked-view": "0.1.6",
     "@react-navigation/bottom-tabs": "^5.5.1",
+    "@react-navigation/drawer": "^5.10.6",
     "@react-navigation/native": "^5.5.0",
     "@react-navigation/stack": "^5.4.1",
     "@valdio/react-native-scrollable-tabview": "^0.8.12",
@@ -55,6 +56,7 @@
     "react-native-svg": "11.0.1",
     "react-native-vector-icons": "^6.7.0",
     "react-native-web": "^0.11.7",
+    "react-navigation": "^4.4.3",
     "rn-sliding-button": "1.1.5",
     "typeface-bree-serif": "0.0.72"
   },

@@ -40,6 +40,7 @@ export default function CadastroUsuario() {
     const [borderColorRed4, setBorderColorRed4] = useState(style.formOk);
     const [termoModal, setTermoModal] = useState(false)
     const [termoLido, setTermoLido] = useState(false)
+    const [idadeCheck, setIdadeCheck] = useState(false)
 
     function backHome() {
         navigation.replace('Login');
@@ -200,7 +201,11 @@ export default function CadastroUsuario() {
                         onChangeText={text => criptoSenha2(text)}
                     />
                     <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
-                        <CheckBox value={termoLido} tintColors={{ true: 'maroon'}} onValueChange={(termoLido) => setTermoLido(termoLido)} />
+                        <CheckBox value={idadeCheck} onValueChange={(idadeCheck) => setIdadeCheck(idadeCheck)} tintColors={ {true: 'maroon', false: 'maroon'}} />
+                        <Text style={{ textDecorationLine: 'underline', color: 'maroon' }}>Confirmo ter <Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>13 anos</Text> ou mais</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
+                        <CheckBox value={termoLido} onValueChange={(termoLido) => setTermoLido(termoLido)} tintColors={ {true: 'maroon', false: 'maroon'}}/>
                         <TouchableOpacity onPress={() => setTermoModal(!termoModal)}>
                             <Text style={{ textDecorationLine: 'underline', color: 'maroon' }}>Aceito os <Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>Termos de Uso</Text></Text>
                         </TouchableOpacity>
@@ -248,21 +253,24 @@ export default function CadastroUsuario() {
             >
                 <View style={style.centeredView}>
                     <View style={style.modalTermoView}>
-                        <Text style={style.modalTitle}><Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>Termos de Uso</Text></Text>
+                        {/* <Text style={style.modalTitle}><Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>Termos de Uso</Text></Text>
                         <ScrollView>
-                            <TermoDeUso/>
-                        </ScrollView>
+                            <TermoDeUso />
+                        </ScrollView> */}
+                        <TermoDeUso />
                         <View style={style.footerModal}>
-                            <TouchableOpacity style={style.continueBtn} onPress={() => setTermoModal(false)}>
+                            <TouchableOpacity style={style.continueBtn} onPress={() => { setTermoModal(false); }}>
                                 <Text style={style.textBtn}>Já li</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
             </Modal>
+
             <View style={style.footer2}>
-                {termoLido
+                {termoLido && idadeCheck
                     ? <TouchableOpacity style={style.continueBtn2} onPress={navigateToResumo}>
+
                         <Text style={style.textBtn}>Cadastrar</Text>
                     </TouchableOpacity>
                     : <TouchableOpacity style={[style.continueBtn2,{backgroundColor:'lightgray',opacity:0.8}]} onPress={navigateToResumo} disabled>

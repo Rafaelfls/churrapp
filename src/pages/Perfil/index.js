@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, ScrollView, Modal, Picker, Image, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, ScrollView, Modal, Picker, Image, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { TextInputMask } from 'react-native-masked-text'
 import api from '../../services/api';
@@ -468,6 +468,10 @@ export default function Perfil() {
         return response.location;
     }
 
+    function abrirDrawer() {
+        navigation.toggleDrawer()
+    }
+
     return (
         <View style={style.container}>
             <FlatList
@@ -478,6 +482,20 @@ export default function Perfil() {
                 renderItem={({ item: usuario }) => (
                     <View>
                         <View style={style.backgroundProfile}>
+                        <View style={style.menuBtn}>
+                            {/* <View style={style.centeredViewNotificacaoQtd}>
+                        <TouchableOpacity onPress={abrirDrawer}>
+                            {notificacoes.length > 0
+                                ? <View style={style.modalViewNotificacaoQtd}>
+                                    <Text style={style.textBtnNotificacaoQtd}>{notificacoes.length}</Text>
+                                </View>
+                                : null}
+                        </TouchableOpacity>
+                    </View> */}
+                            <TouchableWithoutFeedback onPressIn={() => abrirDrawer()} >
+                                <IconMI name='menu' size={30} />
+                            </TouchableWithoutFeedback>
+                        </View>
                             <View style={style.containerProfile}>
                                 {allowEditing[0]
                                     ? <TouchableOpacity activeOpacity={0.5} onPress={() => setPickImageOptions([true])} style={style.centeredViewFotoPerfil}>
@@ -704,7 +722,7 @@ export default function Perfil() {
                                 <Text style={style.textoItem}>Carne preferida:</Text>
                             </View>
                             {allowEditing[0]
-                                ? <View style={{flex:1}}>
+                                ? <View style={{ flex: 1 }}>
                                     <TextInput
                                         style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
                                         editable={allowEditing[0]}
