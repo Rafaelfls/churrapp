@@ -579,7 +579,7 @@ export default function DetalheChurras() {
                   <Icon name="coins" size={22} style={style.icons} />
                   <Text style={style.churrasNome}>Valor por pessoa: </Text>
                 </View>
-                <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount+1)).toFixed(2)}</Text>
+                <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount + 1)).toFixed(2)}</Text>
               </View>}
             {allowEditing[0]
               ? <View style={style.formGroup}>
@@ -777,7 +777,7 @@ export default function DetalheChurras() {
                   <Icon name="coins" size={22} style={style.icons} />
                   <Text style={style.churrasNome}>Valor por pessoa: </Text>
                 </View>
-                <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount+1)).toFixed(2)}</Text>
+                <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount + 1)).toFixed(2)}</Text>
               </View>
               : null}
             <View style={style.formGroup}>
@@ -1027,10 +1027,10 @@ export default function DetalheChurras() {
 
             </View>)
           : (<View tabLabel='Itens'><View style={style.formGroup}>
-            <View style={{ flexDirection: 'row' , justifyContent:'center'}}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
               <Text style={style.churrasNome}>Valor por pessoa: </Text>
             </View>
-            <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', textAlign:'center' }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount + 1)).toFixed(2)}</Text>
+            <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', textAlign: 'center' }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount + 1)).toFixed(2)}</Text>
           </View>
             <FlatList
               data={itens}
@@ -1049,7 +1049,7 @@ export default function DetalheChurras() {
                         <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
                         <Text style={style.locDatSeparatorModal}>  |  </Text>
                         <Icon style={style.localIconModal} name="coins" size={15} />
-                        <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' :"R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
+                        <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
                       </View>
                     </View>
                   </View>
@@ -1234,11 +1234,9 @@ export default function DetalheChurras() {
             </View>
             <View style={style.footerModalQtd}>
               <TouchableOpacity style={style.exitBtnFooterQtd} onPress={() => setVisibility(false, "", '', '')}>
-                <Icon style={style.iconSalvarBtnQtd} name="times" size={15} />
                 <Text style={style.iconSalvarBtnQtd}>Cancelar</Text>
               </TouchableOpacity>
               <TouchableOpacity style={style.salvarBtnQtd} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal, selectedFormato, precoModal)}>
-                <Icon style={style.iconSalvarBtnQtd} name="check" size={15} />
                 <Text style={style.iconSalvarBtnQtd}>Confirmar</Text>
               </TouchableOpacity>
             </View>
@@ -1363,7 +1361,9 @@ export default function DetalheChurras() {
             <Text style={style.modalTitleOpt}>{opcaoItensVisible[1]}</Text>
             <Text style={style.modalTextCont}>Deseja remover ou editar?</Text>
             <View style={style.footerModalCont}>
-              <TouchableOpacity style={style.continueBtnCont} onPress={() => deleteItem(opcaoItensVisible[4])}><Text style={style.textBtnCont}>Remover</Text></TouchableOpacity>
+              <TouchableOpacity style={style.exitBtn} onPress={() => deleteItem(opcaoItensVisible[4])}>
+                <Text style={style.iconExitBtn}>Remover</Text>
+              </TouchableOpacity>
               <TouchableOpacity style={style.continueBtnCont} onPress={() => {
                 setVisibility2([true, opcaoItensVisible[1], opcaoItensVisible[2], opcaoItensVisible[3]]);
                 setOpcaoItensVisible([false])
@@ -1445,11 +1445,9 @@ export default function DetalheChurras() {
             </View>
             <View style={style.footerModalQtd}>
               <TouchableOpacity style={style.exitBtnFooterQtd} onPress={() => setVisibility2([false])}>
-                <Icon style={style.iconSalvarBtnQtd} name="times" size={15} />
-                <Text style={style.iconSalvarBtnQtd}>Cancelar</Text>
+                <Text style={style.iconExitBtn}>Cancelar</Text>
               </TouchableOpacity>
               <TouchableOpacity style={style.salvarBtnQtd} onPress={() => updateItem(visivel2[2], quantidadeModal, selectedUnidade, selectedFormato, precoModal)}>
-                <Icon style={style.iconSalvarBtnQtd} name="check" size={15} />
                 <Text style={style.iconSalvarBtnQtd}>Confirmar</Text>
               </TouchableOpacity>
             </View>

@@ -79,7 +79,7 @@ export default StyleSheet.create({
     justifyContent: "center",
     borderTopColor: 'lightgray',
     borderTopWidth: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#f5f5f5',
   },
   continueBtn:{
     alignItems: 'center',
@@ -89,12 +89,15 @@ export default StyleSheet.create({
     height: '60%',
     width: '85%',
     paddingVertical: 5,
-  },
-  textBtn:{
-    color: 'white',
-    fontSize: 17,
-    fontFamily: 'poppins-medium',
-    textAlign: 'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
   
   //modal
@@ -127,29 +130,55 @@ export default StyleSheet.create({
     fontFamily:'poppins-light'
   },
   footerModal: {    
-    height: 50,
+    height: 90,
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: "center",
     backgroundColor: 'white',
   },
   exitBtnModal: {
-    flexDirection: 'row-reverse',
-    backgroundColor: '#800000',
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-    borderRadius: 8,
     alignItems: 'center',
-    marginHorizontal: 6,
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'lightgray',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
   salvarBtnModal: {
-    flexDirection: 'row-reverse',
-    backgroundColor: '#800000',
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-    borderRadius: 8,
     alignItems: 'center',
-    marginHorizontal: 6,
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },  
+  iconExitBtn: {
+    color: 'maroon',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
   },
   iconSalvarBtnModal: {
     color: 'white',
@@ -178,7 +207,8 @@ export default StyleSheet.create({
   confirmarSairSubTitle:{
     fontSize:12,
     textAlign:'center',
-    color: "grey"
+    color: "grey",
+    fontFamily:'poppins-light'
   },
   footerModalSair:{    
     height: 90,

@@ -249,9 +249,9 @@ export default function AdicionaConvidados({ route, navigation }) {
               <Text style={style.confirmarSairSubTitle}>(Tudo que fez até aqui sera perdido)</Text>
               <View style={style.footerModal}>
                 <TouchableOpacity style={style.sairBtn} onPress={() => setModalSair(false)}>
-                  <Text style={style.textBtn}>Não</Text>
+                  <Text style={style.iconExitBtn}>Não</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={style.sairBtn} onPress={() => backHome()}>
+                <TouchableOpacity style={style.salvarBtn} onPress={() => backHome()}>
                   <Text style={style.textBtn}>Sim</Text>
                 </TouchableOpacity>
               </View>
@@ -325,9 +325,9 @@ export default function AdicionaConvidados({ route, navigation }) {
               </View>
               <View style={style.footerModal}>
                 <TouchableOpacity style={style.sairBtn} onPress={() => setEditaConvite(false)}>
-                  <Text style={style.textBtn}>Cancelar</Text>
+                  <Text style={style.iconExitBtn}>Cancelar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={style.sairBtn} onPress={defineConvite}>
+                <TouchableOpacity style={style.salvarBtn} onPress={defineConvite}>
                   <Text style={style.textBtn}>Confirmar</Text>
                 </TouchableOpacity>
               </View>

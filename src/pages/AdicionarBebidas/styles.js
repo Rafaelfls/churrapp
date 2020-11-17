@@ -79,7 +79,7 @@ export default StyleSheet.create({
     justifyContent: "center",
     borderTopColor: 'lightgray',
     borderTopWidth: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#f5f5f5',
   },
   continueBtn:{
     alignItems: 'center',
@@ -89,12 +89,15 @@ export default StyleSheet.create({
     height: '60%',
     width: '85%',
     paddingVertical: 5,
-  },
-  textBtn:{
-    color: 'white',
-    fontSize: 17,
-    fontFamily: 'poppins-medium',
-    textAlign: 'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
   
   //modal
@@ -135,12 +138,6 @@ export default StyleSheet.create({
     fontSize:17,
     textAlign:'center'
   },
-  modalTitle:{
-    color:"#800000",
-    fontSize:30,
-    marginBottom:15,
-    fontWeight: "bold"
-  },
   confirmarSairTitle:{
     color:"#800000",
     fontSize:20,
@@ -151,16 +148,6 @@ export default StyleSheet.create({
     fontSize:12,
     textAlign:'center',
     color: "grey"
-  },
-  sairBtn:{
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius:8,
-    backgroundColor: 'maroon',
-    height: '60%',
-    width: 125,
-    paddingVertical: 5,
-    marginHorizontal: 10
   },
   footerModal: {    
     height: 50,
@@ -206,19 +193,14 @@ export default StyleSheet.create({
     textAlign:'center',
     fontFamily:'poppins-light'
   },
-  confirmarSairSubTitle:{
-    fontSize:12,
-    textAlign:'center',
-    color: "grey"
-  },
   footerModalSair:{    
     height: 90,
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: "center",
     backgroundColor: 'white',
-  },
-  sairBtn:{
+  },  
+  salvarBtn: {
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius:8,
@@ -226,7 +208,41 @@ export default StyleSheet.create({
     height: '60%',
     width: 125,
     paddingVertical: 5,
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },
+  sairBtn:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'lightgray',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },  
+  iconExitBtn: {
+    color: 'maroon',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
   },
   textBtn:{
     color: 'white',

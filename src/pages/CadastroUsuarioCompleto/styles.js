@@ -82,15 +82,6 @@ export default StyleSheet.create({
   },
 
   //CadastroBtn
-  continueBtn:{
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius:8,
-    backgroundColor: 'maroon',
-    width: '100%',
-    height:40,
-    paddingVertical: 5,
-  },
   textBtn:{
     color: 'white',
     fontSize: 17,
@@ -125,10 +116,12 @@ export default StyleSheet.create({
     color:"#800000",
     fontSize:30,
     marginBottom:15,
+    fontFamily: 'poppins-medium',
   },
   modalText:{
     fontSize:17,
-    textAlign:'center'
+    textAlign:'center',
+    fontFamily: 'poppins-light',
   },
   footerModal:{    
     height: 90,
@@ -144,8 +137,6 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: "center",
-    borderTopColor: 'lightgray',
-    borderTopWidth: 1,
     backgroundColor: 'white',
   },
   continueBtn:{
@@ -154,13 +145,17 @@ export default StyleSheet.create({
     borderRadius:8,
     backgroundColor: 'maroon',
     height: '60%',
-    width: '85%',
+    width: 125,
     paddingVertical: 5,
-  },
-  textBtn:{
-    color: 'white',
-    fontSize: 17,
-    fontFamily: 'poppins-medium',
-    textAlign: 'center',
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
 });

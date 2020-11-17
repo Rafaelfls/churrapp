@@ -266,12 +266,14 @@ export default function CadastroUsuario() {
                     </View>
                 </View>
             </Modal>
-            <View style={style.footer}>
+
+            <View style={style.footer2}>
                 {termoLido && idadeCheck
-                    ? <TouchableOpacity style={style.continueBtn} onPress={navigateToResumo}>
+                    ? <TouchableOpacity style={style.continueBtn2} onPress={navigateToResumo}>
+
                         <Text style={style.textBtn}>Cadastrar</Text>
                     </TouchableOpacity>
-                    : <TouchableOpacity style={style.continueBtnDisabled} onPress={navigateToResumo} disabled>
+                    : <TouchableOpacity style={[style.continueBtn2,{backgroundColor:'lightgray',opacity:0.8}]} onPress={navigateToResumo} disabled>
                         <Text style={style.textBtn}>Cadastrar</Text>
                     </TouchableOpacity>
                 }
