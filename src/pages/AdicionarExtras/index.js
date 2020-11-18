@@ -273,6 +273,8 @@ export default function AdicionarExtras({ route, navigation }) {
                     data={itemList}
                     keyExtractor={itemList => itemList.id}
                     showsVerticalScrollIndicator={false}
+                    refreshing={loading}
+                    onRefresh={carregaMinhaLista}
                     renderItem={({ item: itemList }) => (
                         <View>
                             {isSugestao == true

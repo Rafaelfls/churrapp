@@ -217,6 +217,8 @@ export default function AdicionaConvidados({ route, navigation }) {
           data={convidadosList}
           keyExtractor={(convidadosList) => convidadosList.id}
           showsVerticalScrollIndicator={false}
+          refreshing={loading}
+          onRefresh={setConvidadosList}
           renderItem={({ item: convidadosList }) => (
             <TouchableOpacity style={style.listaConvidados} onPress={() => apagaConvidado(convidadosList.id)}>
               <View style={style.listaConvidadosItem}>

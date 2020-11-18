@@ -8,7 +8,7 @@ const PoliticasDePrivacidade = () => {
     const [termo, setTermo] = useState(false)
 
     return (
-        <View >
+        <View style={style.container}>
             {termo
                 ? <TermoDeUso />
                 : <View style={{height: '100%'}}>

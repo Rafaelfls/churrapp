@@ -201,6 +201,8 @@ export default function AdicionarBebidas({ route, navigation }) {
                     data={itemList}
                     keyExtractor={itemList => itemList.id}
                     showsVerticalScrollIndicator={false}
+                    refreshing={loading}
+                    onRefresh={carregaMinhaLista}
                     renderItem={({ item: itemList }) => (
                         <View>
                             {isSugestao == true

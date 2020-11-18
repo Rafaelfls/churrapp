@@ -98,6 +98,8 @@ export default function OutrosChurras() {
                     data={churrasPassado}
                     style={style.churrasList}
                     showsVerticalScrollIndicator={false}
+                    refreshing={loading}
+                    onRefresh={loadChurrasPassados}
                     keyExtractor={churras => String(churras.id)}
                     renderItem={({ item: churras }) => (
 
@@ -131,6 +133,8 @@ export default function OutrosChurras() {
                     data={churrasFuturo}
                     style={style.churrasList}
                     showsVerticalScrollIndicator={false}
+                    refreshing={loading}
+                    onRefresh={loadChurrasFuturos}
                     keyExtractor={churras => String(churras.id)}
                     renderItem={({ item: churras }) => (
 
