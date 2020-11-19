@@ -317,11 +317,9 @@ export default function ResumoChurras() {
                         <Text style={style.modalText}>Deseja cancelar o churras <Text style={{ fontWeight: 'bold' }}>{churrasDeletar.nomeChurras}</Text>? </Text>
                         <View style={style.footerModal}>
                             <TouchableOpacity style={style.exitBtn} onPress={() => setVisivel(false)}>
-                                <Icon style={style.iconSalvarBtn} name="times" size={20} />
-                                <Text style={style.iconSalvarBtn}>Não</Text>
+                                <Text style={style.iconExitBtn}>Não</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={style.salvarBtn} onPress={() => deletar(churrasDeletar)}>
-                                <Icon style={style.iconSalvarBtn} name="check" size={20} />
                                 <Text style={style.iconSalvarBtn}>Sim</Text>
                             </TouchableOpacity>
                         </View>

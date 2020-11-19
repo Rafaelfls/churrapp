@@ -80,7 +80,16 @@ export default StyleSheet.create({
     right: 5,
     top: 35,
     backgroundColor: 'maroon',
-    borderRadius: 8
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
   mudarSenha: {
     color: 'white',
@@ -242,6 +251,25 @@ export default StyleSheet.create({
     fontFamily: 'poppins-medium',
     fontSize: 18,
   },
+  exitBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'lightgray',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },  
   formGroup: {
     marginHorizontal: 20,
     marginTop: 15,
@@ -337,12 +365,27 @@ export default StyleSheet.create({
   continueBtnCont: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
-    marginHorizontal: 5,
+    borderRadius:8,
     backgroundColor: 'maroon',
     height: '60%',
-    width: '40%',
+    width: 125,
     paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },  
+  iconExitBtn: {
+    color: 'maroon',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
   },
   textBtnCont: {
     color: 'white',

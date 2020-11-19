@@ -218,7 +218,7 @@ export default function CompartilharConvidados({ route, navigation }) {
     <View style={style.container}>
       <SafeAreaView style={style.body}>
         <View style={style.headerGroup}>
-          <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
+          <TouchableOpacity onPress={() => backHome()}>
             <IconFat style={style.iconHeaderBtn} name="chevron-left" size={22} />
           </TouchableOpacity>
           <Text style={style.textHeader}>Convide seus amigos!</Text>
@@ -328,8 +328,8 @@ export default function CompartilharConvidados({ route, navigation }) {
                 </TouchableOpacity>
               </View>
               <View style={style.footerModal}>
-                <TouchableOpacity style={style.sairBtn} onPress={() => setEditaConvite(false)}>
-                  <Text style={style.textBtn}>Não</Text>
+                <TouchableOpacity style={style.exitBtn} onPress={() => setEditaConvite(false)}>
+                  <Text style={style.iconExitBtn}>Não</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={style.sairBtn} onPress={()=>{defineConvite();defineConvite()}}>
                   <Text style={style.textBtn}>Sim</Text>

@@ -68,11 +68,13 @@ export default StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
     fontSize: 20,
+    fontFamily: 'poppins-light',
   },
   modalTitle:{
     color:"#800000",
     fontSize:30,
     marginBottom:15,
+    fontFamily: 'poppins-medium',
   },
   exitBtn: {
     flexDirection: 'row-reverse',
@@ -85,13 +87,49 @@ export default StyleSheet.create({
     fontSize: 15,
     marginHorizontal: 7,
   }, 
-  salvarBtn: {
-    flexDirection: 'row-reverse',
-    backgroundColor: '#800000',
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-    borderRadius: 8,
+  exitBtn: {
     alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'lightgray',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },  
+  iconExitBtn: {
+    color: 'maroon',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
+  salvarBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
   textSalvarBtn:{
     color: 'white',
@@ -100,9 +138,11 @@ export default StyleSheet.create({
     textAlign: 'center',
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    width: '100%',
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    backgroundColor: 'white',
   },
 
   //qrCode modal

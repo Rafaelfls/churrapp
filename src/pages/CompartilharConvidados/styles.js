@@ -84,7 +84,7 @@ footer:{
   justifyContent: "center",
   borderTopColor: 'lightgray',
   borderTopWidth: 1,
-  backgroundColor: 'white',
+  backgroundColor: '#f5f5f5',
 },
 continueBtn:{
   alignItems: 'center',
@@ -94,6 +94,15 @@ continueBtn:{
   height: '60%',
   width: '85%',
   paddingVertical: 5,
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 3,
+  },
+  shadowOpacity: 0.27,
+  shadowRadius: 4.65,
+
+  elevation: 6,
 },
 textBtn:{
   color: 'white',
@@ -116,7 +125,7 @@ editarConvite:{
 modalTitleConvite:{
   color:"#800000",
   fontSize:30,
-  fontWeight: "bold"
+  fontFamily: 'poppins-medium',  
 },
 subTitleConvite:{
   fontSize:12,
@@ -130,6 +139,7 @@ modalTextConvite:{
   fontSize:17,
   justifyContent:'flex-start',
   width:'100%',
+  fontFamily: 'poppins-light',  
 },
 inputStandardConvite:{ 
   borderColor: 'gray', 
@@ -171,23 +181,50 @@ footerModal:{
   flexDirection: "row",
   alignItems: 'center',
   justifyContent: "center",
-  backgroundColor: 'white',
 },
-sairBtn:{
-  alignItems: 'center',
-  justifyContent: 'center',
-  borderRadius:8,
-  backgroundColor: 'maroon',
-  height: '60%',
-  width: 125,
-  paddingVertical: 5,
-  marginHorizontal: 10
-},
-textBtn:{
-  color: 'white',
+iconExitBtn: {
+  color: 'maroon',
   fontSize: 17,
   fontFamily: 'poppins-medium',
   textAlign: 'center',
+},
+exitBtn: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius:8,
+  backgroundColor: 'lightgray',
+  height: '60%',
+  width: 125,
+  paddingVertical: 5,
+  marginHorizontal: 10,
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 3,
+  },
+  shadowOpacity: 0.27,
+  shadowRadius: 4.65,
+
+  elevation: 6,
+}, 
+sairBtn:{
+  alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
 },
 
 })
