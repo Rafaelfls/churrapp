@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import Constants from 'expo-constants';
 
 export default StyleSheet.create({
@@ -80,7 +80,7 @@ export default StyleSheet.create({
   },
   slideBtn: {
     flexDirection: 'row',
-    width: "74%",
+    width: Dimensions.get('window').width,
   },
   detalheSlide: {
     backgroundColor: "darkgray",
