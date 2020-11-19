@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, SafeAreaView, Linking, TouchableOpacity, Modal, TextInput } from 'react-native';
+import { View, Text, Image, SafeAreaView, Linking, TouchableOpacity, Modal, TextInput, FlatList } from 'react-native';
 import { DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { EmailSender } from './EmailSender.js'
 import { TextInputMask } from 'react-native-masked-text'
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
-
+import api from '../services/api.js'
 import style from '../styles';
 
 import { useLoadingModal } from '../context/churrasContext'
@@ -24,44 +24,73 @@ const CustomSideBarMenu = (props) => {
     const [assunto, setAssunto] = useState('')
     const [msg, setMsg] = useState('')
     const { loading, setLoading } = useLoadingModal()
+    const [usuario, setUsuario] = useState();
 
     function logout() {
         USUARIOLOGADO = null
         navigation.replace('Login');
     }
+
+    async function loadPerfil() {
+
+        const response = await api.get(`/usuarios/${USUARIOLOGADO.id}`).then((response) => {
+            setUsuario(response.data)
+
+        })
+    }
+
+    useEffect(() => {
+        loadPerfil()
+    }, [loading]);
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View>
-                <TouchableOpacity style={style.sideMenuProfileIcon} onPress={() => navigation.navigate('Tabs', { screen: 'Perfil' })}>
-                    <Image
-                        source={{ uri: USUARIOLOGADO.fotoUrlU }}
-                        style={{
-                            width: 100,
-                            height: 100,
-                            borderRadius: 100 / 2,
-                        }}
-                    />
-                </TouchableOpacity>
+                {usuario == undefined
+                    ? <Text></Text>
+                    : <View>
+                        <TouchableOpacity style={style.sideMenuProfileIcon} onPress={() => navigation.navigate('Tabs', { screen: 'Perfil' })}>
+                            <Image
+                                source={{ uri: usuario[0].fotoUrlU }}
+                                style={{
+                                    width: 100,
+                                    height: 100,
+                                    borderRadius: 100 / 2,
+                                }}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                }
+
                 <View style={style.perfilInfo}>
-                    {USUARIOLOGADO.apelido === null
-                        ? <Text style={{ fontFamily: 'poppins-bold' }}>{USUARIOLOGADO.nome}</Text>
-                        : <Text style={{ fontFamily: 'poppins-bold' }}>{USUARIOLOGADO.apelido}</Text>
+                    {usuario == undefined
+                        ? <Text></Text>
+                        : <View>
+                            {usuario[0].apelido === null
+                                ? <Text style={{ fontFamily: 'poppins-bold' }}>{usuario[0].nome}</Text>
+                                : <Text style={{ fontFamily: 'poppins-bold' }}>{usuario[0].apelido}</Text>
+                            }
+                        </View>
                     }
-                    <View>
-                        <Text style={{ textAlign: 'center', fontFamily: 'poppins-black', marginTop: 5 }}>Histórico</Text>
-                        <View style={style.perfilChurrasInfo}>
-                            <View style={style.perfilChurrasInfoBox}>
-                                <Icon name="barbeque" size={25} />
-                                <Text style={style.perfilTxtInfo}>Criou</Text>
-                                <Text style={style.perfilTxtInfo}>{USUARIOLOGADO.churrasCriados}</Text>
-                            </View>
-                            <View style={style.perfilChurrasInfoBox}>
-                                <Icon name="eating" size={25} />
-                                <Text style={style.perfilTxtInfo}>Participou</Text>
-                                <Text style={style.perfilTxtInfo}>{USUARIOLOGADO.churrasParticipados}</Text>
+
+                    {usuario == undefined
+                        ? <Text></Text>
+                        : <View>
+                            <Text style={{ textAlign: 'center', fontFamily: 'poppins-black', marginTop: 5 }}>Histórico</Text>
+                            <View style={style.perfilChurrasInfo}>
+                                <View style={style.perfilChurrasInfoBox}>
+                                    <Icon name="barbeque" size={25} />
+                                    <Text style={style.perfilTxtInfo}>Criou</Text>
+                                    <Text style={style.perfilTxtInfo}>{usuario[0].churrasCriados}</Text>
+                                </View>
+                                <View style={style.perfilChurrasInfoBox}>
+                                    <Icon name="eating" size={25} />
+                                    <Text style={style.perfilTxtInfo}>Participou</Text>
+                                    <Text style={style.perfilTxtInfo}>{usuario[0].churrasParticipados}</Text>
+                                </View>
                             </View>
                         </View>
-                    </View>
+                    }
+
                 </View>
                 <View style={style.linha}></View>
             </View>
@@ -72,7 +101,7 @@ const CustomSideBarMenu = (props) => {
                     onPress={() => Linking.openURL('https://www.instagram.com/churrappbrasil/')}
                 /> */}
                 <View style={style.contatoLabel}>
-                <View style={style.linha}></View>
+                    <View style={style.linha}></View>
                     <Icon
                         name='information-solid'
                         style={style.iconStyle}

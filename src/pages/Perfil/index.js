@@ -12,6 +12,12 @@ import { FloatingAction } from "react-native-floating-action";
 import * as Crypto from 'expo-crypto';
 
 
+//Criando Icone Customizável
+import { createIconSetFromIcoMoon } from '@expo/vector-icons';
+import icoMoonConfig from '../../../selection.json';
+import { TouchableHighlight } from 'react-native-gesture-handler';
+const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig, 'zondicon-icon', 'icomoon.ttf');
+//Fim
 import style from './styles';
 import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
@@ -521,13 +527,13 @@ export default function Perfil() {
                         </View>
                         <View style={style.containerMyChurras}>
                             <View style={style.containerOrg}>
-                                <IconMCI name="grill" size={28} />
+                                <CustomIcon name="barbeque" size={28} />
                                 <Text style={style.profileOrg}>Organizou</Text>
                                 <Text style={style.profileOrgNumber}>{usuario.churrasCriados}</Text>
                             </View>
                             <View style={style.linhaSeparaçãoHor}></View>
                             <View style={style.containerPart}>
-                                <IconMCI name="grill" size={28} />
+                                <CustomIcon name="eating" size={28} />
                                 <Text style={style.profilePart}>Participou</Text>
                                 <Text style={style.profilePartNumber}>{usuario.churrasParticipados}</Text>
                             </View>

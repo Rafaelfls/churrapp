@@ -114,36 +114,36 @@ function criarDrawer() {
                     drawerIcon: (({ focused }) => badgeIconeNotificacao(focused))
                 }}
             />
-            <Drawer.Screen name='Criar Item' component={Perfil}
+            {/* <Drawer.Screen name='Criar Item' component={Perfil}
                 options={{
                     drawerIcon: (({ focused }) => <CustomIcon name={focused ? "add-outline" : "add-solid"} size={25} />)
                 }}
-            />
-            <Drawer.Screen name='Lista de Compras' component={Perfil}
+            /> */}
+            {/* <Drawer.Screen name='Lista de Compras' component={Perfil}
                 options={{
                     drawerIcon: (({ focused }) => <CustomIcon name="list-bullet" size={25} />)
                 }}
-            />
+            /> */}
             <Drawer.Screen name='Perfil' component={Perfil}
                 options={{
                     drawerIcon: (({ focused }) => <CustomIcon name="user" size={25} />)
                 }}
             />
-            <Drawer.Screen name='Guia' component={Perfil}
+            {/* <Drawer.Screen name='Guia' component={Perfil}
                 options={{
                     drawerIcon: (({ focused }) => <CustomIcon name="location-food" size={25} />)
                 }}
-            />
-            <Drawer.Screen name='Promoções' component={Perfil}
+            /> */}
+            {/* <Drawer.Screen name='Promoções' component={Perfil}
                 options={{
                     drawerIcon: (({ focused }) => <IconIo name={focused ? "md-pricetag" : "md-pricetag"} size={25} />)
                 }}
-            />
-            <Drawer.Screen name='Lojas' component={Perfil}
+            /> */}
+            {/* <Drawer.Screen name='Lojas' component={Perfil}
                 options={{
                     drawerIcon: (({ focused }) => <CustomIcon name="location-shopping" size={25} />)
                 }}
-            />
+            /> */}
         </Drawer.Navigator>
     );
 }

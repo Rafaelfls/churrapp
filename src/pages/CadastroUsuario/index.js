@@ -40,6 +40,7 @@ export default function CadastroUsuario() {
     const [borderColorRed4, setBorderColorRed4] = useState(style.formOk);
     const [termoModal, setTermoModal] = useState(false)
     const [termoLido, setTermoLido] = useState(false)
+    const [politicaModal, setPoliticaModal] = useState(false)
     const [idadeCheck, setIdadeCheck] = useState(false)
 
     function backHome() {
@@ -200,15 +201,15 @@ export default function CadastroUsuario() {
                         secureTextEntry={true}
                         onChangeText={text => criptoSenha2(text)}
                     />
-                    <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
-                        <CheckBox value={idadeCheck} onValueChange={(idadeCheck) => setIdadeCheck(idadeCheck)} tintColors={ {true: 'maroon', false: 'maroon'}} />
+                    {/* <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
+                        <CheckBox value={idadeCheck} onValueChange={(idadeCheck) => setIdadeCheck(idadeCheck)} tintColors={{ true: 'maroon', false: 'maroon' }} />
                         <Text style={{ textDecorationLine: 'underline', color: 'maroon' }}>Confirmo ter <Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>13 anos</Text> ou mais</Text>
-                    </View>
+                    </View> */}
                     <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
-                        <CheckBox value={termoLido} onValueChange={(termoLido) => setTermoLido(termoLido)} tintColors={ {true: 'maroon', false: 'maroon'}}/>
-                        <TouchableOpacity onPress={() => setTermoModal(!termoModal)}>
-                            <Text style={{ textDecorationLine: 'underline', color: 'maroon' }}>Aceito os <Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>Termos de Uso</Text></Text>
-                        </TouchableOpacity>
+                        <CheckBox value={termoLido} onValueChange={(termoLido) => setTermoLido(termoLido)} tintColors={{ true: 'maroon', false: 'maroon' }} />
+
+                        <Text style={{ color: 'black' }}>Aceito os <Text onPress={() => setTermoModal(!termoModal)} style={{ color: 'maroon', textDecorationLine: 'underline' }}>Termos de Uso</Text> e as <Text onPress={() => setPoliticaModal(!politicaModal)}style={{ color: 'maroon', textDecorationLine: 'underline' }}>Políticas de Privacidade</Text></Text>
+
                     </View>
                 </View>
             </ScrollView>
@@ -266,7 +267,26 @@ export default function CadastroUsuario() {
                     </View>
                 </View>
             </Modal>
-
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={politicaModal}
+            >
+                <View style={style.centeredView}>
+                    <View style={style.modalTermoView}>
+                        {/* <Text style={style.modalTitle}><Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>Termos de Uso</Text></Text>
+                        <ScrollView>
+                            <TermoDeUso />
+                        </ScrollView> */}
+                        <PoliticasDePrivacidade />
+                        <View style={style.footerModal}>
+                            <TouchableOpacity style={style.continueBtn} onPress={() => { setPoliticaModal(false); }}>
+                                <Text style={style.textBtn}>Já li</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
             <View style={style.footer2}>
                 {termoLido && idadeCheck
                     ? <TouchableOpacity style={style.continueBtn2} onPress={navigateToResumo}>

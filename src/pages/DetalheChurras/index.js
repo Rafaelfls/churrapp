@@ -948,6 +948,8 @@ export default function DetalheChurras() {
               data={convidados}
               style={{ height: 170, width: "100%" }}
               showsVerticalScrollIndicator={false}
+              refreshing={loading}
+              onRefresh={carregarConvidados}
               keyExtractor={convidados => String(convidados.id)}
               renderItem={({ item: convidados }) => (
 
@@ -1035,6 +1037,8 @@ export default function DetalheChurras() {
             <FlatList
               data={itens}
               showsVerticalScrollIndicator={false}
+              refreshing={loading}
+              onRefresh={carregarItens}
               keyExtractor={itens => String(itens.id)}
               style={{ marginBottom: 30 }}
               renderItem={({ item: itens }) => (

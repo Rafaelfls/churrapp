@@ -256,6 +256,8 @@ export default function ResumoChurras() {
                 style={style.churrasList}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={churras => String(churras.id)}
+                refreshing={loading}
+                onRefresh={loadChurras}
                 renderItem={({ item: churras }) => (
                     <View>
                         <View style={style.churras}>
