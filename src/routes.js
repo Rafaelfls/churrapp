@@ -45,6 +45,7 @@ import AlterarSenha from './pages/AlterarSenha';
 import Notificacoes from './pages/Notificacoes';
 
 import CustomSideBarMenu from './components/CustomSideBarMenu'
+import CustomSideBarMenuTipo from './components/CustomSideBarMenuTipo'
 
 import ChurrasProvider from './context/churrasContext';
 
@@ -172,6 +173,27 @@ function CriarTabs() {
     );
 }
 
+function CriarDetalheChurrasDrawer() {
+    return(
+        <Drawer.Navigator
+            initialRouteName='Detalhe Churras'
+            drawerType={'back'}
+            drawerStyle={{ width: '55%', backgroundColor: 'lightgray' }}
+            overlayColor={'rgba(0,0,0,0.8)'}
+            drawerPosition="right"
+            drawerContent={(props) => <CustomSideBarMenuTipo {...props} />}
+        >
+            <Drawer.Screen name='Detalhe Churras' component={DetalheChurras}
+                options={{
+                    drawerIcon: (({ focused }) => <IconMI size={25} name={focused ? 'home' : 'home'} ></IconMI>),
+                    title: "Detalhe Churras",
+                    swipeEnabled: false
+                }}
+            />
+        </Drawer.Navigator>
+    )
+}
+
 export default function Routes() {
 
     const linking = {
@@ -209,7 +231,7 @@ export default function Routes() {
                     <AppStack.Screen name="InicioCriaChurras" component={InicioCriaChurras} />
                     <AppStack.Screen name="CriarChurrasco" component={CriarChurrasco} />
                     <AppStack.Screen name="AdicionaConvidados" component={AdicionaConvidados} />
-                    <AppStack.Screen name="DetalheChurras" component={DetalheChurras} />
+                    <AppStack.Screen name="DetalheChurras" component={CriarDetalheChurrasDrawer} />
                     <AppStack.Screen name="OpenContactList" component={OpenContactList} />
                     <AppStack.Screen name="AdicionarPratoPrincipal" component={AdicionarPratoPrincipal} />
                     <AppStack.Screen name="EscolherNovosItens" component={EscolherNovosItens} />

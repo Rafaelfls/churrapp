@@ -18,7 +18,7 @@ import Component2 from '../../assets/Component2.png'
 
 import style from './styles';
 
-import { useChurrasCount, useChurrasParticipado, useAppState } from '../../context/churrasContext';
+import { useChurrasCount, useChurrasParticipado, useAppState, useChurras, useEditavel } from '../../context/churrasContext';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function ResumoChurras() {
@@ -37,6 +37,9 @@ export default function ResumoChurras() {
     const [test, setTest] = useState([]);
     var newChurrasCriados;
     const [direcao, setDirecao] = useState();
+
+    const { newChurras, setNewChurras } = useChurras();
+    const { editavel, setEditavel } = useEditavel();
 
     const isDrawerOpen = useIsDrawerOpen();
 
@@ -140,7 +143,9 @@ export default function ResumoChurras() {
     }
 
     function detalheChurras(churras) {
-        navigation.navigate('DetalheChurras', { churras, editavel: true });
+        navigation.replace('DetalheChurras', { churras });
+        setEditavel(true)
+        setNewChurras(churras);
     }
 
 
@@ -209,7 +214,8 @@ export default function ResumoChurras() {
             setChurrasParticipado(churrasParticipado + 1)
             api.put(`/usuariosQntParticipado/${USUARIOLOGADO.id}`, { churrasParticipados: churrasParticipado + 1 });
             setIsNotificacoesOpen(false)
-            navigation.navigate('DetalheChurras', { churras: churrasId, editavel: false })
+            navigation.navigate('DetalheChurras', { churras: churrasId })
+            setEditavel(false)
         }
     }
     function abrirDrawer() {
@@ -232,7 +238,7 @@ export default function ResumoChurras() {
                         </TouchableOpacity>
                     </View>
                     <TouchableWithoutFeedback onPressIn={() => abrirDrawer()} >
-                            <IconMI name='menu' size={30} />
+                        <IconMI name='menu' size={30} />
                     </TouchableWithoutFeedback>
                 </View>
                 <View style={style.titulo}>
@@ -241,7 +247,7 @@ export default function ResumoChurras() {
                     <Text style={style.textSubHeader}>Você tem {contadorCriado} eventos criados</Text>
                 </View>
             </View>
-            
+
             {churras.length == 0
                 ? (<View style={style.semChurrasbg1}><Image style={style.semChurras1} source={Component1} /></View>)
                 : null

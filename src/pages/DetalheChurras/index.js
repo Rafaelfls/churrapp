@@ -23,14 +23,16 @@ import DatePicker from 'react-native-datepicker';
 import style from './styles';
 import { Container } from 'native-base';
 
-import { useConvidadosCount, useLoadingModal, createLoadingModal } from '../../context/churrasContext';
+import { useConvidadosCount, useLoadingModal, createLoadingModal, useChurras, useEditavel } from '../../context/churrasContext';
 
 export default function DetalheChurras() {
   const route = useRoute();
   const { convidadosCount, setConvidadosCount } = useConvidadosCount();
+  const { newChurras, setNewChurras } = useChurras();
+  const { editavel, setEditavel } = useEditavel();
 
-  const churras = route.params.churras;
-  const editavel = route.params.editavel;
+  // const newChurras = route.params.newChurras;
+  // const editavel = route.params.editavel;
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
   const [itens, setItens] = useState([]);
@@ -77,19 +79,19 @@ export default function DetalheChurras() {
   const [precoModal, setPrecoModal] = useState(0)
   const [precoMedioModal, setPrecoMedioModal] = useState(0);
 
-  //editar Churras
+  //editar newChurras
   const [allowEditing, setAllowEditing] = useState([false, 'darkgray'])
   const [returnVisivel, setReturnVisivel] = useState([false])
   const [image, setImage] = useState({ cancelled: true, uri: null });
-  //Fim editar Churras
+  //Fim editar newChurras
 
   //Convidado Alterar presença
   const [isEnabled, setIsEnabled] = useState(false);
   const [convidadoAtual, setConvidadoAtual] = useState(null)
   //fim convidado alterar presença 
 
-  function CompartilharChurras(churras) {
-    navigation.push('CompartilharChurrasco', { churras });
+  function CompartilharChurras(newChurras) {
+    navigation.push('CompartilharChurrasco', { churras: newChurras });
 
   }
 
@@ -119,7 +121,7 @@ export default function DetalheChurras() {
   }
 
   async function carregarItens() {
-    const response = await api.get(`/listadochurras/${churras}`);
+    const response = await api.get(`/listadochurras/${newChurras}`);
 
     setItens(response.data);
     setItensTotal(response.data.length);
@@ -135,19 +137,19 @@ export default function DetalheChurras() {
   async function carregarTodosTipos(subTipo) {
     switch (subTipo.id) {
       case 1:
-        navigation.replace('EscolherNovosItens',{subTipo,churrascode:churras})
+        navigation.replace('EscolherNovosItens', { subTipo, churrascode: newChurras })
         break;
       case 2:
-          navigation.replace('EscolherNovosItens2',{subTipo,churrascode:churras})
-          break;
+        navigation.replace('EscolherNovosItens2', { subTipo, churrascode: newChurras })
+        break;
       case 3:
-          navigation.replace('EscolherNovosItens3',{subTipo,churrascode:churras})
-          break;      
+        navigation.replace('EscolherNovosItens3', { subTipo, churrascode: newChurras })
+        break;
       case 4:
-        navigation.replace('EscolherNovosItens4',{subTipo,churrascode:churras})
-        break;        
+        navigation.replace('EscolherNovosItens4', { subTipo, churrascode: newChurras })
+        break;
       case 5:
-        navigation.replace('EscolherNovosItens5',{subTipo,churrascode:churras})
+        navigation.replace('EscolherNovosItens5', { subTipo, churrascode: newChurras })
         break;
       default:
         break;
@@ -168,7 +170,7 @@ export default function DetalheChurras() {
     } else {
       var novaUrl = editChurrasFotoUrlC;
     }
-    await api.put(`/churrasUpdate/${churras}`, {
+    await api.put(`/churrasUpdate/${newChurras}`, {
       nomeChurras: editChurrasNome,
       data: editChurrasData,
       limiteConfirmacao: editChurrasDataLimite,
@@ -184,7 +186,7 @@ export default function DetalheChurras() {
   }
 
   async function carregarConvidados() {
-    const response = await api.get(`/convidados/${churras}`);
+    const response = await api.get(`/convidados/${newChurras}`);
 
     setConvidados(response.data);
     setConvidadosCount(response.data.length);
@@ -240,7 +242,7 @@ export default function DetalheChurras() {
     setLoading(true)
     await api.post('/listadochurras', {
       quantidade: qtdNova,
-      churras_id: churras,
+      churras_id: newChurras,
       unidade_id: unidadeDrop,
       item_id: item,
       formato_id: form,
@@ -253,7 +255,7 @@ export default function DetalheChurras() {
       } else {
         var precoFinalTotal = precoFinal * qtdNova;
       }
-      await api.put(`/churrasUpdate/valorTotal/${churras}`, {
+      await api.put(`/churrasUpdate/valorTotal/${newChurras}`, {
         valorTotal: precoFinalTotal,
       })
       setSelectedFormato(1)
@@ -295,7 +297,7 @@ export default function DetalheChurras() {
       } else {
         var precoFinalTotal = precoFinal * qtdNova;
       }
-      await api.put(`/churrasUpdate/valorTotal/${churras}`, {
+      await api.put(`/churrasUpdate/valorTotal/${newChurras}`, {
         valorTotal: precoFinalTotal,
       })
       setSelectedFormato(1)
@@ -392,7 +394,7 @@ export default function DetalheChurras() {
     console.log(itens)
     setLoading(true)
     var precoFinalTotal = itens.precoItem * itens.quantidade;
-    await api.put(`/churrasUpdate/valorTotal/${churras}`, {
+    await api.put(`/churrasUpdate/valorTotal/${newChurras}`, {
       valorTotal: -precoFinalTotal,
     }).then(async function () {
       await api.delete(`/listadochurras/${itens.id}`)
@@ -405,8 +407,9 @@ export default function DetalheChurras() {
   }
 
   async function carregaChurras() {
-    const res = await api.get(`churrasPeloId/${churras}`)
+    const res = await api.get(`churrasPeloId/${newChurras}`)
 
+    console.log(res)
     setChurrasAtual(res.data[0])
     setEditChurrasNome(res.data[0].nomeChurras)
     setEditChurrasNomeUsuario(res.data[0].nome)
@@ -427,6 +430,7 @@ export default function DetalheChurras() {
     setEditChurrasFotoUrlU(res.data[0].fotoUrlU)
     setEditChurrasValorTotal(res.data[0].valorTotal)
     setEditChurrasValorPago(res.data[0].valorPago)
+
   }
 
   function formatData(data) {
@@ -1008,7 +1012,7 @@ export default function DetalheChurras() {
                 )}
               />
 
-              <ActionButton offsetX={10} style={{ opacity: 0.85 }} offsetY={10} onPress={() => setModalSubTipoVisivel(true)} />
+              <ActionButton offsetX={10} style={{ opacity: 0.85 }} offsetY={10} onPress={() => {navigation.openDrawer()}} />
 
             </View>)
           : (<View tabLabel='Itens'><View style={style.formGroup}>
@@ -1203,7 +1207,7 @@ export default function DetalheChurras() {
           </View>
         </View>
       </Modal>
-     
+
       <Modal
         animationType="slide"
         transparent={true}
