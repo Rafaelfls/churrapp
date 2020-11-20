@@ -152,7 +152,6 @@ export default function DetalheChurras() {
       default:
         break;
     }
-    console.log(subTipo)
   }
 
   function editPerfil() {
@@ -389,7 +388,6 @@ export default function DetalheChurras() {
   }
 
   async function deleteItem(itens) {
-    console.log(itens)
     setLoading(true)
     var precoFinalTotal = itens.precoItem * itens.quantidade;
     await api.put(`/churrasUpdate/valorTotal/${churras}`, {
@@ -428,7 +426,7 @@ export default function DetalheChurras() {
     setEditChurrasValorTotal(res.data[0].valorTotal)
     setEditChurrasValorPago(res.data[0].valorPago)
   }
-
+  
   function formatData(data) {
     var date = new Date(data).getDate() + 1
     var month = new Date(data).getMonth() + 1
@@ -453,7 +451,7 @@ export default function DetalheChurras() {
   };
 
   async function uploadImage(imagem) {
-    let apiUrl = 'https://pure-island-99817.herokuapp.com/fotosUsuarios';
+    let apiUrl = 'https://pure-island-99817.herokuapp.com/fotosChurras';
     let uriParts = imagem.uri.split('.');
     let fileType = uriParts[uriParts.length - 1];
     let uri = imagem.uri
@@ -997,7 +995,7 @@ export default function DetalheChurras() {
                         <Text style={style.churrasDonoModal}>{itens.formato == "Não aplica" ? "" : "Opção: " + itens.formato} </Text>
                         <View style={style.churrasLocDatModal}>
                           <Icon style={style.dataIconModal} name="weight-hanging" size={15} />
-                          <Text style={style.qtdItemAdc}>{itens.quantidade} {itens.unidade}</Text>
+                          <Text style={style.qtdItemAdc}>{(itens.quantidade).toFixed(2)} {itens.unidade}</Text>
                           <Text style={style.locDatSeparatorModal}>  |  </Text>
                           <Icon style={style.localIconModal} name="coins" size={15} />
                           <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
@@ -1033,7 +1031,7 @@ export default function DetalheChurras() {
                       <Text style={style.churrasDonoModal}>{itens.descricao} </Text>
                       <View style={style.churrasLocDatModal}>
                         <Icon style={style.dataIconModal} name="weight-hanging" size={15} />
-                        <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
+                        <Text style={style.qtdItemAdc}>{(itens.quantidade).toFixed(2)}{itens.unidade}</Text>
                         <Text style={style.locDatSeparatorModal}>  |  </Text>
                         <Icon style={style.localIconModal} name="coins" size={15} />
                         <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>

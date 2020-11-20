@@ -368,7 +368,7 @@ export default function Perfil() {
             uf: ufNovo,
             idade: idadeNovo,
             senha: senhaUpdate,
-            fotoUrlU: fotoUrlUNovo,
+            fotoUrlU: novaUrl,
             celular: celularNovo,
             apelido: apelidoNovo,
             pontoCarne_id: pontoCarneNovo_id,
