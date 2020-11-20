@@ -71,7 +71,7 @@ export default function Perfil() {
     const [idadeNovo, setIdadeNovo] = useState('')
     const [celularNovo, setCelularNovo] = useState('')
     const [celularNovoFormat, setCelularNovoFormat] = useState('')
-    const [fotoUrlUNovo, setFotoUrlUNovo] = useState('')
+    const [fotoUrlUNovo, setFotoUrlUNovo] = useState('https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png')
     const [pontoCarneNovo_id, setPontoCarneNovo_id] = useState(null);
     const [quantidadeComeNovo_id, setQuantidadeComeNovo_id] = useState(null);
     const [idadeformatada, setIdadeFormatada] = useState(null);
@@ -991,8 +991,8 @@ export default function Perfil() {
                             />
                         </View>
                         <View style={style.footerModalCont}>
-                            <TouchableOpacity style={style.continueBtnCont} onPress={() => setSenhaNova([false])}>
-                                <Text style={style.textBtnCont}>Cancelar</Text>
+                            <TouchableOpacity style={style.exitBtn} onPress={() => setSenhaNova([false])}>
+                                <Text style={style.iconExitBtn}>Cancelar</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={style.continueBtnCont} onPress={alterarSenha}>
                                 <Text style={style.textBtnCont}>Salvar</Text>
@@ -1011,12 +1011,12 @@ export default function Perfil() {
                         <Text style={style.modalTitleCont}>Foto de perfil!</Text>
                         <Text style={style.modalTextCont}>Deseja escolher uma foto ou remover atual?</Text>
                         <View style={style.footerModalCont}>
-                            <TouchableOpacity style={style.continueBtnCont} onPress={() => {
+                            <TouchableOpacity style={style.exitBtn} onPress={() => {
                                 setFotoUrlUNovo("https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png");
                                 setImage({ cancelled: true, uri: "https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png" });
                                 setPickImageOptions([false])
                             }}>
-                                <Text style={style.textBtnCont}>Remover</Text>
+                                <Text style={style.iconExitBtn}>Remover</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={style.continueBtnCont} onPress={pickImage}>
                                 <Text style={style.textBtnCont}>Escolher</Text>

@@ -242,9 +242,9 @@ export default function AdicionarAcompanhamento({ route, navigation }) {
                             <Text style={style.modalText}>Deseja remover <Text style={{ fontFamily: 'poppins-medium' }}>{itemDeletar.nomeItem}</Text> do seu churras? </Text>
                             <View style={style.footerModal}>
                                 <TouchableOpacity style={style.exitBtnModal} onPress={() => setIsVisible(false)}>
-                                    <Text style={style.iconSalvarBtnModal}>Não</Text>
+                                    <Text style={style.iconExitBtn}>Não</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={style.exitBtnModal} onPress={() => deleteItem(itemDeletar)}>
+                                <TouchableOpacity style={style.salvarBtnModal} onPress={() => deleteItem(itemDeletar)}>
                                     <Text style={style.iconSalvarBtnModal}>Sim</Text>
                                 </TouchableOpacity>
                             </View>
@@ -267,10 +267,10 @@ export default function AdicionarAcompanhamento({ route, navigation }) {
                             <Text style={style.modalTextSair}>Você deseja mesmo cancelar este churrasco?</Text>
                             <Text style={style.confirmarSairSubTitle}>(Tudo que fez até aqui sera perdido)</Text>
                             <View style={style.footerModalSair}>
-                                <TouchableOpacity style={style.sairBtn} onPress={() => setModalSair(false)}>
-                                    <Text style={style.textBtn}>Não</Text>
+                                <TouchableOpacity style={style.exitBtnModal} onPress={() => setModalSair(false)}>
+                                    <Text style={style.iconExitBtn}>Não</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={style.sairBtn} onPress={() => backHome()}>
+                                <TouchableOpacity style={style.salvarBtnModal} onPress={() => backHome()}>
                                     <Text style={style.textBtn}>Sim</Text>
                                 </TouchableOpacity>
                             </View>

@@ -125,10 +125,12 @@ export default StyleSheet.create({
     color:"#800000",
     fontSize:30,
     marginBottom:15,
+    fontFamily: 'poppins-medium',
   },
   modalText:{
     fontSize:17,
-    textAlign:'center'
+    textAlign:'center',
+    fontFamily: 'poppins-light',
   },
   modalTermoText: {
     textAlign: 'justify',
@@ -158,17 +160,45 @@ export default StyleSheet.create({
     borderRadius:8,
     backgroundColor: 'maroon',
     height: '60%',
-    width: '85%',
+    width: 125,
     paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
-  continueBtnDisabled: {
+  footer2:{    
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    borderTopColor: 'lightgray',
+    borderTopWidth: 1,
+    backgroundColor: 'white',
+  },
+  continueBtn2: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius:8,
-    backgroundColor: 'lightgray',
+    borderRadius: 8,
+    backgroundColor: 'maroon',
     height: '60%',
     width: '85%',
     paddingVertical: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
   textBtn:{
     color: 'white',

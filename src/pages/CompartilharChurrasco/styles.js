@@ -91,7 +91,7 @@ export default StyleSheet.create({
         justifyContent: "center",
         borderTopColor: 'lightgray',
         borderTopWidth: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#f5f5f5',
     },
     shareBtn: {
         alignItems: 'center',
@@ -101,6 +101,15 @@ export default StyleSheet.create({
         height: '60%',
         width: '85%',
         paddingVertical: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 3,
+        },
+        shadowOpacity: 0.27,
+        shadowRadius: 4.65,
+    
+        elevation: 6,
     },
     shareText: {
         color: 'white',

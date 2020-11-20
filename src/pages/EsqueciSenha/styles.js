@@ -49,7 +49,16 @@ export default StyleSheet.create({
     width: '100%',
     height:40,
     paddingVertical: 5,
-    marginTop: 10
+    marginTop: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
   textBtn:{
     color: 'white',
@@ -118,6 +127,7 @@ export default StyleSheet.create({
     color:"#800000",
     fontSize:26,
     marginBottom:15,
+    fontFamily: 'poppins-medium',
   },
   modalText:{
     fontSize:17,

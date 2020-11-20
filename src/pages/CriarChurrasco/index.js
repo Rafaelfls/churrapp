@@ -318,7 +318,7 @@ export default function CriarChurrasco() {
         </ScrollView>
 
         <View style={style.footer}>
-          <TouchableOpacity style={style.continueBtn} onPress={next}>
+          <TouchableOpacity style={style.continueBtn2} onPress={next}>
             <Text style={style.textBtn}>Criar churras</Text>
           </TouchableOpacity>
         </View>
@@ -352,9 +352,9 @@ export default function CriarChurrasco() {
               <Text style={style.confirmarSairSubTitle}>(Tudo que fez até aqui sera perdido)</Text>
               <View style={style.footerModal}>
                  <TouchableOpacity style={style.sairBtn} onPress={() => setModalSair(false)}>
-                  <Text style={style.textBtn}>Não</Text>
+                  <Text style={style.iconExitBtn}>Não</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={style.sairBtn} onPress={() => backHome()}>
+                <TouchableOpacity style={style.salvarBtn} onPress={() => backHome()}>
                   <Text style={style.textBtn}>Sim</Text>
                 </TouchableOpacity>
               </View>

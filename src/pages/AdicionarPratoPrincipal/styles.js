@@ -63,18 +63,32 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: "center",
-    borderTopColor: 'lightgray',
-    borderTopWidth: 1,
     backgroundColor: 'white',
   },
   continueBtn: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
+    borderRadius:8,
     backgroundColor: 'maroon',
     height: '60%',
-    width: '85%',
+    width: 125,
     paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  }, 
+  iconExitBtn: {
+    color: 'maroon',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
   },
   textBtn: {
     color: 'white',
@@ -83,6 +97,33 @@ export default StyleSheet.create({
     textAlign: 'center',
   },
 
+  footer2:{    
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    borderTopColor: 'lightgray',
+    borderTopWidth: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  continueBtn2: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: '85%',
+    paddingVertical: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },
   //modal
   modalView: {
     margin: 20,
@@ -118,38 +159,13 @@ export default StyleSheet.create({
     fontFamily:'poppins-medium'
   },
   footerModal: {    
-    height: 50,
+    height: 90,
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: "center",
     backgroundColor: 'white',
   },
-  exitBtnModal: {
-    flexDirection: 'row-reverse',
-    backgroundColor: '#800000',
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginHorizontal: 6,
-  },
-  salvarBtnModal: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius:8,
-    marginHorizontal:5,
-    backgroundColor: 'maroon',
-    height: '60%',
-    width: '40%',
-    paddingVertical: 5,
-  },
-  iconSalvarBtnModal: {
-    color: 'white',
-    fontSize: 17,
-    fontFamily: 'poppins-medium',
-    textAlign: 'center',
-  },
-  sairBtn:{
+  salvarBtn: {
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius:8,
@@ -157,15 +173,80 @@ export default StyleSheet.create({
     height: '60%',
     width: 125,
     paddingVertical: 5,
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
-  textBtn:{
+  exitBtnModal: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'lightgray',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },
+  salvarBtnModal: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },
+  iconSalvarBtnModal: {
     color: 'white',
     fontSize: 17,
     fontFamily: 'poppins-medium',
     textAlign: 'center',
-  },
+  },  
+  sairBtn:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius:8,
+    backgroundColor: 'lightgray',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
 
+    elevation: 6,
+  },
   //modal sair
   modalTitle:{
     color:"#800000",

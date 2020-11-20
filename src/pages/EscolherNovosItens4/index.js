@@ -158,7 +158,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                                             <Text style={style.churrasData}> {item.tipo}</Text>
                                             <Text style={style.locDatSeparator}>  |  </Text>
                                             <Icon style={style.localIcon} name="coins" size={15} />
-                                            <Text style={style.churrasLocal}> {item.precoMedio == null ? '  -  ' : "  R$" + item.precoMedio}</Text>
+                                            <Text style={style.churrasLocal}> {item.precoMedio == null ? '  -  ' : "  R$" + (item.precoMedio).toFixed(2)}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -171,12 +171,12 @@ export default function EscolherNovosItens3({ route, navigation }) {
                                         <Text style={style.churrasTitle}>{item.nomeItem}</Text>
                                         <Text style={style.churrasDono}>{item.descricao} </Text>
                                         <View style={style.churrasLocDat}>
-                                            <Icon style={style.localIcon} name="coins" size={15} />
-                                            <Text style={style.churrasLocal}>{item.precoMedio == null ? '  -  ' : "  R$" + item.precoMedio}</Text>
-                                            <Text style={style.locDatSeparator}>  |  </Text>
-                                            <IconMat style={style.dataIcon} name="cow" size={15} />
+                                            <IconMat style={style.dataIcon} name="shuffle-variant" size={15} />
                                             <Text style={style.churrasData}> {item.tipo}</Text>
-                                        </View>
+                                            <Text style={style.locDatSeparator}>  |  </Text>
+                                            <Icon style={style.localIcon} name="coins" size={15} />
+                                            <Text style={style.churrasLocal}>{item.precoMedio == null ? '  -  ' : "  R$" + (item.precoMedio).toFixed(2)}</Text>
+                                            </View>
                                     </View>
                                 </TouchableOpacity>
                             ) : null}
@@ -238,11 +238,9 @@ export default function EscolherNovosItens3({ route, navigation }) {
                             </View>
                             <View style={style.footerModal}>
                                 <TouchableOpacity style={style.exitBtnFooter} onPress={() => setVisibility(false, "", '', '', '')}>
-                                    <Icon style={style.iconSalvarBtn} name="times" size={15} />
-                                    <Text style={style.iconSalvarBtn}>Cancelar</Text>
+                                    <Text style={style.iconExitBtn}>Cancelar</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal,precoModal)}>
-                                    <Icon style={style.iconSalvarBtn} name="check" size={15} />
                                     <Text style={style.iconSalvarBtn}>Confirmar</Text>
                                 </TouchableOpacity>
                             </View>

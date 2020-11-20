@@ -149,7 +149,7 @@ export default function LoginCelular() {
                         <Text style={style.modalTitle}>Ops!</Text>
                         <Text style={style.modalText}>Informações incorretas!</Text>
                         <View style={style.footerModal}>
-                            <TouchableOpacity style={style.continueBtn} onPress={okModal}>
+                            <TouchableOpacity style={style.continueBtn2} onPress={okModal}>
                                 <Text style={style.textBtn}>Ok</Text>
                             </TouchableOpacity>
                         </View>
