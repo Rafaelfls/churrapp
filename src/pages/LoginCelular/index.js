@@ -33,7 +33,7 @@ export default function LoginCelular() {
     const [celularUser, setCelularUser] = useState('');
     const [senhaUsuario, setSenhaUsuario] = useState('');
     const [valueCelular, setValueCelular] = useState('');
-    const [visivel, setVisivel] = useState(true)
+    const [visivel, setVisivel] = useState(false)
 
     async function navigateToResumo() {
         global.USUARIOLOGADO = null;
