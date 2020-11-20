@@ -33,9 +33,10 @@ export default function LoginCelular() {
     const [celularUser, setCelularUser] = useState('');
     const [senhaUsuario, setSenhaUsuario] = useState('');
     const [valueCelular, setValueCelular] = useState('');
-    const [visivel, setVisivel] = useState(false)
+    const [visivel, setVisivel] = useState(true)
 
     async function navigateToResumo() {
+        global.USUARIOLOGADO = null;
         setLoading(true)
         let criptoSenhaVar = await criptoSenha(senhaUsuario)
         if (celularUser == '') {

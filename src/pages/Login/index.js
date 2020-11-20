@@ -11,7 +11,6 @@ export default function Login() {
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
 
-  global.USUARIOLOGADO = null;
   global.LISTADECONVIDADOS = null;
   global.CONVITE = null;
   
