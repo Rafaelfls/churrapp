@@ -59,7 +59,7 @@ export default function AdicionarAcompanhamento({ route, navigation }) {
     }
 
     function escolherNovosItens() {
-        navigation.push('EscolherNovosItens2', { churrascode, convidadosQtd })
+        navigation.push('EscolherNovosItens2', { churrascode, convidadosQtd, subtipo:null })
     }
 
     function backHome() {

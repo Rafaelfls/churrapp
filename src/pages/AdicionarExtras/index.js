@@ -130,7 +130,7 @@ export default function AdicionarExtras({ route, navigation }) {
     }
 
     function escolherNovosItens() {
-        navigation.push('EscolherNovosItens4', { churrascode,convidadosQtd })
+        navigation.push('EscolherNovosItens4', { churrascode, convidadosQtd, subtipo:null })
     }
 
     function backHome() {

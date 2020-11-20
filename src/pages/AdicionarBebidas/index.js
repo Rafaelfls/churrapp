@@ -60,7 +60,7 @@ export default function AdicionarBebidas({ route, navigation }) {
     }
 
     function escolherNovosItens() {
-        navigation.push('EscolherNovosItens3', { churrascode , convidadosQtd })
+        navigation.push('EscolherNovosItens3', { churrascode , convidadosQtd, subtipo:null })
     }
 
     function backHome() {

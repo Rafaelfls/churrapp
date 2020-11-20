@@ -60,7 +60,7 @@ export default function AdicionarSobremesa({ route, navigation }) {
     }
 
     function escolherNovosItens() {
-        navigation.push('EscolherNovosItens5', { churrascode,convidadosQtd })
+        navigation.push('EscolherNovosItens5', { churrascode, convidadosQtd, subtipo:null })
     }
 
     function backHome() {

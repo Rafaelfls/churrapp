@@ -32,6 +32,7 @@ export default function EscolherNovosItens({ route, navigation }) {
     const [filtro, setFiltro] = useState(null)
     const { churrascode } = route.params;
     const { convidadosQtd } = route.params;
+    const { subTipo } = route.params;
 
     async function firstLoad() {
         setLoading(true)
@@ -123,7 +124,11 @@ export default function EscolherNovosItens({ route, navigation }) {
     }
 
     function backHome() {
-        navigation.push('AdicionarPratoPrincipal', { churrascode, convidadosQtd, primeiroAcesso: false })
+        if(subTipo != null){
+            navigation.replace('DetalheChurras', {churras:churrascode, editavel:true})
+        }else{
+            navigation.push('AdicionarPratoPrincipal', { churrascode, convidadosQtd, primeiroAcesso: false })
+        }
     }
 
     function setFiltroTipo(idFiltro) {
