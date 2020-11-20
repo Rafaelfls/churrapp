@@ -75,26 +75,24 @@ const Notificacoes = () => {
                     }
                 </View>
             </View>
-            <View>
-                <FlatList
-                    data={notificacoes}
-                    style={style.notificacoesList}
-                    showsVerticalScrollIndicator={false}
-                    keyExtractor={notificacoes => String(notificacoes.id)}
-                    renderItem={({ item: notificacoes }) => (
-                        <View style={style.cardNotf}>
-                            <Text style={style.cardTextNotf}>{notificacoes.mensagem}</Text>
-                            <View style={style.cardFooterNotf}>
-                                {notificacoes.negar != null
-                                    ? <TouchableOpacity style={style.cardBtnNotf1} onPress={() => clicknegar(notificacoes)}><Text style={style.cardBtnTextNotf1}>{notificacoes.negar}</Text></TouchableOpacity>
-                                    : null}
-                                {notificacoes.confirmar != null
-                                    ? <TouchableOpacity style={style.cardBtnNotf} onPress={() => clickconfirmar(notificacoes)}><Text style={style.cardBtnTextNotf}>{notificacoes.confirmar}</Text></TouchableOpacity>
-                                    : null}
-                            </View>
+            <FlatList
+                data={notificacoes}
+                style={style.notificacoesList}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={notificacoes => String(notificacoes.id)}
+                renderItem={({ item: notificacoes }) => (
+                    <View style={style.cardNotf}>
+                        <Text style={style.cardTextNotf}>{notificacoes.mensagem}</Text>
+                        <View style={style.cardFooterNotf}>
+                            {notificacoes.negar != null
+                                ? <TouchableOpacity style={style.cardBtnNotf1} onPress={() => clicknegar(notificacoes)}><Text style={style.cardBtnTextNotf1}>{notificacoes.negar}</Text></TouchableOpacity>
+                                : null}
+                            {notificacoes.confirmar != null
+                                ? <TouchableOpacity style={style.cardBtnNotf} onPress={() => clickconfirmar(notificacoes)}><Text style={style.cardBtnTextNotf}>{notificacoes.confirmar}</Text></TouchableOpacity>
+                                : null}
                         </View>
-                    )} />
-            </View>
+                    </View>
+                )} />
         </View>
 
     );

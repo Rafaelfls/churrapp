@@ -61,7 +61,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     }
 
     function escolherNovosItens() {
-        navigation.push('EscolherNovosItens', { churrascode })
+        navigation.push('EscolherNovosItens', { churrascode, convidadosQtd, subtipo:null })
     }
 
 
