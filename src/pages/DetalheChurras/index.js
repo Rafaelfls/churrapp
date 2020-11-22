@@ -31,6 +31,7 @@ export default function DetalheChurras() {
 
   const churras = route.params.churras;
   const editavel = route.params.editavel;
+  const {initialPage} = route.params;
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
   const [itens, setItens] = useState([]);
@@ -529,7 +530,7 @@ export default function DetalheChurras() {
         tabBarUnderlineStyle={{ backgroundColor: 'maroon', height: 2 }}
         renderTabBar={() => <DefaultTabBar />}
         ref={(tabView) => { tabView = tabView; }}
-        initialPage={0}
+        initialPage={initialPage}
       >
         <View tabLabel="Info">
           <ScrollView>
@@ -578,8 +579,9 @@ export default function DetalheChurras() {
                 <Text style={style.churrasNome}>Local: </Text>
               </View>
               <TextInput
-                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height:'auto' }]}
                 editable={allowEditing[0]}
+                multiline={true}
                 onChangeText={text => setEditChurrasLocal(text)}
                 value={editChurrasLocal}
               />
@@ -735,8 +737,9 @@ export default function DetalheChurras() {
                 <Text style={style.churrasNome}>Descrição: </Text>
               </View>
               <TextInput
-                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height:'auto' }]}
                 editable={allowEditing[0]}
+                multiline={true}
                 onChangeText={text => setEditChurrasDescricao(text)}
                 value={editChurrasDescricao == null ? "-" : editChurrasDescricao}
               />

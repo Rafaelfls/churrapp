@@ -69,7 +69,7 @@ export default StyleSheet.create({
     marginBottom: 5,
   },
   inputStandard:{ 
-    height: 40, 
+    minHeight: 40, 
     borderBottomWidth: 0.5,
     paddingHorizontal: 5,
     marginBottom: 10,

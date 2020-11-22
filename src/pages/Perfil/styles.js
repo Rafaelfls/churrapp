@@ -3,16 +3,11 @@ import Constants from 'expo-constants';
 import { Row, Right } from 'native-base';
 
 export default StyleSheet.create({
-
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
   //header
   container: {
     flex: 1,
     paddingTop: Constants.statusBarHeight + 15,
-    backgroundColor: '#fff'
+    backgroundColor: 'maroon'
   },
   header: {
     justifyContent: 'center',

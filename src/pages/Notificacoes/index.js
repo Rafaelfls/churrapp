@@ -51,7 +51,7 @@ const Notificacoes = () => {
             await api.delete(`/notificacoes/${notificacao.id}`)
             setChurrasParticipado(churrasParticipado + 1)
             api.put(`/usuariosQntParticipado/${USUARIOLOGADO.id}`, { churrasParticipados: churrasParticipado + 1 });
-            navigation.navigate('DetalheChurras', { churras: churrasId, editavel: false })
+            navigation.navigate('DetalheChurras', { churras: churrasId, editavel: false, initialPage:0 })
         }
     }
 

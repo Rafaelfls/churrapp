@@ -486,7 +486,7 @@ export default function Perfil() {
                 showsVerticalScrollIndicator={false}
                 style={style.churrasList}
                 renderItem={({ item: usuario }) => (
-                    <View>
+                    <View style={{backgroundColor:'white'}}>
                         <View style={style.backgroundProfile}>
                         <View style={style.menuBtn}>
                             {/* <View style={style.centeredViewNotificacaoQtd}>

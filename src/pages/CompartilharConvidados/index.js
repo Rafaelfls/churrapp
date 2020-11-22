@@ -232,7 +232,7 @@ console.log(convid)
             <TouchableOpacity style={{ justifyContent: 'center', alignContent: 'center' }} onPress={() => setEditaConvite(true)}><Text style={style.editarConvite}>Editar convite</Text></TouchableOpacity>
           </View>
           <TextInput
-            style={[style.inputStandard, { marginTop: 5, height: 40 }]}
+            style={[style.inputStandard, { marginTop: 5, height: 70 }]}
             multiline={true}
             numberOfLines={1}
             value={convite0 + convite1 + convite2 + convite3 + convite4 + convite5 +"."}

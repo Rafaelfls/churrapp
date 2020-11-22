@@ -70,7 +70,7 @@ export default function OutrosChurras() {
     }, []);
 
     function detalheChurras(churras) {
-        navigation.navigate('DetalheChurras', { churras, allowShare: false, editavel: false});
+        navigation.navigate('DetalheChurras', { churras, allowShare: false, editavel: false, initialPage:0});
     }
 
     return (
