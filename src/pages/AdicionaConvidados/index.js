@@ -78,7 +78,11 @@ export default function AdicionaConvidados({ route, navigation }) {
   }
 
   async function criaListaConvidados(convid) {
-    convid.telefone = convid.telefone.replace("+55", "").replace(/-/g, "").replace(/\s/g, "").replace(/[()]/g, "");
+    convid.telefone = convid.telefone
+    .replace("+55", "")
+    .replace(/-/g, "")
+    .replace(/\s/g, "")
+    .replace(/[()]/g, "");
 
     if (convid.telefone.length > 11) {
       convid.telefone = convid.telefone.substring(convid.telefone.length - 11)

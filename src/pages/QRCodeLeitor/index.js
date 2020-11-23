@@ -19,6 +19,7 @@ export default function QRCodeLeitor() {
     const [visivel, setIsVisivel] = React.useState(false);
     const [qrCode, setQrCode] = useState(true);
     const [qrCodeValue, setQrCodeValue] = React.useState('');
+    const [scanError, setScanError] = useState([false])
 
     function goBack() {
         setQrCode(false)
@@ -29,49 +30,60 @@ export default function QRCodeLeitor() {
     async function participarDoChurras() {
         setIsVisivel(false);
         setLoading(true)
+        console.log(qrCodeValue)
         await api.post(`/convidadosChurrasCriado/${USUARIOLOGADO.id}`, {
-            churras_id: churras_id
+            churras_id: qrCodeValue.id
         }).then(async function (res) {
-            if(res.data[0].limiteConfirmacao == null){
+            if (res.data[0].limiteConfirmacao == null) {
                 await api.post(`/notificacoes/${USUARIOLOGADO.id}/${qrCodeValue.id}`, {
-                    mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de R$${(res.data[0].valorPagar).fixed(2)}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+                    mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de R$${(res.data[0].valorPagar).toFixed(2)}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
                     negar: "Não vou",
                     confirmar: "Vou",
                     validade: res.data[0].data,
                 })
-            }else{
+            } else {
                 await api.post(`/notificacoes/${USUARIOLOGADO.id}/${qrCodeValue.id}`, {
-                    mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de R$${(res.data[0].valorPagar).fixed(2)}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+                    mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de R$${(res.data[0].valorPagar).toFixed(2)}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
                     negar: "Não vou",
                     confirmar: "Vou",
                     validade: res.data[0].limiteConfirmacao,
                 })
             }
+            setLoading(false)
+            setScanned(false);
         });
-        setQrCode(false)
-        setLoading(false)
+        setQrCode(false);
+        setLoading(false);
+        setScanned(false);
         return navigation.replace('Tabs');
     }
 
     const handleBarCodeScanned = ({ data }) => {
-        setIsVisivel(true)
-        setScanned(false);
+        setScanned(true)
         loadChurras(data)
     };
 
-    async function loadChurras(id){
-        await api.get(`churrasPeloId/${id}`)
-        .then(function(res){
-            setQrCodeValue(res.data[0])
-        })
+    async function loadChurras(id) {
+        try {
+            await api.get(`churrasPeloId/${id}`)
+                .then(function (res) {
+                    setQrCodeValue(res.data[0])
+                    setIsVisivel(true)
+                })
+        } catch (error) {
+            setScanError([true, id])
+        }
+
+        setLoading(false)
     }
 
     return (
 
         <View style={style.container}>
+            <View style={style.top}></View>
             <BarCodeScanner
                 onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                style={[StyleSheet.absoluteFill, style.cameraContainer]}
+                style={StyleSheet.absoluteFillObject}
             />
             <Modal
                 animationType="none"
@@ -101,11 +113,28 @@ export default function QRCodeLeitor() {
                         <Text style={style.modalTitle}>Participar!</Text>
                         <Text style={style.modalText}>Deseja participar do churras {qrCodeValue.nomeChurras}?</Text>
                         <View style={style.footer}>
-                            <TouchableOpacity style={style.exitBtn} onPress={() => setIsVisivel(false)}>
+                            <TouchableOpacity style={style.exitBtn} onPress={() => {setIsVisivel(false), setScanned(false)}}>
                                 <Text style={style.iconExitBtn}>Cancelar</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={style.salvarBtn} onPress={participarDoChurras}>
                                 <Text style={style.textSalvarBtn}>Participar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={scanError[0]}
+            >
+                <View style={style.centeredView}>
+                    <View style={style.modalView}>
+                        <Text style={style.modalTitle}>Ops!</Text>
+                        <Text style={style.modalText}>Não encontramos churrasco com o codigo <Text style={{ fontWeight: 'bold' }}>{scanError[1]}</Text> !</Text>
+                        <View style={style.footer}>
+                            <TouchableOpacity style={style.salvarBtn} onPress={() => { setScanError([false]), setScanned(false) }}>
+                                <Text style={style.textSalvarBtn}>Ok</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

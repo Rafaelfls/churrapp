@@ -70,14 +70,14 @@ export default function ParticiparChurrasco() {
                         }).then(async function (res) {
                             if (res.data[0].limiteConfirmacao == null) {
                                 await api.post(`/notificacoes/${USUARIOLOGADO.id}/${churras_id}`, {
-                                    mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de R$${(res.data[0].valorPagar).fixed(2)}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+                                    mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de R$${(res.data[0].valorPagar).toFixed(2)}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
                                     negar: "Não vou",
                                     confirmar: "Vou",
                                     validade: res.data[0].data,
                                 })
                             } else {
                                 await api.post(`/notificacoes/${USUARIOLOGADO.id}/${churras_id}`, {
-                                    mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de R$${(res.data[0].valorPagar).fixed(2)}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
+                                    mensagem: `${res.data[0].nome} está te convidando para o churras ${res.data[0].nomeChurras}, e o valor por pessoa é de R$${(res.data[0].valorPagar).toFixed(2)}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
                                     negar: "Não vou",
                                     confirmar: "Vou",
                                     validade: res.data[0].limiteConfirmacao,
