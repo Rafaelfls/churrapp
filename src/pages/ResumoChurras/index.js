@@ -117,7 +117,6 @@ export default function ResumoChurras() {
     }
 
     function apertaFabBtn(btn) {
-        console.log(btn)
         if (btn == "criaChurras") {
             inicioCriarChurras();
         }
@@ -186,13 +185,11 @@ export default function ResumoChurras() {
         if (notificacao.churras_id == null) {
             await api.delete(`/notificacoes/${notificacao.id}`)
             setIsNotificacoesOpen(false)
-            console.log("DOIDERA")
             setRefreshChurras(!refreshChurras);
         } else {
             await api.put(`/negarPresenca/${notificacao.usuario_id}/${notificacao.churras_id}`)
             await api.delete(`/notificacoes/${notificacao.id}`)
             setIsNotificacoesOpen(false)
-            console.log("DOIDERA")
             setRefreshChurras(!refreshChurras);
         }
     }

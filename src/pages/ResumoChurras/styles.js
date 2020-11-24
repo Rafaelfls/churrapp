@@ -67,7 +67,6 @@ export default StyleSheet.create({
 
   //cards
   churrasList: {
-    marginHorizontal: 20,
     paddingTop: 15,
     backgroundColor: "transparent",
   },
@@ -77,7 +76,7 @@ export default StyleSheet.create({
     backgroundColor: 'white',
     marginVertical: 10,
     marginBottom:15,
-    marginLeft: 0,
+    marginHorizontal: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
