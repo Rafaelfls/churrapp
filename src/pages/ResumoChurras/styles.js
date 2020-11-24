@@ -67,16 +67,18 @@ export default StyleSheet.create({
 
   //cards
   churrasList: {
+    marginHorizontal: 20,
     paddingTop: 15,
     backgroundColor: "transparent",
   },
+
+  //sem borda em cima, com borda embaixo
 
   //cardDesign
   churras: {
     backgroundColor: 'white',
     marginVertical: 10,
     marginBottom:15,
-    marginHorizontal: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
