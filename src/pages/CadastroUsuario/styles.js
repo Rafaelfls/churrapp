@@ -173,6 +173,11 @@ export default StyleSheet.create({
 
     elevation: 6,
   },
+  checkbox:{ 
+    width:"100%",
+    flexDirection: 'row',
+    alignItems: 'center', 
+    alignSelf: 'flex-end' },
   footer2:{    
     height: 90,
     flexDirection: "row",

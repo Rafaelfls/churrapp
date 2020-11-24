@@ -41,7 +41,6 @@ export default function CadastroUsuario() {
     const [termoModal, setTermoModal] = useState(false)
     const [termoLido, setTermoLido] = useState(false)
     const [politicaModal, setPoliticaModal] = useState(false)
-    const [idadeCheck, setIdadeCheck] = useState(false)
 
     function backHome() {
         navigation.replace('Login');
@@ -205,8 +204,8 @@ export default function CadastroUsuario() {
                         <CheckBox value={idadeCheck} onValueChange={(idadeCheck) => setIdadeCheck(idadeCheck)} tintColors={{ true: 'maroon', false: 'maroon' }} />
                         <Text style={{ textDecorationLine: 'underline', color: 'maroon' }}>Confirmo ter <Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>13 anos</Text> ou mais</Text>
                     </View> */}
-                    <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
-                        <CheckBox value={termoLido} onValueChange={(termoLido) => setTermoLido(termoLido)} tintColors={{ true: 'maroon', false: 'maroon' }} />
+                    <View style={style.checkbox}>
+                        <CheckBox value={termoLido} onValueChange={setTermoLido} onPress={()=>setTermoLido(!termoLido)} tintColors={{ true: 'maroon', false: 'maroon' }} />
 
                         <Text style={{ color: 'black' }}>Aceito os <Text onPress={() => setTermoModal(!termoModal)} style={{ color: 'maroon', textDecorationLine: 'underline' }}>Termos de Uso</Text> e as <Text onPress={() => setPoliticaModal(!politicaModal)}style={{ color: 'maroon', textDecorationLine: 'underline' }}>Políticas de Privacidade</Text></Text>
 
@@ -288,9 +287,8 @@ export default function CadastroUsuario() {
                 </View>
             </Modal>
             <View style={style.footer2}>
-                {termoLido && idadeCheck
+                {termoLido
                     ? <TouchableOpacity style={style.continueBtn2} onPress={navigateToResumo}>
-
                         <Text style={style.textBtn}>Cadastrar</Text>
                     </TouchableOpacity>
                     : <TouchableOpacity style={[style.continueBtn2,{backgroundColor:'lightgray',opacity:0.8}]} onPress={navigateToResumo} disabled>

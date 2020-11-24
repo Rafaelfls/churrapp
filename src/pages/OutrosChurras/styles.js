@@ -19,13 +19,13 @@ export default StyleSheet.create({
     marginBottom: 15,
   },
   titulo: {
-    width:"100%",
-    paddingHorizontal:40
+    width:"100%"
   },
   textHeader: {
     fontSize: 30,
     color: 'black',
     fontFamily: 'poppins-semi-bold',
+    textAlign:'center'
   },
 
  //cards

@@ -31,6 +31,7 @@ export default function DetalheChurras() {
 
   const churras = route.params.churras;
   const editavel = route.params.editavel;
+  const {initialPage} = route.params;
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
   const [itens, setItens] = useState([]);
@@ -152,7 +153,6 @@ export default function DetalheChurras() {
       default:
         break;
     }
-    console.log(subTipo)
   }
 
   function editPerfil() {
@@ -389,7 +389,6 @@ export default function DetalheChurras() {
   }
 
   async function deleteItem(itens) {
-    console.log(itens)
     setLoading(true)
     var precoFinalTotal = itens.precoItem * itens.quantidade;
     await api.put(`/churrasUpdate/valorTotal/${churras}`, {
@@ -428,7 +427,7 @@ export default function DetalheChurras() {
     setEditChurrasValorTotal(res.data[0].valorTotal)
     setEditChurrasValorPago(res.data[0].valorPago)
   }
-
+  
   function formatData(data) {
     var date = new Date(data).getDate() + 1
     var month = new Date(data).getMonth() + 1
@@ -453,7 +452,7 @@ export default function DetalheChurras() {
   };
 
   async function uploadImage(imagem) {
-    let apiUrl = 'https://pure-island-99817.herokuapp.com/fotosUsuarios';
+    let apiUrl = 'https://pure-island-99817.herokuapp.com/fotosChurras';
     let uriParts = imagem.uri.split('.');
     let fileType = uriParts[uriParts.length - 1];
     let uri = imagem.uri
@@ -531,7 +530,7 @@ export default function DetalheChurras() {
         tabBarUnderlineStyle={{ backgroundColor: 'maroon', height: 2 }}
         renderTabBar={() => <DefaultTabBar />}
         ref={(tabView) => { tabView = tabView; }}
-        initialPage={0}
+        initialPage={initialPage}
       >
         <View tabLabel="Info">
           <ScrollView>
@@ -580,8 +579,9 @@ export default function DetalheChurras() {
                 <Text style={style.churrasNome}>Local: </Text>
               </View>
               <TextInput
-                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height:'auto' }]}
                 editable={allowEditing[0]}
+                multiline={true}
                 onChangeText={text => setEditChurrasLocal(text)}
                 value={editChurrasLocal}
               />
@@ -737,8 +737,9 @@ export default function DetalheChurras() {
                 <Text style={style.churrasNome}>Descrição: </Text>
               </View>
               <TextInput
-                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height:'auto' }]}
                 editable={allowEditing[0]}
+                multiline={true}
                 onChangeText={text => setEditChurrasDescricao(text)}
                 value={editChurrasDescricao == null ? "-" : editChurrasDescricao}
               />
@@ -997,7 +998,7 @@ export default function DetalheChurras() {
                         <Text style={style.churrasDonoModal}>{itens.formato == "Não aplica" ? "" : "Opção: " + itens.formato} </Text>
                         <View style={style.churrasLocDatModal}>
                           <Icon style={style.dataIconModal} name="weight-hanging" size={15} />
-                          <Text style={style.qtdItemAdc}>{itens.quantidade} {itens.unidade}</Text>
+                          <Text style={style.qtdItemAdc}>{(itens.quantidade).toFixed(2)} {itens.unidade}</Text>
                           <Text style={style.locDatSeparatorModal}>  |  </Text>
                           <Icon style={style.localIconModal} name="coins" size={15} />
                           <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
@@ -1033,7 +1034,7 @@ export default function DetalheChurras() {
                       <Text style={style.churrasDonoModal}>{itens.descricao} </Text>
                       <View style={style.churrasLocDatModal}>
                         <Icon style={style.dataIconModal} name="weight-hanging" size={15} />
-                        <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
+                        <Text style={style.qtdItemAdc}>{(itens.quantidade).toFixed(2)}{itens.unidade}</Text>
                         <Text style={style.locDatSeparatorModal}>  |  </Text>
                         <Icon style={style.localIconModal} name="coins" size={15} />
                         <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>

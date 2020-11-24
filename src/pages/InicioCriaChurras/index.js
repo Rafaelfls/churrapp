@@ -25,7 +25,7 @@ export default function InicioCriaChurras() {
                 <Text style={style.textHeader2}>Estamos aqui para te ajudar.</Text>
             </View>
             <View style={style.btnContainer}>
-                <Text style={style.textHeader3}>São apenas 6 etapas!</Text>
+                <Text style={style.textHeader3}>São apenas 7 etapas!</Text>
                 <TouchableOpacity style={style.continueBtn} onPress={() => next()}>
                     <Text style={style.textBtn}>Começar</Text>
                 </TouchableOpacity>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, SafeAreaView, Linking, TouchableOpacity, Modal, TextInput, FlatList } from 'react-native';
+import { View, Text, Image, SafeAreaView, Linking, TouchableOpacity, Modal, TextInput, FlatList,AsyncStorage } from 'react-native';
 import { DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { EmailSender } from './EmailSender.js'
@@ -26,7 +26,9 @@ const CustomSideBarMenu = (props) => {
     const { loading, setLoading } = useLoadingModal()
     const [usuario, setUsuario] = useState();
 
-    function logout() {
+    async function logout() {
+        await AsyncStorage.removeItem('phone')
+        await AsyncStorage.removeItem('password')
         USUARIOLOGADO = null
         navigation.replace('Login');
     }

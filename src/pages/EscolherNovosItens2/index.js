@@ -102,7 +102,7 @@ export default function EscolherNovosItens2({ route, navigation }) {
 
     function backHome() {
         if(subTipo != null){
-            navigation.replace('DetalheChurras', {churras:churrascode, editavel:true})
+            navigation.replace('DetalheChurras', {churras:churrascode, editavel:true, initialPage:2})
         }else{
             navigation.push('AdicionarAcompanhamento', { churrascode, convidadosQtd })
         }

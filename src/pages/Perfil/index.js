@@ -368,7 +368,7 @@ export default function Perfil() {
             uf: ufNovo,
             idade: idadeNovo,
             senha: senhaUpdate,
-            fotoUrlU: fotoUrlUNovo,
+            fotoUrlU: novaUrl,
             celular: celularNovo,
             apelido: apelidoNovo,
             pontoCarne_id: pontoCarneNovo_id,
@@ -486,7 +486,7 @@ export default function Perfil() {
                 showsVerticalScrollIndicator={false}
                 style={style.churrasList}
                 renderItem={({ item: usuario }) => (
-                    <View>
+                    <View style={{backgroundColor:'white'}}>
                         <View style={style.backgroundProfile}>
                         <View style={style.menuBtn}>
                             {/* <View style={style.centeredViewNotificacaoQtd}>

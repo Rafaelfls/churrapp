@@ -43,9 +43,9 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
   },
   participateBtn: {
-    position:'absolute',
-    top:40,
-    right:20,
+    position:'relative',
+    top:0,
+    right:5,
     justifyContent:'center',
     alignItems:'center'
   },
@@ -69,7 +69,7 @@ export default StyleSheet.create({
     marginBottom: 5,
   },
   inputStandard:{ 
-    height: 40, 
+    minHeight: 40, 
     borderBottomWidth: 0.5,
     paddingHorizontal: 5,
     marginBottom: 10,
