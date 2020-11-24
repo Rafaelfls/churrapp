@@ -253,4 +253,13 @@ export default StyleSheet.create({
     fontFamily: 'poppins-medium',
     width: '45%',
   },
+  tipoImg: {
+    width: '100%',
+    height: 50,
+    borderRadius: 10,
+    borderColor: 'gray',
+    borderWidth: 0.8,
+    alignSelf: 'center',
+    overflow: "hidden"
+  },
 })

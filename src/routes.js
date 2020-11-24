@@ -83,7 +83,7 @@ function badgeIconeNotificacao(focused) {
                     </View>
                     : null}
             </View>
-            <IconMI size={25} name={focused ? 'bell-o' : 'bell'}  ></IconMI>
+            <IconMI size={25} name={'bell'}  ></IconMI>
         </View>
     )
 }

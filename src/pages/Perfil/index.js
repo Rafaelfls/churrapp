@@ -19,7 +19,7 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig, 'zondicon-icon', 'icomoon.ttf');
 //Fim
 import style from './styles';
-import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
+import { useLoadingModal, createLoadingModal, useEdicao } from '../../context/churrasContext';
 
 
 export default function Perfil() {
@@ -31,6 +31,7 @@ export default function Perfil() {
     const [pontoCarneLista, setPontoCarneLista] = useState([]);
     const [quantidadeComeLista, setQuantidadeComeLista] = useState([]);
     const [isBirthday, setIsBirthday] = useState(false);
+
 
     const [search, setSearchCarne] = useState('');
     const [tipo, setTipo] = useState([]);
@@ -82,6 +83,7 @@ export default function Perfil() {
 
 
     const { loading, setLoading } = useLoadingModal();
+    const { edicao, setEdicao } = useEdicao();
     const criarModal = createLoadingModal(loading);
 
     async function pegarItemPorTipo(carneVisivel, acompanhamentoVisivel, bebidaVisivel, sobremesaVisivel) {
@@ -330,57 +332,65 @@ export default function Perfil() {
             setIdadeNovo(idadeformatada)
         }
         setAllowEditing([true, 'black']);
+        setEdicao(true);
     }
 
-
     async function savePerfil() {
-        setLoading(true)
-        setAllowEditing([false, 'darkgray']);
-        if (image.uri != null) {
-            var novaUrl = await uploadImage(image);
+        if (edicao == false) {
+            setAllowEditing([false, 'darkgray']);
+            setEdicao(false)
+
         } else {
-            var novaUrl = fotoUrlUNovo;
+            setLoading(true)
+            setAllowEditing([false, 'darkgray']);
+            if (image.uri != null) {
+                var novaUrl = await uploadImage(image);
+            } else {
+                var novaUrl = fotoUrlUNovo;
+            }
+
+            if (search === "") {
+                setSearchCarne(usuario.carnePreferida);
+                setCarnePreferidaNovo(usuario.carnePreferida_id);
+            }
+            if (searchAcompanhamento === "") {
+                setSearchAcompanhamento(usuario.acompanhamentoPreferido);
+                setAcompanhamentoPreferidoNovo(usuario.acompanhamentoPreferido_id);
+            }
+            if (searchBebida === "") {
+                setSearchBebida(usuario.bebidaPreferida);
+                setBebidaPreferidaNovo(usuario.bebidaPreferida_id);
+            }
+            if (searchSobremesa === "") {
+                setSearchSobremesa(usuario.sobremesaPreferida);
+                setSobremesaPreferidaNovo(usuario.sobremesaPreferida_id);
+            }
+            console.log("SOBREMESA ID " + sobremesaPreferidaNovo)
+            console.log(idadeNovo)
+            api.put(`/usuarios/${id}`, {
+                nome: nomeNovo,
+                sobrenome: sobrenomeNovo,
+                email: emailNovo,
+                cidade: cidadeNovo,
+                uf: ufNovo,
+                idade: idadeNovo,
+                senha: senhaUpdate,
+                fotoUrlU: fotoUrlUNovo,
+                celular: celularNovo,
+                apelido: apelidoNovo,
+                pontoCarne_id: pontoCarneNovo_id,
+                carnePreferida_id: carnePreferidaNovo,
+                quantidadeCome_id: quantidadeComeNovo_id,
+                bebidaPreferida_id: bebidaPreferidaNovo,
+                acompanhamentoPreferido_id: acompanhamentoPreferidoNovo,
+                sobremesaPreferida_id: sobremesaPreferidaNovo
+            }).then(function (response) {
+                setReturnVisivel([true, response.data.mensagem, "Editar perfil!"])
+                setRefreshPerfil(!refreshPerfil)
+                setEdicao(false)
+            })
         }
 
-        if (search === "") {
-            setSearchCarne(usuario.carnePreferida);
-            setCarnePreferidaNovo(usuario.carnePreferida_id);
-        }
-        if (searchAcompanhamento === "") {
-            setSearchAcompanhamento(usuario.acompanhamentoPreferido);
-            setAcompanhamentoPreferidoNovo(usuario.acompanhamentoPreferido_id);
-        }
-        if (searchBebida === "") {
-            setSearchBebida(usuario.bebidaPreferida);
-            setBebidaPreferidaNovo(usuario.bebidaPreferida_id);
-        }
-        if (searchSobremesa === "") {
-            setSearchSobremesa(usuario.sobremesaPreferida);
-            setSobremesaPreferidaNovo(usuario.sobremesaPreferida_id);
-        }
-        console.log("SOBREMESA ID " + sobremesaPreferidaNovo)
-        console.log(idadeNovo)
-        api.put(`/usuarios/${id}`, {
-            nome: nomeNovo,
-            sobrenome: sobrenomeNovo,
-            email: emailNovo,
-            cidade: cidadeNovo,
-            uf: ufNovo,
-            idade: idadeNovo,
-            senha: senhaUpdate,
-            fotoUrlU: fotoUrlUNovo,
-            celular: celularNovo,
-            apelido: apelidoNovo,
-            pontoCarne_id: pontoCarneNovo_id,
-            carnePreferida_id: carnePreferidaNovo,
-            quantidadeCome_id: quantidadeComeNovo_id,
-            bebidaPreferida_id: bebidaPreferidaNovo,
-            acompanhamentoPreferido_id: acompanhamentoPreferidoNovo,
-            sobremesaPreferida_id: sobremesaPreferidaNovo
-        }).then(function (response) {
-            setReturnVisivel([true, response.data.mensagem, "Editar perfil!"])
-            setRefreshPerfil(!refreshPerfil)
-        })
     }
 
     async function alterarSenha() {
@@ -475,7 +485,10 @@ export default function Perfil() {
     }
 
     function abrirDrawer() {
+        setEdicao(false)
         navigation.toggleDrawer()
+        setAllowEditing([false, 'darkgray']);
+
     }
 
     return (
@@ -488,8 +501,8 @@ export default function Perfil() {
                 renderItem={({ item: usuario }) => (
                     <View>
                         <View style={style.backgroundProfile}>
-                        <View style={style.menuBtn}>
-                            {/* <View style={style.centeredViewNotificacaoQtd}>
+                            <View style={style.menuBtn}>
+                                {/* <View style={style.centeredViewNotificacaoQtd}>
                         <TouchableOpacity onPress={abrirDrawer}>
                             {notificacoes.length > 0
                                 ? <View style={style.modalViewNotificacaoQtd}>
@@ -498,10 +511,10 @@ export default function Perfil() {
                                 : null}
                         </TouchableOpacity>
                     </View> */}
-                            <TouchableWithoutFeedback onPressIn={() => abrirDrawer()} >
-                                <IconMI name='menu' size={30} />
-                            </TouchableWithoutFeedback>
-                        </View>
+                                <TouchableWithoutFeedback onPressIn={() => abrirDrawer()} >
+                                    <IconMI name='menu' size={30} />
+                                </TouchableWithoutFeedback>
+                            </View>
                             <View style={style.containerProfile}>
                                 {allowEditing[0]
                                     ? <TouchableOpacity activeOpacity={0.5} onPress={() => setPickImageOptions([true])} style={style.centeredViewFotoPerfil}>
@@ -928,13 +941,13 @@ export default function Perfil() {
                 ? <FloatingAction
                     color='rgba(0,0,0,0.9)'
                     showBackground={false}
-                    onPressMain={() => savePerfil()}
+                    onPressMain={() => { savePerfil() }}
                     floatingIcon={<IconMI name="save" size={22} color={"white"} />}
                 />
                 : <FloatingAction
                     color='rgba(0,0,0,0.9)'
                     showBackground={false}
-                    onPressMain={() => editPerfil()}
+                    onPressMain={() => { editPerfil() }}
                     floatingIcon={<IconMI name="edit" size={22} color={"white"} />}
                 />}
 

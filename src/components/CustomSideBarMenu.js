@@ -9,7 +9,7 @@ import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import api from '../services/api.js'
 import style from '../styles';
 
-import { useLoadingModal } from '../context/churrasContext'
+import { useLoadingModal, useEdicao } from '../context/churrasContext'
 
 //Criando Icone Customizável
 import { createIconSetFromIcoMoon } from '@expo/vector-icons';
@@ -20,10 +20,8 @@ const Icon = createIconSetFromIcoMoon(icoMoonConfig, 'zondicon-icon', 'icomoon.t
 
 const CustomSideBarMenu = (props) => {
     const navigation = useNavigation();
-    const [modalEmail, setModalEmail] = useState(false)
-    const [assunto, setAssunto] = useState('')
-    const [msg, setMsg] = useState('')
     const { loading, setLoading } = useLoadingModal()
+    const { edicao, setEdicao } = useEdicao()
     const [usuario, setUsuario] = useState();
 
     function logout() {
@@ -40,6 +38,7 @@ const CustomSideBarMenu = (props) => {
     }
 
     useEffect(() => {
+        setEdicao(false)
         loadPerfil()
     }, [loading]);
     return (
@@ -48,7 +47,7 @@ const CustomSideBarMenu = (props) => {
                 {usuario == undefined
                     ? <Text></Text>
                     : <View>
-                        <TouchableOpacity style={style.sideMenuProfileIcon} onPress={() => navigation.navigate('Tabs', { screen: 'Perfil' })}>
+                        <TouchableOpacity style={style.sideMenuProfileIcon} onPress={() => {setEdicao(false);navigation.navigate('Tabs', { screen: 'Perfil' })}}>
                             <Image
                                 source={{ uri: usuario[0].fotoUrlU }}
                                 style={{
@@ -147,7 +146,7 @@ const CustomSideBarMenu = (props) => {
                             color: 'gray',
                             fontFamily: 'poppins-bold'
                         }}
-                        onPress={() => { setModalEmail(true); }}>
+                        onPress={() => { EmailSender('contato@churrapp.com', "", ""); }}>
                         contato@churrapp.com
                     </Text>
                 </View>
@@ -160,43 +159,6 @@ const CustomSideBarMenu = (props) => {
                     <Text style={{ fontFamily: 'poppins-medium' }}>Logout</Text>
                 </TouchableOpacity>
             </View>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalEmail}
-            >
-                <View style={style.centeredView}>
-                    <View style={style.modalView}>
-                        <Text style={style.modalTitle}>Enviar email!</Text>
-                        <TouchableOpacity style={{ position: 'absolute', right: 20, top: 20 }} onPress={() => { setModalEmail(!modalEmail); setAssunto(''); setMsg('') }}><Icon name="close" size={25} /></TouchableOpacity>
-                        <View style={style.inputArea}>
-                            <Text style={style.textLabel}>Assunto:</Text>
-                            <TextInput
-                                style={[style.inputStandardAssunto]}
-                                keyboardType="default"
-                                value={assunto}
-                                multiline={true}
-                                numberOfLines={5}
-                                onChangeText={(text) => { setAssunto(text); }}
-                            />
-                        </View>
-                        <View style={style.inputArea}>
-                            <Text style={style.textLabel}>Mensagem:</Text>
-                            <TextInput
-                                style={[style.inputStandard]}
-                                keyboardType="default"
-                                value={msg}
-                                onChangeText={(text) => { setMsg(text); }}
-                            />
-                        </View>
-                        <View style={style.footerModal}>
-                            <TouchableOpacity style={style.continueBtn} onPress={() => { setModalEmail(!modalEmail); EmailSender('contato@churrapp.com', assunto, msg) }}>
-                                <Text style={style.textBtn}>OK</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
         </SafeAreaView>
     );
 

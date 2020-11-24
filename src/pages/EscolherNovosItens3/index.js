@@ -123,7 +123,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                         <Text style={style.textHeader}>Adicionar bebidas</Text>
                     </View>
                 </View>
-                <View style={{ height: 70 }}>
+                <View style={{ height: 108 }}>
                     <FlatList
                         data={tipo}
                         horizontal={true}
@@ -132,6 +132,9 @@ export default function EscolherNovosItens3({ route, navigation }) {
                         renderItem={({ item: tipo }) => (
                             <View style={style.filtroL} >
                                 <TouchableOpacity style={style.tiposDeItenscard} onPress={() => setFiltroTipo(tipo.id)}>
+                                    <View style={style.tipoImg}>
+                                        <Image source={{ uri: tipo.fotoUrlT }} style={{ width: '100%', height: 50, resizeMode: "stretch"}} />
+                                    </View>
                                     <Text style={style.tiposDeItenstextCard}>{tipo.tipo}</Text>
                                 </TouchableOpacity>
                             </View>

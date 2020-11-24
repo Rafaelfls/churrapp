@@ -18,7 +18,7 @@ export default StyleSheet.create({
   textHeader: {
     fontSize: 18,
     color: 'black',
-    marginLeft:10,
+    marginLeft: 10,
     fontFamily: 'poppins-semi-bold',
   },
   textHeaderBtn: {
@@ -43,7 +43,7 @@ export default StyleSheet.create({
     marginHorizontal: 7,
     backgroundColor: 'maroon',
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     borderRadius: 8,
     shadowColor: "#000",
     shadowOffset: {
@@ -52,7 +52,6 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
-
     elevation: 6,
   },
   tiposDeItenstextCard: {
@@ -68,7 +67,7 @@ export default StyleSheet.create({
     alignSelf: 'center',
     color: 'gold',
     fontSize: 36,
-  },  
+  },
   footerModal: {
     height: 90,
     flexDirection: "row",
@@ -82,7 +81,7 @@ export default StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    maxHeight:'100%'
+    maxHeight: '100%'
   },
   modalView: {
     backgroundColor: "#f2f2f2",
@@ -106,7 +105,7 @@ export default StyleSheet.create({
     fontSize: 17,
     fontFamily: 'poppins-medium',
     textAlign: 'center',
-  },   
+  },
   iconExitBtn: {
     color: 'maroon',
     fontSize: 17,
@@ -116,7 +115,7 @@ export default StyleSheet.create({
   exitBtnFooter: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius:8,
+    borderRadius: 8,
     backgroundColor: 'lightgray',
     height: '60%',
     width: 125,
@@ -135,7 +134,7 @@ export default StyleSheet.create({
   salvarBtn: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius:8,
+    borderRadius: 8,
     backgroundColor: 'maroon',
     height: '60%',
     width: 125,
@@ -148,7 +147,6 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
-
     elevation: 6,
   },
   openButton: {
@@ -168,35 +166,35 @@ export default StyleSheet.create({
     fontSize: 20,
     fontFamily: 'poppins-light',
   },
-  modalTextLabel:{
+  modalTextLabel: {
     textAlign: "left",
     fontSize: 17,
-    marginRight:15,
-    color:'#800000',
+    marginRight: 15,
+    color: '#800000',
     fontFamily: 'poppins-light',
-    maxWidth:'45%',
-    width:'45%'
+    maxWidth: '45%',
+    width: '45%'
   },
   boxDropdown: {
-    position:'absolute',
-    right:0,
+    position: 'absolute',
+    right: 0,
     paddingHorizontal: 101,
     color: 'black',
   },
   selectionForm: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom:15,
+    marginBottom: 15,
   },
   textSalvarBtn: {
     color: 'gold',
     paddingHorizontal: 5,
   },
-  listaConvidados:{
+  listaConvidados: {
     marginTop: 10,
   },
-  filtroL:{
-    marginBottom:10,
+  filtroL: {
+    marginBottom: 10,
   },
 
   //card itens
@@ -249,5 +247,14 @@ export default StyleSheet.create({
     marginBottom: 2,
     fontFamily: 'poppins-medium',
     width: '45%',
+  },
+  tipoImg: {
+    width: '100%',
+    height: 50,
+    borderRadius: 10,
+    borderColor: 'gray',
+    borderWidth: 0.8,
+    alignSelf: 'center',
+    overflow: "hidden"
   },
 })

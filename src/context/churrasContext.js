@@ -11,6 +11,7 @@ export default function churrasProvider({ children }) {
     const [convidadosCount, setConvidadosCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [appStateVisible, setAppStateVisible] = useState();
+    const [edicao, setEdicao] = useState(false);
 
 
 
@@ -26,7 +27,9 @@ export default function churrasProvider({ children }) {
                 churrasParticipado,
                 setChurrasParticipado,
                 appStateVisible,
-                setAppStateVisible
+                setAppStateVisible,
+                edicao,
+                setEdicao
             }}>
             {children}
         </ChurrasContext.Provider>
@@ -62,6 +65,12 @@ export function useAppState() {
     const context = useContext(ChurrasContext);
     const { appStateVisible, setAppStateVisible } = context;
     return { appStateVisible, setAppStateVisible };
+}
+
+export function useEdicao() {
+    const context = useContext(ChurrasContext);
+    const { edicao, setEdicao } = context;
+    return { edicao, setEdicao };
 }
 
 export function createLoadingModal(loading) {
