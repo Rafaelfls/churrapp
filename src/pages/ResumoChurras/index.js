@@ -262,7 +262,7 @@ export default function ResumoChurras() {
                     <View style={style.churras}>
                         <View style={style.churrasDescricao}>
                             <RNSlidingButton
-                                style={{ backgroundColor: 'white', width: "95%" }}
+                                style={style.slidingCard}
                                 height={100}
                                 onSlidingSuccessLeft={() => { setVisivel(true); setChurrasDeletar(churras) }}
                                 onSlidingSuccessRight={() => { detalheChurras(churras.id) }}
