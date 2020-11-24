@@ -31,6 +31,7 @@ export default function DetalheChurras() {
 
   const churras = route.params.churras;
   const editavel = route.params.editavel;
+  const {initialPage} = route.params;
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
   const [itens, setItens] = useState([]);
@@ -199,16 +200,6 @@ export default function DetalheChurras() {
     setFormato(responseFormato.data);
   }
 
-  async function setVisibility(isVisible, item, unidade, id, precoMedio) {
-    setLoading(true)
-    setPrecoMedioModal(precoMedio)
-    setQuantidadeModal(0)
-    setIsVisivel(isVisible)
-    setItemModal(item)
-    setIdItem(id)
-    setLoading(false)
-  }
-
   function backHome() {
     if (editavel) {
       navigation.replace('Tabs')
@@ -234,24 +225,24 @@ export default function DetalheChurras() {
   }
 
   async function carregarTodosTipos(subTipo) {
-    if (subTipo.id == 2) {
-      return pegarItemPorTipo({ id: 6 })
-    } else if (subTipo.id == 5) {
-      return pegarItemPorTipo({ id: 14 })
-    } else {
-      setLoading(true)
-      const response = await api.get(`/tipoSubTipo?subTipo=${subTipo.id}`).then(function (response) {
-        setTodosTipos(response.data);
-        setModalSubTipoVisivel(false);
-        setModalTipoVisivel(true);
-        setLoading(false)
-      });
-      if (subTipo.subTipo == "Carnes") {
-        setFormatoPicker(true)
-      } else {
-        setSelectedFormato(1);
-      }
-
+    switch (subTipo.id) {
+      case 1:
+        navigation.replace('EscolherNovosItens',{subTipo,churrascode:churras})
+        break;
+      case 2:
+          navigation.replace('EscolherNovosItens2',{subTipo,churrascode:churras})
+          break;
+      case 3:
+          navigation.replace('EscolherNovosItens3',{subTipo,churrascode:churras})
+          break;      
+      case 4:
+        navigation.replace('EscolherNovosItens4',{subTipo,churrascode:churras})
+        break;        
+      case 5:
+        navigation.replace('EscolherNovosItens5',{subTipo,churrascode:churras})
+        break;
+      default:
+        break;
     }
   }
 
@@ -493,20 +484,7 @@ export default function DetalheChurras() {
     }
   }
 
-  async function pegarItemPorTipo(tipo) {
-    setLoading(true)
-    await api.get(`/items?tipo=${tipo.id}`)
-      .then(function (response) {
-        setTodosItens(response.data);
-        setModalSubTipoVisivel(false);
-        setModalTipoVisivel(false);
-        setModalItemVisivel(true);
-        setLoading(false)
-      });
-  }
-
   async function deleteItem(itens) {
-    console.log(itens)
     setLoading(true)
     var precoFinalTotal = itens.precoItem * itens.quantidade;
     await api.put(`/churrasUpdate/valorTotal/${churras}`, {
@@ -546,7 +524,7 @@ export default function DetalheChurras() {
     setEditChurrasValorTotal(res.data[0].valorTotal)
     setEditChurrasValorPago(res.data[0].valorPago)
   }
-
+  
   function formatData(data) {
     var date = new Date(data).getDate() + 1
     var month = new Date(data).getMonth() + 1
@@ -571,7 +549,7 @@ export default function DetalheChurras() {
   };
 
   async function uploadImage(imagem) {
-    let apiUrl = 'https://pure-island-99817.herokuapp.com/fotosUsuarios';
+    let apiUrl = 'https://pure-island-99817.herokuapp.com/fotosChurras';
     let uriParts = imagem.uri.split('.');
     let fileType = uriParts[uriParts.length - 1];
     let uri = imagem.uri
@@ -654,7 +632,7 @@ export default function DetalheChurras() {
         tabBarUnderlineStyle={{ backgroundColor: 'maroon', height: 2 }}
         renderTabBar={() => <DefaultTabBar />}
         ref={(tabView) => { tabView = tabView; }}
-        initialPage={0}
+        initialPage={initialPage}
       >
         <View tabLabel="Info">
           <ScrollView>
@@ -703,8 +681,9 @@ export default function DetalheChurras() {
                 <Text style={style.churrasNome}>Local: </Text>
               </View>
               <TextInput
-                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height:'auto' }]}
                 editable={allowEditing[0]}
+                multiline={true}
                 onChangeText={text => setEditChurrasLocal(text)}
                 value={editChurrasLocal}
               />
@@ -860,8 +839,9 @@ export default function DetalheChurras() {
                 <Text style={style.churrasNome}>Descrição: </Text>
               </View>
               <TextInput
-                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height:'auto' }]}
                 editable={allowEditing[0]}
+                multiline={true}
                 onChangeText={text => setEditChurrasDescricao(text)}
                 value={editChurrasDescricao == null ? "-" : editChurrasDescricao}
               />
@@ -985,6 +965,7 @@ export default function DetalheChurras() {
                     {convidados.confirmado
                       ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoPresente}>
                         <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
+
                         <View>
                           <Text style={style.nomeConvidado}>{convidados.nome}</Text>
                           <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
@@ -1324,6 +1305,8 @@ export default function DetalheChurras() {
                 refreshing={loading}
                 onRefresh={carregarItens}
                 keyExtractor={itens => String(itens.id)}
+                refreshing={loading}
+                onRefresh={carregarItens}
                 style={{ height: '100%' }}
                 renderItem={({ item: itens }) => (
                   <View>
@@ -1334,7 +1317,7 @@ export default function DetalheChurras() {
                         <Text style={style.churrasDonoModal}>{itens.formato == "Não aplica" ? "" : "Opção: " + itens.formato} </Text>
                         <View style={style.churrasLocDatModal}>
                           <Icon style={style.dataIconModal} name="weight-hanging" size={15} />
-                          <Text style={style.qtdItemAdc}>{itens.quantidade} {itens.unidade}</Text>
+                          <Text style={style.qtdItemAdc}>{(itens.quantidade).toFixed(2)} {itens.unidade}</Text>
                           <Text style={style.locDatSeparatorModal}>  |  </Text>
                           <Icon style={style.localIconModal} name="coins" size={15} />
                           <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
@@ -1424,39 +1407,6 @@ export default function DetalheChurras() {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalTipoVisivel}>
-        <View style={style.centeredView}>
-          <View style={style.modalView}>
-            <Text style={style.titleSubTipoModal}>Qual tipo?</Text>
-            <FlatList
-              data={todosTipos}
-              keyExtractor={todosTipos => String(todosTipos.id)}
-              renderItem={({ item: todosTipos }) => (
-
-                <View>
-                  <TouchableOpacity style={style.tiposDesign} onPress={() => pegarItemPorTipo(todosTipos)}>
-                    <Text style={style.nomeItem}>{todosTipos.tipo}</Text>
-                  </TouchableOpacity>
-                </View>
-
-              )}
-            />
-            <View style={style.footerModal}>
-              <TouchableHighlight style={style.exitBtn} onPress={() => {
-                setModalTipoVisivel(!modalTipoVisivel);
-                setTodosTipos([]);
-                setFormatoPicker(false);
-              }}>
-                <Text style={style.iconSalvarBtn}>Fechar</Text>
-              </TouchableHighlight>
-            </View>
-          </View>
-        </View>
-      </Modal>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
         visible={modalItemVisivel}>
         <View style={style.centeredViewItens}>
           <View style={style.modalView}>
@@ -1495,75 +1445,6 @@ export default function DetalheChurras() {
               }}>
                 <Text style={style.iconSalvarBtn}>Fechar</Text>
               </TouchableHighlight>
-            </View>
-          </View>
-        </View>
-      </Modal>
-
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={visivel}
-      >
-        <View style={style.centeredViewQtd}>
-          <View style={style.modalViewQtd}>
-            <Text style={style.titleSubTipoModal}>Quanto de
-              <Text style={{ fontFamily: 'poppins-medium', }}> {itemModal} </Text>
-              deseja adicionar?</Text>
-            <View style={style.selectionFormQtd}>
-              <Text style={style.modalTextLabel}>Quantidade:</Text>
-              <NumericInput
-                value={quantidadeModal}
-                onChange={quantNova => setQuantidadeModal(quantNova)}
-                totalWidth={150}
-                totalHeight={30}
-                iconSize={15}
-                initValue={quantidadeModal}
-                valueType='real'
-                rounded
-                textColor='black'
-                iconStyle={{ color: 'maroon' }}
-                style={style.quantidadeInputQtd} />
-            </View>
-            <View style={style.selectionFormQtd}>
-              <Text style={style.modalTextLabel}>Unidade:</Text>
-              <Picker
-                selectedValue={selectedUnidade}
-                style={style.boxDropdownQtd}
-                itemStyle={style.itemDropdown}
-                mode="dropdown"
-                onValueChange={itemValue => { setSelectedUnidade(itemValue); setNomeUnidadeSelecionada(unidades[itemValue].unidade) }}
-              >
-                {unidades.map((unity, idx) => (
-                  <Picker.Item label={unity.unidade} key={idx} value={unity.id} />
-                ))}
-              </Picker>
-            </View>
-            {ativarFormatoPicker()}
-
-            <View style={style.selectionFormQtd}>
-              <Text style={style.modalTextLabel}>Preço por {nomeUnidadeSelecionada}:</Text>
-              <NumericInput
-                value={precoModal}
-                onChange={precoNova => setPrecoModal(precoNova)}
-                totalWidth={150}
-                totalHeight={30}
-                iconSize={15}
-                minValue={0}
-                initValue={precoModal}
-                valueType='real'
-                rounded
-                textColor='black'
-                iconStyle={{ color: 'maroon' }} />
-            </View>
-            <View style={style.footerModalQtd}>
-              <TouchableOpacity style={style.exitBtnFooterQtd} onPress={() => setVisibility(false, "", '', '')}>
-                <Text style={style.iconSalvarBtnQtd}>Cancelar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={style.salvarBtnQtd} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal, selectedFormato, precoModal)}>
-                <Text style={style.iconSalvarBtnQtd}>Confirmar</Text>
-              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -1643,21 +1524,7 @@ export default function DetalheChurras() {
           </View>
         </View>
       </Modal>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={unidadeInvalidaVisivel}
-      >
-        <View style={style.centeredViewContactar}>
-          <View style={style.modalViewContactar}>
-            <Text style={style.modalTitleCont}>Ops!</Text>
-            <Text style={style.modalTextCont}>Selecione uma unidade de medida!</Text>
-            <View style={style.footerModalCont}>
-              <TouchableOpacity style={style.continueBtnCont} onPress={() => setUnidadeInvalidaVisivel(false)}><Text style={style.textBtnCont}>Ok</Text></TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+     
       <Modal
         animationType="slide"
         transparent={true}

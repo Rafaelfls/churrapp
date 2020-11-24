@@ -1,11 +1,13 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import Constants from 'expo-constants';
 
 export default StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#800000'
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    backgroundColor:'maroon'
   },
 
   header: {
@@ -14,10 +16,18 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingBottom: 10,
-    backgroundColor: '#800000',
     zIndex:1,
+    backgroundColor:'maroon'
   },
-
+  top:{
+    position: 'absolute',
+    top:0,
+    left:0,
+    right:0,
+    padding:Constants.statusBarHeight,
+    zIndex:1,
+    backgroundColor:'maroon'
+  },
   backBtn: {
     color:"white",
   },
@@ -30,12 +40,11 @@ export default StyleSheet.create({
   },
 
   cameraContainer: {
-    marginHorizontal: 0, marginLeft: 0, marginStart: 0,
-    paddingHorizontal: 0, paddingLeft: 0, paddingStart: 0,
-    marginTop:40,
-    height: '109%',
-    padding: 0,
-    backgroundColor:'maroon'
+    position:'absolute',
+    top:0,
+    bottom:0,
+    left:0,
+    right:0
 },
 
   titulo: {

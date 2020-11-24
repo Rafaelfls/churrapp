@@ -43,6 +43,7 @@ export default function AdicionaConvidados({ route, navigation }) {
   const [isSelected3, setSelection3] = useState(true);
   const [isSelected4, setSelection4] = useState(true);
   const [isSelected5, setSelection5] = useState(true);
+  const [isDisabled, setDisabled] = useState(true)
 
   const config = {
     headers: { 'Authorization': USUARIOLOGADO.id }
@@ -65,6 +66,7 @@ export default function AdicionaConvidados({ route, navigation }) {
       senha: null,
       telefone: $telefone,
     })
+    setDisabled(false)
     setUpdatePage(!updatePage)
   }
 
@@ -76,7 +78,11 @@ export default function AdicionaConvidados({ route, navigation }) {
   }
 
   async function criaListaConvidados(convid) {
-    convid.telefone = convid.telefone.replace("+55", "").replace(/-/g, "").replace(/\s/g, "").replace(/[()]/g, "");
+    convid.telefone = convid.telefone
+    .replace("+55", "")
+    .replace(/-/g, "")
+    .replace(/\s/g, "")
+    .replace(/[()]/g, "");
 
     if (convid.telefone.length > 11) {
       convid.telefone = convid.telefone.substring(convid.telefone.length - 11)
@@ -113,16 +119,16 @@ export default function AdicionaConvidados({ route, navigation }) {
 
   function apagaConvidado(convidado) {
     convidadosList = convidadosList.filter(oldState => oldState.id !== convidado)
+    if(convidadosList.length == 0 ){
+      setDisabled(true)
+    }
     setUpdatePage(!updatePage)
-    // setConvidadosList(prevState => {
-    //   return prevState.filter(oldState => oldState.id !== joao.id);
-    // });
   }
 
   async function next() {
-    const convidadosQtd = convidadosList.length +1
+    const convidadosQtd = convidadosList.length + 1
     LISTADECONVIDADOS = convidadosList;
-    CONVITE = convite0+convite1+convite2+convite3+convite4+convite5+".";
+    CONVITE = convite0 + convite1 + convite2 + convite3 + convite4 + convite5 + ".";
 
     setLoading(true)
     await convidadosList.map(convid => criaListaConvidados(convid))
@@ -206,10 +212,10 @@ export default function AdicionaConvidados({ route, navigation }) {
             <TouchableOpacity style={{ justifyContent: 'center', alignContent: 'center' }} onPress={() => setEditaConvite(true)}><Text style={style.editarConvite}>Editar convite</Text></TouchableOpacity>
           </View>
           <TextInput
-            style={[style.inputStandard, { marginTop: 5, height: 40 }]}
+            style={[style.inputStandard, { marginTop: 5, height: 70 }]}
             multiline={true}
             numberOfLines={1}
-            value={convite0+convite1+convite2+convite3+convite4+convite5+"."}
+            value={convite0 + convite1 + convite2 + convite3 + convite4 + convite5 + "."}
           />
         </View>
 
@@ -235,9 +241,15 @@ export default function AdicionaConvidados({ route, navigation }) {
         <ActionButton offsetX={10} offsetY={95} onPress={openContactList} />
 
         <View style={style.footer}>
-          <TouchableOpacity style={style.continueBtn} onPress={next}>
-            <Text style={style.textBtn}>Convidar</Text>
-          </TouchableOpacity>
+          {isDisabled
+            ? (<TouchableOpacity style={[style.continueBtn,{backgroundColor:'gray'}]} onPress={next} disabled>
+              <Text style={style.textBtn}>Convidar</Text>
+            </TouchableOpacity>)
+            : (<TouchableOpacity style={style.continueBtn} onPress={next}>
+              <Text style={style.textBtn}>Convidar</Text>
+            </TouchableOpacity>)
+          }
+
         </View>
         <Modal
           animationType="slide"
@@ -279,47 +291,47 @@ export default function AdicionaConvidados({ route, navigation }) {
                   numberOfLines={1}
                   value={convite0}
                 />
-                <TouchableOpacity onPress={()=>setSelection1(!isSelected1)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => setSelection1(!isSelected1)} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <CheckBox
                     value={isSelected1}
                     onValueChange={setSelection1}
-                    tintColors={{ true: 'maroon'}}
+                    tintColors={{ true: 'maroon' }}
                     style={style.checkbox}
                   />
                   <Text style={style.modalTextConvite}>Adicionar o local?</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>setSelection2(!isSelected2)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => setSelection2(!isSelected2)} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <CheckBox
                     value={isSelected2}
                     onValueChange={setSelection2}
-                    tintColors={{ true: 'maroon'}}
+                    tintColors={{ true: 'maroon' }}
                     style={style.checkbox}
                   />
                   <Text style={style.modalTextConvite}>Adicionar a Data?</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>setSelection3(!isSelected3)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => setSelection3(!isSelected3)} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <CheckBox
                     value={isSelected3}
                     onValueChange={setSelection3}
-                    tintColors={{ true: 'maroon'}}
+                    tintColors={{ true: 'maroon' }}
                     style={style.checkbox}
                   />
                   <Text style={style.modalTextConvite}>Adicionar o Horario?</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>setSelection4(!isSelected4)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => setSelection4(!isSelected4)} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <CheckBox
                     value={isSelected4}
                     onValueChange={setSelection4}
-                    tintColors={{ true: 'maroon'}}
+                    tintColors={{ true: 'maroon' }}
                     style={style.checkbox}
                   />
                   <Text style={style.modalTextConvite}>Adicionar o valor por pessoa?</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>setSelection5(!isSelected5)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => setSelection5(!isSelected5)} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <CheckBox
                     value={isSelected5}
                     onValueChange={setSelection5}
-                    tintColors={{ true: 'maroon'}}
+                    tintColors={{ true: 'maroon' }}
                     style={style.checkbox}
                   />
                   <Text style={style.modalTextConvite}>Adicionar data limite de confirmação?</Text>

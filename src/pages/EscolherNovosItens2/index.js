@@ -30,6 +30,7 @@ export default function EscolherNovosItens2({ route, navigation }) {
     const [filtro, setFiltro] = useState(null)
     const { churrascode } = route.params;
     const { convidadosQtd } = route.params;
+    const { subTipo } = route.params;
 
     async function firstLoad() {
         setLoading(true)
@@ -100,7 +101,11 @@ export default function EscolherNovosItens2({ route, navigation }) {
     }
 
     function backHome() {
-        navigation.push('AdicionarAcompanhamento', { churrascode, convidadosQtd })
+        if(subTipo != null){
+            navigation.replace('DetalheChurras', {churras:churrascode, editavel:true, initialPage:2})
+        }else{
+            navigation.push('AdicionarAcompanhamento', { churrascode, convidadosQtd })
+        }
     }
 
     return (

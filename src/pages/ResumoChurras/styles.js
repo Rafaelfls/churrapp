@@ -16,17 +16,17 @@ export default StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 15,
   },
-  titulo: {
-  },
   textHeader: {
     fontSize: 30,
     color: 'black',
     fontFamily: 'poppins-semi-bold',
+    textAlign:'center'
   },
   textSubHeader: {
     fontSize: 15,
     color: 'gray',
     fontFamily: 'poppins-medium',
+    textAlign:'center'
   },
   signOutBtn: {
     position: "absolute",

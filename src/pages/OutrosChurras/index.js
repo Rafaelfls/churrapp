@@ -61,6 +61,12 @@ export default function OutrosChurras() {
         var date = new Date(data).getDate()+1
         var month = new Date(data).getMonth()+1
         var year = new Date(data).getFullYear()
+        if (date < 10) {
+            date = "0" + date
+        }
+        if (month < 10) {
+            month = "0" + month
+        }
         return date + '/' + month + '/' + year
     }
 
@@ -70,7 +76,7 @@ export default function OutrosChurras() {
     }, []);
 
     function detalheChurras(churras) {
-        navigation.navigate('DetalheChurras', { churras, allowShare: false, editavel: false});
+        navigation.navigate('DetalheChurras', { churras, allowShare: false, editavel: false, initialPage:0});
     }
 
     return (
