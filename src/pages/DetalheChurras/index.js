@@ -942,10 +942,11 @@ export default function DetalheChurras() {
             <Picker
               mode="dropdown"
               style={style.pickerDropdownFiltro}
+              itemStyle={{ fontFamily: 'poppins-bold' }}
               selectedValue={convidadosFiltro}
               onValueChange={convidadosFiltro => setConvidadosFiltro(convidadosFiltro)}
             >
-              <Picker.Item label={"Filtrar"} value={""} key={0} />
+              <Picker.Item label={"Sem Filtro"} value={""} key={0} />
               <Picker.Item label={"Vou"} value={"true"} key={1} />
               <Picker.Item label={"Não Vou"} value={"false"} key={2} />
               <Picker.Item label={"Nome"} value={"nome"} key={3} />
@@ -1143,7 +1144,7 @@ export default function DetalheChurras() {
               selectedValue={convidadosFiltro}
               onValueChange={convidadosFiltro => setConvidadosFiltro(convidadosFiltro)}
             >
-              <Picker.Item label={"Filtrar"} value={""} key={0} />
+              <Picker.Item label={"Sem Filtro"} value={""} key={0} />
               <Picker.Item label={"Vou"} value={"true"} key={1} />
               <Picker.Item label={"Não Vou"} value={"false"} key={2} />
               <Picker.Item label={"Nome"} value={"nome"} key={3} />
