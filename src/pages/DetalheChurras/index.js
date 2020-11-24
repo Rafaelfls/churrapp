@@ -31,7 +31,7 @@ export default function DetalheChurras() {
 
   const churras = route.params.churras;
   const editavel = route.params.editavel;
-  const {initialPage} = route.params;
+  const { initialPage } = route.params;
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
   const [itens, setItens] = useState([]);
@@ -227,19 +227,19 @@ export default function DetalheChurras() {
   async function carregarTodosTipos(subTipo) {
     switch (subTipo.id) {
       case 1:
-        navigation.replace('EscolherNovosItens',{subTipo,churrascode:churras})
+        navigation.replace('EscolherNovosItens', { subTipo, churrascode: churras })
         break;
       case 2:
-          navigation.replace('EscolherNovosItens2',{subTipo,churrascode:churras})
-          break;
+        navigation.replace('EscolherNovosItens2', { subTipo, churrascode: churras })
+        break;
       case 3:
-          navigation.replace('EscolherNovosItens3',{subTipo,churrascode:churras})
-          break;      
+        navigation.replace('EscolherNovosItens3', { subTipo, churrascode: churras })
+        break;
       case 4:
-        navigation.replace('EscolherNovosItens4',{subTipo,churrascode:churras})
-        break;        
+        navigation.replace('EscolherNovosItens4', { subTipo, churrascode: churras })
+        break;
       case 5:
-        navigation.replace('EscolherNovosItens5',{subTipo,churrascode:churras})
+        navigation.replace('EscolherNovosItens5', { subTipo, churrascode: churras })
         break;
       default:
         break;
@@ -406,12 +406,14 @@ export default function DetalheChurras() {
   }
 
   function passouDoLimite() {
-    var dataLimite = new Date(churrasAtual.limiteConfirmacao).getTime()
+    var dataLimite = new Date(churrasAtual.limiteConfirmacao)
     if (dataLimite == 0) {
       return false
     }
-    var hoje = new Date().getTime()
-    if (dataLimite <= hoje) {
+    var msDiff = new Date(churrasAtual.limiteConfirmacao).getTime() - new Date().getTime();
+    var pastDays = Math.floor(msDiff / (1000 * 60 * 60 * 24));
+
+    if (pastDays < -1) {
       return true
     } else {
       return false
@@ -524,7 +526,7 @@ export default function DetalheChurras() {
     setEditChurrasValorTotal(res.data[0].valorTotal)
     setEditChurrasValorPago(res.data[0].valorPago)
   }
-  
+
   function formatData(data) {
     var date = new Date(data).getDate() + 1
     var month = new Date(data).getMonth() + 1
@@ -598,23 +600,18 @@ export default function DetalheChurras() {
             <IconEnt name="share" size={25} color={"white"} />
           </TouchableOpacity>
           : <View style={style.participateBtn}>
-            {dataComparar < Date.now()
-              ? <Text></Text>
-              : <View>
-                {isEnabled
-                  ? <Text style={style.textSwitch}>Vou</Text>
-                  : <Text style={style.textSwitch}>Não Vou</Text>
-                }
-                <Switch
-                  trackColor={{ false: "gray", true: "green" }}
-                  thumbColor={passouDoLimite() ? isEnabled ? "gray" : "gray" : isEnabled ? "white" : "white"}
-                  ios_backgroundColor="#3e3e3e"
-                  onValueChange={atualizaPresença}
-                  disabled={passouDoLimite()}
-                  value={isEnabled}
-                />
-              </View>
+            {isEnabled
+              ? <Text style={style.textSwitch}>Vou</Text>
+              : <Text style={style.textSwitch}>Não Vou</Text>
             }
+            <Switch
+              trackColor={{ false: "gray", true: "green" }}
+              thumbColor={passouDoLimite() ? isEnabled ? "gray" : "gray" : isEnabled ? "white" : "white"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={atualizaPresença}
+              disabled={passouDoLimite()}
+              value={isEnabled}
+            />
           </View>
         }
       </View>
@@ -681,7 +678,7 @@ export default function DetalheChurras() {
                 <Text style={style.churrasNome}>Local: </Text>
               </View>
               <TextInput
-                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height:'auto' }]}
+                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}
                 editable={allowEditing[0]}
                 multiline={true}
                 onChangeText={text => setEditChurrasLocal(text)}
@@ -839,7 +836,7 @@ export default function DetalheChurras() {
                 <Text style={style.churrasNome}>Descrição: </Text>
               </View>
               <TextInput
-                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height:'auto' }]}
+                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}
                 editable={allowEditing[0]}
                 multiline={true}
                 onChangeText={text => setEditChurrasDescricao(text)}
@@ -1525,7 +1522,7 @@ export default function DetalheChurras() {
           </View>
         </View>
       </Modal>
-     
+
       <Modal
         animationType="slide"
         transparent={true}

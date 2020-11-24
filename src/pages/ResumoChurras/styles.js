@@ -75,7 +75,6 @@ export default StyleSheet.create({
   churras: {
     backgroundColor: 'white',
     marginVertical: 10,
-    marginHorizontal: 20,
     marginBottom:15,
     shadowColor: "#000",
     shadowOffset: {
@@ -88,8 +87,8 @@ export default StyleSheet.create({
   },
   slideBtn: {
     flexDirection: 'row',
-    width: Dimensions.get('window').width,
-    paddingLeft:10,
+    width: Dimensions.get('window').width+10,
+    paddingHorizontal:20,
     paddingVertical:5,
   },
   detalheSlide: {
