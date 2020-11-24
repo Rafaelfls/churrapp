@@ -77,6 +77,95 @@ export default function DetalheChurras() {
   const [nomeUnidadeSelecionada, setNomeUnidadeSelecionada] = useState('Unidade de medida')
   const [precoModal, setPrecoModal] = useState(0)
   const [precoMedioModal, setPrecoMedioModal] = useState(0);
+  const [dataComparar, setDataComparar] = useState()
+  const [convidadosFiltro, setConvidadosFiltro] = useState("")
+  const convidadosNome = [].concat(convidados)
+    .sort((a, b) => a.nome > b.nome ? 1 : -1)
+    .map((convidados, i) =>
+      <View style={style.containerConvidados}>
+        {convidados.confirmado
+          ? (<View style={style.convidadoPresente}>
+            <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
+            <View>
+              <Text style={style.nomeConvidado}>{convidados.nome}</Text>
+              <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
+              <Text style={style.statusConvidado}>Vou comparecer</Text>
+            </View>
+            {convidados.pagou
+              ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+              : null}
+          </View>)
+          : convidados.confirmado == false
+            ? (<View style={style.convidadoAusente}>
+              <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgAusente} />
+              <View>
+                <Text style={style.nomeConvidadoAusente}>{convidados.nome}</Text>
+                <Text style={style.foneConvidadoAusente}>{formataNumeroCelular(convidados.celular)}</Text>
+                <Text style={style.statusConvidadoAusente}>Não vou comparecer</Text>
+              </View>
+              {convidados.pagou
+                ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                : null}
+            </View>)
+            : convidados.confirmado == null
+              ? (<View style={style.convidadoNaoConfirm}>
+                <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
+                <View>
+                  <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
+                  <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
+                  <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
+                </View>
+                {convidados.pagou
+                  ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                  : null}
+              </View>)
+              : null}
+      </View>
+    );
+
+  const convidadosNomeDono = [].concat(convidados)
+    .sort((a, b) => a.nome > b.nome ? 1 : -1)
+    .map((convidados, i) =>
+      <View style={style.containerConvidados} key={i}>
+        {convidados.confirmado
+          ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoPresente}>
+            <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
+            <View>
+              <Text style={style.nomeConvidado}>{convidados.nome}</Text>
+              <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
+              <Text style={style.statusConvidado}>Vou comparecer</Text>
+            </View>
+            {convidados.pagou
+              ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+              : null}
+          </TouchableOpacity>)
+          : convidados.confirmado == false
+            ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoAusente}>
+              <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgAusente} />
+              <View>
+                <Text style={style.nomeConvidadoAusente}>{convidados.nome}</Text>
+                <Text style={style.foneConvidadoAusente}>{formataNumeroCelular(convidados.celular)}</Text>
+                <Text style={style.statusConvidadoAusente}>Não vou comparecer</Text>
+              </View>
+              {convidados.pagou
+                ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                : null}
+            </TouchableOpacity>)
+            : convidados.confirmado == null
+              ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoNaoConfirm}>
+                <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
+                <View>
+                  <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
+                  <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
+                  <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
+                </View>
+                {convidados.pagou
+                  ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                  : null}
+              </TouchableOpacity>) : null}
+      </View>
+    );
+
 
   //editar Churras
   const [allowEditing, setAllowEditing] = useState([false, 'darkgray'])
@@ -114,8 +203,10 @@ export default function DetalheChurras() {
   function backHome() {
     if (editavel) {
       navigation.replace('Tabs')
+      savePerfil(false)
     } else {
-      navigation.replace('Tabs', { screen: "OutrosChurras" })
+      navigation.goBack()
+      savePerfil(false)
     }
   }
 
@@ -160,27 +251,32 @@ export default function DetalheChurras() {
   }
 
 
-  async function savePerfil() {
-    setLoading(true)
-    setAllowEditing([false, 'darkgray']);
-    if (image.uri != null) {
-      var novaUrl = await uploadImage(image);
+  async function savePerfil(sair) {
+    if (sair) {
+      setLoading(true)
+      setAllowEditing([false, 'darkgray']);
+      if (image.uri != null) {
+        var novaUrl = await uploadImage(image);
+      } else {
+        var novaUrl = editChurrasFotoUrlC;
+      }
+      await api.put(`/churrasUpdate/${churras}`, {
+        nomeChurras: editChurrasNome,
+        data: editChurrasData,
+        limiteConfirmacao: editChurrasDataLimite,
+        hrInicio: editChurrasInicio,
+        hrFim: editChurrasFim,
+        local: editChurrasLocal,
+        descricao: editChurrasDescricao,
+        fotoUrlC: novaUrl,
+      }).then(function (res) {
+        setReturnVisivel([true, res.data.mensagem])
+        setRefresh(!refresh)
+      })
     } else {
-      var novaUrl = editChurrasFotoUrlC;
+      setAllowEditing([false, 'darkgray']);
     }
-    await api.put(`/churrasUpdate/${churras}`, {
-      nomeChurras: editChurrasNome,
-      data: editChurrasData,
-      limiteConfirmacao: editChurrasDataLimite,
-      hrInicio: editChurrasInicio,
-      hrFim: editChurrasFim,
-      local: editChurrasLocal,
-      descricao: editChurrasDescricao,
-      fotoUrlC: novaUrl,
-    }).then(function (res) {
-      setReturnVisivel([true, res.data.mensagem])
-      setRefresh(!refresh)
-    })
+
   }
 
   async function carregarConvidados() {
@@ -418,6 +514,7 @@ export default function DetalheChurras() {
       setEditChurrasDataLimite(dataFormatadaLimite)
 
     }
+    setDataComparar(Date.parse(res.data[0].data))
     setEditChurrasData(dataFormatada)
     setEditChurrasInicio(res.data[0].hrInicio)
     setEditChurrasFim(res.data[0].hrFim)
@@ -501,18 +598,23 @@ export default function DetalheChurras() {
             <IconEnt name="share" size={25} color={"white"} />
           </TouchableOpacity>
           : <View style={style.participateBtn}>
-            {isEnabled
-              ? <Text style={style.textSwitch}>Vou</Text>
-              : <Text style={style.textSwitch}>Não Vou</Text>
+            {dataComparar < Date.now()
+              ? <Text></Text>
+              : <View>
+                {isEnabled
+                  ? <Text style={style.textSwitch}>Vou</Text>
+                  : <Text style={style.textSwitch}>Não Vou</Text>
+                }
+                <Switch
+                  trackColor={{ false: "gray", true: "green" }}
+                  thumbColor={passouDoLimite() ? isEnabled ? "gray" : "gray" : isEnabled ? "white" : "white"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={atualizaPresença}
+                  disabled={passouDoLimite()}
+                  value={isEnabled}
+                />
+              </View>
             }
-            <Switch
-              trackColor={{ false: "gray", true: "green" }}
-              thumbColor={passouDoLimite() ? isEnabled ? "gray" : "gray" : isEnabled ? "white" : "white"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={atualizaPresença}
-              disabled={passouDoLimite()}
-              value={isEnabled}
-            />
           </View>
         }
       </View>
@@ -784,7 +886,7 @@ export default function DetalheChurras() {
               ? <FloatingAction
                 color='rgba(0,0,0,0.9)'
                 showBackground={false}
-                onPressMain={() => savePerfil()}
+                onPressMain={() => savePerfil(true)}
                 floatingIcon={<IconMa name="save" size={22} color={"white"} />}
               />
               : <FloatingAction
@@ -837,30 +939,112 @@ export default function DetalheChurras() {
                 />
               </View>
               : null}
-            <FlatList
-              data={convidados}
-              style={{ height: 170, width: "100%" }}
-              showsVerticalScrollIndicator={false}
-              refreshing={loading}
-              onRefresh={carregarConvidados}
-              keyExtractor={convidados => String(convidados.id)}
-              renderItem={({ item: convidados }) => (
+            <Picker
+              mode="dropdown"
+              style={style.pickerDropdownFiltro}
+              selectedValue={convidadosFiltro}
+              onValueChange={convidadosFiltro => setConvidadosFiltro(convidadosFiltro)}
+            >
+              <Picker.Item label={"Filtrar"} value={""} key={0} />
+              <Picker.Item label={"Vou"} value={"true"} key={1} />
+              <Picker.Item label={"Não Vou"} value={"false"} key={2} />
+              <Picker.Item label={"Nome"} value={"nome"} key={3} />
+              <Picker.Item label={"Aguardando Resposta"} value={"null"} key={4} />
+            </Picker>
+            {/* Sem filto */}
+            {convidadosFiltro == "" && (
+              <FlatList
+                data={convidados}
+                style={{ height: 170, width: "100%" }}
+                showsVerticalScrollIndicator={false}
+                refreshing={loading}
+                onRefresh={carregarConvidados}
+                keyExtractor={convidados => String(convidados.id)}
+                renderItem={({ item: convidados }) => (
+                  <View style={style.containerConvidados}>
+                    {convidados.confirmado
+                      ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoPresente}>
+                        <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
 
-                <View style={style.containerConvidados}>
-                  {convidados.confirmado
-                    ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoPresente}>
-                      <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
-                      <View>
-                        <Text style={style.nomeConvidado}>{convidados.nome}</Text>
-                        <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
-                        <Text style={style.statusConvidado}>Vou comparecer</Text>
-                      </View>
-                      {convidados.pagou
-                        ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
-                        : null}
-                    </TouchableOpacity>)
-                    : convidados.confirmado == false
-                      ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoAusente}>
+                        <View>
+                          <Text style={style.nomeConvidado}>{convidados.nome}</Text>
+                          <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
+                          <Text style={style.statusConvidado}>Vou comparecer</Text>
+                        </View>
+                        {convidados.pagou
+                          ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                          : null}
+                      </TouchableOpacity>)
+                      : convidados.confirmado == false
+                        ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoAusente}>
+                          <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgAusente} />
+                          <View>
+                            <Text style={style.nomeConvidadoAusente}>{convidados.nome}</Text>
+                            <Text style={style.foneConvidadoAusente}>{formataNumeroCelular(convidados.celular)}</Text>
+                            <Text style={style.statusConvidadoAusente}>Não vou comparecer</Text>
+                          </View>
+                          {convidados.pagou
+                            ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                            : null}
+                        </TouchableOpacity>)
+                        : convidados.confirmado == null
+                          ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoNaoConfirm}>
+                            <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
+                            <View>
+                              <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
+                              <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
+                              <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
+                            </View>
+                            {convidados.pagou
+                              ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                              : null}
+                          </TouchableOpacity>) : null}
+                  </View>
+
+                )}
+              />
+            )}
+            {/* Filtro vou */}
+            {convidadosFiltro == "true" && (
+              <FlatList
+                data={convidados}
+                style={{ height: 170, width: "100%" }}
+                showsVerticalScrollIndicator={false}
+                refreshing={loading}
+                onRefresh={carregarConvidados}
+                keyExtractor={convidados => String(convidados.id)}
+                renderItem={({ item: convidados }) => (
+                  <View style={style.containerConvidados}>
+                    {convidados.confirmado == true && (
+                      (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoPresente}>
+                        <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
+                        <View>
+                          <Text style={style.nomeConvidado}>{convidados.nome}</Text>
+                          <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
+                          <Text style={style.statusConvidado}>Vou comparecer</Text>
+                        </View>
+                        {convidados.pagou
+                          ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                          : null}
+                      </TouchableOpacity>)
+                    )}
+                  </View>
+                )}
+              />
+            )}
+            {/* Filtro não vou */}
+            {convidadosFiltro == "false" && (
+              <FlatList
+                data={convidados}
+                style={{ height: 170, width: "100%" }}
+                showsVerticalScrollIndicator={false}
+                refreshing={loading}
+                onRefresh={carregarConvidados}
+                keyExtractor={convidados => String(convidados.id)}
+                renderItem={({ item: convidados }) => (
+                  <View style={style.containerConvidados}>
+                    {convidados.confirmado == false && (
+                      (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoAusente}>
                         <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgAusente} />
                         <View>
                           <Text style={style.nomeConvidadoAusente}>{convidados.nome}</Text>
@@ -871,21 +1055,47 @@ export default function DetalheChurras() {
                           ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
                           : null}
                       </TouchableOpacity>)
-                      : convidados.confirmado == null
-                        ? (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoNaoConfirm}>
-                          <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
-                          <View>
-                            <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
-                            <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
-                            <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
-                          </View>
-                          {convidados.pagou
-                            ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
-                            : null}
-                        </TouchableOpacity>) : null}
-                </View>
-              )}
-            />
+                    )}
+                  </View>
+
+                )}
+              />
+            )}
+            {/* Filtro por nome */}
+            {convidadosFiltro == "nome" && (
+              <ScrollView>
+                {convidadosNomeDono}
+              </ScrollView>
+            )}
+            {/* Filtro aguardando resposta */}
+            {convidadosFiltro == "null" && (
+              <FlatList
+                data={convidados}
+                style={{ height: 170, width: "100%" }}
+                showsVerticalScrollIndicator={false}
+                refreshing={loading}
+                onRefresh={carregarConvidados}
+                keyExtractor={convidados => String(convidados.id)}
+                renderItem={({ item: convidados }) => (
+                  <View style={style.containerConvidados}>
+                    {convidados.confirmado == null && (
+                      (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoNaoConfirm}>
+                        <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
+                        <View>
+                          <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
+                          <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
+                          <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
+                        </View>
+                        {convidados.pagou
+                          ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                          : null}
+                      </TouchableOpacity>)
+                    )}
+                  </View>
+
+                )}
+              />
+            )}
           </View>)
           : (<View tabLabel='Convidados' style={{ height: '100%', width: "100%" }}>
 
@@ -926,30 +1136,113 @@ export default function DetalheChurras() {
                 />
               </View>
               : null}
-            <FlatList
-              data={convidados}
-              style={{ height: 170, width: "100%" }}
-              showsVerticalScrollIndicator={false}
-              refreshing={loading}
-              onRefresh={carregarConvidados}
-              keyExtractor={convidados => String(convidados.id)}
-              renderItem={({ item: convidados }) => (
+            <Picker
+              mode="dropdown"
+              style={style.pickerDropdownFiltro}
+              itemStyle={{ fontFamily: 'poppins-bold' }}
+              selectedValue={convidadosFiltro}
+              onValueChange={convidadosFiltro => setConvidadosFiltro(convidadosFiltro)}
+            >
+              <Picker.Item label={"Filtrar"} value={""} key={0} />
+              <Picker.Item label={"Vou"} value={"true"} key={1} />
+              <Picker.Item label={"Não Vou"} value={"false"} key={2} />
+              <Picker.Item label={"Nome"} value={"nome"} key={3} />
+              <Picker.Item label={"Aguardando Resposta"} value={"null"} key={4} />
+            </Picker>
+            {/* Sem filto */}
+            {convidadosFiltro == "" && (
+              <FlatList
+                data={convidados}
+                style={{ height: 170, width: "100%" }}
+                showsVerticalScrollIndicator={false}
+                refreshing={loading}
+                onRefresh={carregarConvidados}
+                keyExtractor={convidados => String(convidados.id)}
+                renderItem={({ item: convidados }) => (
+                  <View style={style.containerConvidados}>
+                    {convidados.confirmado
+                      ? (<View style={style.convidadoPresente}>
+                        <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
+                        <View>
+                          <Text style={style.nomeConvidado}>{convidados.nome}</Text>
+                          <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
+                          <Text style={style.statusConvidado}>Vou comparecer</Text>
+                        </View>
+                        {convidados.pagou
+                          ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                          : null}
+                      </View>)
+                      : convidados.confirmado == false
+                        ? (<View style={style.convidadoAusente}>
+                          <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgAusente} />
+                          <View>
+                            <Text style={style.nomeConvidadoAusente}>{convidados.nome}</Text>
+                            <Text style={style.foneConvidadoAusente}>{formataNumeroCelular(convidados.celular)}</Text>
+                            <Text style={style.statusConvidadoAusente}>Não vou comparecer</Text>
+                          </View>
+                          {convidados.pagou
+                            ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                            : null}
+                        </View>)
+                        : convidados.confirmado == null
+                          ? (<View style={style.convidadoNaoConfirm}>
+                            <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
+                            <View>
+                              <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
+                              <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
+                              <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
+                            </View>
+                            {convidados.pagou
+                              ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                              : null}
+                          </View>)
+                          : null}
+                  </View>
 
-                <View style={style.containerConvidados}>
-                  {convidados.confirmado
-                    ? (<View style={style.convidadoPresente}>
-                      <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
-                      <View>
-                        <Text style={style.nomeConvidado}>{convidados.nome}</Text>
-                        <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
-                        <Text style={style.statusConvidado}>Vou comparecer</Text>
-                      </View>
-                      {convidados.pagou
-                        ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
-                        : null}
-                    </View>)
-                    : convidados.confirmado == false
-                      ? (<View style={style.convidadoAusente}>
+                )}
+              />
+            )}
+            {/* Filtro vou */}
+            {convidadosFiltro == "true" && (
+              <FlatList
+                data={convidados}
+                style={{ height: 170, width: "100%" }}
+                showsVerticalScrollIndicator={false}
+                refreshing={loading}
+                onRefresh={carregarConvidados}
+                keyExtractor={convidados => String(convidados.id)}
+                renderItem={({ item: convidados }) => (
+                  <View style={style.containerConvidados}>
+                    {convidados.confirmado == true && (
+                      (<View style={style.convidadoPresente}>
+                        <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
+                        <View>
+                          <Text style={style.nomeConvidado}>{convidados.nome}</Text>
+                          <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
+                          <Text style={style.statusConvidado}>Vou comparecer</Text>
+                        </View>
+                        {convidados.pagou
+                          ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                          : null}
+                      </View>)
+                    )}
+                  </View>
+                )}
+              />
+            )}
+            {/* Filtro não vou */}
+            {convidadosFiltro == "false" && (
+              <FlatList
+                data={convidados}
+                style={{ height: 170, width: "100%" }}
+                showsVerticalScrollIndicator={false}
+                refreshing={loading}
+                onRefresh={carregarConvidados}
+                keyExtractor={convidados => String(convidados.id)}
+                renderItem={({ item: convidados }) => (
+                  <View style={style.containerConvidados}>
+                    {convidados.confirmado == false && (
+                      (<View style={style.convidadoAusente}>
                         <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgAusente} />
                         <View>
                           <Text style={style.nomeConvidadoAusente}>{convidados.nome}</Text>
@@ -960,23 +1253,47 @@ export default function DetalheChurras() {
                           ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
                           : null}
                       </View>)
-                      : convidados.confirmado == null
-                        ? (<View style={style.convidadoNaoConfirm}>
-                          <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
-                          <View>
-                            <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
-                            <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
-                            <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
-                          </View>
-                          {convidados.pagou
-                            ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
-                            : null}
-                        </View>)
-                        : null}
-                </View>
+                    )}
+                  </View>
 
-              )}
-            />
+                )}
+              />
+            )}
+            {/* Filtro por nome */}
+            {convidadosFiltro == "nome" && (
+              <ScrollView>
+                {convidadosNome}
+              </ScrollView>
+            )}
+            {/* Filtro aguardando resposta */}
+            {convidadosFiltro == "null" && (
+              <FlatList
+                data={convidados}
+                style={{ height: 170, width: "100%" }}
+                showsVerticalScrollIndicator={false}
+                refreshing={loading}
+                onRefresh={carregarConvidados}
+                keyExtractor={convidados => String(convidados.id)}
+                renderItem={({ item: convidados }) => (
+                  <View style={style.containerConvidados}>
+                    {convidados.confirmado == null && (
+                      (<View style={style.convidadoNaoConfirm}>
+                        <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
+                        <View>
+                          <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
+                          <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
+                          <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
+                        </View>
+                        {convidados.pagou
+                          ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                          : null}
+                      </View>)
+                    )}
+                  </View>
+
+                )}
+              />
+            )}
           </View>)}
 
         {editavel
@@ -985,6 +1302,8 @@ export default function DetalheChurras() {
               <FlatList
                 data={itens}
                 showsVerticalScrollIndicator={false}
+                refreshing={loading}
+                onRefresh={carregarItens}
                 keyExtractor={itens => String(itens.id)}
                 refreshing={loading}
                 onRefresh={carregarItens}
@@ -1012,39 +1331,40 @@ export default function DetalheChurras() {
               <ActionButton offsetX={10} style={{ opacity: 0.85 }} offsetY={10} onPress={() => setModalSubTipoVisivel(true)} />
 
             </View>)
-          : (<View tabLabel='Itens'><View style={style.formGroup}>
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-              <Text style={style.churrasNome}>Valor por pessoa: </Text>
+          : (
+            <View tabLabel='Itens'><View style={style.formGroup}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <Text style={style.churrasNome}>Valor por pessoa: </Text>
+              </View>
+              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', textAlign: 'center' }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount + 1)).toFixed(2)}</Text>
             </View>
-            <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', textAlign: 'center' }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount + 1)).toFixed(2)}</Text>
-          </View>
-            <FlatList
-              data={itens}
-              showsVerticalScrollIndicator={false}
-              refreshing={loading}
-              onRefresh={carregarItens}
-              keyExtractor={itens => String(itens.id)}
-              style={{ marginBottom: 30 }}
-              renderItem={({ item: itens }) => (
-                <View>
-                  <View style={style.cardItemAdicionado}>
-                    <Image source={{ uri: itens.fotoUrlT }} style={style.churrasFotoModal} />
-                    <View style={style.churrasInfosViewModal}>
-                      <Text style={style.churrasTitleModal}>{itens.nomeItem}</Text>
-                      <Text style={style.churrasDonoModal}>{itens.descricao} </Text>
-                      <View style={style.churrasLocDatModal}>
-                        <Icon style={style.dataIconModal} name="weight-hanging" size={15} />
-                        <Text style={style.qtdItemAdc}>{(itens.quantidade).toFixed(2)}{itens.unidade}</Text>
-                        <Text style={style.locDatSeparatorModal}>  |  </Text>
-                        <Icon style={style.localIconModal} name="coins" size={15} />
-                        <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
+              <FlatList
+                data={itens}
+                showsVerticalScrollIndicator={false}
+                refreshing={loading}
+                onRefresh={carregarItens}
+                keyExtractor={itens => String(itens.id)}
+                style={{ marginBottom: 100 }}
+                renderItem={({ item: itens }) => (
+                  <View>
+                    <View style={style.cardItemAdicionado}>
+                      <Image source={{ uri: itens.fotoUrlT }} style={style.churrasFotoModal} />
+                      <View style={style.churrasInfosViewModal}>
+                        <Text style={style.churrasTitleModal}>{itens.nomeItem}</Text>
+                        <Text style={style.churrasDonoModal}>{itens.descricao} </Text>
+                        <View style={style.churrasLocDatModal}>
+                          <Icon style={style.dataIconModal} name="weight-hanging" size={15} />
+                          <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
+                          <Text style={style.locDatSeparatorModal}>  |  </Text>
+                          <Icon style={style.localIconModal} name="coins" size={15} />
+                          <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
+                        </View>
                       </View>
                     </View>
                   </View>
-                </View>
-              )}
-            />
-          </View>)}
+                )}
+              />
+            </View>)}
 
       </ScrollableTabView>
 

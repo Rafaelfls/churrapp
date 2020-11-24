@@ -18,19 +18,19 @@ import Component2 from '../../assets/Component2.png'
 
 import style from './styles';
 
-import { useChurrasCount, useChurrasParticipado, useAppState } from '../../context/churrasContext';
+import { useChurrasCount, useChurrasParticipado, useAppState, useLoadingModal } from '../../context/churrasContext';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function ResumoChurras() {
     const { churrasCount, setChurrasCount } = useChurrasCount();
     const { churrasParticipado, setChurrasParticipado } = useChurrasParticipado();
+    const { loading, setLoading } = useLoadingModal();
     const [contadorCriado, setContadorCriado] = useState(USUARIOLOGADO.churrasCriados);
 
     const route = useRoute();
     const [churras, setChurras] = useState([]);
     const [notificacoes, setnotificacoes] = useState([]);
     const [isNotificacoesOpen, setIsNotificacoesOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [visivel, setVisivel] = useState(false)
     const [churrasDeletar, setChurrasDeletar] = useState([]);
     const [refreshChurras, setRefreshChurras] = useState(true);

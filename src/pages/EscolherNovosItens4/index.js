@@ -83,11 +83,11 @@ export default function EscolherNovosItens3({ route, navigation }) {
             item_id: item,
             precoItem: precoFinal,
         }).then(async function (res) {
-            if(res.data.quantidadeAntiga){
-                var sub = res.data.quantidadeAntiga*res.data.precoAntigo;
-                var sum = precoFinal * (qtdNova+res.data.quantidadeAntiga);
-                var precoFinalTotal = sum-sub;
-            }else{
+            if (res.data.quantidadeAntiga) {
+                var sub = res.data.quantidadeAntiga * res.data.precoAntigo;
+                var sum = precoFinal * (qtdNova + res.data.quantidadeAntiga);
+                var precoFinalTotal = sum - sub;
+            } else {
                 var precoFinalTotal = precoFinal * qtdNova;
             }
             await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
@@ -128,7 +128,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                         <Text style={style.textHeader}>Adicionar extras</Text>
                     </View>
                 </View>
-                <View style={{ height: 70 }}>
+                <View style={{ height: 108 }}>
                     <FlatList
                         data={tipo}
                         horizontal={true}
@@ -137,6 +137,9 @@ export default function EscolherNovosItens3({ route, navigation }) {
                         renderItem={({ item: tipo }) => (
                             <View style={style.filtroL} >
                                 <TouchableOpacity style={style.tiposDeItenscard} onPress={() => setFiltroTipo(tipo.id)}>
+                                    <View style={style.tipoImg}>
+                                        <Image source={{ uri: tipo.fotoUrlT }} style={{ width: '100%', height: 50, resizeMode: "stretch" }} />
+                                    </View>
                                     <Text style={style.tiposDeItenstextCard}>{tipo.tipo}</Text>
                                 </TouchableOpacity>
                             </View>
@@ -151,7 +154,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                     renderItem={({ item: item }) => (
                         <View >
                             {filtro == null ? (
-                                <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id,item.precoMedio)}>
+                                <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id, item.precoMedio)}>
                                     {item.fotoUrlI == null
                                         ? <Image source={{ uri: item.fotoUrlT }} style={style.churrasFoto} />
                                         : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
@@ -181,7 +184,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                                             <Text style={style.locDatSeparator}>  |  </Text>
                                             <Icon style={style.localIcon} name="coins" size={15} />
                                             <Text style={style.churrasLocal}>{item.precoMedio == null ? '  -  ' : "  R$" + (item.precoMedio).toFixed(2)}</Text>
-                                            </View>
+                                        </View>
                                     </View>
                                 </TouchableOpacity>
                             ) : null}
@@ -219,7 +222,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                                     style={style.boxDropdown}
                                     itemStyle={style.itemDropdown}
                                     mode="dropdown"
-                                    onValueChange={itemValue => {setSelectedUnidade(itemValue);setNomeUnidadeSelecionada(unidades[itemValue].unidade)}}
+                                    onValueChange={itemValue => { setSelectedUnidade(itemValue); setNomeUnidadeSelecionada(unidades[itemValue].unidade) }}
                                 >
                                     {unidades.map((unity, idx) => (
                                         <Picker.Item label={unity.unidade} value={unity.id} key={idx} />
@@ -245,7 +248,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                                 <TouchableOpacity style={style.exitBtnFooter} onPress={() => setVisibility(false, "", '', '', '')}>
                                     <Text style={style.iconExitBtn}>Cancelar</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal,precoModal)}>
+                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal, precoModal)}>
                                     <Text style={style.iconSalvarBtn}>Confirmar</Text>
                                 </TouchableOpacity>
                             </View>
