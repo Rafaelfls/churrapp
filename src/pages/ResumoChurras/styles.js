@@ -67,25 +67,36 @@ export default StyleSheet.create({
 
   //cards
   churrasList: {
-    marginLeft: 20,
+    marginHorizontal: 20,
     paddingTop: 15,
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
   },
+
+  //sem borda em cima, com borda embaixo
 
   //cardDesign
   churras: {
     backgroundColor: 'white',
-    marginBottom: 15,
-    marginLeft: 0,
+    marginVertical: 10,
+    marginBottom:15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
   },
   slideBtn: {
     flexDirection: 'row',
     width: Dimensions.get('window').width,
+    paddingLeft:10,
+    paddingVertical:5,
   },
   detalheSlide: {
     backgroundColor: "darkgray",
     width: 100,
-    marginRight: 10,
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomLeftRadius: 8,
@@ -129,7 +140,10 @@ export default StyleSheet.create({
   churrasDescricao: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+  },
+  slidingCard:{
+    backgroundColor: 'white', 
+    width: "100%",
   },
   churrasFoto: {
     width: 66,
