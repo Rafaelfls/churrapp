@@ -51,6 +51,8 @@ import ChurrasProvider from './context/churrasContext';
 import style from './styles.js'
 import api from './services/api'
 
+import { useLoadingModal } from '././context/churrasContext.js'
+
 //Criando Icone Customizável
 import { createIconSetFromIcoMoon } from '@expo/vector-icons';
 import icoMoonConfig from '../selection.json';
@@ -63,6 +65,7 @@ const Drawer = createDrawerNavigator();
 
 
 function badgeIconeNotificacao(focused) {
+    const { loading } = useLoadingModal()
     const [notificacoes, setnotificacoes] = useState([]);
     function loadNotificacoes() {
         api.get(`/notificacoes/${USUARIOLOGADO.id}`).then(function (res) {
@@ -72,7 +75,7 @@ function badgeIconeNotificacao(focused) {
 
     useEffect(() => {
         loadNotificacoes();
-    }, []);
+    }, [loading]);
 
     return (
         <View>

@@ -10,10 +10,11 @@ import api from '../../services/api';
 
 import style from './styles';
 
-import { useChurrasCount, useChurrasParticipado } from '../../context/churrasContext';
+import { useChurrasCount, useChurrasParticipado, useLoadingModal } from '../../context/churrasContext';
 
 const Notificacoes = () => {
     const { churrasParticipado, setChurrasParticipado } = useChurrasParticipado();
+    const { loading, setLoading } = useLoadingModal()
 
     const navigation = useNavigation();
 
@@ -31,6 +32,7 @@ const Notificacoes = () => {
     }
 
     async function clicknegar(notificacao) {
+        setLoading(true)
         if (notificacao.churras_id == null) {
             await api.delete(`/notificacoes/${notificacao.id}`)
             setRefreshNotificacao(!refreshNotificacao);
@@ -39,9 +41,11 @@ const Notificacoes = () => {
             await api.delete(`/notificacoes/${notificacao.id}`)
             setRefreshNotificacao(!refreshNotificacao);
         }
+        setLoading(false)
     }
 
     async function clickconfirmar(notificacao) {
+        setLoading(true)
         if (notificacao.churras_id == null) {
             await api.delete(`/notificacoes/${notificacao.id}`)
             setRefreshNotificacao(!refreshNotificacao);
@@ -51,8 +55,9 @@ const Notificacoes = () => {
             await api.delete(`/notificacoes/${notificacao.id}`)
             setChurrasParticipado(churrasParticipado + 1)
             api.put(`/usuariosQntParticipado/${USUARIOLOGADO.id}`, { churrasParticipados: churrasParticipado + 1 });
-            navigation.navigate('DetalheChurras', { churras: churrasId, editavel: false, initialPage:0 })
+            navigation.navigate('DetalheChurras', { churras: churrasId, editavel: false, initialPage: 0 })
         }
+        setLoading(false)
     }
 
     useEffect(() => {

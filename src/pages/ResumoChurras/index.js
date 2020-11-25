@@ -139,7 +139,7 @@ export default function ResumoChurras() {
     }
 
     function detalheChurras(churras) {
-        navigation.navigate('DetalheChurras', { churras, editavel: true, initialPage:0 });
+        navigation.navigate('DetalheChurras', { churras, editavel: true, initialPage: 0 });
     }
 
 
@@ -169,8 +169,10 @@ export default function ResumoChurras() {
 
     useEffect(() => {
         loadChurras();
-        loadNotificacoes();
     }, [refreshChurras]);
+    useEffect(() => {
+        loadNotificacoes();
+    }, [loading]);
 
     async function loadNotificacoes() {
         await api.get(`/notificacoes/${USUARIOLOGADO.id}`).then(function (res) {
@@ -206,7 +208,7 @@ export default function ResumoChurras() {
             setChurrasParticipado(churrasParticipado + 1)
             api.put(`/usuariosQntParticipado/${USUARIOLOGADO.id}`, { churrasParticipados: churrasParticipado + 1 });
             setIsNotificacoesOpen(false)
-            navigation.navigate('DetalheChurras', { churras: churrasId, editavel: false, initialPage:0 })
+            navigation.navigate('DetalheChurras', { churras: churrasId, editavel: false, initialPage: 0 })
         }
     }
     function abrirDrawer() {
