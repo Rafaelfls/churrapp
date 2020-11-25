@@ -701,7 +701,6 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: "center",
-    backgroundColor: 'white',
   },
   selectionFormQtd: {
     flexDirection: 'row',

@@ -395,7 +395,7 @@ export default function DetalheChurras() {
     })
   }
 
-  async function updateItem(item, quantidade, unidade, formato, precoModal) {
+  async function updateItem(item, quantidade, unidade, formato, precoModal, itemTodo) {
     var form = formato;
     var precoFinal;
     if (form == 1) { form = 7 }
@@ -404,9 +404,9 @@ export default function DetalheChurras() {
     }
 
     if (precoModal == 0) {
-      precoFinal = (precoMedioModal * quantidade).toFixed(2);
+      precoFinal = itemTodo.precoMedio
     } else {
-      precoFinal = (precoModal * quantidade).toFixed(2)
+      precoFinal = precoModal 
     }
 
     setLoading(true)
@@ -416,12 +416,12 @@ export default function DetalheChurras() {
       formato_id: form,
       precoItem: precoFinal,
     }).then(async function (res) {
-      if (res.data.quantidadeAntiga) {
-        var sub = res.data.quantidadeAntiga * res.data.precoAntigo;
-        var sum = precoFinal * (qtdNova + res.data.quantidadeAntiga);
+      if (res.data.antigo) {
+        var sub = res.data.antigo[0].quantidade * res.data.antigo[0].precoItem;
+        var sum = precoFinal * (quantidade + res.data.antigo[0].quantidade);
         var precoFinalTotal = sum - sub;
       } else {
-        var precoFinalTotal = precoFinal * qtdNova;
+        var precoFinalTotal = (precoFinal*quantidade).toFixed(2);
       }
       await api.put(`/churrasUpdate/valorTotal/${churras}`, {
         valorTotal: precoFinalTotal,
@@ -432,7 +432,7 @@ export default function DetalheChurras() {
       setQuantidadeModal(0)
       setLoading(false)
       setVisibility2([false])
-      opcaoItensVisible([false])
+      setOpcaoItensVisible([false])
       setRefresh(!refresh)
     })
   }
@@ -1677,7 +1677,7 @@ export default function DetalheChurras() {
                 <Text style={style.iconExitBtn}>Remover</Text>
               </TouchableOpacity>
               <TouchableOpacity style={style.continueBtnCont} onPress={() => {
-                setVisibility2([true, opcaoItensVisible[1], opcaoItensVisible[2], opcaoItensVisible[3]]);
+                setVisibility2([true, opcaoItensVisible[1], opcaoItensVisible[2], opcaoItensVisible[3], opcaoItensVisible[4]]);
                 setOpcaoItensVisible([false])
               }}><Text style={style.textBtnCont}>Editar</Text></TouchableOpacity>
             </View>
@@ -1759,7 +1759,7 @@ export default function DetalheChurras() {
               <TouchableOpacity style={style.exitBtnFooterQtd} onPress={() => setVisibility2([false])}>
                 <Text style={style.iconExitBtn}>Cancelar</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={style.salvarBtnQtd} onPress={() => updateItem(visivel2[2], quantidadeModal, selectedUnidade, selectedFormato, precoModal)}>
+              <TouchableOpacity style={style.salvarBtnQtd} onPress={() => updateItem(visivel2[2], quantidadeModal, selectedUnidade, selectedFormato, precoModal, visivel2[4])}>
                 <Text style={style.iconSalvarBtnQtd}>Confirmar</Text>
               </TouchableOpacity>
             </View>
