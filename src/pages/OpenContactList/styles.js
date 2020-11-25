@@ -10,6 +10,27 @@ export default StyleSheet.create({
   body:{
     flex: 1,
   },
+  cleanInput: {
+    position: 'absolute',
+    right: 20,
+    top: 40,
+    backgroundColor: 'maroon',
+    borderRadius: 100,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },
+  mudarSenha: {
+    color: 'white',
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+  },
   headerGroup:{
     flexDirection:'row',
   },

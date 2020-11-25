@@ -83,7 +83,7 @@ export default function OpenContactList() {
             borderBottomColor: 'gray',
           }}
           value={valueSearch}
-          onChangeText={value => {searchContacts(value); setValueSearch('')}}
+          onChangeText={value => {searchContacts(value); setValueSearch(value)}}
         />
         <TouchableOpacity onPress={() => { searchContacts(''); setValueSearch('')}} style={style.cleanInput}>
             <Text style={style.mudarSenha}>X</Text>
