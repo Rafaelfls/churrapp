@@ -74,6 +74,16 @@ export default function CadastroUsuario() {
         })
     }
 
+    async function setUsuarioLogado($senha){
+        if(await AsyncStorage.getItem('phone') == null){
+            await AsyncStorage.setItem('phone',celularUsuario)
+            await AsyncStorage.setItem('password',$senha)
+            return
+        }else{
+            return
+        }
+    }
+
     async function navigateToResumo() {
 
         if (nomeUsuario == '') {
@@ -111,6 +121,7 @@ export default function CadastroUsuario() {
         } else {
             if (senhaUsuarioUncrpt == senhaUsuarioUncrpt2) {
                 setLoading(true)
+                try {                
                 await api.post('/usuarios', {
                     nome: nomeUsuario,
                     sobrenome: 'sobrenome',
@@ -135,12 +146,16 @@ export default function CadastroUsuario() {
                         setErroMsg(response.data.mensagem)
                         setErroVisivel(true)
                     } else {
+                        setUsuarioLogado(senhaUsuarioUncrpt)
                         USUARIOLOGADO = response.data.usuario[0]
                         await enviaNotificacao(USUARIOLOGADO.id)
                         setLoading(false)
                         navigation.replace('Tabs');
                     }
                 })
+            } catch (error) {
+                    
+            }
             } else {
                 setBorderColorRed2(style.formNok)
                 setBorderColorRed4(style.formNok)
