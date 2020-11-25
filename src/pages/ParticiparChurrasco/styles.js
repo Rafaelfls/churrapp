@@ -156,6 +156,27 @@ export default StyleSheet.create({
     fontFamily: 'poppins-medium',
     textAlign: 'center',
   },
+  cleanInput: {
+    position: 'absolute',
+    right: 50,
+    top: 60,
+    backgroundColor: 'maroon',
+    borderRadius: 100,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },
+  mudarSenha: {
+    color: 'white',
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+  },
   footerModal2: {  
     height: 90,
     flexDirection: "row",

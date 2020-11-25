@@ -43,19 +43,19 @@ export default function ParticiparChurrasco() {
     }
 
 
-    async function showModal(){
+    async function showModal() {
         if (churras_id != null) {
             setLoading(true)
             await api.get(`/churrasPeloId/${churras_id}`)
-            .then((res) => {
-                if (res.data[0] != undefined) {
-                    setLoading(false)
-                    setConfirm([true,res.data[0].nomeChurras])
-                }else{
-                    setLoading(false)
-                    setVisivel(true)
-                }
-            })
+                .then((res) => {
+                    if (res.data[0] != undefined) {
+                        setLoading(false)
+                        setConfirm([true, res.data[0].nomeChurras])
+                    } else {
+                        setLoading(false)
+                        setVisivel(true)
+                    }
+                })
         }
     }
 
@@ -115,9 +115,12 @@ export default function ParticiparChurrasco() {
                     style={style.inputStandard}
                     autoCapitalize={"none"}
                     onChangeText={text => setChurras_id(text)}
-                    value ={churras_id}
+                    value={churras_id}
                     placeholder={'000000000000000'}
                 />
+                <TouchableOpacity onPress={() => { setChurras_id('')}} style={style.cleanInput}>
+                    <Text style={style.mudarSenha}>X</Text>
+                </TouchableOpacity>
             </View>
 
             <Modal
@@ -138,7 +141,7 @@ export default function ParticiparChurrasco() {
                 </View>
             </Modal>
 
-            
+
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -149,7 +152,7 @@ export default function ParticiparChurrasco() {
                         <Text style={style.modalTitle}>Participar!</Text>
                         <Text style={style.modalText}>Deseja participar do churras {confirm[1]}?</Text>
                         <View style={style.footerModal2}>
-                            <TouchableOpacity style={style.exitBtn} onPress={() => {setConfirm([false]), setChurras_id(null)}}>
+                            <TouchableOpacity style={style.exitBtn} onPress={() => { setConfirm([false]), setChurras_id(null) }}>
                                 <Text style={style.iconExitBtn}>Cancelar</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={style.salvarBtn} onPress={entrarChurrasco}>

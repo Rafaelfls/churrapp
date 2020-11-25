@@ -55,6 +55,27 @@ export default StyleSheet.create({
     paddingHorizontal: 5,
     marginBottom: 10,
   },
+  cleanInput: {
+    position: 'absolute',
+    right: 5,
+    top: 0,
+    backgroundColor: 'maroon',
+    borderRadius: 100,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },
+  mudarSenha: {
+    color: 'white',
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+  },
   formOk: {
     borderColor: 'darkgray',
   },

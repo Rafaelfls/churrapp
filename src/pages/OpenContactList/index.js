@@ -11,6 +11,7 @@ export default function OpenContactList() {
   const navigation = useNavigation();
   const [contacts, setContacts] = useState([]);
   const [contactsMemory, setContactsMemory] = useState([]);
+  const [valueSearch, setValueSearch] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -81,8 +82,12 @@ export default function OpenContactList() {
             borderBottomWidth: 1,
             borderBottomColor: 'gray',
           }}
-          onChangeText={value => searchContacts(value)}
+          value={valueSearch}
+          onChangeText={value => {searchContacts(value); setValueSearch('')}}
         />
+        <TouchableOpacity onPress={() => { searchContacts(''); setValueSearch('')}} style={style.cleanInput}>
+            <Text style={style.mudarSenha}>X</Text>
+        </TouchableOpacity>
         <View style={{ flex: 1, backgroundColor: 'white' }}>
           {isLoading
             ? (

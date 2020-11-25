@@ -498,7 +498,7 @@ export default function Perfil() {
                 showsVerticalScrollIndicator={false}
                 style={style.churrasList}
                 renderItem={({ item: usuario }) => (
-                    <View style={{backgroundColor:'white'}}>
+                    <View style={{ backgroundColor: 'white' }}>
                         <View style={style.backgroundProfile}>
                             <View style={style.menuBtn}>
                                 {/* <View style={style.centeredViewNotificacaoQtd}>
@@ -570,12 +570,17 @@ export default function Perfil() {
                                         <Text style={style.textoItem}>Sobrenome:</Text>
                                     </View>
                                     {usuario.sobrenome == "sobrenome"
-                                        ? <TextInput
-                                            style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
-                                            editable={allowEditing[0]}
-                                            onChangeText={text => { setSobrenomeNovo(text) }}
-                                            value={sobrenomeNovo}
-                                        />
+                                        ? (<View>
+                                            <TextInput
+                                                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                                editable={allowEditing[0]}
+                                                onChangeText={text => { setSobrenomeNovo(text) }}
+                                                value={sobrenomeNovo}
+                                            />
+                                            <TouchableOpacity onPress={() => setSobrenomeNovo('')} style={style.cleanInput}>
+                                                <Text style={style.mudarSenha}>X</Text>
+                                            </TouchableOpacity>
+                                        </View>)
                                         : <TextInput
                                             style={[style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray' }]}
                                             editable={false}
@@ -621,6 +626,9 @@ export default function Perfil() {
                                         onChangeText={text => { setApelidoNovo(text) }}
                                         value={apelidoNovo}
                                     />
+                                    <TouchableOpacity onPress={() => setApelidoNovo('')} style={style.cleanInput}>
+                                        <Text style={style.mudarSenha}>X</Text>
+                                    </TouchableOpacity>
                                 </View>
                                 <View style={style.formGroup}>
                                     <View style={{ flexDirection: 'row' }}>
@@ -633,6 +641,9 @@ export default function Perfil() {
                                         onChangeText={text => { setCidadeNovo(text) }}
                                         value={cidadeNovo}
                                     />
+                                    <TouchableOpacity onPress={() => setCidadeNovo('')} style={style.cleanInput}>
+                                        <Text style={style.mudarSenha}>X</Text>
+                                    </TouchableOpacity>
                                 </View>
                                 <View style={style.formGroup}>
                                     <View style={{ flexDirection: 'row' }}>
@@ -645,6 +656,9 @@ export default function Perfil() {
                                         onChangeText={text => { setUfNovo(text) }}
                                         value={ufNovo}
                                     />
+                                    <TouchableOpacity onPress={() => setUfNovo('')} style={style.cleanInput}>
+                                        <Text style={style.mudarSenha}>X</Text>
+                                    </TouchableOpacity>
                                 </View>
                                 <View style={style.formGroup}>
                                     <View style={{ flexDirection: 'row' }}>
@@ -657,6 +671,9 @@ export default function Perfil() {
                                         onChangeText={text => { setEmailNovo(text) }}
                                         value={emailNovo}
                                     />
+                                    <TouchableOpacity onPress={() => setEmailNovo('')} style={style.cleanInput}>
+                                        <Text style={style.mudarSenha}>X</Text>
+                                    </TouchableOpacity>
                                 </View>
                                 <View style={style.formGroup}>
                                     <View style={{ flexDirection: 'row' }}>
@@ -678,6 +695,9 @@ export default function Perfil() {
                                         includeRawValueInChangeText={true}
                                         onChangeText={(text, rawText) => { setCelularNovo(rawText); setCelularNovoFormat(text) }}
                                     />
+                                    <TouchableOpacity onPress={() => {setCelularNovo(''); setCelularNovoFormat('')}} style={style.cleanInput}>
+                                        <Text style={style.mudarSenha}>X</Text>
+                                    </TouchableOpacity>
                                 </View>
                                 <View style={style.formGroup}>
                                     <View style={{ flexDirection: 'row' }}>
