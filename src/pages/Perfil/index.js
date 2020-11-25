@@ -252,10 +252,6 @@ export default function Perfil() {
             setUsuario(response.data)
             //info para editar perfil
             setNomeNovo(response.data[0].nome)
-            setSobrenomeNovo(response.data[0].sobrenome)
-            setEmailNovo(response.data[0].email)
-            setCidadeNovo(response.data[0].cidade)
-            setUfNovo(response.data[0].uf)
             setApelidoNovo(response.data[0].apelido)
             setIdadeFormatada(formatDataNascimento(response.data[0].idade))
             setCelularNovo(response.data[0].celular)
@@ -270,6 +266,26 @@ export default function Perfil() {
             setSobremesaPreferidaNovo(response.data[0].sobremesaPreferida_id)
             if (idadeformatada != "02/01/1900") {
                 setIdadeNovo(idadeformatada)
+            }
+            if (response.data[0].sobrenome == "sobrenome") {
+                setSobrenomeNovo("")
+            } else {
+                setSobrenomeNovo(response.data[0].sobrenome)
+            }
+            if (response.data[0].cidade == "cidade") {
+                setCidadeNovo("")
+            } else {
+                setCidadeNovo(response.data[0].cidade)
+            }
+            if (response.data[0].uf == "uf") {
+                setUfNovo("")
+            } else {
+                setUfNovo(response.data[0].uf)
+            }
+            if (response.data[0].email.includes("@churrapp.com", 11)) {
+                setEmailNovo("")
+            } else {
+                setEmailNovo(response.data[0].email)
             }
             //fim info para editar
             setChurrasParticipados(response.data[0].churrasParticipados)
