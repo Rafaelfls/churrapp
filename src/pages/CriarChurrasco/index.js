@@ -76,11 +76,11 @@ export default function CriarChurrasco() {
   }
 
   function backHome() {
-      newChurrasCriados = churrasCount - 1;
-      api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: newChurrasCriados });
-      navigation.replace('Tabs');
-      setModalSair(false)
-    
+    newChurrasCriados = churrasCount - 1;
+    api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: newChurrasCriados });
+    navigation.replace('Tabs');
+    setModalSair(false)
+
   }
 
   const pickImage = async () => {
@@ -177,28 +177,46 @@ export default function CriarChurrasco() {
         <ScrollView style={style.scrollView}>
           <View style={style.formGroup}>
             <Text style={style.textLabel}>Nome do churras</Text>
-            <TextInput
-              style={[style.inputStandard, borderColorRed1]}
-              onChangeText={text => setNomeChurras(text)}
-              placeholder={'Nome do churrasco'}
-            />
+            <View>
+              <TextInput
+                style={[style.inputStandard, borderColorRed1]}
+                onChangeText={text => setNomeChurras(text)}
+                value={nomeChurras}
+                placeholder={'Nome do churrasco'}
+              />
+              <TouchableOpacity onPress={() => { setNomeChurras('') }} style={style.cleanInput}>
+                <Text style={style.mudarSenha}>X</Text>
+              </TouchableOpacity>
+            </View>
             <Text style={style.textLabel}>Local</Text>
-            <TextInput
-              style={[style.inputStandard, borderColorRed2]}
-              placeholder={"Local do churrasco"}
-              onChangeText={text => setlocal(text)}
-            />
+            <View>
+              <TextInput
+                style={[style.inputStandard, borderColorRed2]}
+                placeholder={"Local do churrasco"}
+                onChangeText={text => setlocal(text)}
+                value={local}
+              />
+              <TouchableOpacity onPress={() => { setlocal('') }} style={style.cleanInput}>
+                <Text style={style.mudarSenha}>X</Text>
+              </TouchableOpacity>
+            </View>
             <Text style={style.textLabel}>Descrição</Text>
-            <TextInput
-              style={[style.inputStandard, style.formOk]}
-              multiline={true}
-              numberOfLines={3}
-              placeholder={"Descrição do churrasco (opcional)"}
-              onChangeText={text => setdescricao(text)}
-            />
+            <View>
+              <TextInput
+                style={[style.inputStandard, style.formOk]}
+                multiline={true}
+                numberOfLines={3}
+                value={descricao}
+                placeholder={"Descrição do churrasco (opcional)"}
+                onChangeText={text => setdescricao(text)}
+              />
+              <TouchableOpacity onPress={() => { setdescricao('') }} style={style.cleanInput}>
+                <Text style={style.mudarSenha}>X</Text>
+              </TouchableOpacity>
+            </View>
             <Text style={style.textLabel}>Data</Text>
             <DatePicker
-              style={{ width: "100%", marginBottom:10 }}
+              style={{ width: "100%", marginBottom: 10 }}
               date={date}
               mode="date"
               placeholder="DD/MM/AAAA"
@@ -226,7 +244,7 @@ export default function CriarChurrasco() {
             />
             <Text style={style.textLabel}>Início</Text>
             <DatePicker
-              style={{ width: "100%", marginBottom:10 }}
+              style={{ width: "100%", marginBottom: 10 }}
               date={hrInicio}
               mode="time"
               placeholder="00:00"
@@ -252,7 +270,7 @@ export default function CriarChurrasco() {
             />
             <Text style={style.textLabel}>Término</Text>
             <DatePicker
-              style={{ width: "100%", marginBottom:10 }}
+              style={{ width: "100%", marginBottom: 10 }}
               date={hrFim}
               mode="time"
               placeholder="00:00"
@@ -278,7 +296,7 @@ export default function CriarChurrasco() {
             />
             <Text style={style.textLabel}>Confirmação de presença até</Text>
             <DatePicker
-              style={{ width: "100%", marginBottom:10 }}
+              style={{ width: "100%", marginBottom: 10 }}
               date={limiteConfirmacao}
               mode="date"
               placeholder="DD/MM/AAAA"
@@ -313,6 +331,10 @@ export default function CriarChurrasco() {
                   {image && <Image source={{ uri: image.uri }} style={{ width: 170, height: 170, paddingVertical: 10 }} />}
                 </TouchableOpacity>
               </View>
+              
+              <TouchableOpacity onPress={() => { setImage({ cancelled: true }) }} style={style.cleanInput}>
+                <Text style={style.mudarSenha}>X</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
@@ -351,7 +373,7 @@ export default function CriarChurrasco() {
               <Text style={style.modalText}>Você deseja mesmo cancelar este churrasco?</Text>
               <Text style={style.confirmarSairSubTitle}>(Tudo que fez até aqui sera perdido)</Text>
               <View style={style.footerModal}>
-                 <TouchableOpacity style={style.sairBtn} onPress={() => setModalSair(false)}>
+                <TouchableOpacity style={style.sairBtn} onPress={() => setModalSair(false)}>
                   <Text style={style.iconExitBtn}>Não</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={style.salvarBtn} onPress={() => backHome()}>

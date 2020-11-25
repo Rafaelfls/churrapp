@@ -104,14 +104,21 @@ export default function LoginCelular() {
                         includeRawValueInChangeText={true}
                         onChangeText={(text, rawText) => { setCelularUser(rawText); setValueCelular(text) }}
                     />
+                    <TouchableOpacity onPress={() => {setCelularUser(''); setValueCelular('')}} style={style.cleanInput1}>
+                        <Text style={style.mudarSenha}>X</Text>
+                    </TouchableOpacity>
                     <Text style={style.textLabel}>Senha:</Text>
                     <TextInput
                         style={style.inputStandard}
                         placeholder={"8 ~ 16 caracteres"}
                         maxLength={16}
                         secureTextEntry={true}
+                        value={senhaUsuario}
                         onChangeText={text => setSenhaUsuario(text)}
                     />
+                    <TouchableOpacity onPress={() => {setSenhaUsuario('')}} style={style.cleanInput2}>
+                        <Text style={style.mudarSenha}>X</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity style={style.continueBtn} onPress={()=> {navigateToResumo(celularUser, senhaUsuario)}}>
                         <Text style={style.textBtn}>Entrar</Text>
                     </TouchableOpacity>

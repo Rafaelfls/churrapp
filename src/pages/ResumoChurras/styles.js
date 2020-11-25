@@ -67,12 +67,9 @@ export default StyleSheet.create({
 
   //cards
   churrasList: {
-    marginHorizontal: 20,
     paddingTop: 15,
     backgroundColor: "transparent",
   },
-
-  //sem borda em cima, com borda embaixo
 
   //cardDesign
   churras: {
@@ -90,8 +87,8 @@ export default StyleSheet.create({
   },
   slideBtn: {
     flexDirection: 'row',
-    width: Dimensions.get('window').width,
-    paddingLeft:10,
+    width: Dimensions.get('window').width+10,
+    paddingHorizontal:20,
     paddingVertical:5,
   },
   detalheSlide: {

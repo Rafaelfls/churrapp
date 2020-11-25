@@ -84,24 +84,37 @@ const AlterarSenha = () => {
             <Text style={style.subtitle}>Digite sua nova senha</Text>
             <View style={style.inputArea}>
                 <Text style={style.textLabel}>Nova senha:</Text>
-                <TextInput
-                    style={[style.inputStandard, borderColor1]}
-                    autoFocus={true}
-                    placeholder={'xxxxxxx'}
-                    secureTextEntry={true}
-                    onChangeText={(rawText) => { criptoSenha1(rawText); }}
-                />
+                <View>
+                    <TextInput
+                        style={[style.inputStandard, borderColor1]}
+                        autoFocus={true}
+                        placeholder={'xxxxxxx'}
+                        secureTextEntry={true}
+                        value={senhaUserUncrpt1}
+                        onChangeText={(rawText) => { criptoSenha1(rawText); }}
+                    />
+                    <TouchableOpacity onPress={() => { setSenhaUserUncrpt1('') }} style={style.cleanInput}>
+                        <Text style={style.mudarSenha}>X</Text>
+                    </TouchableOpacity>
+                </View>
                 <Text style={style.textLabel}>Confirmar senha:</Text>
-                <TextInput
-                    style={[style.inputStandard, borderColor2]}
-                    placeholder={'xxxxxxx'}
-                    secureTextEntry={true}
-                    onChangeText={(rawText) => { criptoSenha2(rawText); }}
-                />
-                {info
-                    ? <Text style={style.textInfo}>As senhas não coincidem</Text>
-                    : null
-                }
+                <View>
+                    <TextInput
+                        style={[style.inputStandard, borderColor2]}
+                        placeholder={'xxxxxxx'}
+                        secureTextEntry={true}
+                        value={senhaUserUncrpt2}
+                        onChangeText={(rawText) => { criptoSenha2(rawText); }}
+                    />
+                    {info
+                        ? <Text style={style.textInfo}>As senhas não coincidem</Text>
+                        : null
+                    }
+
+                    <TouchableOpacity onPress={() => { setSenhaUserUncrpt2('') }} style={style.cleanInput}>
+                        <Text style={style.mudarSenha}>X</Text>
+                    </TouchableOpacity>
+                </View>
 
                 <TouchableOpacity style={style.continueBtn} onPress={() => validarSenha()}>
                     <Text style={style.textBtn}>Enviar</Text>
