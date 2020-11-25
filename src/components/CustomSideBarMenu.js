@@ -33,7 +33,7 @@ const CustomSideBarMenu = (props) => {
 
     async function loadPerfil() {
 
-        const response = await api.get(`/usuarios/${USUARIOLOGADO.id}`).then((response) => {
+        await api.get(`/usuarios/${USUARIOLOGADO.id}`).then((response) => {
             setUsuario(response.data)
 
         })
