@@ -231,25 +231,31 @@ export default function DetalheChurras() {
     var tipoid = []
     var id = 0
     var tiposFiltrado = []
-    // await api.get(`/tipo`).then((res) => {
-    //   item.map((obj) => {
-    //     res.data.map((ind, indx) => {
-    //       tipoid[indx] = ind.id
-    //       if(tipoid[indx] == obj.tipo_id){
-    //         tiposFiltrado[id] = obj.tipo_id
-    //         setTipos(tiposFiltrado)
-    //         id++
-    //         console.log(obj.tipo_id)
-    //       }
-    //     })
-    //     // console.log(obj.tipo_id)
-    //   })
-    // })
     await api.get(`/tipo`).then((res) => {
-      setTipos(res.data)
+      item.map((obj) => {
+        res.data.map((ind, indx) => {
+          tipoid[indx] = ind.id
+          if (tipoid[indx] == obj.tipo_id) {
+            tiposFiltrado[id] = obj.subTipo
+            id++
+          }
+        })
+      })
     })
+    var ola = removeDups(tiposFiltrado)
+
+    setTipos(ola)
   }
-  console.log(tipos)
+
+  function removeDups(names) {
+    let unique = {};
+    names.forEach(function(i) {
+      if(!unique[i]) {
+        unique[i] = true;
+      }
+    });
+    return Object.keys(unique);
+  }
   async function carregarTodosTipos(subTipo) {
     switch (subTipo.id) {
       case 1:
@@ -1333,7 +1339,7 @@ export default function DetalheChurras() {
               >
                 <Picker.Item label={"Sem Filtro"} key={500} value={""} />
                 {tipos.map((unity, idx) => (
-                  <Picker.Item label={unity.tipo} key={idx} value={unity.id} />
+                  <Picker.Item label={unity} key={idx} value={unity} />
                 ))}
               </Picker>
               {itensFiltro == ""
@@ -1377,7 +1383,7 @@ export default function DetalheChurras() {
                   style={{ height: '90%' }}
                   renderItem={({ item: itens }) => (
                     <View>
-                      {itens.tipo_id == itensFiltro
+                      {itens.subTipo == itensFiltro
                         ? <TouchableOpacity style={style.cardItemAdicionado} onPress={() => { setOpcaoItensVisible([true, itens.nomeItem, itens.id, itens.subTipo, itens]) }}>
                           <Image source={{ uri: itens.fotoUrlT }} style={style.churrasFotoModal} />
                           <View style={style.churrasInfosViewModal}>
@@ -1418,7 +1424,7 @@ export default function DetalheChurras() {
               >
                 <Picker.Item label={"Sem Filtro"} key={500} value={""} />
                 {tipos.map((unity, idx) => (
-                  <Picker.Item label={unity.tipo} key={idx} value={unity.id} />
+                  <Picker.Item label={unity} key={idx} value={unity} />
                 ))}
               </Picker>
               {itensFiltro == ""
@@ -1428,7 +1434,7 @@ export default function DetalheChurras() {
                   refreshing={loading}
                   onRefresh={carregarItens}
                   keyExtractor={itens => String(itens.id)}
-                  style={{ marginBottom: 100 }}
+                  style={{ marginBottom: 150 }}
                   renderItem={({ item: itens }) => (
                     <View>
                       <View style={style.cardItemAdicionado}>
@@ -1454,10 +1460,10 @@ export default function DetalheChurras() {
                   refreshing={loading}
                   onRefresh={carregarItens}
                   keyExtractor={itens => String(itens.id)}
-                  style={{ marginBottom: 100 }}
+                  style={{ marginBottom: 150 }}
                   renderItem={({ item: itens }) => (
                     <View>
-                      {itens.tipo_id == itensFiltro
+                      {itens.subTipo == itensFiltro
                         ? <View style={style.cardItemAdicionado}>
                           <Image source={{ uri: itens.fotoUrlT }} style={style.churrasFotoModal} />
                           <View style={style.churrasInfosViewModal}>
