@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, Image, FlatList, TouchableOpacity, Linking,
-  Picker, ScrollView, Modal, TextInput, TouchableHighlight, Switch
+  Picker, ScrollView, Modal, TextInput, TouchableHighlight, Switch, AppState
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import NumericInput from 'react-native-numeric-input';
@@ -31,7 +31,7 @@ export default function DetalheChurras() {
 
   const churras = route.params.churras;
   const editavel = route.params.editavel;
-  const {initialPage} = route.params;
+  const { initialPage } = route.params;
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
   const [itens, setItens] = useState([]);
@@ -79,6 +79,8 @@ export default function DetalheChurras() {
   const [precoMedioModal, setPrecoMedioModal] = useState(0);
   const [dataComparar, setDataComparar] = useState()
   const [convidadosFiltro, setConvidadosFiltro] = useState("")
+  const [itensFiltro, setItensFiltro] = useState("")
+  const [tipos, setTipos] = useState([])
   const convidadosNome = [].concat(convidados)
     .sort((a, b) => a.nome > b.nome ? 1 : -1)
     .map((convidados, i) =>
@@ -212,9 +214,10 @@ export default function DetalheChurras() {
 
   async function carregarItens() {
     const response = await api.get(`/listadochurras/${churras}`);
-
     setItens(response.data);
     setItensTotal(response.data.length);
+
+    carregarTipos(response.data)
   }
   async function carregarSubTipos() {
     setLoading(true)
@@ -224,22 +227,45 @@ export default function DetalheChurras() {
     setLoading(false)
   }
 
+  async function carregarTipos(item) {
+    var tipoid = []
+    var id = 0
+    var tiposFiltrado = []
+    // await api.get(`/tipo`).then((res) => {
+    //   item.map((obj) => {
+    //     res.data.map((ind, indx) => {
+    //       tipoid[indx] = ind.id
+    //       if(tipoid[indx] == obj.tipo_id){
+    //         tiposFiltrado[id] = obj.tipo_id
+    //         setTipos(tiposFiltrado)
+    //         id++
+    //         console.log(obj.tipo_id)
+    //       }
+    //     })
+    //     // console.log(obj.tipo_id)
+    //   })
+    // })
+    await api.get(`/tipo`).then((res) => {
+      setTipos(res.data)
+    })
+  }
+  console.log(tipos)
   async function carregarTodosTipos(subTipo) {
     switch (subTipo.id) {
       case 1:
-        navigation.replace('EscolherNovosItens',{subTipo,churrascode:churras})
+        navigation.replace('EscolherNovosItens', { subTipo, churrascode: churras })
         break;
       case 2:
-          navigation.replace('EscolherNovosItens2',{subTipo,churrascode:churras})
-          break;
+        navigation.replace('EscolherNovosItens2', { subTipo, churrascode: churras })
+        break;
       case 3:
-          navigation.replace('EscolherNovosItens3',{subTipo,churrascode:churras})
-          break;      
+        navigation.replace('EscolherNovosItens3', { subTipo, churrascode: churras })
+        break;
       case 4:
-        navigation.replace('EscolherNovosItens4',{subTipo,churrascode:churras})
-        break;        
+        navigation.replace('EscolherNovosItens4', { subTipo, churrascode: churras })
+        break;
       case 5:
-        navigation.replace('EscolherNovosItens5',{subTipo,churrascode:churras})
+        navigation.replace('EscolherNovosItens5', { subTipo, churrascode: churras })
         break;
       default:
         break;
@@ -524,7 +550,7 @@ export default function DetalheChurras() {
     setEditChurrasValorTotal(res.data[0].valorTotal)
     setEditChurrasValorPago(res.data[0].valorPago)
   }
-  
+
   function formatData(data) {
     var date = new Date(data).getDate() + 1
     var month = new Date(data).getMonth() + 1
@@ -681,7 +707,7 @@ export default function DetalheChurras() {
                 <Text style={style.churrasNome}>Local: </Text>
               </View>
               <TextInput
-                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height:'auto' }]}
+                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}
                 editable={allowEditing[0]}
                 multiline={true}
                 onChangeText={text => setEditChurrasLocal(text)}
@@ -839,7 +865,7 @@ export default function DetalheChurras() {
                 <Text style={style.churrasNome}>Descrição: </Text>
               </View>
               <TextInput
-                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height:'auto' }]}
+                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}
                 editable={allowEditing[0]}
                 multiline={true}
                 onChangeText={text => setEditChurrasDescricao(text)}
@@ -1299,36 +1325,82 @@ export default function DetalheChurras() {
         {editavel
           ? (
             <View tabLabel='Itens'>
-              <FlatList
-                data={itens}
-                showsVerticalScrollIndicator={false}
-                refreshing={loading}
-                onRefresh={carregarItens}
-                keyExtractor={itens => String(itens.id)}
-                refreshing={loading}
-                onRefresh={carregarItens}
-                style={{ height: '100%' }}
-                renderItem={({ item: itens }) => (
-                  <View>
-                    <TouchableOpacity style={style.cardItemAdicionado} onPress={() => { setOpcaoItensVisible([true, itens.nomeItem, itens.id, itens.subTipo, itens]) }}>
-                      <Image source={{ uri: itens.fotoUrlT }} style={style.churrasFotoModal} />
-                      <View style={style.churrasInfosViewModal}>
-                        <Text style={style.churrasTitleModal}>{itens.nomeItem}</Text>
-                        <Text style={style.churrasDonoModal}>{itens.formato == "Não aplica" ? "" : "Opção: " + itens.formato} </Text>
-                        <View style={style.churrasLocDatModal}>
-                          <Icon style={style.dataIconModal} name="weight-hanging" size={15} />
-                          <Text style={style.qtdItemAdc}>{(itens.quantidade).toFixed(2)} {itens.unidade}</Text>
-                          <Text style={style.locDatSeparatorModal}>  |  </Text>
-                          <Icon style={style.localIconModal} name="coins" size={15} />
-                          <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
+              <Picker
+                mode="dropdown"
+                style={style.pickerDropdownFiltro}
+                selectedValue={itensFiltro}
+                onValueChange={itensFiltro => setItensFiltro(itensFiltro)}
+              >
+                <Picker.Item label={"Sem Filtro"} key={500} value={""} />
+                {tipos.map((unity, idx) => (
+                  <Picker.Item label={unity.tipo} key={idx} value={unity.id} />
+                ))}
+              </Picker>
+              {itensFiltro == ""
+                ? <FlatList
+                  data={itens}
+                  showsVerticalScrollIndicator={false}
+                  refreshing={loading}
+                  onRefresh={carregarItens}
+                  keyExtractor={itens => String(itens.id)}
+                  refreshing={loading}
+                  onRefresh={carregarItens}
+                  style={{ height: '90%' }}
+                  renderItem={({ item: itens }) => (
+                    <View>
+                      <TouchableOpacity style={style.cardItemAdicionado} onPress={() => { setOpcaoItensVisible([true, itens.nomeItem, itens.id, itens.subTipo, itens]) }}>
+                        <Image source={{ uri: itens.fotoUrlT }} style={style.churrasFotoModal} />
+                        <View style={style.churrasInfosViewModal}>
+                          <Text style={style.churrasTitleModal}>{itens.nomeItem}</Text>
+                          <Text style={style.churrasDonoModal}>{itens.formato == "Não aplica" ? "" : "Opção: " + itens.formato} </Text>
+                          <View style={style.churrasLocDatModal}>
+                            <Icon style={style.dataIconModal} name="weight-hanging" size={15} />
+                            <Text style={style.qtdItemAdc}>{(itens.quantidade).toFixed(2)} {itens.unidade}</Text>
+                            <Text style={style.locDatSeparatorModal}>  |  </Text>
+                            <Icon style={style.localIconModal} name="coins" size={15} />
+                            <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
+                          </View>
                         </View>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                />
+                :
+                <FlatList
+                  data={itens}
+                  showsVerticalScrollIndicator={false}
+                  refreshing={loading}
+                  onRefresh={carregarItens}
+                  keyExtractor={itens => String(itens.id)}
+                  refreshing={loading}
+                  onRefresh={carregarItens}
+                  style={{ height: '90%' }}
+                  renderItem={({ item: itens }) => (
+                    <View>
+                      {itens.tipo_id == itensFiltro
+                        ? <TouchableOpacity style={style.cardItemAdicionado} onPress={() => { setOpcaoItensVisible([true, itens.nomeItem, itens.id, itens.subTipo, itens]) }}>
+                          <Image source={{ uri: itens.fotoUrlT }} style={style.churrasFotoModal} />
+                          <View style={style.churrasInfosViewModal}>
+                            <Text style={style.churrasTitleModal}>{itens.nomeItem}</Text>
+                            <Text style={style.churrasDonoModal}>{itens.formato == "Não aplica" ? "" : "Opção: " + itens.formato} </Text>
+                            <View style={style.churrasLocDatModal}>
+                              <Icon style={style.dataIconModal} name="weight-hanging" size={15} />
+                              <Text style={style.qtdItemAdc}>{(itens.quantidade).toFixed(2)} {itens.unidade}</Text>
+                              <Text style={style.locDatSeparatorModal}>  |  </Text>
+                              <Icon style={style.localIconModal} name="coins" size={15} />
+                              <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
+                            </View>
+                          </View>
+                        </TouchableOpacity>
+                        : null
+                      }
 
-              <ActionButton offsetX={10} style={{ opacity: 0.85 }} offsetY={10} onPress={() => setModalSubTipoVisivel(true)} />
+                    </View>
+                  )}
+                />
+              }
+
+              <ActionButton offsetX={20} style={{ opacity: 0.85 }} offsetY={80} onPress={() => setModalSubTipoVisivel(true)} />
 
             </View>)
           : (
@@ -1338,32 +1410,76 @@ export default function DetalheChurras() {
               </View>
               <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', textAlign: 'center' }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount + 1)).toFixed(2)}</Text>
             </View>
-              <FlatList
-                data={itens}
-                showsVerticalScrollIndicator={false}
-                refreshing={loading}
-                onRefresh={carregarItens}
-                keyExtractor={itens => String(itens.id)}
-                style={{ marginBottom: 100 }}
-                renderItem={({ item: itens }) => (
-                  <View>
-                    <View style={style.cardItemAdicionado}>
-                      <Image source={{ uri: itens.fotoUrlT }} style={style.churrasFotoModal} />
-                      <View style={style.churrasInfosViewModal}>
-                        <Text style={style.churrasTitleModal}>{itens.nomeItem}</Text>
-                        <Text style={style.churrasDonoModal}>{itens.descricao} </Text>
-                        <View style={style.churrasLocDatModal}>
-                          <Icon style={style.dataIconModal} name="weight-hanging" size={15} />
-                          <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
-                          <Text style={style.locDatSeparatorModal}>  |  </Text>
-                          <Icon style={style.localIconModal} name="coins" size={15} />
-                          <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
+              <Picker
+                mode="dropdown"
+                style={style.pickerDropdownFiltro}
+                selectedValue={itensFiltro}
+                onValueChange={itensFiltro => setItensFiltro(itensFiltro)}
+              >
+                <Picker.Item label={"Sem Filtro"} key={500} value={""} />
+                {tipos.map((unity, idx) => (
+                  <Picker.Item label={unity.tipo} key={idx} value={unity.id} />
+                ))}
+              </Picker>
+              {itensFiltro == ""
+                ? <FlatList
+                  data={itens}
+                  showsVerticalScrollIndicator={false}
+                  refreshing={loading}
+                  onRefresh={carregarItens}
+                  keyExtractor={itens => String(itens.id)}
+                  style={{ marginBottom: 100 }}
+                  renderItem={({ item: itens }) => (
+                    <View>
+                      <View style={style.cardItemAdicionado}>
+                        <Image source={{ uri: itens.fotoUrlT }} style={style.churrasFotoModal} />
+                        <View style={style.churrasInfosViewModal}>
+                          <Text style={style.churrasTitleModal}>{itens.nomeItem}</Text>
+                          <Text style={style.churrasDonoModal}>{itens.descricao} </Text>
+                          <View style={style.churrasLocDatModal}>
+                            <Icon style={style.dataIconModal} name="weight-hanging" size={15} />
+                            <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
+                            <Text style={style.locDatSeparatorModal}>  |  </Text>
+                            <Icon style={style.localIconModal} name="coins" size={15} />
+                            <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
+                          </View>
                         </View>
                       </View>
                     </View>
-                  </View>
-                )}
-              />
+                  )}
+                />
+                : <FlatList
+                  data={itens}
+                  showsVerticalScrollIndicator={false}
+                  refreshing={loading}
+                  onRefresh={carregarItens}
+                  keyExtractor={itens => String(itens.id)}
+                  style={{ marginBottom: 100 }}
+                  renderItem={({ item: itens }) => (
+                    <View>
+                      {itens.tipo_id == itensFiltro
+                        ? <View style={style.cardItemAdicionado}>
+                          <Image source={{ uri: itens.fotoUrlT }} style={style.churrasFotoModal} />
+                          <View style={style.churrasInfosViewModal}>
+                            <Text style={style.churrasTitleModal}>{itens.nomeItem}</Text>
+                            <Text style={style.churrasDonoModal}>{itens.descricao} </Text>
+                            <View style={style.churrasLocDatModal}>
+                              <Icon style={style.dataIconModal} name="weight-hanging" size={15} />
+                              <Text style={style.qtdItemAdc}>{itens.quantidade}{itens.unidade}</Text>
+                              <Text style={style.locDatSeparatorModal}>  |  </Text>
+                              <Icon style={style.localIconModal} name="coins" size={15} />
+                              <Text style={style.churrasLocalModal}> {itens.precoItem == null ? '-' : "R$ " + (itens.precoItem * itens.quantidade).toFixed(2)}</Text>
+                            </View>
+                          </View>
+                        </View>
+                        : null
+                      }
+
+                    </View>
+                  )}
+                />
+              }
+
             </View>)}
 
       </ScrollableTabView>
@@ -1524,7 +1640,7 @@ export default function DetalheChurras() {
           </View>
         </View>
       </Modal>
-     
+
       <Modal
         animationType="slide"
         transparent={true}
