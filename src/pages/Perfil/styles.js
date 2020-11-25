@@ -86,6 +86,11 @@ export default StyleSheet.create({
 
     elevation: 6,
   },
+  mudarSenha: {
+    color: 'white',
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+  },
   icons: {
     color: 'maroon',
     marginRight: 8,
