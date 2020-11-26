@@ -58,11 +58,19 @@ export default function OutrosChurras() {
     }
 
     function formatData(data) {
-        var date = new Date(data).getDate()+1
-        var month = new Date(data).getMonth()+1
+        var date = new Date(data).getDate() + 1
+        var month = new Date(data).getMonth() + 1
         var year = new Date(data).getFullYear()
         if (date < 10) {
             date = "0" + date
+        }
+        if (date === 32) {
+            date = "01"
+            month = month + 1
+            if (month === 13) {
+                month = 1
+                year += 1
+            }
         }
         if (month < 10) {
             month = "0" + month
@@ -76,7 +84,7 @@ export default function OutrosChurras() {
     }, []);
 
     function detalheChurras(churras) {
-        navigation.navigate('DetalheChurras', { churras, allowShare: false, editavel: false, initialPage:0});
+        navigation.navigate('DetalheChurras', { churras, allowShare: false, editavel: false, initialPage: 0 });
     }
 
     return (
@@ -123,7 +131,7 @@ export default function OutrosChurras() {
                                                     <Text style={style.churrasData}> {formatData(churras.data)}</Text>
                                                     <Text style={style.locDatSeparator}>  |  </Text>
                                                     <IconMI style={style.localIcon} name="access-time" size={15} />
-                                                    <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - "+churras.hrFim: ''}</Text>
+                                                    <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - " + churras.hrFim : ''}</Text>
                                                 </View>
                                             </View>
                                         </View>
@@ -154,11 +162,11 @@ export default function OutrosChurras() {
                                                 <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
                                                 <Text style={style.churrasDono}>{churras.nome} </Text>
                                                 <View style={style.churrasLocDat}>
-                                                <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                                    <IconFea style={style.dataIcon} name="calendar" size={15} />
                                                     <Text style={style.churrasData}> {formatData(churras.data)}</Text>
                                                     <Text style={style.locDatSeparator}>  |  </Text>
                                                     <IconMI style={style.localIcon} name="access-time" size={15} />
-                                                    <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - "+churras.hrFim: ''}</Text>
+                                                    <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - " + churras.hrFim : ''}</Text>
                                                 </View>
                                             </View>
                                         </View>

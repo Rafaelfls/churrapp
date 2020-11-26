@@ -249,8 +249,8 @@ export default function DetalheChurras() {
 
   function removeDups(names) {
     let unique = {};
-    names.forEach(function(i) {
-      if(!unique[i]) {
+    names.forEach(function (i) {
+      if (!unique[i]) {
         unique[i] = true;
       }
     });
@@ -406,7 +406,7 @@ export default function DetalheChurras() {
     if (precoModal == 0) {
       precoFinal = itemTodo.precoMedio
     } else {
-      precoFinal = precoModal 
+      precoFinal = precoModal
     }
 
     setLoading(true)
@@ -421,7 +421,7 @@ export default function DetalheChurras() {
         var sum = precoFinal * (quantidade + res.data.antigo[0].quantidade);
         var precoFinalTotal = sum - sub;
       } else {
-        var precoFinalTotal = (precoFinal*quantidade).toFixed(2);
+        var precoFinalTotal = (precoFinal * quantidade).toFixed(2);
       }
       await api.put(`/churrasUpdate/valorTotal/${churras}`, {
         valorTotal: precoFinalTotal,
@@ -441,14 +441,21 @@ export default function DetalheChurras() {
     var dataLimite = new Date(churrasAtual.limiteConfirmacao)
     if (dataLimite == 0) {
       return false
-    }
-    var msDiff = new Date(churrasAtual.limiteConfirmacao).getTime() - new Date().getTime();
-    var pastDays = Math.floor(msDiff / (1000 * 60 * 60 * 24));
-
-    if (pastDays < -1) {
-      return true
     } else {
-      return false
+      var msDiff = new Date(churrasAtual.limiteConfirmacao).getTime() - new Date().getTime();
+      var pastDays = Math.floor(msDiff / (1000 * 60 * 60 * 24));
+      if (new Date(dataLimite).getTime() === 0) {
+        var dataAtual = Math.floor((new Date(churrasAtual.data).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+        if (dataAtual < -1) {
+          return true
+        } else {
+          return false
+        }
+      } else if (pastDays < -1) {
+        return true
+      } else {
+        return false
+      }
     }
   }
 
@@ -563,6 +570,14 @@ export default function DetalheChurras() {
     var date = new Date(data).getDate() + 1
     var month = new Date(data).getMonth() + 1
     var year = new Date(data).getFullYear()
+    if(date === 32) {
+      date = "01"
+      month = month + 1
+      if(month === 13) {
+          month = 1
+          year += 1
+      }
+  }
     return date + '/' + month + '/' + year
   }
 
