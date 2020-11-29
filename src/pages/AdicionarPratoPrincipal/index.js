@@ -81,7 +81,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
         setLoading(true)
         setItemList([])
         setLoading(false)
-        navigation.navigate('AdicionaConvidados',{convidadosList:[]})
+        navigation.navigate('AdicionaConvidados')
     }
 
     function updateValue(qtdSugestao) {
