@@ -167,6 +167,14 @@ export default function ResumoChurras() {
         if (date < 10) {
             date = "0" + date
         }
+        if (date === 32) {
+            date = "01"
+            month = month + 1
+            if (month === 13) {
+                month = 1
+                year += 1
+            }
+        }
         if (month < 10) {
             month = "0" + month
         }
