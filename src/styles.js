@@ -148,7 +148,7 @@ export default StyleSheet.create({
     marginBottom: 2,
     fontSize: 17,
   },
-  inputStandardAssunto:{
+  inputStandardAssunto: {
     height: 40,
     borderColor: 'gray',
     fontFamily: 'poppins-regular',
@@ -172,6 +172,66 @@ export default StyleSheet.create({
     fontSize: 17,
     fontFamily: 'poppins-medium',
     textAlign: 'center',
+  },
+  //Fim
+  //SubTipos
+  churrasImgContainer: {
+    marginBottom: 0,
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 10,
+    flexDirection:'row',
+    justifyContent:'space-evenly',
+  },
+  nomeItem: {
+    color: 'white',
+    padding: 3,
+  },
+  churrasItemContainer: {
+    height: 180,
+    width: '100%',
+    marginBottom: 0,
+    alignItems: 'center',
+    backgroundColor: 'maroon',
+    borderRadius: 10,
+    padding: 10,
+    justifyContent: 'center'
+  },
+  churrasItem: {
+    color: 'white',
+    fontFamily: 'poppins-light',
+    fontSize: 12,
+    paddingVertical: 5
+  },
+  itemImg: {
+    height: 100,
+    width: 100,
+    borderRadius: 100,
+  },
+  sideMenuSubTipo: {
+    // resizeMode: 'center',
+    marginTop: 40,
+    width: "100%",
+    height: 180,
+    alignSelf: 'center',
+    backgroundColor: 'maroon',
+    marginTop: 0,
+    paddingVertical: 10
+  },
+  tituloSubTipo: {
+    fontFamily: 'poppins-medium',
+    fontSize: 18,
+    padding: 10,
+    height: '100%',
+    width: '100%',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    color: 'white'
+  },
+  linhaSubTipo: {
+    backgroundColor: 'grey',
+    width: '100%',
+    height: 4,
   },
   //Fim
 })

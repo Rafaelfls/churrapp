@@ -11,16 +11,20 @@ import { QRCode } from 'react-native-custom-qr-codes-expo';
 
 import style from './styles';
 
+import { useEditavel, useChurras } from '../../context/churrasContext.js'
+
 
 export default function CompartilharChurrasco({ route, navigation }) {
-    
+
     const rota = useRoute();
     const churras = rota.params.churras
     const [churrasDateFormatted, setChurrasDateFormatted] = useState();
     const [churrasDateFormattedConf, setChurrasDateFormattedConf] = useState();
+    const { setEditavel } = useEditavel();
 
     function goBack() {
-        navigation.replace('DetalheChurras',{churras:churras.id, editavel:true, initialPage:1})
+        navigation.replace('DetalheChurras', { churras: churras.id, initialPage:1 })
+        setEditavel(true);
     }
 
     function compartilhar() {
@@ -29,16 +33,16 @@ export default function CompartilharChurrasco({ route, navigation }) {
             sobrenomeContato: null,
             telefoneContato: null,
             churrasAtual: {
-              churrasCode: churras.id,
-              nomeChurras: churras.nomeChurras,
-              local: churras.local,
-              hrInicio: churras.hrInicio,
-              hrFim: churras.hrFim,
-              descricao: churras.descricao,
-              data: churrasDateFormatted,
-              limiteConfirmacao:churrasDateFormattedConf,
+                churrasCode: churras.id,
+                nomeChurras: churras.nomeChurras,
+                local: churras.local,
+                hrInicio: churras.hrInicio,
+                hrFim: churras.hrFim,
+                descricao: churras.descricao,
+                data: churrasDateFormatted,
+                limiteConfirmacao: churrasDateFormattedConf,
             },
-          });
+        });
     }
 
     const copyToClipboard = () => {
@@ -55,12 +59,12 @@ export default function CompartilharChurrasco({ route, navigation }) {
         var year = new Date(churras.data).getFullYear()
         setChurrasDateFormatted(date + '/' + month + '/' + year)
 
-        if(churras.limiteConfirmacao != null){
+        if (churras.limiteConfirmacao != null) {
             var date2 = new Date(churras.limiteConfirmacao).getDate() + 1
             var month2 = new Date(churras.limiteConfirmacao).getMonth() + 1
             var year2 = new Date(churras.limiteConfirmacao).getFullYear()
             setChurrasDateFormattedConf(date2 + '/' + month2 + '/' + year2)
-        }else{
+        } else {
             setChurrasDateFormattedConf(churrasDateFormatted)
         }
     }
