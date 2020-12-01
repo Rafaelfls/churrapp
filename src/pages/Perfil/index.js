@@ -19,7 +19,7 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig, 'zondicon-icon', 'icomoon.ttf');
 //Fim
 import style from './styles';
-import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
+import { useLoadingModal, createLoadingModal, useEdicao } from '../../context/churrasContext';
 
 
 export default function Perfil() {
@@ -31,6 +31,7 @@ export default function Perfil() {
     const [pontoCarneLista, setPontoCarneLista] = useState([]);
     const [quantidadeComeLista, setQuantidadeComeLista] = useState([]);
     const [isBirthday, setIsBirthday] = useState(false);
+
 
     const [search, setSearchCarne] = useState('');
     const [tipo, setTipo] = useState([]);
@@ -82,6 +83,7 @@ export default function Perfil() {
 
 
     const { loading, setLoading } = useLoadingModal();
+    const { edicao, setEdicao } = useEdicao();
     const criarModal = createLoadingModal(loading);
 
     async function pegarItemPorTipo(carneVisivel, acompanhamentoVisivel, bebidaVisivel, sobremesaVisivel) {
@@ -250,10 +252,6 @@ export default function Perfil() {
             setUsuario(response.data)
             //info para editar perfil
             setNomeNovo(response.data[0].nome)
-            setSobrenomeNovo(response.data[0].sobrenome)
-            setEmailNovo(response.data[0].email)
-            setCidadeNovo(response.data[0].cidade)
-            setUfNovo(response.data[0].uf)
             setApelidoNovo(response.data[0].apelido)
             setIdadeFormatada(formatDataNascimento(response.data[0].idade))
             setCelularNovo(response.data[0].celular)
@@ -268,6 +266,26 @@ export default function Perfil() {
             setSobremesaPreferidaNovo(response.data[0].sobremesaPreferida_id)
             if (idadeformatada != "02/01/1900") {
                 setIdadeNovo(idadeformatada)
+            }
+            if (response.data[0].sobrenome == "sobrenome") {
+                setSobrenomeNovo("")
+            } else {
+                setSobrenomeNovo(response.data[0].sobrenome)
+            }
+            if (response.data[0].cidade == "cidade") {
+                setCidadeNovo("")
+            } else {
+                setCidadeNovo(response.data[0].cidade)
+            }
+            if (response.data[0].uf == "uf") {
+                setUfNovo("")
+            } else {
+                setUfNovo(response.data[0].uf)
+            }
+            if (response.data[0].email.includes("@churrapp.com", 11)) {
+                setEmailNovo("")
+            } else {
+                setEmailNovo(response.data[0].email)
             }
             //fim info para editar
             setChurrasParticipados(response.data[0].churrasParticipados)
@@ -330,57 +348,64 @@ export default function Perfil() {
             setIdadeNovo(idadeformatada)
         }
         setAllowEditing([true, 'black']);
+        setEdicao(true);
     }
 
-
     async function savePerfil() {
-        setLoading(true)
-        setAllowEditing([false, 'darkgray']);
-        if (image.uri != null) {
-            var novaUrl = await uploadImage(image);
-        } else {
-            var novaUrl = fotoUrlUNovo;
-        }
+        if (edicao == false) {
+            setAllowEditing([false, 'darkgray']);
+            setEdicao(false)
 
-        if (search === "") {
-            setSearchCarne(usuario.carnePreferida);
-            setCarnePreferidaNovo(usuario.carnePreferida_id);
+        } else {
+            setLoading(true)
+            setAllowEditing([false, 'darkgray']);
+            if (image.uri != null) {
+                var novaUrl = await uploadImage(image);
+            } else {
+                var novaUrl = fotoUrlUNovo;
+            }
+
+            if (search === "") {
+                setSearchCarne(usuario.carnePreferida);
+                setCarnePreferidaNovo(usuario.carnePreferida_id);
+            }
+            if (searchAcompanhamento === "") {
+                setSearchAcompanhamento(usuario.acompanhamentoPreferido);
+                setAcompanhamentoPreferidoNovo(usuario.acompanhamentoPreferido_id);
+            }
+            if (searchBebida === "") {
+                setSearchBebida(usuario.bebidaPreferida);
+                setBebidaPreferidaNovo(usuario.bebidaPreferida_id);
+            }
+            if (searchSobremesa === "") {
+                setSearchSobremesa(usuario.sobremesaPreferida);
+                setSobremesaPreferidaNovo(usuario.sobremesaPreferida_id);
+            }
+            console.log("SOBREMESA ID " + sobremesaPreferidaNovo)
+            console.log(idadeNovo)
+            api.put(`/usuarios/${id}`, {
+                nome: nomeNovo,
+                sobrenome: sobrenomeNovo,
+                email: emailNovo,
+                cidade: cidadeNovo,
+                uf: ufNovo,
+                idade: idadeNovo,
+                senha: senhaUpdate,
+                fotoUrlU: fotoUrlUNovo,
+                celular: celularNovo,
+                apelido: apelidoNovo,
+                pontoCarne_id: pontoCarneNovo_id,
+                carnePreferida_id: carnePreferidaNovo,
+                quantidadeCome_id: quantidadeComeNovo_id,
+                bebidaPreferida_id: bebidaPreferidaNovo,
+                acompanhamentoPreferido_id: acompanhamentoPreferidoNovo,
+                sobremesaPreferida_id: sobremesaPreferidaNovo
+            }).then(function (response) {
+                setReturnVisivel([true, response.data.mensagem, "Editar perfil!"])
+                setRefreshPerfil(!refreshPerfil)
+                setEdicao(false)
+            })
         }
-        if (searchAcompanhamento === "") {
-            setSearchAcompanhamento(usuario.acompanhamentoPreferido);
-            setAcompanhamentoPreferidoNovo(usuario.acompanhamentoPreferido_id);
-        }
-        if (searchBebida === "") {
-            setSearchBebida(usuario.bebidaPreferida);
-            setBebidaPreferidaNovo(usuario.bebidaPreferida_id);
-        }
-        if (searchSobremesa === "") {
-            setSearchSobremesa(usuario.sobremesaPreferida);
-            setSobremesaPreferidaNovo(usuario.sobremesaPreferida_id);
-        }
-        console.log("SOBREMESA ID " + sobremesaPreferidaNovo)
-        console.log(idadeNovo)
-        api.put(`/usuarios/${id}`, {
-            nome: nomeNovo,
-            sobrenome: sobrenomeNovo,
-            email: emailNovo,
-            cidade: cidadeNovo,
-            uf: ufNovo,
-            idade: idadeNovo,
-            senha: senhaUpdate,
-            fotoUrlU: fotoUrlUNovo,
-            celular: celularNovo,
-            apelido: apelidoNovo,
-            pontoCarne_id: pontoCarneNovo_id,
-            carnePreferida_id: carnePreferidaNovo,
-            quantidadeCome_id: quantidadeComeNovo_id,
-            bebidaPreferida_id: bebidaPreferidaNovo,
-            acompanhamentoPreferido_id: acompanhamentoPreferidoNovo,
-            sobremesaPreferida_id: sobremesaPreferidaNovo
-        }).then(function (response) {
-            setReturnVisivel([true, response.data.mensagem, "Editar perfil!"])
-            setRefreshPerfil(!refreshPerfil)
-        })
     }
 
     async function alterarSenha() {
@@ -475,7 +500,10 @@ export default function Perfil() {
     }
 
     function abrirDrawer() {
+        setEdicao(false)
         navigation.toggleDrawer()
+        setAllowEditing([false, 'darkgray']);
+
     }
 
     return (
@@ -486,10 +514,10 @@ export default function Perfil() {
                 showsVerticalScrollIndicator={false}
                 style={style.churrasList}
                 renderItem={({ item: usuario }) => (
-                    <View>
+                    <View style={{ backgroundColor: 'white' }}>
                         <View style={style.backgroundProfile}>
-                        <View style={style.menuBtn}>
-                            {/* <View style={style.centeredViewNotificacaoQtd}>
+                            <View style={style.menuBtn}>
+                                {/* <View style={style.centeredViewNotificacaoQtd}>
                         <TouchableOpacity onPress={abrirDrawer}>
                             {notificacoes.length > 0
                                 ? <View style={style.modalViewNotificacaoQtd}>
@@ -498,10 +526,10 @@ export default function Perfil() {
                                 : null}
                         </TouchableOpacity>
                     </View> */}
-                            <TouchableWithoutFeedback onPressIn={() => abrirDrawer()} >
-                                <IconMI name='menu' size={30} />
-                            </TouchableWithoutFeedback>
-                        </View>
+                                <TouchableWithoutFeedback onPressIn={() => abrirDrawer()} >
+                                    <IconMI name='menu' size={30} />
+                                </TouchableWithoutFeedback>
+                            </View>
                             <View style={style.containerProfile}>
                                 {allowEditing[0]
                                     ? <TouchableOpacity activeOpacity={0.5} onPress={() => setPickImageOptions([true])} style={style.centeredViewFotoPerfil}>
@@ -558,12 +586,14 @@ export default function Perfil() {
                                         <Text style={style.textoItem}>Sobrenome:</Text>
                                     </View>
                                     {usuario.sobrenome == "sobrenome"
-                                        ? <TextInput
-                                            style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
-                                            editable={allowEditing[0]}
-                                            onChangeText={text => { setSobrenomeNovo(text) }}
-                                            value={sobrenomeNovo}
-                                        />
+                                        ? (<View>
+                                            <TextInput
+                                                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                                editable={allowEditing[0]}
+                                                onChangeText={text => { setSobrenomeNovo(text) }}
+                                                value={sobrenomeNovo}
+                                            />
+                                        </View>)
                                         : <TextInput
                                             style={[style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray' }]}
                                             editable={false}
@@ -928,13 +958,13 @@ export default function Perfil() {
                 ? <FloatingAction
                     color='rgba(0,0,0,0.9)'
                     showBackground={false}
-                    onPressMain={() => savePerfil()}
+                    onPressMain={() => { savePerfil() }}
                     floatingIcon={<IconMI name="save" size={22} color={"white"} />}
                 />
                 : <FloatingAction
                     color='rgba(0,0,0,0.9)'
                     showBackground={false}
-                    onPressMain={() => editPerfil()}
+                    onPressMain={() => { editPerfil() }}
                     floatingIcon={<IconMI name="edit" size={22} color={"white"} />}
                 />}
 

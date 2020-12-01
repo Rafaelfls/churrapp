@@ -43,49 +43,50 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
   },
   participateBtn: {
-    position:'absolute',
-    top:40,
-    right:20,
-    justifyContent:'center',
-    alignItems:'center'
+    position: 'absolute',
+    top: 40,
+    right: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  textSwitch:{
-    color:'white',
+  textSwitch: {
+    color: 'white',
     fontFamily: 'poppins-light',
   },
   //body
-  formGroup:{
-    marginHorizontal:20,
+  formGroup: {
+    marginHorizontal: 20,
     marginTop: 15,
     justifyContent: "center",
   },
   formGroupRow: {
     flexDirection: 'column'
   },
-  textLabel:{
+  textLabel: {
     fontSize: 17,
-    color:"maroon",
+    color: "maroon",
     fontFamily: 'poppins-medium',
     marginBottom: 5,
   },
+
   inputStandard:{ 
-    height: 40, 
+    minHeight: 40, 
     borderBottomWidth: 0.5,
     paddingHorizontal: 5,
     marginBottom: 10,
     color: 'black',
     fontFamily: 'poppins-light',
     fontSize: 16,
-  }, 
+  },
   infosPrincipais: {
-    marginHorizontal:15,
-    marginTop:10,
-    width:'60%',
+    marginHorizontal: 15,
+    marginTop: 10,
+    width: '60%',
   },
   churrasLocalContainer: {
     marginBottom: 9,
     flexDirection: 'row',
-    paddingRight:15,
+    paddingRight: 15,
   },
   churrasNome: {
     color: 'maroon',
@@ -105,15 +106,15 @@ export default StyleSheet.create({
     fontFamily: 'poppins-light',
     fontSize: 16,
   },
-  editFotoChurras:{
-    position:'absolute',
-    top:0,
-    left:0,
-    right:0,
-    bottom:0,
-    width:100,
-    height:100,
-    backgroundColor:'blue'
+  editFotoChurras: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: 100,
+    height: 100,
+    backgroundColor: 'blue'
   },
   churrasDonoContainer: {
     height: 150,
@@ -129,8 +130,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     padding: 10,
-    flexDirection:'row',
-    justifyContent:'space-evenly'
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
   },
   churrasDono: {
     color: 'white',
@@ -196,13 +197,13 @@ export default StyleSheet.create({
     height: 110,
     padding: 1,
     width: '90%'
-  },  
+  },
   profileImgNaoConfirm: {
     height: '100%',
     width: 100,
     borderTopLeftRadius: 8,
     borderBottomLeftRadius: 8,
-  },  
+  },
   nomeConvidadoNaoConfirm: {
     color: 'white',
     fontFamily: 'poppins-medium',
@@ -232,21 +233,21 @@ export default StyleSheet.create({
     height: 110,
     padding: 1,
     width: '90%'
-  },  
+  },
   profileImgAusente: {
     height: '100%',
     width: 100,
     borderTopLeftRadius: 8,
     borderBottomLeftRadius: 8,
-    opacity:0.5
-  },  
+    opacity: 0.5
+  },
   nomeConvidadoAusente: {
     color: 'white',
     fontFamily: 'poppins-medium',
     fontSize: 20,
     marginLeft: 10,
     marginTop: 10,
-    opacity:0.5
+    opacity: 0.5
   },
   foneConvidadoAusente: {
     color: 'white',
@@ -254,8 +255,8 @@ export default StyleSheet.create({
     marginLeft: 10,
     marginTop: 5,
     fontSize: 15,
-    opacity:0.5
-  },  
+    opacity: 0.5
+  },
   statusConvidadoAusente: {
     color: 'white',
     fontFamily: 'poppins-light',
@@ -299,11 +300,11 @@ export default StyleSheet.create({
     marginTop: 5,
     fontSize: 13,
   },
-  convidadoPago:{
-    position:'absolute',
-    right:20,
-    top:13,
-    color:'green'
+  convidadoPago: {
+    position: 'absolute',
+    right: 20,
+    top: 13,
+    color: 'green'
   },
 
   //fim convidados
@@ -660,7 +661,7 @@ export default StyleSheet.create({
   exitBtnFooterQtd: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius:8,
+    borderRadius: 8,
     backgroundColor: 'lightgray',
     height: '60%',
     width: 125,
@@ -679,7 +680,7 @@ export default StyleSheet.create({
   salvarBtnQtd: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius:8,
+    borderRadius: 8,
     backgroundColor: 'maroon',
     height: '60%',
     width: 125,
@@ -700,21 +701,20 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: "center",
-    backgroundColor: 'white',
   },
   selectionFormQtd: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom:15,
-  },  
-  modalTextLabel:{
+    marginBottom: 15,
+  },
+  modalTextLabel: {
     textAlign: "left",
     fontSize: 17,
-    marginRight:15,
-    color:'#800000',
+    marginRight: 15,
+    color: '#800000',
     fontFamily: 'poppins-light',
-    maxWidth:'45%',
-    width:'45%'
+    maxWidth: '45%',
+    width: '45%'
   },
   selectionFormQtdLabel: {
     fontSize: 18,
@@ -722,10 +722,14 @@ export default StyleSheet.create({
     marginRight: 10,
   },
   boxDropdownQtd: {
-    position:'absolute',
-    right:0,
+    position: 'absolute',
+    right: 0,
     paddingHorizontal: 101,
     color: 'black',
+  },
+  pickerDropdownFiltro: {
+    color: 'maroon',
+    marginHorizontal: 90,
   },
   titleSubTipoModalQtd: {
     fontSize: 20,
@@ -744,7 +748,7 @@ export default StyleSheet.create({
     borderRadius: 8,
     padding: 25,
     alignItems: "center",
-    width:'95%',
+    width: '95%',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -760,35 +764,35 @@ export default StyleSheet.create({
     alignItems: "center",
     width: '100%',
   },
-  modalTitleCont:{
-    color:"#800000",
+  modalTitleCont: {
+    color: "#800000",
     fontFamily: 'poppins-medium',
-    fontSize:30,
-    marginBottom:15,
+    fontSize: 30,
+    marginBottom: 15,
   },
-  continueExitCont:{
-    position:'absolute',
-    top:10,
-    right:20
+  continueExitCont: {
+    position: 'absolute',
+    top: 10,
+    right: 20
   },
-  modalTitleOpt:{
-    color:"#800000",
+  modalTitleOpt: {
+    color: "#800000",
     fontFamily: 'poppins-medium',
-    fontSize:30,
-    marginBottom:5,
+    fontSize: 30,
+    marginBottom: 5,
   },
-  modalTextCont:{
-    fontSize:17,
+  modalTextCont: {
+    fontSize: 17,
     fontFamily: 'poppins-light',
-    textAlign:'center'
+    textAlign: 'center'
   },
-  modalSubCont:{
-    fontSize:17,
+  modalSubCont: {
+    fontSize: 17,
     fontFamily: 'poppins-light',
-    textAlign:'center',
-    marginTop:20,
+    textAlign: 'center',
+    marginTop: 20,
   },
-  footerModalCont:{    
+  footerModalCont: {
     height: 90,
     flexDirection: "row",
     alignItems: 'center',
@@ -798,7 +802,7 @@ export default StyleSheet.create({
   exitBtn: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius:8,
+    borderRadius: 8,
     backgroundColor: 'lightgray',
     height: '60%',
     width: 125,
@@ -813,11 +817,11 @@ export default StyleSheet.create({
     shadowRadius: 4.65,
 
     elevation: 6,
-  }, 
-  continueBtnCont:{
+  },
+  continueBtnCont: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius:8,
+    borderRadius: 8,
     backgroundColor: 'maroon',
     height: '60%',
     width: 125,
@@ -839,48 +843,48 @@ export default StyleSheet.create({
     fontFamily: 'poppins-medium',
     textAlign: 'center',
   },
-  textBtnCont:{
+  textBtnCont: {
     color: 'white',
     fontSize: 17,
     fontFamily: 'poppins-medium',
     textAlign: 'center',
   },
-  headerModalCont:{    
+  headerModalCont: {
     height: 90,
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: "center",
     backgroundColor: 'white',
   },
-  closeBtnCont:{
-    position:'absolute',
-    top:15,
-    right:20
+  closeBtnCont: {
+    position: 'absolute',
+    top: 15,
+    right: 20
   },
   //Fim modal entrar em contato com convidado
 
   //editar Foto churras
   centeredViewFotoChurras: {
-    position:'absolute',
+    position: 'absolute',
     height: 150,
     width: 150,
     borderRadius: 10,
-    marginLeft:10,
-    zIndex:1,
+    marginLeft: 10,
+    zIndex: 1,
   },
   modalViewFotoChurras: {
     backgroundColor: "rgba(114,114,114,0.5)",
     borderRadius: 8,
     alignItems: "center",
-    justifyContent:'center',
-    width:'100%',  
-    height:'100%'  
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%'
   },
-  continueBtnFotoChurras:{
+  continueBtnFotoChurras: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-  textBtnFotoChurras:{
+  textBtnFotoChurras: {
     color: 'white',
     fontSize: 17,
     fontFamily: 'poppins-medium',

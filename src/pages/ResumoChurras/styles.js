@@ -16,17 +16,17 @@ export default StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 15,
   },
-  titulo: {
-  },
   textHeader: {
     fontSize: 30,
     color: 'black',
     fontFamily: 'poppins-semi-bold',
+    textAlign:'center'
   },
   textSubHeader: {
     fontSize: 15,
     color: 'gray',
     fontFamily: 'poppins-medium',
+    textAlign:'center'
   },
   signOutBtn: {
     position: "absolute",
@@ -67,25 +67,33 @@ export default StyleSheet.create({
 
   //cards
   churrasList: {
-    marginLeft: 20,
     paddingTop: 15,
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
   },
 
   //cardDesign
   churras: {
     backgroundColor: 'white',
-    marginBottom: 15,
-    marginLeft: 0,
+    marginVertical: 10,
+    marginBottom:15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
   },
   slideBtn: {
     flexDirection: 'row',
-    width: Dimensions.get('window').width,
+    width: Dimensions.get('window').width+10,
+    paddingHorizontal:20,
+    paddingVertical:5,
   },
   detalheSlide: {
     backgroundColor: "darkgray",
     width: 100,
-    marginRight: 10,
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomLeftRadius: 8,
@@ -129,7 +137,10 @@ export default StyleSheet.create({
   churrasDescricao: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+  },
+  slidingCard:{
+    backgroundColor: 'white', 
+    width: "100%",
   },
   churrasFoto: {
     width: 66,

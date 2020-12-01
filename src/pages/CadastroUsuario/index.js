@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, Text, TextInput, TouchableOpacity, ScrollView, Picker, Modal } from 'react-native';
+import { View, Image, Text, TextInput, TouchableOpacity, ScrollView, Picker, Modal, AsyncStorage } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import api from '../../services/api';
@@ -41,7 +41,6 @@ export default function CadastroUsuario() {
     const [termoModal, setTermoModal] = useState(false)
     const [termoLido, setTermoLido] = useState(false)
     const [politicaModal, setPoliticaModal] = useState(false)
-    const [idadeCheck, setIdadeCheck] = useState(false)
 
     function backHome() {
         navigation.replace('Login');
@@ -73,6 +72,16 @@ export default function CadastroUsuario() {
             confirmar: "Legal",
             validade: null
         })
+    }
+
+    async function setUsuarioLogado($senha){
+        if(await AsyncStorage.getItem('phone') == null){
+            await AsyncStorage.setItem('phone',celularUsuario)
+            await AsyncStorage.setItem('password',$senha)
+            return
+        }else{
+            return
+        }
     }
 
     async function navigateToResumo() {
@@ -112,6 +121,7 @@ export default function CadastroUsuario() {
         } else {
             if (senhaUsuarioUncrpt == senhaUsuarioUncrpt2) {
                 setLoading(true)
+                try {                
                 await api.post('/usuarios', {
                     nome: nomeUsuario,
                     sobrenome: 'sobrenome',
@@ -136,12 +146,16 @@ export default function CadastroUsuario() {
                         setErroMsg(response.data.mensagem)
                         setErroVisivel(true)
                     } else {
+                        setUsuarioLogado(senhaUsuarioUncrpt)
                         USUARIOLOGADO = response.data.usuario[0]
                         await enviaNotificacao(USUARIOLOGADO.id)
                         setLoading(false)
                         navigation.replace('Tabs');
                     }
                 })
+            } catch (error) {
+                    
+            }
             } else {
                 setBorderColorRed2(style.formNok)
                 setBorderColorRed4(style.formNok)
@@ -165,50 +179,73 @@ export default function CadastroUsuario() {
             <ScrollView style={style.scrollView}>
                 <View style={style.formGroup}>
                     <Text style={style.textLabel}>Primeiro nome:</Text>
-                    <TextInput
-                        style={[style.inputStandard, borderColorRed1]}
-                        onChangeText={text => setNomeUsuario(text)}
-                        placeholder={'Nome'}
-                    />
+                    <View>
+                        <TextInput
+                            style={[style.inputStandard, borderColorRed1]}
+                            onChangeText={text => setNomeUsuario(text)}
+                            value={nomeUsuario}
+                            placeholder={'Nome'}
+                        />
+                        <TouchableOpacity onPress={() => { setNomeUsuario('') }} style={style.cleanInput}>
+                            <Text style={style.mudarSenha}>X</Text>
+                        </TouchableOpacity>
+                    </View>
                     <Text style={style.textLabel}>Celular:</Text>
-                    <TextInputMask
-                        style={[style.inputStandard, borderColorRed3]}
-                        type={'cel-phone'}
-                        options={{
-                            maskType: 'BRL',
-                            withDDD: true,
-                            dddMask: '(99) '
-                        }}
-                        keyboardType={"phone-pad"}
-                        placeholder={'(xx)xxxxx-xxxx'}
-                        value={celularUsuario}
-                        includeRawValueInChangeText={true}
-                        onChangeText={(text, rawText) => setCelularUsuario(rawText)}
-                    />
+                    <View>
+                        <TextInputMask
+                            style={[style.inputStandard, borderColorRed3]}
+                            type={'cel-phone'}
+                            options={{
+                                maskType: 'BRL',
+                                withDDD: true,
+                                dddMask: '(99) '
+                            }}
+                            keyboardType={"phone-pad"}
+                            placeholder={'(xx)xxxxx-xxxx'}
+                            value={celularUsuario}
+                            includeRawValueInChangeText={true}
+                            onChangeText={(text, rawText) => setCelularUsuario(rawText)}
+                        />
+                        <TouchableOpacity onPress={() => { setCelularUsuario('') }} style={style.cleanInput}>
+                            <Text style={style.mudarSenha}>X</Text>
+                        </TouchableOpacity>
+                    </View>
                     <Text style={style.textLabel}>Senha:</Text>
-                    <TextInput
-                        style={[style.inputStandard, borderColorRed2]}
-                        placeholder={"8 ~ 16 caracteres"}
-                        maxLength={16}
-                        secureTextEntry={true}
-                        onChangeText={text => criptoSenha1(text)}
-                    />
+                    <View>
+                        <TextInput
+                            style={[style.inputStandard, borderColorRed2]}
+                            placeholder={"8 ~ 16 caracteres"}
+                            maxLength={16}
+                            secureTextEntry={true}
+                            value={senhaUsuarioUncrpt}
+                            onChangeText={text => criptoSenha1(text)}
+                        />
+                        <TouchableOpacity onPress={() => { setSenhaUsuarioUncrpt('') }} style={style.cleanInput}>
+                            <Text style={style.mudarSenha}>X</Text>
+                        </TouchableOpacity>
+                    </View>
                     <Text style={style.textLabel}>Confirmar senha:</Text>
-                    <TextInput
-                        style={[style.inputStandard, borderColorRed4]}
-                        placeholder={"8 ~ 16 caracteres"}
-                        maxLength={16}
-                        secureTextEntry={true}
-                        onChangeText={text => criptoSenha2(text)}
-                    />
+                    <View>
+                        <TextInput
+                            style={[style.inputStandard, borderColorRed4]}
+                            placeholder={"8 ~ 16 caracteres"}
+                            maxLength={16}
+                            secureTextEntry={true}
+                            value={senhaUsuarioUncrpt2}
+                            onChangeText={text => criptoSenha2(text)}
+                        />
+                        <TouchableOpacity onPress={() => { setSenhaUsuarioUncrpt2('') }} style={style.cleanInput}>
+                            <Text style={style.mudarSenha}>X</Text>
+                        </TouchableOpacity>
+                    </View>
                     {/* <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
                         <CheckBox value={idadeCheck} onValueChange={(idadeCheck) => setIdadeCheck(idadeCheck)} tintColors={{ true: 'maroon', false: 'maroon' }} />
                         <Text style={{ textDecorationLine: 'underline', color: 'maroon' }}>Confirmo ter <Text style={{ color: 'maroon', textDecorationLine: 'underline' }}>13 anos</Text> ou mais</Text>
                     </View> */}
-                    <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
-                        <CheckBox value={termoLido} onValueChange={(termoLido) => setTermoLido(termoLido)} tintColors={{ true: 'maroon', false: 'maroon' }} />
+                    <View style={style.checkbox}>
+                        <CheckBox value={termoLido} onValueChange={setTermoLido} onPress={() => setTermoLido(!termoLido)} tintColors={{ true: 'maroon', false: 'maroon' }} />
 
-                        <Text style={{ color: 'black' }}>Aceito os <Text onPress={() => setTermoModal(!termoModal)} style={{ color: 'maroon', textDecorationLine: 'underline' }}>Termos de Uso</Text> e as <Text onPress={() => setPoliticaModal(!politicaModal)}style={{ color: 'maroon', textDecorationLine: 'underline' }}>Políticas de Privacidade</Text></Text>
+                        <Text style={{ color: 'black' }}>Aceito os <Text onPress={() => setTermoModal(!termoModal)} style={{ color: 'maroon', textDecorationLine: 'underline' }}>Termos de Uso</Text> e as <Text onPress={() => setPoliticaModal(!politicaModal)} style={{ color: 'maroon', textDecorationLine: 'underline' }}>Políticas de Privacidade</Text></Text>
 
                     </View>
                 </View>
@@ -288,12 +325,11 @@ export default function CadastroUsuario() {
                 </View>
             </Modal>
             <View style={style.footer2}>
-                {termoLido && idadeCheck
+                {termoLido
                     ? <TouchableOpacity style={style.continueBtn2} onPress={navigateToResumo}>
-
                         <Text style={style.textBtn}>Cadastrar</Text>
                     </TouchableOpacity>
-                    : <TouchableOpacity style={[style.continueBtn2,{backgroundColor:'lightgray',opacity:0.8}]} onPress={navigateToResumo} disabled>
+                    : <TouchableOpacity style={[style.continueBtn2, { backgroundColor: 'lightgray', opacity: 0.8 }]} onPress={navigateToResumo} disabled>
                         <Text style={style.textBtn}>Cadastrar</Text>
                     </TouchableOpacity>
                 }

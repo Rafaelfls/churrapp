@@ -28,6 +28,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
     const [precoModal, setPrecoModal] = useState(0)
     const [idItem, setIdItem] = useState(null)
     const [filtro, setFiltro] = useState(null)
+    const [adicionado, setAdicionado] = useState(false);
     const { churrascode } = route.params;
     const { convidadosQtd } = route.params;
     const { subTipo } = route.params;
@@ -96,13 +97,14 @@ export default function EscolherNovosItens3({ route, navigation }) {
                 setQuantidadeModal(0)
                 setPrecoModal(0)
                 setLoading(false)
+                setAdicionado(true)
             })
         })
     }
 
     function backHome() {
         if(subTipo != null){
-            navigation.replace('DetalheChurras', {churras:churrascode, editavel:true})
+            navigation.replace('DetalheChurras', {churras:churrascode, editavel:true, initialPage:2})
         }else{
             navigation.push('AdicionarBebidas', { churrascode, convidadosQtd })
         }
@@ -128,7 +130,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                         <Text style={style.textHeader}>Adicionar bebidas</Text>
                     </View>
                 </View>
-                <View style={{ height: 70 }}>
+                <View style={{ height: 108 }}>
                     <FlatList
                         data={tipo}
                         horizontal={true}
@@ -137,6 +139,9 @@ export default function EscolherNovosItens3({ route, navigation }) {
                         renderItem={({ item: tipo }) => (
                             <View style={style.filtroL} >
                                 <TouchableOpacity style={style.tiposDeItenscard} onPress={() => setFiltroTipo(tipo.id)}>
+                                    <View style={style.tipoImg}>
+                                        <Image source={{ uri: tipo.fotoUrlT }} style={{ width: '100%', height: 50, resizeMode: "stretch"}} />
+                                    </View>
                                     <Text style={style.tiposDeItenstextCard}>{tipo.tipo}</Text>
                                 </TouchableOpacity>
                             </View>
@@ -256,6 +261,23 @@ export default function EscolherNovosItens3({ route, navigation }) {
 
                 {criarModal}
 
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={adicionado}
+                >
+                    <View style={style.centeredView}>
+                        <View style={style.modalView}>
+                            <Text style={style.modalTitle}>Adicionado!</Text>
+                            <Text style={style.modalText}>Item adicionado com sucesso!</Text>
+                            <View style={style.footerModal}>
+                                <TouchableOpacity style={style.salvarBtn} onPress={() => { setAdicionado(false)}}>
+                                    <Text style={style.iconSalvarBtn}>OK</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
             </SafeAreaView>
         </View>
     )

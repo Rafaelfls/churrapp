@@ -23,7 +23,7 @@ export default function CompartilharChurrasco({ route, navigation }) {
     const { setEditavel } = useEditavel();
 
     function goBack() {
-        navigation.replace('DetalheChurras', { churras: churras.id })
+        navigation.replace('DetalheChurras', { churras: churras.id, initialPage:1 })
         setEditavel(true);
     }
 

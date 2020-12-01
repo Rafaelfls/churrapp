@@ -8,7 +8,7 @@
       "web"
     ],
     "scheme": "churrapp",
-    "version": "0.9.5",
+    "version": "0.9.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {

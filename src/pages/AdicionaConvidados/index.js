@@ -5,18 +5,13 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconFat from 'react-native-vector-icons/Feather';
 import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
-import * as Crypto from 'expo-crypto';
 import CheckBox from '@react-native-community/checkbox';
 
 import style from './styles';
 import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
-var convidadosList = [];
-
 export default function AdicionaConvidados({ route, navigation }) {
 
-  const { nomeContato } = route.params;
-  const { telefoneContato } = route.params;
   const { churrasAtual } = route.params;
 
   const { loading, setLoading } = useLoadingModal();
@@ -43,98 +38,49 @@ export default function AdicionaConvidados({ route, navigation }) {
   const [isSelected3, setSelection3] = useState(true);
   const [isSelected4, setSelection4] = useState(true);
   const [isSelected5, setSelection5] = useState(true);
+  const [isDisabled, setDisabled] = useState(true)
+  const [convidadosList, setConvidadosList] = useState()
 
   const config = {
     headers: { 'Authorization': USUARIOLOGADO.id }
   };
 
+  async function loadConvidados(){
+    api.get(`/convidados/${churrasAtual.churrasCode}`)
+    .then(res => {
+      setConvidadosList(res.data)
+      if (res.data.length > 0) {
+        setDisabled(false)
+      } else {
+        setDisabled(true)
+      }
+    })
+  }
 
   useEffect(() => {
-    if (telefoneContato != null) {
-      setConvidadosList(nomeContato, telefoneContato)
-    }
-  }, [telefoneContato]);
+    loadConvidados()
+  }, [])
 
-  useEffect(() => { }, [updatePage])
+  useEffect(() => {
+    loadConvidados()
+  }, [updatePage])
+
   useEffect(() => { }, [editaConvite])
 
-  function setConvidadosList($nome, $telefone) {
-    convidadosList.push({
-      id: convidadosList.length,
-      nome: $nome,
-      senha: null,
-      telefone: $telefone,
-    })
+  async function apagaConvidado(convidado) {
+    await api.delete(`/deletarConvite/${convidado}/${churrasAtual.churrasCode}`)
     setUpdatePage(!updatePage)
-  }
-
-  async function criaSenha(convid, telefone) {
-    convid.senha = await Crypto.digestStringAsync(
-      Crypto.CryptoDigestAlgorithm.SHA512,
-      telefone
-    );
-  }
-
-  async function criaListaConvidados(convid) {
-    convid.telefone = convid.telefone.replace("+55", "").replace(/-/g, "").replace(/\s/g, "").replace(/[()]/g, "");
-
-    if (convid.telefone.length > 11) {
-      convid.telefone = convid.telefone.substring(convid.telefone.length - 11)
-    }
-
-    let senhaProvisoria = convid.telefone.substring(convid.telefone.length - 9)
-    await criaSenha(convid, senhaProvisoria)
-
-    const response = await api.post('/usuarios', {
-      nome: convid.nome,
-      sobrenome: 'sobrenome',
-      email: convid.telefone + "@churrapp",
-      cidade: "cidade",
-      uf: "uf",
-      idade: "02/01/1900",
-      fotoUrlU: "https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png",
-      celular: convid.telefone,
-      cadastrado: false,
-      apelido: convid.nome,
-      senha: convid.senha,
-      pontoCarne_id: 0,
-      carnePreferida_id: 0,
-      quantidadeCome_id: 0,
-      bebidaPreferida_id: 0,
-      acompanhamentoPreferido_id: 0
-    }).then(async function (response) {
-      await api.post(`/convidadosChurras/${response.data.usuario[0].id}`, {
-        valorPagar: "00",
-        churras_id: churrasAtual.churrasCode
-      })
-    })
-
-  }
-
-  function apagaConvidado(convidado) {
-    convidadosList = convidadosList.filter(oldState => oldState.id !== convidado)
-    setUpdatePage(!updatePage)
-    // setConvidadosList(prevState => {
-    //   return prevState.filter(oldState => oldState.id !== joao.id);
-    // });
   }
 
   async function next() {
-    const convidadosQtd = convidadosList.length +1
+    const convidadosQtd = convidadosList.length + 1
     LISTADECONVIDADOS = convidadosList;
-    CONVITE = convite0+convite1+convite2+convite3+convite4+convite5+".";
-
-    setLoading(true)
-    await convidadosList.map(convid => criaListaConvidados(convid))
-    setLoading(false)
+    CONVITE = convite0 + convite1 + convite2 + convite3 + convite4 + convite5 + ".";
     var churrascode = churrasAtual.churrasCode
     navigation.navigate('AdicionarPratoPrincipal', { convidadosQtd, churrascode, primeiroAcesso: true });
-
-    convidadosList = []
   }
 
   function backHome() {
-    convidadosList = []
     LISTADECONVIDADOS = null;
     CONVITE = null;
     setLoading(true)
@@ -186,8 +132,9 @@ export default function AdicionaConvidados({ route, navigation }) {
   }
 
   function openContactList() {
-    navigation.push('OpenContactList')
+    navigation.navigate('OpenContactList', { churrasCode: churrasAtual.churrasCode, churrasAtual })
   }
+
   return (
     <View style={style.container}>
       <SafeAreaView style={style.body}>
@@ -206,10 +153,10 @@ export default function AdicionaConvidados({ route, navigation }) {
             <TouchableOpacity style={{ justifyContent: 'center', alignContent: 'center' }} onPress={() => setEditaConvite(true)}><Text style={style.editarConvite}>Editar convite</Text></TouchableOpacity>
           </View>
           <TextInput
-            style={[style.inputStandard, { marginTop: 5, height: 40 }]}
+            style={[style.inputStandard, { marginTop: 5, height: 70 }]}
             multiline={true}
             numberOfLines={1}
-            value={convite0+convite1+convite2+convite3+convite4+convite5+"."}
+            value={convite0 + convite1 + convite2 + convite3 + convite4 + convite5 + "."}
           />
         </View>
 
@@ -218,15 +165,15 @@ export default function AdicionaConvidados({ route, navigation }) {
           keyExtractor={(convidadosList) => convidadosList.id}
           showsVerticalScrollIndicator={false}
           refreshing={loading}
-          onRefresh={setConvidadosList}
+          onRefresh={() => setUpdatePage(!updatePage)}
           renderItem={({ item: convidadosList }) => (
-            <TouchableOpacity style={style.listaConvidados} onPress={() => apagaConvidado(convidadosList.id)}>
+            <TouchableOpacity style={style.listaConvidados} onPress={() => apagaConvidado(convidadosList.usuario_id)}>
               <View style={style.listaConvidadosItem}>
                 <Text style={style.listaConvidadosLabel}>{convidadosList.nome}</Text>
               </View>
               <View style={style.listaConvidadosItem}>
                 <IconFA style={style.phoneIcon} name="phone" size={16} />
-                <Text style={style.listaConvidadosLabelNum}>{convidadosList.telefone}</Text>
+                <Text style={style.listaConvidadosLabelNum}>{convidadosList.celular}</Text>
               </View>
             </TouchableOpacity>
           )}
@@ -235,9 +182,15 @@ export default function AdicionaConvidados({ route, navigation }) {
         <ActionButton offsetX={10} offsetY={95} onPress={openContactList} />
 
         <View style={style.footer}>
-          <TouchableOpacity style={style.continueBtn} onPress={next}>
-            <Text style={style.textBtn}>Convidar</Text>
-          </TouchableOpacity>
+          {isDisabled
+            ? (<TouchableOpacity style={[style.continueBtn, { backgroundColor: 'gray' }]} disabled>
+              <Text style={style.textBtn}>Convidar</Text>
+            </TouchableOpacity>)
+            : (<TouchableOpacity style={style.continueBtn} onPress={next}>
+              <Text style={style.textBtn}>Convidar</Text>
+            </TouchableOpacity>)
+          }
+
         </View>
         <Modal
           animationType="slide"
@@ -279,47 +232,47 @@ export default function AdicionaConvidados({ route, navigation }) {
                   numberOfLines={1}
                   value={convite0}
                 />
-                <TouchableOpacity onPress={()=>setSelection1(!isSelected1)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => setSelection1(!isSelected1)} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <CheckBox
                     value={isSelected1}
                     onValueChange={setSelection1}
-                    tintColors={{ true: 'maroon'}}
+                    tintColors={{ true: 'maroon' }}
                     style={style.checkbox}
                   />
                   <Text style={style.modalTextConvite}>Adicionar o local?</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>setSelection2(!isSelected2)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => setSelection2(!isSelected2)} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <CheckBox
                     value={isSelected2}
                     onValueChange={setSelection2}
-                    tintColors={{ true: 'maroon'}}
+                    tintColors={{ true: 'maroon' }}
                     style={style.checkbox}
                   />
                   <Text style={style.modalTextConvite}>Adicionar a Data?</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>setSelection3(!isSelected3)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => setSelection3(!isSelected3)} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <CheckBox
                     value={isSelected3}
                     onValueChange={setSelection3}
-                    tintColors={{ true: 'maroon'}}
+                    tintColors={{ true: 'maroon' }}
                     style={style.checkbox}
                   />
                   <Text style={style.modalTextConvite}>Adicionar o Horario?</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>setSelection4(!isSelected4)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => setSelection4(!isSelected4)} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <CheckBox
                     value={isSelected4}
                     onValueChange={setSelection4}
-                    tintColors={{ true: 'maroon'}}
+                    tintColors={{ true: 'maroon' }}
                     style={style.checkbox}
                   />
                   <Text style={style.modalTextConvite}>Adicionar o valor por pessoa?</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>setSelection5(!isSelected5)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => setSelection5(!isSelected5)} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <CheckBox
                     value={isSelected5}
                     onValueChange={setSelection5}
-                    tintColors={{ true: 'maroon'}}
+                    tintColors={{ true: 'maroon' }}
                     style={style.checkbox}
                   />
                   <Text style={style.modalTextConvite}>Adicionar data limite de confirmação?</Text>

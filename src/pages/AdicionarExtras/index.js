@@ -67,9 +67,7 @@ export default function AdicionarExtras({ route, navigation }) {
     function enviaMensagens(convid, todosConvid) { 
         var telefone = convid.celular
         var valorFinal = (convid.valorTotal / todosConvid).toFixed(2);
-        console.log("enviaMensagens",valorFinal,convid.valorTotal , todosConvid)
         var cvt = CONVITE
-        console.log(cvt)
         cvt = cvt.replace('R$XX,XX.','R$'+valorFinal+".")
         cvt = cvt.replace('R$0.00.','R$'+valorFinal+".")
         cvt = cvt.replace(',,',',')
@@ -87,7 +85,6 @@ export default function AdicionarExtras({ route, navigation }) {
 
     async function updateValorPagar(convidado, quantosConvid) {
         var valorAPagar = convidado.valorTotal / quantosConvid;
-        console.log("updateValorPagar",valorAPagar, convidado.valorTotal , quantosConvid)
         await api.put(`/atualizarValor/${convidado.id}`,{
             valorPagar:valorAPagar
         })
@@ -109,9 +106,7 @@ export default function AdicionarExtras({ route, navigation }) {
 
 
     async function enviaNotificacao(convid,todosConvid) {
-        console.log(convid)
         var valorFinal = (convid.valorTotal / todosConvid).toFixed(2);
-        console.log("enviaNotificacao",valorFinal, convid.valorTotal , todosConvid)
         if(convid.limiteConfirmacao == null){
             await api.post(`/notificacoes/${convid.usuario_id}/${churrascode}`, {
                 mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${convid.nomeChurras}, e o valor por pessoa é de R$${valorFinal}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
@@ -134,7 +129,6 @@ export default function AdicionarExtras({ route, navigation }) {
     }
 
     function backHome() {
-        LISTADECONVIDADOS = null;
         CONVITE = null;
         setLoading(true)
         api.delete(`/churras/${churrascode}`, config)

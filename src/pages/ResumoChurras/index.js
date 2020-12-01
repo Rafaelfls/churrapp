@@ -18,19 +18,20 @@ import Component2 from '../../assets/Component2.png'
 
 import style from './styles';
 
-import { useChurrasCount, useChurrasParticipado, useAppState, useChurras, useEditavel } from '../../context/churrasContext';
+import { useChurrasCount, useChurrasParticipado, useAppState, useChurras, useEditavel, useLoadingModal } from '../../context/churrasContext';
+
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function ResumoChurras() {
     const { churrasCount, setChurrasCount } = useChurrasCount();
     const { churrasParticipado, setChurrasParticipado } = useChurrasParticipado();
+    const { loading, setLoading } = useLoadingModal();
     const [contadorCriado, setContadorCriado] = useState(USUARIOLOGADO.churrasCriados);
 
     const route = useRoute();
     const [churras, setChurras] = useState([]);
     const [notificacoes, setnotificacoes] = useState([]);
     const [isNotificacoesOpen, setIsNotificacoesOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [visivel, setVisivel] = useState(false)
     const [churrasDeletar, setChurrasDeletar] = useState([]);
     const [refreshChurras, setRefreshChurras] = useState(true);
@@ -120,7 +121,6 @@ export default function ResumoChurras() {
     }
 
     function apertaFabBtn(btn) {
-        console.log(btn)
         if (btn == "criaChurras") {
             inicioCriarChurras();
         }
@@ -143,7 +143,7 @@ export default function ResumoChurras() {
     }
 
     function detalheChurras(churras) {
-        navigation.replace('DetalheChurras', { churras });
+        navigation.replace('DetalheChurras', { churras, initialPage: 0 });
         setEditavel(true)
         setNewChurras(churras);
     }
@@ -175,8 +175,10 @@ export default function ResumoChurras() {
 
     useEffect(() => {
         loadChurras();
-        loadNotificacoes();
     }, [refreshChurras]);
+    useEffect(() => {
+        loadNotificacoes();
+    }, [loading]);
 
     async function loadNotificacoes() {
         await api.get(`/notificacoes/${USUARIOLOGADO.id}`).then(function (res) {
@@ -191,13 +193,11 @@ export default function ResumoChurras() {
         if (notificacao.churras_id == null) {
             await api.delete(`/notificacoes/${notificacao.id}`)
             setIsNotificacoesOpen(false)
-            console.log("DOIDERA")
             setRefreshChurras(!refreshChurras);
         } else {
             await api.put(`/negarPresenca/${notificacao.usuario_id}/${notificacao.churras_id}`)
             await api.delete(`/notificacoes/${notificacao.id}`)
             setIsNotificacoesOpen(false)
-            console.log("DOIDERA")
             setRefreshChurras(!refreshChurras);
         }
     }
@@ -214,7 +214,7 @@ export default function ResumoChurras() {
             setChurrasParticipado(churrasParticipado + 1)
             api.put(`/usuariosQntParticipado/${USUARIOLOGADO.id}`, { churrasParticipados: churrasParticipado + 1 });
             setIsNotificacoesOpen(false)
-            navigation.navigate('DetalheChurras', { churras: churrasId })
+            navigation.navigate('DetalheChurras', { churras: churrasId, initialPage: 0 })
             setEditavel(false)
         }
     }
@@ -265,39 +265,37 @@ export default function ResumoChurras() {
                 refreshing={loading}
                 onRefresh={loadChurras}
                 renderItem={({ item: churras }) => (
-                    <View>
-                        <View style={style.churras}>
-                            <View style={style.churrasDescricao}>
-                                <RNSlidingButton
-                                    style={{ backgroundColor: 'white', width: "95%" }}
-                                    height={100}
-                                    onSlidingSuccessLeft={() => { setVisivel(true); setChurrasDeletar(churras) }}
-                                    onSlidingSuccessRight={() => { detalheChurras(churras.id) }}
-                                    slideDirection={SlideDirection.ANY}>
-                                    <View style={{ flexDirection: "row", width: '100%' }}>
-                                        <View style={style.detalheSlide}>
-                                            <Icon name="info" size={24} color="white" />
-                                        </View>
-                                        <View style={style.slideBtn}>
-                                            <Image source={{ uri: churras.fotoUrlC }} style={style.churrasFoto} />
-                                            <View style={style.churrasInfosView}>
-                                                <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
-                                                <Text style={style.churrasDono}>{churras.nome} </Text>
-                                                <View style={style.churrasLocDat}>
-                                                    <IconFea style={style.dataIcon} name="calendar" size={15} />
-                                                    <Text style={style.churrasData}> {formatData(churras.data)}</Text>
-                                                    <Text style={style.locDatSeparator}>  |  </Text>
-                                                    <IconMI style={style.localIcon} name="access-time" size={15} />
-                                                    <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - " + churras.hrFim : ''}</Text>
-                                                </View>
+                    <View style={style.churras}>
+                        <View style={style.churrasDescricao}>
+                            <RNSlidingButton
+                                style={style.slidingCard}
+                                height={100}
+                                onSlidingSuccessLeft={() => { setVisivel(true); setChurrasDeletar(churras) }}
+                                onSlidingSuccessRight={() => { detalheChurras(churras.id) }}
+                                slideDirection={SlideDirection.ANY}>
+                                <View style={{ flexDirection: "row", width: '100%' }}>
+                                    <View style={style.detalheSlide}>
+                                        <Icon name="info" size={24} color="white" />
+                                    </View>
+                                    <View style={style.slideBtn}>
+                                        <Image source={{ uri: churras.fotoUrlC }} style={style.churrasFoto} />
+                                        <View style={style.churrasInfosView}>
+                                            <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
+                                            <Text style={style.churrasDono}>{churras.nome} </Text>
+                                            <View style={style.churrasLocDat}>
+                                                <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                                <Text style={style.churrasData}> {formatData(churras.data)}</Text>
+                                                <Text style={style.locDatSeparator}>  |  </Text>
+                                                <IconMI style={style.localIcon} name="access-time" size={15} />
+                                                <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - " + churras.hrFim : ''}</Text>
                                             </View>
                                         </View>
-                                        <View style={style.deletarSlide}>
-                                            <Icon name="trash-alt" size={24} color="white" />
-                                        </View>
                                     </View>
-                                </RNSlidingButton>
-                            </View>
+                                    <View style={style.deletarSlide}>
+                                        <Icon name="trash-alt" size={24} color="white" />
+                                    </View>
+                                </View>
+                            </RNSlidingButton>
                         </View>
                     </View>
                 )}

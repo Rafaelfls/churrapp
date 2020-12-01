@@ -172,6 +172,9 @@ const EsqueciSenha = () => {
                     includeRawValueInChangeText={true}
                     onChangeText={(text, rawText) => { setCelularUser(rawText); }}
                 />
+                <TouchableOpacity onPress={() => {setCelularUser('')}} style={style.cleanInput2}>
+                    <Text style={style.mudarSenha}>X</Text>
+                </TouchableOpacity>
                 {info
                     ? <Text style={style.textInfo}>Número inválido</Text>
                     : null

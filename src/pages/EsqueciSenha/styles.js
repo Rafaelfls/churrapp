@@ -16,6 +16,28 @@ export default StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: 20,
   },
+  
+  cleanInput2: {
+    position: 'absolute',
+    right: 5,
+    top: 35,
+    backgroundColor: 'maroon',
+    borderRadius: 100,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },
+  mudarSenha: {
+    color: 'white',
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+  },
   textHeader: {
     fontSize: 30,
     color: 'black',

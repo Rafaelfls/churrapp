@@ -81,7 +81,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
         setLoading(true)
         setItemList([])
         setLoading(false)
-        navigation.navigate('AdicionaConvidados',)
+        navigation.navigate('AdicionaConvidados')
     }
 
     function updateValue(qtdSugestao) {
@@ -262,7 +262,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                             <Text style={style.modalTitleText}>Info</Text>
                             <Text style={style.modalText}>A seguir o Churrapp preparou para você uma sugestão de itens para seu churrasco.</Text>
                             <Text style={style.modalText}>Essa sugestão leva em conta quantos convidados você convidou para seu churras.</Text>
-                            <Text style={style.modalText}>Se não gostar da sugestão é so adicionar itens de sua preferencia com as quantidades que preferir.</Text>
+                            <Text style={style.modalText}>Se não gostar da sugestão é só adicionar itens de sua preferência com as quantidades que desejar.</Text>
                             <View style={style.footerModal}>
                                 <TouchableOpacity style={style.salvarBtnModal} onPress={() => setIsFirstTime(false)}>
                                     <Text style={style.iconSalvarBtnModal}>Ok</Text>
