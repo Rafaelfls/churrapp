@@ -28,6 +28,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
     const [precoModal, setPrecoModal] = useState(0)
     const [idItem, setIdItem] = useState(null)
     const [filtro, setFiltro] = useState(null)
+    const [adicionado, setAdicionado] = useState(false);
     const { churrascode } = route.params;
     const { convidadosQtd } = route.params;
     const { subTipo } = route.params;
@@ -96,6 +97,7 @@ export default function EscolherNovosItens3({ route, navigation }) {
                 setQuantidadeModal(0)
                 setPrecoModal(0)
                 setLoading(false)
+                setAdicionado(true)
             })
         })
     }
@@ -259,6 +261,23 @@ export default function EscolherNovosItens3({ route, navigation }) {
 
                 {criarModal}
 
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={adicionado}
+                >
+                    <View style={style.centeredView}>
+                        <View style={style.modalView}>
+                            <Text style={style.modalTitle}>Adicionado!</Text>
+                            <Text style={style.modalText}>Item adicionado com sucesso!</Text>
+                            <View style={style.footerModal}>
+                                <TouchableOpacity style={style.salvarBtn} onPress={() => { setAdicionado(false)}}>
+                                    <Text style={style.iconSalvarBtn}>OK</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
             </SafeAreaView>
         </View>
     )
