@@ -8,11 +8,13 @@ import IconFea from 'react-native-vector-icons/Feather';
 import IconMI from 'react-native-vector-icons/MaterialIcons';
 
 import style from './styles';
-import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
+import { useLoadingModal, createLoadingModal, useEditavel, useChurras } from '../../context/churrasContext';
 
 export default function OutrosChurras() {
 
     const { loading, setLoading } = useLoadingModal();
+    const { editavel, setEditavel } = useEditavel();
+    const { newChurras, setNewChurras } = useChurras();
     const criarModal = createLoadingModal(loading);
     const [churrasPassado, setChurrasPassados] = useState([]);
     const [churrasFuturo, setChurrasFuturo] = useState([]);
@@ -84,7 +86,9 @@ export default function OutrosChurras() {
     }, []);
 
     function detalheChurras(churras) {
-        navigation.navigate('DetalheChurras', { churras, allowShare: false, editavel: false, initialPage: 0 });
+        navigation.navigate('DetalheChurras', { churras, allowShare: false, initialPage:0 });
+        setEditavel(false);
+        setNewChurras(churras);
     }
 
     return (

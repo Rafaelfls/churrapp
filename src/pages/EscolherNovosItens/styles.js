@@ -54,6 +54,13 @@ export default StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 6,
   },
+  
+  modalTitle: {
+    color: "#800000",
+    fontSize: 30,
+    marginBottom: 15,
+    fontFamily: 'poppins-medium',
+  },
   tiposDeItenstextCard: {
     color: 'white',
     fontSize: 17,

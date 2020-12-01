@@ -18,7 +18,8 @@ import Component2 from '../../assets/Component2.png'
 
 import style from './styles';
 
-import { useChurrasCount, useChurrasParticipado, useAppState, useLoadingModal } from '../../context/churrasContext';
+import { useChurrasCount, useChurrasParticipado, useAppState, useChurras, useEditavel, useLoadingModal } from '../../context/churrasContext';
+
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function ResumoChurras() {
@@ -37,6 +38,9 @@ export default function ResumoChurras() {
     const [test, setTest] = useState([]);
     var newChurrasCriados;
     const [direcao, setDirecao] = useState();
+
+    const { newChurras, setNewChurras } = useChurras();
+    const { editavel, setEditavel } = useEditavel();
 
     const isDrawerOpen = useIsDrawerOpen();
 
@@ -139,7 +143,9 @@ export default function ResumoChurras() {
     }
 
     function detalheChurras(churras) {
-        navigation.navigate('DetalheChurras', { churras, editavel: true, initialPage: 0 });
+        navigation.replace('DetalheChurras', { churras, initialPage: 0 });
+        setEditavel(true)
+        setNewChurras(churras);
     }
 
 
@@ -216,7 +222,8 @@ export default function ResumoChurras() {
             setChurrasParticipado(churrasParticipado + 1)
             api.put(`/usuariosQntParticipado/${USUARIOLOGADO.id}`, { churrasParticipados: churrasParticipado + 1 });
             setIsNotificacoesOpen(false)
-            navigation.navigate('DetalheChurras', { churras: churrasId, editavel: false, initialPage: 0 })
+            navigation.navigate('DetalheChurras', { churras: churrasId, initialPage: 0 })
+            setEditavel(false)
         }
     }
     function abrirDrawer() {

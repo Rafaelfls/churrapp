@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, TextInput, SafeAreaView, Modal, FlatList,
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconFat from 'react-native-vector-icons/Feather';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
 import * as Crypto from 'expo-crypto';
@@ -11,8 +10,6 @@ import CheckBox from '@react-native-community/checkbox';
 
 import style from './styles';
 import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
-
-var convidadosList = [];
 
 export default function CompartilharConvidados({ route, navigation }) {
 

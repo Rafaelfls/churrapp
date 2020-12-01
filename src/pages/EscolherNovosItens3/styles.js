@@ -15,6 +15,12 @@ export default StyleSheet.create({
     marginHorizontal: '5%',
     alignItems: "center",
   },
+  modalTitle: {
+    color: "#800000",
+    fontSize: 30,
+    marginBottom: 15,
+    fontFamily: 'poppins-medium',
+  },
   textHeader: {
     fontSize: 18,
     color: 'black',

@@ -21,6 +21,12 @@ export default StyleSheet.create({
     marginLeft:10,
     fontFamily: 'poppins-semi-bold',
   },
+  modalTitle: {
+    color: "#800000",
+    fontSize: 30,
+    marginBottom: 15,
+    fontFamily: 'poppins-medium',
+  },
   exitBtn: {
     flexDirection: 'row-reverse',
   },
