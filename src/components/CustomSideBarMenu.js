@@ -9,7 +9,7 @@ import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import api from '../services/api.js'
 import style from '../styles';
 
-import { useLoadingModal, useEdicao } from '../context/churrasContext'
+import { useLoadingModal, useEditavel } from '../context/churrasContext'
 
 //Criando Icone Customizável
 import { createIconSetFromIcoMoon } from '@expo/vector-icons';
@@ -21,7 +21,7 @@ const Icon = createIconSetFromIcoMoon(icoMoonConfig, 'zondicon-icon', 'icomoon.t
 const CustomSideBarMenu = (props) => {
     const navigation = useNavigation();
     const { loading, setLoading } = useLoadingModal()
-    const { edicao, setEdicao } = useEdicao()
+    const { editavel, setEditavel } = useEditavel()
     const [usuario, setUsuario] = useState();
 
     async function logout() {
@@ -40,7 +40,6 @@ const CustomSideBarMenu = (props) => {
     }
 
     useEffect(() => {
-        setEdicao(false)
         loadPerfil()
     }, [loading]);
     return (
@@ -49,7 +48,7 @@ const CustomSideBarMenu = (props) => {
                 {usuario == undefined
                     ? <Text></Text>
                     : <View>
-                        <TouchableOpacity style={style.sideMenuProfileIcon} onPress={() => {setEdicao(false);navigation.navigate('Tabs', { screen: 'Perfil' })}}>
+                        <TouchableOpacity style={style.sideMenuProfileIcon} onPress={() => {setEditavel(false);navigation.navigate('Tabs', { screen: 'Perfil' })}}>
                             <Image
                                 source={{ uri: usuario[0].fotoUrlU }}
                                 style={{

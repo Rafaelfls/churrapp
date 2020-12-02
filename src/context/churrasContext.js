@@ -13,6 +13,7 @@ export default function churrasProvider({ children }) {
     const [appStateVisible, setAppStateVisible] = useState();
     const [newChurras, setNewChurras] = useState();
     const [editavel, setEditavel] = useState(false);
+    const [initialPage, setInitialPage] = useState(0);
 
 
 
@@ -32,7 +33,9 @@ export default function churrasProvider({ children }) {
                 newChurras,
                 setNewChurras,
                 editavel,
-                setEditavel
+                setEditavel,
+                initialPage,
+                setInitialPage
             }}>
             {children}
         </ChurrasContext.Provider>
@@ -81,6 +84,11 @@ export function useEditavel() {
     const context = useContext(ChurrasContext);
     const { editavel, setEditavel } = context;
     return { editavel, setEditavel };
+}
+export function useInitialPage() {
+    const context = useContext(ChurrasContext);
+    const { initialPage, setInitialPage } = context;
+    return { initialPage, setInitialPage };
 }
 
 export function createLoadingModal(loading) {

@@ -10,11 +10,12 @@ import IconFea from 'react-native-vector-icons/Feather';
 import IconMat from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import style from './styles';
-import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
+import { useLoadingModal, createLoadingModal, useInitialPage } from '../../context/churrasContext';
 
 export default function EscolherNovosItens2({ route, navigation }) {
 
     const { loading, setLoading } = useLoadingModal();
+    const { setInitialPage } = useInitialPage()
     const criarModal = createLoadingModal(loading);
     const [item, setItem] = useState([]);
     const [unidades, setUnidades] = useState([]);
@@ -84,11 +85,11 @@ export default function EscolherNovosItens2({ route, navigation }) {
             item_id: item,
             precoItem: precoFinal,
         }).then(async function (res) {
-            if(res.data.quantidadeAntiga){
-                var sub = res.data.quantidadeAntiga*res.data.precoAntigo;
-                var sum = precoFinal * (qtdNova+res.data.quantidadeAntiga);
-                var precoFinalTotal = sum-sub;
-            }else{
+            if (res.data.quantidadeAntiga) {
+                var sub = res.data.quantidadeAntiga * res.data.precoAntigo;
+                var sum = precoFinal * (qtdNova + res.data.quantidadeAntiga);
+                var precoFinalTotal = sum - sub;
+            } else {
                 var precoFinalTotal = precoFinal * qtdNova;
             }
             await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
@@ -103,9 +104,10 @@ export default function EscolherNovosItens2({ route, navigation }) {
     }
 
     function backHome() {
-        if(subTipo != null){
-            navigation.replace('DetalheChurras', {churras:churrascode, editavel:true, initialPage:2})
-        }else{
+        if (subTipo != null) {
+            navigation.replace('DetalheChurras', { churras: churrascode, editavel: true })
+            setInitialPage(2)
+        } else {
             navigation.push('AdicionarAcompanhamento', { churrascode, convidadosQtd })
         }
     }
@@ -128,7 +130,7 @@ export default function EscolherNovosItens2({ route, navigation }) {
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item: item }) => (
                         <View >
-                            <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id,item.precoMedio)}>
+                            <TouchableOpacity style={style.card} onPress={() => setVisibility(true, item.nomeItem, item.unidade_id, item.id, item.precoMedio)}>
                                 {item.fotoUrlI == null
                                     ? <Image source={{ uri: item.fotoUrlT }} style={style.churrasFoto} />
                                     : <Image source={{ uri: item.fotoUrlI }} style={style.churrasFoto} />}
@@ -179,7 +181,7 @@ export default function EscolherNovosItens2({ route, navigation }) {
                                     style={style.boxDropdown}
                                     itemStyle={style.itemDropdown}
                                     mode="dropdown"
-                                    onValueChange={itemValue => {setSelectedUnidade(itemValue);setNomeUnidadeSelecionada(unidades[itemValue].unidade)}}
+                                    onValueChange={itemValue => { setSelectedUnidade(itemValue); setNomeUnidadeSelecionada(unidades[itemValue].unidade) }}
                                 >
                                     {unidades.map((unity, idx) => (
                                         <Picker.Item label={unity.unidade} value={unity.id} key={idx} />
@@ -205,7 +207,7 @@ export default function EscolherNovosItens2({ route, navigation }) {
                                 <TouchableOpacity style={style.exitBtnFooter} onPress={() => setVisibility(false, "", '', '', '')}>
                                     <Text style={style.iconExitBtn}>Cancelar</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal,precoModal)}>
+                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, quantidadeModal, precoModal)}>
                                     <Text style={style.iconSalvarBtn}>Confirmar</Text>
                                 </TouchableOpacity>
                             </View>
@@ -224,7 +226,7 @@ export default function EscolherNovosItens2({ route, navigation }) {
                             <Text style={style.modalTitle}>Adicionado!</Text>
                             <Text style={style.modalText}>Item adicionado com sucesso!</Text>
                             <View style={style.footerModal}>
-                                <TouchableOpacity style={style.salvarBtn} onPress={() => { setAdicionado(false)}}>
+                                <TouchableOpacity style={style.salvarBtn} onPress={() => { setAdicionado(false) }}>
                                     <Text style={style.iconSalvarBtn}>OK</Text>
                                 </TouchableOpacity>
                             </View>
