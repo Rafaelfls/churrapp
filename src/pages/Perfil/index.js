@@ -19,7 +19,7 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig, 'zondicon-icon', 'icomoon.ttf');
 //Fim
 import style from './styles';
-import { useLoadingModal, createLoadingModal, useEdicao } from '../../context/churrasContext';
+import { useLoadingModal, createLoadingModal, useEditavel } from '../../context/churrasContext';
 
 
 export default function Perfil() {
@@ -83,7 +83,7 @@ export default function Perfil() {
 
 
     const { loading, setLoading } = useLoadingModal();
-    const { edicao, setEdicao } = useEdicao();
+    const { editavel, setEditavel } = useEditavel();
     const criarModal = createLoadingModal(loading);
 
     async function pegarItemPorTipo(carneVisivel, acompanhamentoVisivel, bebidaVisivel, sobremesaVisivel) {
@@ -348,13 +348,13 @@ export default function Perfil() {
             setIdadeNovo(idadeformatada)
         }
         setAllowEditing([true, 'black']);
-        setEdicao(true);
+        setEditavel(true);
     }
 
     async function savePerfil() {
-        if (edicao == false) {
+        if (editavel == false) {
             setAllowEditing([false, 'darkgray']);
-            setEdicao(false)
+            setEditavel(false)
 
         } else {
             setLoading(true)
@@ -403,7 +403,7 @@ export default function Perfil() {
             }).then(function (response) {
                 setReturnVisivel([true, response.data.mensagem, "Editar perfil!"])
                 setRefreshPerfil(!refreshPerfil)
-                setEdicao(false)
+                setEditavel(false)
             })
         }
     }
@@ -500,7 +500,7 @@ export default function Perfil() {
     }
 
     function abrirDrawer() {
-        setEdicao(false)
+        setEditavel(false)
         navigation.toggleDrawer()
         setAllowEditing([false, 'darkgray']);
 

@@ -10,11 +10,12 @@ import IconFea from 'react-native-vector-icons/Feather';
 import IconMat from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import style from './styles';
-import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
+import { useLoadingModal, createLoadingModal, useInitialPage } from '../../context/churrasContext';
 
 export default function EscolherNovosItens({ route, navigation }) {
 
     const { loading, setLoading } = useLoadingModal();
+    const { setInitialPage } = useInitialPage()
     const criarModal = createLoadingModal(loading);
     const [item, setItem] = useState([]);
     const [unidades, setUnidades] = useState([]);
@@ -127,7 +128,8 @@ export default function EscolherNovosItens({ route, navigation }) {
 
     function backHome() {
         if (subTipo != null) {
-            navigation.replace('DetalheChurras', { churras: churrascode, editavel: true, initialPage: 2 })
+            navigation.replace('DetalheChurras', { churras: churrascode, editavel: true })
+            setInitialPage(2)
         } else {
             navigation.push('AdicionarPratoPrincipal', { churrascode, convidadosQtd, primeiroAcesso: false })
         }
@@ -303,7 +305,7 @@ export default function EscolherNovosItens({ route, navigation }) {
                             <Text style={style.modalTitle}>Adicionado!</Text>
                             <Text style={style.modalText}>Item adicionado com sucesso!</Text>
                             <View style={style.footerModal}>
-                                <TouchableOpacity style={style.salvarBtn} onPress={() => { setAdicionado(false)}}>
+                                <TouchableOpacity style={style.salvarBtn} onPress={() => { setAdicionado(false) }}>
                                     <Text style={style.iconSalvarBtn}>OK</Text>
                                 </TouchableOpacity>
                             </View>

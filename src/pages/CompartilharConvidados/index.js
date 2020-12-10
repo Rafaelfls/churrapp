@@ -10,6 +10,7 @@ import CheckBox from '@react-native-community/checkbox';
 
 import style from './styles';
 import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
+var convidadosList = [];
 
 export default function CompartilharConvidados({ route, navigation }) {
 

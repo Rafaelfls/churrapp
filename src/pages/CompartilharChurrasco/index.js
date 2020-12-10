@@ -11,7 +11,7 @@ import { QRCode } from 'react-native-custom-qr-codes-expo';
 
 import style from './styles';
 
-import { useEditavel, useChurras } from '../../context/churrasContext.js'
+import { useEditavel, useChurras, useInitialPage } from '../../context/churrasContext.js'
 
 
 export default function CompartilharChurrasco({ route, navigation }) {
@@ -21,9 +21,11 @@ export default function CompartilharChurrasco({ route, navigation }) {
     const [churrasDateFormatted, setChurrasDateFormatted] = useState();
     const [churrasDateFormattedConf, setChurrasDateFormattedConf] = useState();
     const { setEditavel } = useEditavel();
+    const { setInitialPage } = useInitialPage()
 
     function goBack() {
-        navigation.replace('DetalheChurras', { churras: churras.id, initialPage:1 })
+        navigation.replace('DetalheChurras', { churras: churras.id })
+        setInitialPage(1);
         setEditavel(true);
     }
 

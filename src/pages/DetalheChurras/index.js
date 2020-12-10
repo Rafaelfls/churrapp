@@ -23,17 +23,17 @@ import DatePicker from 'react-native-datepicker';
 import style from './styles';
 import { Container } from 'native-base';
 
-import { useConvidadosCount, useLoadingModal, createLoadingModal, useChurras, useEditavel } from '../../context/churrasContext';
+import { useConvidadosCount, useLoadingModal, createLoadingModal, useChurras, useEditavel, useInitialPage } from '../../context/churrasContext';
 
 export default function DetalheChurras() {
   const route = useRoute();
   const { convidadosCount, setConvidadosCount } = useConvidadosCount();
   const { newChurras, setNewChurras } = useChurras();
   const { editavel, setEditavel } = useEditavel();
+  const { initialPage } = useInitialPage();
 
-  const churras = route.params.churras;
-  const editavel = route.params.editavel;
-  const { initialPage } = route.params;
+  // const churras = route.params.churras;
+  // const editavel = route.params.editavel;
   const { loading, setLoading } = useLoadingModal();
   const criarModal = createLoadingModal(loading);
   const [itens, setItens] = useState([]);
@@ -215,7 +215,7 @@ export default function DetalheChurras() {
   }
 
   async function carregarItens() {
-    const response = await api.get(`/listadochurras/${churras}`);
+    const response = await api.get(`/listadochurras/${newChurras}`);
     setItens(response.data);
     setItensTotal(response.data.length);
 
@@ -261,19 +261,19 @@ export default function DetalheChurras() {
   async function carregarTodosTipos(subTipo) {
     switch (subTipo.id) {
       case 1:
-        navigation.replace('EscolherNovosItens', { subTipo, churrascode: churras })
+        navigation.replace('EscolherNovosItens', { subTipo, churrascode: newChurras })
         break;
       case 2:
-        navigation.replace('EscolherNovosItens2', { subTipo, churrascode: churras })
+        navigation.replace('EscolherNovosItens2', { subTipo, churrascode: newChurras })
         break;
       case 3:
-        navigation.replace('EscolherNovosItens3', { subTipo, churrascode: churras })
+        navigation.replace('EscolherNovosItens3', { subTipo, churrascode: newChurras })
         break;
       case 4:
-        navigation.replace('EscolherNovosItens4', { subTipo, churrascode: churras })
+        navigation.replace('EscolherNovosItens4', { subTipo, churrascode: newChurras })
         break;
       case 5:
-        navigation.replace('EscolherNovosItens5', { subTipo, churrascode: churras })
+        navigation.replace('EscolherNovosItens5', { subTipo, churrascode: newChurras })
         break;
       default:
         break;
@@ -294,7 +294,7 @@ export default function DetalheChurras() {
       } else {
         var novaUrl = editChurrasFotoUrlC;
       }
-      await api.put(`/churrasUpdate/${churras}`, {
+      await api.put(`/churrasUpdate/${newChurras}`, {
         nomeChurras: editChurrasNome,
         data: editChurrasData,
         limiteConfirmacao: editChurrasDataLimite,
@@ -573,14 +573,14 @@ export default function DetalheChurras() {
     var date = new Date(data).getDate() + 1
     var month = new Date(data).getMonth() + 1
     var year = new Date(data).getFullYear()
-    if(date === 32) {
+    if (date === 32) {
       date = "01"
       month = month + 1
-      if(month === 13) {
-          month = 1
-          year += 1
+      if (month === 13) {
+        month = 1
+        year += 1
       }
-  }
+    }
     return date + '/' + month + '/' + year
   }
 
@@ -1416,7 +1416,11 @@ export default function DetalheChurras() {
                         </TouchableOpacity>
                         : null
                       }
-              <ActionButton offsetX={10} style={{ opacity: 0.85 }} offsetY={10} onPress={() => {navigation.openDrawer()}} />
+                    </View>
+                  )}
+                />
+              }
+              <ActionButton offsetX={10} style={{ opacity: 0.85 }} offsetY={10} onPress={() => { navigation.openDrawer() }} />
 
             </View>)
           : (

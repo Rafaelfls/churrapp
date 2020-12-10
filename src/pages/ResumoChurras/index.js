@@ -18,7 +18,7 @@ import Component2 from '../../assets/Component2.png'
 
 import style from './styles';
 
-import { useChurrasCount, useChurrasParticipado, useAppState, useChurras, useEditavel, useLoadingModal } from '../../context/churrasContext';
+import { useChurrasCount, useChurrasParticipado, useAppState, useChurras, useEditavel, useLoadingModal, useInitialPage } from '../../context/churrasContext';
 
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -26,6 +26,10 @@ export default function ResumoChurras() {
     const { churrasCount, setChurrasCount } = useChurrasCount();
     const { churrasParticipado, setChurrasParticipado } = useChurrasParticipado();
     const { loading, setLoading } = useLoadingModal();
+    const { setInitialPage } = useInitialPage()
+    const { newChurras, setNewChurras } = useChurras();
+    const { editavel, setEditavel } = useEditavel();
+
     const [contadorCriado, setContadorCriado] = useState(USUARIOLOGADO.churrasCriados);
 
     const route = useRoute();
@@ -39,8 +43,6 @@ export default function ResumoChurras() {
     var newChurrasCriados;
     const [direcao, setDirecao] = useState();
 
-    const { newChurras, setNewChurras } = useChurras();
-    const { editavel, setEditavel } = useEditavel();
 
     const isDrawerOpen = useIsDrawerOpen();
 
@@ -143,8 +145,9 @@ export default function ResumoChurras() {
     }
 
     function detalheChurras(churras) {
-        navigation.replace('DetalheChurras', { churras, initialPage: 0 });
-        setEditavel(true)
+        navigation.replace('DetalheChurras', { churras });
+        setInitialPage(0);
+        setEditavel(true);
         setNewChurras(churras);
     }
 
@@ -222,7 +225,8 @@ export default function ResumoChurras() {
             setChurrasParticipado(churrasParticipado + 1)
             api.put(`/usuariosQntParticipado/${USUARIOLOGADO.id}`, { churrasParticipados: churrasParticipado + 1 });
             setIsNotificacoesOpen(false)
-            navigation.navigate('DetalheChurras', { churras: churrasId, initialPage: 0 })
+            navigation.navigate('DetalheChurras', { churras: churrasId })
+            setInitialPage(0);
             setEditavel(false)
         }
     }
@@ -279,7 +283,7 @@ export default function ResumoChurras() {
                                 style={style.slidingCard}
                                 height={100}
                                 onSlidingSuccessLeft={() => { setVisivel(true); setChurrasDeletar(churras) }}
-                                onSlidingSuccessRight={() => { detalheChurras(churras.id) }}
+                                onSlidingSuccessRight={() => { detalheChurras(churras.id); setEditavel(true) }}
                                 slideDirection={SlideDirection.ANY}>
                                 <View style={{ flexDirection: "row", width: '100%' }}>
                                     <View style={style.detalheSlide}>
