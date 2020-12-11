@@ -7,7 +7,7 @@ import { TextInputMask } from 'react-native-masked-text'
 import SMSVerifyCode from 'react-native-sms-verifycode';
 import api from '../../services/api';
 import { CodeField, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field'; //yarn add react-native-confirmation-code-field
-// import RNOtpVerify from 'react-native-otp-verify';
+import RNOtpVerify from 'react-native-otp-verify';
 
 import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
@@ -46,8 +46,15 @@ const EsqueciSenha = () => {
     }
     function celVerify() {
         RNOtpVerify.getOtp()
-            .then(p => RNOtpVerify.addListener(this.otpHandler))
+            .then(p => RNOtpVerify.addListener(otpHandler))
             .catch(p => console.log(p));
+    }
+
+    function otpHandler(message) {
+        const otp = /(\d{4})/g.exec(message)[1];
+        this.setState({ otp });
+        RNOtpVerify.removeListener();
+        Keyboard.dismiss();
     }
     // Termina aqui
 
@@ -137,7 +144,7 @@ const EsqueciSenha = () => {
     }
 
     useEffect(() => {
-        // celVerify();
+        celVerify();
         requestReadSmsPermission();
         pegarPIN();
     }, []);
@@ -172,7 +179,7 @@ const EsqueciSenha = () => {
                     includeRawValueInChangeText={true}
                     onChangeText={(text, rawText) => { setCelularUser(rawText); }}
                 />
-                <TouchableOpacity onPress={() => {setCelularUser('')}} style={style.cleanInput2}>
+                <TouchableOpacity onPress={() => { setCelularUser('') }} style={style.cleanInput2}>
                     <Text style={style.mudarSenha}>X</Text>
                 </TouchableOpacity>
                 {info

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, Image, FlatList, TouchableOpacity, Linking,
-  Picker, ScrollView, Modal, TextInput, TouchableHighlight, Switch, AppState
+  Picker, ScrollView, Modal, TextInput, TouchableHighlight, Switch, AppState, StatusBar
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import NumericInput from 'react-native-numeric-input';
@@ -16,7 +16,7 @@ import ActionButton from 'react-native-action-button';
 import api from '../../services/api';
 import * as ImagePicker from 'expo-image-picker';
 import { FloatingAction } from "react-native-floating-action";
-import DatePicker from 'react-native-datepicker';
+import DatePicker from 'react-native-date-picker';
 // import { Rating, AirbnbRating } from 'react-native-elements'
 
 
@@ -59,6 +59,11 @@ export default function DetalheChurras() {
   const [editChurrasFotoUrlU, setEditChurrasFotoUrlU] = useState('https://churrappuploadteste.s3.amazonaws.com/default/usuario_default.png')
   const [editChurrasValorTotal, setEditChurrasValorTotal] = useState(0)
   const [editChurrasValorPago, setEditChurrasValorPago] = useState(0)
+
+  const [editChurrasDataPicker, setEditChurrasDataPicker] = useState('')
+  const [editChurrasDataLimitePicker, setEditChurrasDataLimitePicker] = useState('')
+  const [hrComeco, setHrComeco] = useState()
+  const [hrFim, setHrFim] = useState()
 
   const [modalTipoVisivel, setModalTipoVisivel] = useState(false);
   const [modalItemVisivel, setModalItemVisivel] = useState(false);
@@ -281,11 +286,16 @@ export default function DetalheChurras() {
   }
 
   function editPerfil() {
+    formatarDataPicker(editChurrasData)
+    formatarDataPickerLimite(editChurrasDataLimite)
+    // formatDataInicio(editChurrasInicio)
+    // formatDataFim(editChurrasFim)
     setAllowEditing([true, 'black']);
   }
 
 
   async function savePerfil(sair) {
+    var dataNova = new Date(editChurrasData)
     if (sair) {
       setLoading(true)
       setAllowEditing([false, 'darkgray']);
@@ -294,9 +304,11 @@ export default function DetalheChurras() {
       } else {
         var novaUrl = editChurrasFotoUrlC;
       }
+      console.log(editChurrasData)
+      // console.log(editChurrasDataPicker)
       await api.put(`/churrasUpdate/${newChurras}`, {
         nomeChurras: editChurrasNome,
-        data: editChurrasData,
+        data: dataNova,
         limiteConfirmacao: editChurrasDataLimite,
         hrInicio: editChurrasInicio,
         hrFim: editChurrasFim,
@@ -314,9 +326,9 @@ export default function DetalheChurras() {
 
   async function carregarConvidados() {
     const response = await api.get(`/convidados/${newChurras}`);
-
+    const res = await api.get(`convidadosVai/${newChurras}`)
     setConvidados(response.data);
-    setConvidadosCount(response.data.length);
+    setConvidadosCount(res.data.length);
     setConvidadosConfirmados(response.data);
     if (!editavel) {
       response.data.map(convid => {
@@ -333,8 +345,10 @@ export default function DetalheChurras() {
     setIsEnabled(previousState => !previousState)
     if (!isEnabled) {
       await api.put(`/confirmaPresenca/${convidadoAtual.usuario_id}/${convidadoAtual.churras_id}`)
+      setRefresh(!refresh)
     } else {
       await api.put(`/negarPresenca/${convidadoAtual.usuario_id}/${convidadoAtual.churras_id}`)
+      setRefresh(!refresh)
     }
     setLoading(false)
   }
@@ -544,7 +558,7 @@ export default function DetalheChurras() {
   async function carregaChurras() {
     const res = await api.get(`churrasPeloId/${newChurras}`)
 
-    console.log(res)
+    // console.log(res)
     setChurrasAtual(res.data[0])
     setEditChurrasNome(res.data[0].nomeChurras)
     setEditChurrasNomeUsuario(res.data[0].nome)
@@ -552,13 +566,16 @@ export default function DetalheChurras() {
     const dataFormatada = formatData(res.data[0].data)
     if (res.data[0].limiteConfirmacao === null) {
       setEditChurrasDataLimite(dataFormatada)
+      setEditChurrasDataLimitePicker(dataFormatada)
     } else {
       const dataFormatadaLimite = formatData(res.data[0].limiteConfirmacao)
       setEditChurrasDataLimite(dataFormatadaLimite)
+      setEditChurrasDataLimitePicker(dataFormatadaLimite)
 
     }
     setDataComparar(Date.parse(res.data[0].data))
-    setEditChurrasData(dataFormatada)
+    setEditChurrasDataPicker(dataFormatada)
+    setEditChurrasData(res.data[0].data)
     setEditChurrasInicio(res.data[0].hrInicio)
     setEditChurrasFim(res.data[0].hrFim)
     setEditChurrasDescricao(res.data[0].descricao)
@@ -628,6 +645,37 @@ export default function DetalheChurras() {
     return response.location;
   }
 
+  function formatarDataPicker(data) {
+    var dataInicio = new Date(data).getDate() + 1
+    var mesInicio = new Date(data).getMonth() + 1
+    var anoInicio = new Date(data).getFullYear()
+    setEditChurrasData(mesInicio + "/" + dataInicio + "/" + anoInicio)
+  }
+
+  function formatarDataPickerLimite(dataLimite) {
+    var dataConfirmacao = new Date(dataLimite).getDate()
+    var mesConfirmacao = new Date(dataLimite).getMonth() + 1
+    var anoConfirmacao = new Date(dataLimite).getFullYear()
+    setEditChurrasDataLimite(mesConfirmacao + "/" + dataConfirmacao + "/" + anoConfirmacao)
+
+  }
+  function formatDataInicio(data) {
+    var hours = data.getHours();
+    var min = data.getMinutes();
+    var sec = data.getSeconds();
+
+    setEditChurrasInicio(hours + ':' + min + ':' + sec)
+    setHrComeco(hours + ':' + min + ':' + sec)
+  }
+  function formatDataFim(data) {
+    var hours = data.getHours();
+    var min = data.getMinutes();
+    var sec = data.getSeconds();
+
+    setEditChurrasFim(hours + ':' + min + ':' + sec)
+    setHrFim(hours + ':' + min + ':' + sec)
+  }
+
   useEffect(() => {
     carregaChurras();
     carregarItens();
@@ -679,7 +727,7 @@ export default function DetalheChurras() {
         tabBarUnderlineStyle={{ backgroundColor: 'maroon', height: 2 }}
         renderTabBar={() => <DefaultTabBar />}
         ref={(tabView) => { tabView = tabView; }}
-        initialPage={initialPage}
+      // initialPage={initialPage}
       >
         <View tabLabel="Info">
           <ScrollView>
@@ -735,151 +783,104 @@ export default function DetalheChurras() {
                 value={editChurrasLocal}
               />
             </View>
-            <View style={style.formGroup}>
-              <View style={{ flexDirection: 'row' }}>
-                <IconEnt name="calendar" size={22} style={style.icons} />
-                <Text style={style.churrasNome}>Data: </Text>
+            {allowEditing[0]
+              ? <View>
+                <View style={style.formGroup}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <IconEnt name="calendar" size={22} style={style.icons} />
+                    <Text style={style.churrasNome}>Data: </Text>
+                  </View>
+                  <DatePicker
+                    // style={{ width: '100%' }}
+                    date={editChurrasData}
+                    mode="date"
+                    locale='pt'
+                    disabled={!allowEditing[0]}
+                    placeholder="DD/MM/AAAA"
+                    format="DD/MM/YYYY"
+                    minimumDate={new Date()}
+                    onDateChange={(date) => { setEditChurrasData(date); console.log(date) }}
+                  />
+                </View>
+                <View style={style.formGroup}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <IconEnt name="calendar" size={22} style={style.icons} />
+                    <Text style={style.churrasNome}>Data limite confirmação: </Text>
+                  </View>
+                  <DatePicker
+                    // style={{ width: '100%' }}
+                    date={editChurrasDataLimite}
+                    mode="date"
+                    locale='pt'
+                    disabled={!allowEditing[0]}
+                    placeholder="DD/MM/AAAA"
+                    format="DD/MM/YYYY"
+                    minimumDate={new Date()}
+                    maximumDate={editChurrasData}
+                    onDateChange={(date) => { setEditChurrasDataLimite(date); console.log(date) }}
+                  />
+                </View>
+                <View style={style.formGroup}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <IconEnt name="clock" size={22} style={style.icons} />
+                    <Text style={style.churrasNome}>Horário de início: </Text>
+                  </View>
+                  <DatePicker
+                    // style={{ width: '100%' }}
+                    date={hrComeco}
+                    mode="time"
+                    placeholder="00:00"
+                    disabled={!allowEditing[0]}
+                    onDateChange={(hrInicio) => { formatDataInicio(hrInicio) }}
+                  />
+                </View>
+                <View style={style.formGroup}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <IconEnt name="clock" size={22} style={style.icons} />
+                    <Text style={style.churrasNome}>Horário de Fim: </Text>
+                  </View>
+                  <DatePicker
+                    // style={{ width: '100%' }}
+                    date={hrFim}
+                    mode="time"
+                    disabled={!allowEditing[0]}
+                    onDateChange={(hrFim) => { formatDataFim(hrFim) }}
+                  />
+                </View>
               </View>
-              <DatePicker
-                style={{ width: '100%' }}
-                date={editChurrasData}
-                mode="date"
-                disabled={!allowEditing[0]}
-                placeholder="DD/MM/AAAA"
-                format="DD/MM/YYYY"
-                minDate={new Date()}
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateIcon: {
-                    display: 'none'
-                  },
-                  dateText: {
-                    color: allowEditing[1],
-                    fontSize: 16,
-                    position: 'absolute',
-                    fontFamily: 'poppins-light',
-                  },
-                  disabled: {
-                    backgroundColor: 'transparent',
-                  },
-                  dateInput: {
-                    borderBottomWidth: 1,
-                    borderWidth: 0,
-                    borderBottomColor: allowEditing[1],
-                  }
-                }}
-                onDateChange={(date) => { setEditChurrasData(date) }}
-              />
-            </View>
-            <View style={style.formGroup}>
-              <View style={{ flexDirection: 'row' }}>
-                <IconEnt name="calendar" size={22} style={style.icons} />
-                <Text style={style.churrasNome}>Data limite confirmação: </Text>
+              :
+              <View>
+                <View style={style.formGroup}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <IconEnt name="calendar" size={22} style={style.icons} />
+                    <Text style={style.churrasNome}>Data: </Text>
+                  </View>
+                  <Text style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}>{editChurrasDataPicker}</Text>
+                </View>
+                <View style={style.formGroup}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <IconEnt name="calendar" size={22} style={style.icons} />
+                    <Text style={style.churrasNome}>Data limite confirmação: </Text>
+                  </View>
+                  <Text style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}>{editChurrasDataLimitePicker}</Text>
+                </View>
+                <View style={style.formGroup}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <IconEnt name="clock" size={22} style={style.icons} />
+                    <Text style={style.churrasNome}>Horário de início: </Text>
+                  </View>
+                  <Text style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}>{editChurrasInicio}</Text>
+                </View>
+                <View style={style.formGroup}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <IconEnt name="clock" size={22} style={style.icons} />
+                    <Text style={style.churrasNome}>Horário de Fim: </Text>
+                  </View>
+                  <Text style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}>{editChurrasFim}</Text>
+                </View>
               </View>
-              <DatePicker
-                style={{ width: '100%' }}
-                date={editChurrasDataLimite}
-                mode="date"
-                disabled={!allowEditing[0]}
-                placeholder="DD/MM/AAAA"
-                format="DD/MM/YYYY"
-                minDate={new Date()}
-                maxDate={editChurrasData}
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateIcon: {
-                    display: 'none'
-                  },
-                  dateText: {
-                    color: allowEditing[1],
-                    fontSize: 16,
-                    position: 'absolute',
-                    fontFamily: 'poppins-light',
-                  },
-                  disabled: {
-                    backgroundColor: 'transparent',
-                  },
-                  dateInput: {
-                    borderBottomWidth: 1,
-                    borderWidth: 0,
-                    borderBottomColor: allowEditing[1],
-                  }
-                }}
-                onDateChange={(date) => { setEditChurrasDataLimite(date) }}
-              />
-            </View>
-            <View style={style.formGroup}>
-              <View style={{ flexDirection: 'row' }}>
-                <IconEnt name="clock" size={22} style={style.icons} />
-                <Text style={style.churrasNome}>Horário de início: </Text>
-              </View>
-              <DatePicker
-                style={{ width: '100%' }}
-                date={editChurrasInicio}
-                mode="time"
-                placeholder="00:00"
-                disabled={!allowEditing[0]}
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateIcon: {
-                    display: 'none'
-                  },
-                  dateText: {
-                    color: allowEditing[1],
-                    fontSize: 16,
-                    position: 'absolute',
-                    fontFamily: 'poppins-light',
-                  },
-                  disabled: {
-                    backgroundColor: 'transparent',
-                  },
-                  dateInput: {
-                    borderBottomWidth: 1,
-                    borderWidth: 0,
-                    borderBottomColor: allowEditing[1],
-                  }
-                }}
-                onDateChange={(date) => { setEditChurrasInicio(date) }}
-              />
-            </View>
-            <View style={style.formGroup}>
-              <View style={{ flexDirection: 'row' }}>
-                <IconEnt name="clock" size={22} style={style.icons} />
-                <Text style={style.churrasNome}>Horário de Fim: </Text>
-              </View>
-              <DatePicker
-                style={{ width: '100%' }}
-                date={editChurrasFim}
-                mode="time"
-                placeholder="00:00"
-                confirmBtnText="Confirm"
-                disabled={!allowEditing[0]}
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateIcon: {
-                    display: 'none'
-                  },
-                  disabled: {
-                    backgroundColor: 'transparent',
-                  },
-                  dateText: {
-                    color: allowEditing[1],
-                    fontSize: 16,
-                    position: 'absolute',
-                    fontFamily: 'poppins-light',
-                  },
-                  dateInput: {
-                    borderBottomWidth: 1,
-                    borderWidth: 0,
-                    borderBottomColor: allowEditing[1],
-                  }
-                }}
-                onDateChange={(date) => { setEditChurrasFim(date) }}
-              />
-            </View>
+            }
+
             <View style={style.formGroup}>
               <View style={{ flexDirection: 'row' }}>
                 <IconMa name="description" size={22} style={style.icons} />
@@ -933,7 +934,7 @@ export default function DetalheChurras() {
               ? <FloatingAction
                 color='rgba(0,0,0,0.9)'
                 showBackground={false}
-                onPressMain={() => savePerfil(true)}
+                onPressMain={() => { savePerfil(true) }}
                 floatingIcon={<IconMa name="save" size={22} color={"white"} />}
               />
               : <FloatingAction
@@ -952,38 +953,7 @@ export default function DetalheChurras() {
             {churrasAtual.limiteConfirmacao != null
               ? <View style={style.formGroup}>
                 <Text style={[style.churrasNome, { textAlign: 'center' }]}>Data limite confirmação: </Text>
-                <DatePicker
-                  style={{ width: '100%' }}
-                  date={editChurrasDataLimite}
-                  mode="date"
-                  disabled={true}
-                  placeholder="DD/MM/AAAA"
-                  format="DD/MM/YYYY"
-                  minDate={new Date()}
-                  maxDate={editChurrasData}
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  customStyles={{
-                    dateIcon: {
-                      display: 'none'
-                    },
-                    dateText: {
-                      color: 'darkgray',
-                      fontSize: 16,
-                      position: 'absolute',
-                      fontFamily: 'poppins-light',
-                    },
-                    disabled: {
-                      backgroundColor: 'transparent',
-                    },
-                    dateInput: {
-                      borderBottomWidth: 1,
-                      borderWidth: 0,
-                      borderBottomColor: 'darkgray',
-                    }
-                  }}
-                  onDateChange={(date) => { setEditChurrasDataLimite(date) }}
-                />
+                <Text style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto', textAlign: 'center' }]}>{editChurrasDataLimitePicker}</Text>
               </View>
               : null}
             <Picker
@@ -1150,38 +1120,7 @@ export default function DetalheChurras() {
             {churrasAtual.limiteConfirmacao != null
               ? <View style={style.formGroup}>
                 <Text style={[style.churrasNome, { textAlign: 'center' }]}>Data limite confirmação: </Text>
-                <DatePicker
-                  style={{ width: '100%' }}
-                  date={editChurrasDataLimite}
-                  mode="date"
-                  disabled={true}
-                  placeholder="DD/MM/AAAA"
-                  format="DD/MM/YYYY"
-                  minDate={new Date()}
-                  maxDate={editChurrasData}
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  customStyles={{
-                    dateIcon: {
-                      display: 'none'
-                    },
-                    dateText: {
-                      color: 'darkgray',
-                      fontSize: 16,
-                      position: 'absolute',
-                      fontFamily: 'poppins-light',
-                    },
-                    disabled: {
-                      backgroundColor: 'transparent',
-                    },
-                    dateInput: {
-                      borderBottomWidth: 1,
-                      borderWidth: 0,
-                      borderBottomColor: 'darkgray',
-                    }
-                  }}
-                  onDateChange={(date) => { setEditChurrasDataLimite(date) }}
-                />
+                <Text style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto', textAlign: 'center' }]}>{editChurrasDataLimitePicker}</Text>
               </View>
               : null}
             <Picker
@@ -1428,7 +1367,7 @@ export default function DetalheChurras() {
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <Text style={style.churrasNome}>Valor por pessoa: </Text>
               </View>
-              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', textAlign: 'center' }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount + 1)).toFixed(2)}</Text>
+              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', textAlign: 'center' }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount+ 1)).toFixed(2)}</Text>
             </View>
               <Picker
                 mode="dropdown"

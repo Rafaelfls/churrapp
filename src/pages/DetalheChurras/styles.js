@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, StatusBar } from 'react-native';
 import Constants from 'expo-constants';
 
 export default StyleSheet.create({
@@ -11,14 +11,14 @@ export default StyleSheet.create({
   //header
   containerHeader: {
     flexDirection: 'row',
-    paddingTop: Constants.statusBarHeight + 10,
+    paddingTop: StatusBar.currentHeight +  15,
     paddingBottom: '2%',
     backgroundColor: 'maroon',
-
+    justifyContent:'space-between',
   },
   title: {
-    width: '70%',
     marginTop: 10,
+    
   },
   detalheTitle: {
     fontSize: 30,
@@ -30,24 +30,25 @@ export default StyleSheet.create({
     textAlign: "center",
   },
   backBtn: {
-    position: "relative",
-    top: 0,
     justifyContent: 'center',
     paddingHorizontal: 20,
+    width:100
   },
   shareBtn: {
-    position: "relative",
-    top: 0,
-    right: 0,
     justifyContent: 'center',
     paddingHorizontal: 20,
+    width:100,
+    alignItems:'flex-end'
+  },
+  shareBtnIcon:{
+    padding:0,
+    margin:0
   },
   participateBtn: {
-    position: 'absolute',
-    top: 40,
-    right: 20,
+    paddingHorizontal: 20,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    width:100
   },
   textSwitch: {
     color: 'white',
@@ -303,7 +304,7 @@ export default StyleSheet.create({
   convidadoPago: {
     position: 'absolute',
     right: 20,
-    top: 13,
+    top: 50,
     color: 'green'
   },
 

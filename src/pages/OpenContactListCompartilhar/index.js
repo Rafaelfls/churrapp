@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {StyleSheet, View, FlatList, Text, TouchableOpacity,SafeAreaView,TextInput,ActivityIndicator } from 'react-native';
+import { StyleSheet, View, FlatList, Text, TouchableOpacity, SafeAreaView, TextInput, ActivityIndicator } from 'react-native';
 import * as Contacts from 'expo-contacts';
 import { useNavigation } from '@react-navigation/native'
 
@@ -56,7 +56,7 @@ export default function OpenContactListCompartilhar() {
   return (
     <View style={style.container}>
       <SafeAreaView style={style.body}>
-        <View style={{flexDirection:"row", marginLeft:10, alignItems:'center'}}>
+        <View style={{ flexDirection: "row", marginLeft: 10, alignItems: 'center' }}>
           <TouchableOpacity
             onPress={() => navigation.navigate('CompartilharConvidados', {
               nomeContato: null,
@@ -74,7 +74,7 @@ export default function OpenContactListCompartilhar() {
           placeholderTextColor="gray"
           style={{
             backgroundColor: 'white',
-            height: 40,
+            height: 45,
             fontFamily: 'poppins-medium',
             fontSize: 15,
             paddingLeft: 5,
@@ -84,43 +84,49 @@ export default function OpenContactListCompartilhar() {
             borderBottomColor: 'gray',
           }}
           value={valueSearch}
-          onChangeText={value => {searchContacts(value);setValueSearch(value)}}
+          onChangeText={value => { searchContacts(value); setValueSearch(value) }}
         />
-        <TouchableOpacity onPress={() => { searchContacts(''); setValueSearch('')}} style={style.cleanInput}>
-            <Text style={style.mudarSenha}>X</Text>
-        </TouchableOpacity>
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-          {isLoading 
-          ? (
-            <View
-              style={{
-                ...StyleSheet.absoluteFill,
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginLeft: 30,
-              }}
-            >
-              <ActivityIndicator size="large" color="maroon" />
-            </View>
-          ) : null}
+          {isLoading
+            ? (
+              <View
+                style={{
+                  ...StyleSheet.absoluteFill,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 30,
+                }}
+              >
+                <ActivityIndicator size="large" color="maroon" />
+              </View>
+            ) : null}
           <FlatList
             data={contacts}
-            keyExtractor={(item,idx) => contacts.celular}
+            keyExtractor={(item, idx) => contacts.celular}
             showsVerticalScrollIndicator={false}
             style={style.churrasList}
             renderItem={({ item: contacts }) => (
-              <TouchableOpacity onPress={() => navigation.navigate('CompartilharConvidados', {
-                nomeContato: contacts.nome,
-                telefoneContato: contacts.celular,
-                churrasCodeAtual: null
-              })} style={{ minHeight: 70, padding: 5, paddingHorizontal: 20 }}>
-                <Text style={{ color: 'black', fontFamily: 'poppins-semi-bold', fontSize: 18 }}>
-                  {contacts.nome}
-                </Text>
-                <Text style={{ color: 'gray', fontFamily: 'poppins-medium' }}>
-                  {contacts.celular}
-                </Text>
-              </TouchableOpacity>
+              <View>
+                {contacts.celular == 55 + USUARIOLOGADO.celular
+                  ? null
+                  : contacts.celular === '055' + USUARIOLOGADO.celular
+                    ? null
+                    :
+                    <TouchableOpacity onPress={() => navigation.navigate('CompartilharConvidados', {
+                      nomeContato: contacts.nome,
+                      telefoneContato: contacts.celular,
+                      churrasCodeAtual: null
+                    })} style={{ minHeight: 70, padding: 5, paddingHorizontal: 20 }}>
+                      <Text style={{ color: 'black', fontFamily: 'poppins-semi-bold', fontSize: 18 }}>
+                        {contacts.nome}
+                      </Text>
+                      <Text style={{ color: 'gray', fontFamily: 'poppins-medium' }}>
+                        {contacts.celular}
+                      </Text>
+                    </TouchableOpacity>
+                }
+
+              </View>
             )}
           />
 

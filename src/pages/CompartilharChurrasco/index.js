@@ -25,7 +25,7 @@ export default function CompartilharChurrasco({ route, navigation }) {
 
     function goBack() {
         navigation.replace('DetalheChurras', { churras: churras.id })
-        setInitialPage(1);
+        // setInitialPage(1);
         setEditavel(true);
     }
 

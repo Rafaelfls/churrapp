@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, Vibration, ActivityIndicator, Modal, RefreshControl, AppState, Platform, TouchableWithoutFeedback } from 'react-native';
+import {
+    View, Text, Image, FlatList, TouchableOpacity, Vibration, ActivityIndicator, Modal,
+    RefreshControl, AppState, Platform, TouchableWithoutFeedback, StatusBar, Pressable, ToastAndroid, Animated
+} from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { FloatingAction } from "react-native-floating-action";
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -9,6 +12,10 @@ import IconEnt from 'react-native-vector-icons/Entypo';
 import IconFea from 'react-native-vector-icons/Feather';
 import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
 import { useIsDrawerOpen } from '@react-navigation/drawer'
+import DatePicker from 'react-native-date-picker';
+import ActionButton from 'react-native-action-button';
+import { Fab } from 'native-base';
+
 
 import api from '../../services/api';
 
@@ -21,6 +28,7 @@ import style from './styles';
 import { useChurrasCount, useChurrasParticipado, useAppState, useChurras, useEditavel, useLoadingModal, useInitialPage } from '../../context/churrasContext';
 
 import { ScrollView } from 'react-native-gesture-handler';
+import { Button } from 'native-base';
 
 export default function ResumoChurras() {
     const { churrasCount, setChurrasCount } = useChurrasCount();
@@ -41,47 +49,54 @@ export default function ResumoChurras() {
     const [refreshChurras, setRefreshChurras] = useState(true);
     const [test, setTest] = useState([]);
     var newChurrasCriados;
-    const [direcao, setDirecao] = useState();
+    const [ativado, setAtivado] = useState(false);
 
 
     const isDrawerOpen = useIsDrawerOpen();
 
+
+    const [dots, setDots] = useState(false);
+    const [animation, setAnimation] = useState(new Animated.Value(0));
+    const [rotation, setRotation] = useState(new Animated.Value(0));
+    const [dotsAnimation, setDotsAnimation] = useState(new Animated.Value(0));
+    const [indexToAnimate, setIndexToanimate] = useState()
+    const [dotsMenu, setDotsMenu] = useState(new Animated.Value(0))
+    const [contador, setContador] = useState(false)
+
     //Começo Ouvir Estado do App
-    const appState = useRef(AppState.currentState);
-    const { appStateVisible, setAppStateVisible } = useAppState(appState.current);
+    // const appState = useRef(AppState.currentState);
+    // const { appStateVisible, setAppStateVisible } = useAppState(appState.current);
 
-    useEffect(() => {
-        AppState.addEventListener("change", _handleAppStateChange);
-        if (Platform.OS == "android") {
-            AppState.addEventListener("blur", _handleBlurState);
-        }
-        return () => {
-            AppState.removeEventListener("change", _handleAppStateChange);
-            if (Platform.OS == "android") {
-                AppState.removeEventListener("blur", _handleBlurState);
-            }
+    // useEffect(() => {
+    //     AppState.addEventListener("change", _handleAppStateChange);
+    //     if (Platform.OS == "android") {
+    //         AppState.addEventListener("blur", _handleBlurState);
+    //     }
+    //     return () => {
+    //         AppState.removeEventListener("change", _handleAppStateChange);
+    //         if (Platform.OS == "android") {
+    //             AppState.removeEventListener("blur", _handleBlurState);
+    //         }
 
-        };
-    }, []);
+    //     };
+    // }, []);
 
-    const _handleBlurState = (nextAppState) => {
-        if (appState.current.match(/active/) && nextAppState === "active") {
-            console.log("Blur");
-        }
-        appState.current = nextAppState;
-        setAppStateVisible(appState.current);
-        console.log("AppState", appState.current);
-    }
+    // const _handleBlurState = (nextAppState) => {
+    //     if (appState.current.match(/active/) && nextAppState === "active") {
+    //         console.log("Blur");
+    //     }
+    //     appState.current = nextAppState;
+    //     console.log("AppState", appState.current);
+    // }
 
-    const _handleAppStateChange = (nextAppState) => {
-        if (appState.current.match(/inactive|background/) && nextAppState === "active") {
-            console.log("App ativo novamente!");
-        }
+    // const _handleAppStateChange = (nextAppState) => {
+    //     if (appState.current.match(/inactive|background/) && nextAppState === "active") {
+    //         console.log("App ativo novamente!");
+    //     }
 
-        appState.current = nextAppState;
-        setAppStateVisible(appState.current);
-        console.log("AppState", appState.current);
-    };
+    //     appState.current = nextAppState;
+    //     console.log("AppState", appState.current);
+    // };
     // Fim Ouvir Estado do App
 
 
@@ -108,7 +123,16 @@ export default function ResumoChurras() {
 
     const navigation = useNavigation();
 
+    function showToast(churrasToast) {
+        ToastAndroid.showWithGravityAndOffset(
+            "Churras " + churrasToast.nomeChurras + " foi deletado!", ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            200
+        );
+    }
     function deletar(churrass) {
+        showToast(churrass)
         setLoading(true)
         api.delete(`/churras/${churrass.id}`, config).then(function () {
             setVisivel(!visivel)
@@ -136,7 +160,7 @@ export default function ResumoChurras() {
         setRefreshChurras(!refreshChurras);
         newChurrasCriados = churrasCount + 1;
         api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: newChurrasCriados });
-        navigation.navigate('InicioCriaChurras', { appStateVisible: appStateVisible });
+        navigation.navigate('InicioCriaChurras');
 
     }
 
@@ -234,10 +258,159 @@ export default function ResumoChurras() {
         navigation.toggleDrawer()
     }
 
+    const animatedStyles = {
+        rotate: {
+            transform: [
+                {
+                    rotate: rotation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ['0deg', '-45deg']
+                    })
+                }
+            ]
+        },
+        rotateBack: {
+            transform: [
+                {
+                    rotate: rotation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ['0deg', '-45deg']
+                    })
+                }
+            ]
+        },
+        plusMove: {
+            transform: [
+                {
+                    translateY: animation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [-20, 0]
+                    })
+                }
+            ],
+            // height: animation.interpolate({
+            //     inputRange: [0, 1],
+            //     outputRange: [-20, 20]
+            // })
+        },
+        dotMove1: {
+            transform: [
+                {
+                    translateX: dotsAnimation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, -50]
+                    })
+                },
+                {
+                    translateY: dotsAnimation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, 13]
+                    })
+                }
+            ]
+        },
+        dotMove2: {
+            transform: [
+                {
+                    translateX: dotsAnimation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, -25]
+                    })
+                },
+                {
+                    translateY: dotsAnimation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, 5]
+                    })
+                }
+            ]
+        },
+        dotMove3: {
+            transform: [
+                {
+                    translateX: dotsAnimation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, 0]
+                    })
+                },
+                {
+                    translateY: dotsAnimation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, -3]
+                    })
+                }
+            ]
+        },
+        dotMenu: {
+            transform: [
 
+                {
+                    translateY: dotsMenu.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [-40, -8]
+                    })
+                },
+                {
+                    translateX: dotsMenu.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, 0]
+                    })
+                },
+                {
+                    scaleY: dotsMenu.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, 1]
+                    })
+                }
+            ]
+        },
+        cardExpand: {
+            marginBottom: dotsMenu.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 20]
+            })
+        }
+    }
+
+    function rotateFab() {
+        const toValue = ativado ? 0 : 1
+        setAtivado(!ativado)
+        Animated.spring(rotation, {
+            toValue,
+            friction: 50,
+            tension: 140,
+            useNativeDriver: true
+        }).start()
+        Animated.spring(animation, {
+            toValue,
+            friction: 5,
+            tension: 140,
+            useNativeDriver: true
+        }).start()
+    }
+    function moveDots() {
+        const toValue = dots ? 0 : 1
+        setDots(!dots)
+        Animated.parallel([
+            Animated.spring(dotsAnimation, {
+                toValue,
+                friction: 50,
+                tension: 140,
+                useNativeDriver: true
+            }),
+            Animated.spring(dotsMenu, {
+                toValue,
+                friction: 50,
+                tension: 140,
+                delay: 100,
+                useNativeDriver: false
+            })
+        ]).start()
+
+    }
     return (
         <View style={style.container}>
-
+            <StatusBar barStyle="dark-content" backgroundColor="white" />
             <View style={style.header}>
                 <View style={style.menuBtn}>
                     <View style={style.centeredViewNotificacaoQtd}>
@@ -258,6 +431,33 @@ export default function ResumoChurras() {
 
                     <Text style={style.textSubHeader}>Você tem {contadorCriado} eventos criados</Text>
                 </View>
+                <View style={{ left: 110, top: 30 }}>
+                    <Fab
+                        active={ativado}
+                        onPress={() => rotateFab()}
+                        direction="down"
+                        containerStyle={{}}
+                        style={{ backgroundColor: 'maroon', zIndex: 4 }}
+                    // position="topRight"
+                    >
+                        <View style={style.fab}>
+                            <Animated.View style={[style.plus1, animatedStyles.rotate]} />
+                            <Animated.View style={[style.plus2, animatedStyles.rotateBack]} />
+                        </View>
+                        <Button onPress={() => inicioCriarChurras()} style={{ backgroundColor: 'maroon', zIndex: 3 }}>
+                            <Animated.View style={[animatedStyles.plusMove]}>
+                                <Text style={{ position: "absolute", color: 'black', left: -125, fontSize: 15, width: '1000%', fontFamily: 'poppins-medium' }}>Criar Churras</Text>
+                                <Icon name="plus" style={style.fabBtnIcon} />
+                            </Animated.View>
+                        </Button>
+                        <Button onPress={() => ParticiparChurras()} style={{ backgroundColor: 'maroon', zIndex: 3 }}>
+                            <Animated.View style={[animatedStyles.plusMove]}>
+                                <Text style={{ position: "absolute", color: 'black', left: -180, fontSize: 15, width: '1000%', fontFamily: 'poppins-medium' }}>Participar do Churras</Text>
+                                <Icon name="users" style={style.fabBtnIcon} />
+                            </Animated.View>
+                        </Button>
+                    </Fab>
+                </View>
             </View>
 
             {churras.length == 0
@@ -277,50 +477,63 @@ export default function ResumoChurras() {
                 refreshing={loading}
                 onRefresh={loadChurras}
                 renderItem={({ item: churras }) => (
-                    <View style={style.churras}>
-                        <View style={style.churrasDescricao}>
-                            <RNSlidingButton
-                                style={style.slidingCard}
-                                height={100}
-                                onSlidingSuccessLeft={() => { setVisivel(true); setChurrasDeletar(churras) }}
-                                onSlidingSuccessRight={() => { detalheChurras(churras.id); setEditavel(true) }}
-                                slideDirection={SlideDirection.ANY}>
-                                <View style={{ flexDirection: "row", width: '100%' }}>
-                                    <View style={style.detalheSlide}>
-                                        <Icon name="info" size={24} color="white" />
-                                    </View>
-                                    <View style={style.slideBtn}>
-                                        <Image source={{ uri: churras.fotoUrlC }} style={style.churrasFoto} />
-                                        <View style={style.churrasInfosView}>
-                                            <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
-                                            <Text style={style.churrasDono}>{churras.nome} </Text>
-                                            <View style={style.churrasLocDat}>
-                                                <IconFea style={style.dataIcon} name="calendar" size={15} />
-                                                <Text style={style.churrasData}> {formatData(churras.data)}</Text>
-                                                <Text style={style.locDatSeparator}>  |  </Text>
-                                                <IconMI style={style.localIcon} name="access-time" size={15} />
-                                                <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - " + churras.hrFim : ''}</Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                    <View style={style.deletarSlide}>
-                                        <Icon name="trash-alt" size={24} color="white" />
+                    <View style={[style.churras]}>
+                        <Pressable
+                            style={({ pressed }) => [pressed ? style.pressedCard : style.unpressedCard]}
+                            delayLongPress={300}
+                            onPress={() => { detalheChurras(churras.id); setEditavel(true) }}
+                            onLongPress={() => { setVisivel(true); setChurrasDeletar(churras) }}>
+                            <View style={[style.slideBtn]}>
+                                <Image source={{ uri: churras.fotoUrlC }} style={style.churrasFoto} />
+                                <View style={style.churrasInfosView}>
+                                    <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
+                                    <Text style={style.churrasDono}>{churras.nome} </Text>
+                                    <View style={style.churrasLocDat}>
+                                        <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                        <Text style={style.churrasData}> {formatData(churras.data)}</Text>
+                                        <Text style={style.locDatSeparator}>  |  </Text>
+                                        <IconMI style={style.localIcon} name="access-time" size={15} />
+                                        <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - " + churras.hrFim : ''}</Text>
                                     </View>
                                 </View>
-                            </RNSlidingButton>
-                        </View>
+                            </View>
+                        </Pressable>
+                        <TouchableOpacity style={[style.extraIconTO]} onPressIn={() => { setIndexToanimate(churras.id); setContador(true) }} onPress={() => { moveDots(); }}>
+                            {churras.id == indexToAnimate
+                                ?
+                                <View>
+                                    <View>
+                                        <Animated.View style={[style.dot, animatedStyles.dotMove1]} />
+                                        <Animated.View style={[style.dot, animatedStyles.dotMove2]} />
+                                        <Animated.View style={[style.dot, animatedStyles.dotMove3]} />
+                                    </View>
+                                    <Animated.View style={[{ top: 8, width: 80, right: 10, backgroundColor: 'rgba(211,211,211,0.8 )', borderRadius: 15, padding: 10 }, animatedStyles.dotMenu]}>
+                                        <View>
+                                            <TouchableOpacity style={{ borderRadius: 8, backgroundColor: 'rgba(128,128,128 ,0.9)', margin: 2, padding: 1 }} onPress={() => { detalheChurras(churras.id); setEditavel(true) }}>
+                                                <Text style={{ color: 'black', fontSize: 12, textAlign: 'center', fontFamily: 'poppins-bold' }}>Editar</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity style={{ borderRadius: 8, backgroundColor: 'rgba(128,128,128 ,0.9)', margin: 2, padding: 1 }} onPress={() => { setVisivel(true); setChurrasDeletar(churras) }}>
+                                                <Text style={{ color: 'maroon', fontSize: 12, textAlign: 'center', fontFamily: 'poppins-bold' }}>Excluir</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </Animated.View>
+                                </View>
+                                :
+                                <View>
+                                    <Animated.View style={[style.dot]} />
+                                    <Animated.View style={[style.dot]} />
+                                    <Animated.View style={[style.dot]} />
+                                </View>
+                            }
+                        </TouchableOpacity>
                     </View>
                 )}
             />
+            <View style={{ marginBottom: 5 }} />
 
-            <FloatingAction
-                actions={btns}
-                color='#800000'
-                overlayColor='rgba(68, 68, 68, 0)'
-                onPress={() => Vibration.vibrate(50)}
-                onPressItem={name => {
-                    apertaFabBtn(name)
-                }} />
+
 
             <Modal
                 animationType="fade"
@@ -372,7 +585,6 @@ export default function ResumoChurras() {
                     </View>
                 </View>
             </Modal>
-
         </View>
 
     )

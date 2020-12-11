@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, StatusBar } from 'react-native';
 import Constants from 'expo-constants';
 
 export default StyleSheet.create({
@@ -6,8 +6,8 @@ export default StyleSheet.create({
   //header
   container: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight + 15,
-    backgroundColor: '#fff'
+    paddingTop: StatusBar.currentHeight,
+    backgroundColor: '#fff',
   },  
 
   //header
@@ -30,27 +30,23 @@ export default StyleSheet.create({
 
  //cards
  churrasList: {
-  marginLeft: 20,
+  marginHorizontal: 20,
   paddingTop: 15,
-  backgroundColor: "transparent"
+  backgroundColor: "transparent",
 },
 
 //cardDesign
-churras: {
-  backgroundColor: 'white',
-  marginBottom: 15,
-  marginLeft: 0,
-},
 slideBtn:{
   flexDirection:'row',
+  width:'100%',
+  marginTop:10,
+  marginBottom:15,
+  padding:10,
+  backgroundColor:'#d3d3d350',
+  borderRadius:8,
 },
 
 //cardContent
-churrasDescricao:{
-  flexDirection:'row',
-  alignItems: 'center',
-  marginBottom: 10,
-},
 churrasFoto:{
   width: 66,
   height: 66,

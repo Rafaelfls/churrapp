@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, SafeAreaView, FlatList, Modal, Picker } from 'react-native';
+import { View, Text, TouchableOpacity, Image, SafeAreaView, FlatList, Modal, Picker, ToastAndroid } from 'react-native';
 import api from '../../services/api';
 import NumericInput from 'react-native-numeric-input';
 
@@ -80,8 +80,19 @@ export default function EscolherNovosItens({ route, navigation }) {
         setIdItem(id)
     }
 
+    function showToast(isVisible) {
+        if (isVisible) {
+            ToastAndroid.showWithGravityAndOffset(
+                itemModal + " foi adicionado!", ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+                25,
+                50
+            );
+        }
+    }
     async function addItem(isVisible, item, unidadeDrop, formatoDrop, qtdNova, precoModal) {
-        setIsVisivel(isVisible)
+        showToast(isVisible)
+        setIsVisivel(false)
         setLoading(true)
         var formatoFinal;
         var precoFinal;
@@ -121,7 +132,6 @@ export default function EscolherNovosItens({ route, navigation }) {
                 setQuantidadeModal(0)
                 setPrecoModal(0)
                 setLoading(false)
-                setAdicionado(true)
             })
         })
     }
@@ -129,7 +139,7 @@ export default function EscolherNovosItens({ route, navigation }) {
     function backHome() {
         if (subTipo != null) {
             navigation.replace('DetalheChurras', { churras: churrascode, editavel: true })
-            setInitialPage(2)
+            setInitialPage(0)
         } else {
             navigation.push('AdicionarPratoPrincipal', { churrascode, convidadosQtd, primeiroAcesso: false })
         }
@@ -288,7 +298,7 @@ export default function EscolherNovosItens({ route, navigation }) {
                                 <TouchableOpacity style={style.exitBtnFooter} onPress={() => setVisibility(false, "", '', '', '')}>
                                     <Text style={style.iconExitBtn}>Cancelar</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(false, idItem, selectedUnidade, selectedFormato, quantidadeModal, precoModal)}>
+                                <TouchableOpacity style={style.salvarBtn} onPress={() => addItem(true, idItem, selectedUnidade, selectedFormato, quantidadeModal, precoModal)}>
                                     <Text style={style.iconSalvarBtn}>Confirmar</Text>
                                 </TouchableOpacity>
                             </View>

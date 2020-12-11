@@ -49,7 +49,7 @@ const CustomSideBarMenuTipo = (props) => {
             </View>
             <View style={style.linhaSubTipo}></View>
             <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
-                <View style={{ marginHorizontal: 15, top: -20 }}>
+                <View style={{ marginHorizontal: 15}}>
                     <FlatList
                         data={subTipos}
                         showsVerticalScrollIndicator={false}
@@ -79,7 +79,7 @@ const CustomSideBarMenuTipo = (props) => {
                                     }
                                 }}>
                                     <View style={style.churrasItemContainer}>
-                                        <Image source={{ uri: subTipoUrlU }} style={style.itemImg} />
+                                        <Image source={{ uri: subTipos.fotoUrlST }} style={style.itemImg} />
                                         <Text style={style.churrasItem}>{subTipos.subTipo}</Text>
                                     </View>
                                 </TouchableOpacity>

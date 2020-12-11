@@ -10,12 +10,7 @@
     "scheme": "churrapp",
     "version": "0.9.8",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#fff"
-    },
+    
     "updates": {
       "fallbackToCacheTimeout": 0
     },

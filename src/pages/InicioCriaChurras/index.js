@@ -10,8 +10,6 @@ import style from './styles';
 export default function InicioCriaChurras() {
 
     const navigation = useNavigation();
-    const { appStateVisible, setAppStateVisible } = useAppState()
-    console.log(appStateVisible)
 
 
     function next() {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, Image } from 'react-native';
+import { Text, View, Button, Image, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -103,7 +103,7 @@ function criarDrawer() {
                 inactiveTintColor: 'maroon',
                 activeBackgroundColor: 'rgba(128,0,0,0.8)',
                 labelStyle: { fontFamily: 'poppins-medium', fontSize: 15, alignSelf: 'flex-start' },
-                itemStyle: { marginHorizontal: 8, top: -30 }
+                itemStyle: { marginHorizontal: 8 }
             }}
             drawerContent={(props) => <CustomSideBarMenu {...props} />}
         >
@@ -205,6 +205,7 @@ export default function Routes() {
 
     return (
         <ChurrasProvider>
+            <StatusBar hidden />
             <NavigationContainer linking={linking} fallback={<Text>Carregando...</Text>}>
                 <AppStack.Navigator screenOptions={{ headerShown: false }}>
                     {/* Telas fora do app */}
