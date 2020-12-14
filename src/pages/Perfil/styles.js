@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, StatusBar } from 'react-native';
 import Constants from 'expo-constants';
 import { Row, Right } from 'native-base';
 
@@ -6,7 +6,7 @@ export default StyleSheet.create({
   //header
   container: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight + 15,
+    paddingTop: StatusBar.currentHeight,
     backgroundColor: 'maroon'
   },
   header: {

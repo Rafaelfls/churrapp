@@ -1,12 +1,11 @@
-import { StyleSheet, Dimensions } from 'react-native';
-import Constants from 'expo-constants';
+import { StyleSheet, Dimensions, StatusBar } from 'react-native';
 
 export default StyleSheet.create({
 
   //header
   container: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight + 15,
+    paddingTop: StatusBar.currentHeight + 15,
     backgroundColor: '#fff'
   },
   header: {
@@ -20,13 +19,13 @@ export default StyleSheet.create({
     fontSize: 30,
     color: 'black',
     fontFamily: 'poppins-semi-bold',
-    textAlign:'center'
+    textAlign: 'center'
   },
   textSubHeader: {
     fontSize: 15,
     color: 'gray',
     fontFamily: 'poppins-medium',
-    textAlign:'center'
+    textAlign: 'center'
   },
   signOutBtn: {
     position: "absolute",
@@ -73,23 +72,15 @@ export default StyleSheet.create({
 
   //cardDesign
   churras: {
-    backgroundColor: 'white',
     marginVertical: 10,
-    marginBottom:15,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5
+    marginBottom: 15,
+    marginHorizontal: 10,
   },
   slideBtn: {
     flexDirection: 'row',
-    width: Dimensions.get('window').width+10,
-    paddingHorizontal:20,
-    paddingVertical:5,
+    width: Dimensions.get('window').width + 10,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
   },
   detalheSlide: {
     backgroundColor: "darkgray",
@@ -111,23 +102,23 @@ export default StyleSheet.create({
   //imagem Quando nao tem churras
 
   semChurrasbg1: {
-    position:'absolute',
-    bottom:25,
-    right:85
+    position: 'absolute',
+    bottom: 25,
+    right: 85
   },
   semChurras1: {
-    width:100,
-    height:100
+    width: 100,
+    height: 100
   },
   semChurrasbg2: {
-    position:'absolute',
-    top:180,
-    width:'100%',
-    alignItems:'center'
+    position: 'absolute',
+    top: 180,
+    width: '100%',
+    alignItems: 'center'
   },
   semChurras2: {
-    width:250,
-    height:160
+    width: 250,
+    height: 160
   },
 
   // fim imagem quando nao tem churras
@@ -138,9 +129,17 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  slidingCard:{
-    backgroundColor: 'white', 
+  unpressedCard: {
+    backgroundColor: '#d3d3d350',
     width: "100%",
+    borderRadius: 8,
+    paddingVertical: 5,
+  },
+  pressedCard: {
+    backgroundColor: '#d3d3d3',
+    width: "100%",
+    borderRadius: 8,
+    paddingVertical: 5,
   },
   churrasFoto: {
     width: 66,
@@ -167,9 +166,22 @@ export default StyleSheet.create({
     color: 'steelblue',
     paddingBottom: 5,
   },
+  extraIconTO: {
+    color: 'maroon',
+    position: 'absolute',
+    top: 10,
+    right: -20,
+    height: 110,
+    width: 100,
+    // backgroundColor: 'red',
+    zIndex: 100
+  },
+  extraIcon: {
+    color: 'maroon',
+  },
   churrasLocalSV: {
     marginBottom: 2,
-    marginRight:3,
+    marginRight: 3,
     width: '100%',
   },
   churrasLocal: {
@@ -195,7 +207,14 @@ export default StyleSheet.create({
     marginBottom: 2,
     fontFamily: 'poppins-medium',
   },
-
+  dot: {
+    height: 5,
+    width: 5,
+    borderRadius: 5 / 2,
+    backgroundColor: 'maroon',
+    marginTop: 3,
+    right: -50,
+  },
   //fabButton
   fabBtn: {
     opacity: 0.85,
@@ -206,7 +225,31 @@ export default StyleSheet.create({
     textAlignVertical: 'center',
     color: 'white'
   },
-
+  plus1: {
+    width: '50%',
+    height: 5,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    margin: 10,
+    position: "absolute"
+  },
+  plus2: {
+    height: '50%',
+    width: 5,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    margin: 10,
+    position: "absolute"
+  },
+  fab: {
+    backgroundColor: 'maroon',
+    height: 60,
+    width: 60,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column"
+  },
   //modal
   modalView: {
     margin: 20,
@@ -243,7 +286,7 @@ export default StyleSheet.create({
     fontSize: 27,
     marginBottom: 15,
   },
-  footerModal: {  
+  footerModal: {
     height: 90,
     flexDirection: "row",
     alignItems: 'center',
@@ -253,7 +296,7 @@ export default StyleSheet.create({
   exitBtn: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius:8,
+    borderRadius: 8,
     backgroundColor: 'lightgray',
     height: '60%',
     width: 125,
@@ -268,7 +311,7 @@ export default StyleSheet.create({
     shadowRadius: 4.65,
 
     elevation: 6,
-  },  
+  },
   iconExitBtn: {
     color: 'maroon',
     fontSize: 17,
@@ -278,7 +321,7 @@ export default StyleSheet.create({
   salvarBtn: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius:8,
+    borderRadius: 8,
     backgroundColor: 'maroon',
     height: '60%',
     width: 125,
@@ -342,7 +385,7 @@ export default StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     position: 'absolute',
-    top: Constants.statusBarHeight - 44,
+    top: StatusBar.currentHeight - 44,
     left: 0,
     right: 0,
     bottom: 0,

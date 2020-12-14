@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Modal, AsyncStorage } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Modal, AsyncStorage, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native'
 import { TextInputMask } from 'react-native-masked-text'
@@ -26,24 +26,24 @@ export default function LoginCelular() {
         global.USUARIOLOGADO = null;
         setLoading(true)
         let criptoSenhaVar = await criptoSenha($senha)
-            try {
-                await api.get(`/usuariosCel/${$celular}/${criptoSenhaVar}`)
+        try {
+            await api.get(`/usuariosCel/${$celular}/${criptoSenhaVar}`)
                 .then(async function (response) {
                     if (response.data[0] == undefined) {
                         setLoading(false)
                         return setVisivel(true)
-                    } else {         
-                        console.log("aqui")              
-                        await setUsuarioLogado($senha) 
-                        console.log("aqui")     
+                    } else {
+                        console.log("aqui")
+                        await setUsuarioLogado($senha)
+                        console.log("aqui")
                         USUARIOLOGADO = response.data[0]
                         setLoading(false)
                         navigation.replace('Tabs');
                     }
                 })
-            } catch (error) {
-                setLoading(false)
-            }        
+        } catch (error) {
+            setLoading(false)
+        }
     }
 
     function esqueciSenha() {
@@ -65,20 +65,20 @@ export default function LoginCelular() {
         navigation.goBack();
     }
 
-    async function setUsuarioLogado($senha){
-        if(await AsyncStorage.getItem('phone') == null){
-            await AsyncStorage.setItem('phone',celularUser)
-            await AsyncStorage.setItem('password',$senha)
+    async function setUsuarioLogado($senha) {
+        if (await AsyncStorage.getItem('phone') == null) {
+            await AsyncStorage.setItem('phone', celularUser)
+            await AsyncStorage.setItem('password', $senha)
             return
-        }else{
+        } else {
             return
         }
     }
-  
+
 
     return (
         <View style={style.container}>
-
+            {/* <StatusBar hidden /> */}
             <View style={style.header}>
                 <TouchableOpacity style={style.exitBtn} onPress={() => backHome()}>
                     <Icon style={style.iconHeaderBtn} name="arrow-left" size={22} />
@@ -104,9 +104,6 @@ export default function LoginCelular() {
                         includeRawValueInChangeText={true}
                         onChangeText={(text, rawText) => { setCelularUser(rawText); setValueCelular(text) }}
                     />
-                    <TouchableOpacity onPress={() => {setCelularUser(''); setValueCelular('')}} style={style.cleanInput1}>
-                        <Text style={style.mudarSenha}>X</Text>
-                    </TouchableOpacity>
                     <Text style={style.textLabel}>Senha:</Text>
                     <TextInput
                         style={style.inputStandard}
@@ -116,10 +113,7 @@ export default function LoginCelular() {
                         value={senhaUsuario}
                         onChangeText={text => setSenhaUsuario(text)}
                     />
-                    <TouchableOpacity onPress={() => {setSenhaUsuario('')}} style={style.cleanInput2}>
-                        <Text style={style.mudarSenha}>X</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={style.continueBtn} onPress={()=> {navigateToResumo(celularUser, senhaUsuario)}}>
+                    <TouchableOpacity style={style.continueBtn} onPress={() => { navigateToResumo(celularUser, senhaUsuario) }}>
                         <Text style={style.textBtn}>Entrar</Text>
                     </TouchableOpacity>
                 </View>

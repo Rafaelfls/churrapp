@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as Crypto from 'expo-crypto';
 import api from '../../services/api';
+import SplashScreen from 'react-native-splash-screen';
 
 import style from './styles';
 import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
@@ -28,6 +29,7 @@ export default function Login() {
   }
 
   useEffect(() => {
+    SplashScreen.hide();
     getUsuarioLogado();
   }, []);
 

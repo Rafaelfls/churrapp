@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Image, Modal } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../services/api';
-import DatePicker from 'react-native-datepicker';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
+import DatePicker from 'react-native-date-picker';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
@@ -19,11 +20,11 @@ export default function CriarChurrasco() {
   const navigation = useNavigation();
   const [nomeChurras, setNomeChurras] = useState('');
   const [local, setlocal] = useState('');
-  const [hrInicio, sethrInicio] = useState('');
+  const [hrInicio, sethrInicio] = useState();
   const [hrFim, sethrFim] = useState();
   const [descricao, setdescricao] = useState();
-  const [date, setDate] = useState('');
-  const [limiteConfirmacao, setLimiteConfirmacao] = useState(null);
+  const [date, setDate] = useState();
+  const [limiteConfirmacao, setLimiteConfirmacao] = useState();
   const [image, setImage] = useState({ cancelled: true });
   const [churrasCodeCriado, setChurrasCodeCriado] = useState('')
   const [visivel, setVisivel] = useState(false)
@@ -162,6 +163,22 @@ export default function CriarChurrasco() {
     })
   }
 
+  function formatDataInicio(data) {
+    var hours = data.getHours();
+    var min = data.getMinutes();
+    var sec = data.getSeconds();
+
+    sethrInicio(hours + ':' + min + ':' + sec)
+    console.log(hrInicio)
+  }
+  function formatDataFim(data) {
+    var hours = data.getHours();
+    var min = data.getMinutes();
+    var sec = data.getSeconds();
+
+    sethrFim(hours + ':' + min + ':' + sec)
+  }
+
   return (
     <View style={style.container}>
       <SafeAreaView style={style.body}>
@@ -184,9 +201,6 @@ export default function CriarChurrasco() {
                 value={nomeChurras}
                 placeholder={'Nome do churrasco'}
               />
-              <TouchableOpacity onPress={() => { setNomeChurras('') }} style={style.cleanInput}>
-                <Text style={style.mudarSenha}>X</Text>
-              </TouchableOpacity>
             </View>
             <Text style={style.textLabel}>Local</Text>
             <View>
@@ -196,9 +210,6 @@ export default function CriarChurrasco() {
                 onChangeText={text => setlocal(text)}
                 value={local}
               />
-              <TouchableOpacity onPress={() => { setlocal('') }} style={style.cleanInput}>
-                <Text style={style.mudarSenha}>X</Text>
-              </TouchableOpacity>
             </View>
             <Text style={style.textLabel}>Descrição</Text>
             <View>
@@ -210,117 +221,41 @@ export default function CriarChurrasco() {
                 placeholder={"Descrição do churrasco (opcional)"}
                 onChangeText={text => setdescricao(text)}
               />
-              <TouchableOpacity onPress={() => { setdescricao('') }} style={style.cleanInput}>
-                <Text style={style.mudarSenha}>X</Text>
-              </TouchableOpacity>
             </View>
             <Text style={style.textLabel}>Data</Text>
             <DatePicker
-              style={{ width: "100%", marginBottom: 10 }}
+              style={{ marginBottom: 10 }}
               date={date}
               mode="date"
-              placeholder="DD/MM/AAAA"
+              locale="pt"
               format="DD/MM/YYYY"
-              minDate={new Date()}
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              customStyles={{
-                dateIcon: {
-                  position: 'absolute',
-                  left: 0,
-                  top: 4,
-                  marginLeft: 0
-                },
-                dateInput: {
-                  borderBottomWidth: 1,
-                  borderWidth: 0,
-                  marginLeft: 36,
-                  borderBottomColor: borderColorRed3,
-                  fontFamily: 'poppins-regular',
-                },
-                // ... You can check the source to find the other keys.
-              }}
-              onDateChange={(date) => { setDate(date) }}
+              minimumDate={new Date()}
+              onDateChange={(date) => { setDate(date); console.log(date) }}
             />
             <Text style={style.textLabel}>Início</Text>
             <DatePicker
-              style={{ width: "100%", marginBottom: 10 }}
+              style={{ marginBottom: 10 }}
               date={hrInicio}
               mode="time"
               placeholder="00:00"
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              customStyles={{
-                dateIcon: {
-                  position: 'absolute',
-                  left: 0,
-                  top: 4,
-                  marginLeft: 0
-                },
-                dateInput: {
-                  borderBottomWidth: 1,
-                  borderWidth: 0,
-                  marginLeft: 36,
-                  borderBottomColor: borderColorRed4,
-                  fontFamily: 'poppins-regular',
-                },
-                // ... You can check the source to find the other keys.
-              }}
-              onDateChange={(hrInicio) => { sethrInicio(hrInicio) }}
+              onDateChange={(hrInicio) => { formatDataInicio(hrInicio); }}
             />
             <Text style={style.textLabel}>Término</Text>
             <DatePicker
-              style={{ width: "100%", marginBottom: 10 }}
+              style={{ marginBottom: 10 }}
               date={hrFim}
               mode="time"
-              placeholder="00:00"
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              customStyles={{
-                dateIcon: {
-                  position: 'absolute',
-                  left: 0,
-                  top: 4,
-                  marginLeft: 0
-                },
-                dateInput: {
-                  borderBottomWidth: 1,
-                  borderWidth: 0,
-                  marginLeft: 36,
-                  borderBottomColor: 'darkgray',
-                  fontFamily: 'poppins-regular',
-                },
-                // ... You can check the source to find the other keys.
-              }}
-              onDateChange={(hrFim) => { sethrFim(hrFim) }}
+              onDateChange={(hrFim) => { formatDataFim(hrFim) }}
             />
             <Text style={style.textLabel}>Confirmação de presença até</Text>
             <DatePicker
-              style={{ width: "100%", marginBottom: 10 }}
+              style={{ marginBottom: 10 }}
               date={limiteConfirmacao}
               mode="date"
-              placeholder="DD/MM/AAAA"
+              locale='pt'
               format="DD/MM/YYYY"
-              minDate={new Date()}
-              maxDate={date}
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              customStyles={{
-                dateIcon: {
-                  position: 'absolute',
-                  left: 0,
-                  top: 4,
-                  marginLeft: 0
-                },
-                dateInput: {
-                  borderBottomWidth: 1,
-                  borderWidth: 0,
-                  marginLeft: 36,
-                  borderBottomColor: 'darkgray',
-                  fontFamily: 'poppins-regular',
-                },
-                // ... You can check the source to find the other keys.
-              }}
+              minimumDate={new Date()}
+              maximumDate={date}
               onDateChange={(date) => { setLimiteConfirmacao(date) }}
             />
             <View style={{ marginVertical: 10 }}>
@@ -331,10 +266,6 @@ export default function CriarChurrasco() {
                   {image && <Image source={{ uri: image.uri }} style={{ width: 170, height: 170, paddingVertical: 10 }} />}
                 </TouchableOpacity>
               </View>
-              
-              <TouchableOpacity onPress={() => { setImage({ cancelled: true }) }} style={style.cleanInput}>
-                <Text style={style.mudarSenha}>X</Text>
-              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>

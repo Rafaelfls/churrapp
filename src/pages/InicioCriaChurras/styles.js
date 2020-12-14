@@ -1,4 +1,4 @@
-import { StyleSheet, YellowBox, RecyclerViewBackedScrollViewComponent } from 'react-native';
+import { StyleSheet, YellowBox, RecyclerViewBackedScrollViewComponent, StatusBar } from 'react-native';
 import Constants from 'expo-constants';
 import { ceil } from 'react-native-reanimated';
 
@@ -7,7 +7,7 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: Constants.statusBarHeight,
+    paddingTop: StatusBar.currentHeight,
     backgroundColor: 'maroon',    
   },
   

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, FlatList, Text, TouchableOpacity, SafeAreaView, TextInput, ActivityIndicator,Modal } from 'react-native';
+import { StyleSheet, View, FlatList, Text, TouchableOpacity, SafeAreaView, TextInput, ActivityIndicator, Modal, ToastAndroid } from 'react-native';
 import * as Contacts from 'expo-contacts';
 import { useNavigation } from '@react-navigation/native'
 import IconFea from 'react-native-vector-icons/Feather';
@@ -92,9 +92,20 @@ export default function OpenContactList({ route }) {
         valorPagar: "00",
         churras_id: churrasCode
       }).then(() => {
-        setAdicionado(true)
+        showToast()
       })
     })
+  }
+
+  function showToast() {
+    ToastAndroid.showWithGravityAndOffset(
+      "Contato adicionado!", ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      150
+    );
+    searchContacts('');
+    setValueSearch('');
   }
 
   async function addContact($nome, $celular) {
@@ -121,7 +132,7 @@ export default function OpenContactList({ route }) {
       <SafeAreaView style={style.body}>
         <View style={{ flexDirection: "row", marginLeft: 10, alignItems: 'center' }}>
           <TouchableOpacity
-            onPress={() => navigation.replace('AdicionaConvidados',{churrasAtual})
+            onPress={() => navigation.replace('AdicionaConvidados', { churrasAtual })
             }
           >
             <IconFea style={style.iconHeaderBtn} name="chevron-left" size={22} />
@@ -133,7 +144,7 @@ export default function OpenContactList({ route }) {
           placeholderTextColor="gray"
           style={{
             backgroundColor: 'white',
-            height: 40,
+            height: 45,
             fontFamily: 'poppins-medium',
             fontSize: 15,
             paddingLeft: 5,
@@ -145,9 +156,6 @@ export default function OpenContactList({ route }) {
           value={valueSearch}
           onChangeText={value => { searchContacts(value); setValueSearch(value) }}
         />
-        <TouchableOpacity onPress={() => { searchContacts(''); setValueSearch('') }} style={style.cleanInput}>
-          <Text style={style.mudarSenha}>X</Text>
-        </TouchableOpacity>
         <View style={{ flex: 1, backgroundColor: 'white' }}>
           {isLoading
             ? (
@@ -168,15 +176,23 @@ export default function OpenContactList({ route }) {
             showsVerticalScrollIndicator={false}
             style={style.churrasList}
             renderItem={({ item: contacts }) => (
-              <TouchableOpacity onPress={() => addContact(contacts.nome, contacts.celular)}
-                style={{ minHeight: 70, padding: 5, paddingHorizontal: 20 }}>
-                <Text style={{ color: 'black', fontFamily: 'poppins-semi-bold', fontSize: 18 }}>
-                  {contacts.nome}
-                </Text>
-                <Text style={{ color: 'gray', fontFamily: 'poppins-medium' }}>
-                  {contacts.celular}
-                </Text>
-              </TouchableOpacity>
+              <View>
+                {contacts.celular == 55 + USUARIOLOGADO.celular
+                  ? null
+                  : contacts.celular === '055' + USUARIOLOGADO.celular
+                    ? null
+                    :
+                    <TouchableOpacity onPress={() => addContact(contacts.nome, contacts.celular)}
+                      style={{ minHeight: 70, padding: 5, paddingHorizontal: 20 }}>
+                      <Text style={{ color: 'black', fontFamily: 'poppins-semi-bold', fontSize: 18 }}>
+                        {contacts.nome}
+                      </Text>
+                      <Text style={{ color: 'gray', fontFamily: 'poppins-medium' }}>
+                        {contacts.celular}
+                      </Text>
+                    </TouchableOpacity>
+                }
+              </View>
             )}
           />
 
@@ -192,7 +208,7 @@ export default function OpenContactList({ route }) {
             <Text style={style.modalTitle}>Adicionado!</Text>
             <Text style={style.modalText}>Convidado adicionado com sucesso!</Text>
             <View style={style.footerModal}>
-              <TouchableOpacity style={style.salvarBtn} onPress={() =>{setAdicionado(false),searchContacts(''); setValueSearch('')}}>
+              <TouchableOpacity style={style.salvarBtn} onPress={() => { setAdicionado(false), searchContacts(''); setValueSearch('') }}>
                 <Text style={style.textBtn}>OK</Text>
               </TouchableOpacity>
             </View>
@@ -207,22 +223,22 @@ export default function OpenContactList({ route }) {
         <View style={style.centeredView}>
           <View style={style.modalView}>
             <Text style={style.modalTitle}>Ops!</Text>
-            <Text style={style.modalText}>Esta faltando o DDD do seu contato!</Text>            
+            <Text style={style.modalText}>Esta faltando o DDD do seu contato!</Text>
             <Text style={style.textLabel}>DDD:</Text>
-              <TextInput
-                style={style.inputStandard}
-                value={ddd}
-                placeholder={"19"}
-                onChangeText={text => setddd(text)}
-              />
-              <TouchableOpacity onPress={() => { setdescricao('') }} style={style.cleanInput}>
-                <Text style={style.mudarSenha}>X</Text>
-              </TouchableOpacity>
+            <TextInput
+              style={style.inputStandard}
+              value={ddd}
+              placeholder={"19"}
+              onChangeText={text => setddd(text)}
+            />
+            <TouchableOpacity onPress={() => { setdescricao('') }} style={style.cleanInput}>
+              <Text style={style.mudarSenha}>X</Text>
+            </TouchableOpacity>
             <View style={style.footerModal}>
               <TouchableOpacity style={style.sairBtn} onPress={() => setDDD([false])}>
                 <Text style={style.iconExitBtn}>Cancelar</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={style.salvarBtn} onPress={()=> addContactFinal(DDD[1], DDD[2])}>
+              <TouchableOpacity style={style.salvarBtn} onPress={() => addContactFinal(DDD[1], DDD[2])}>
                 <Text style={style.textBtn}>Confirmar</Text>
               </TouchableOpacity>
             </View>

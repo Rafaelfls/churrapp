@@ -1,16 +1,16 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
+    "start": "react-native start",
     "startC": "expo start -c",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
     "web": "expo start --web",
     "eject": "expo eject"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
     "@react-native-community/checkbox": "^0.5.5",
+    "@react-native-community/datetimepicker": "^3.0.6",
     "@react-native-community/masked-view": "0.1.6",
     "@react-native-picker/picker": "^1.9.2",
     "@react-navigation/bottom-tabs": "^5.5.1",
@@ -29,11 +29,13 @@
     "expo-font": "~8.1.0",
     "expo-image-picker": "~8.1.0",
     "expo-permissions": "~8.1.0",
+    "expo-splash-screen": "^0.2.3",
+    "expo-updates": "~0.2.0",
     "moment": "^2.29.1",
-    "native-base": "^2.13.12",
+    "native-base": "^2.13.15",
     "react": "16.9.0",
     "react-dom": "16.9.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
+    "react-native": "0.63.3",
     "react-native-action-button": "^2.8.5",
     "react-native-autocomplete-input": "^4.2.0",
     "react-native-confirmation-code-field": "^6.5.1",
@@ -53,9 +55,13 @@
     "react-native-reanimated": "~1.7.0",
     "react-native-safe-area-context": "0.7.3",
     "react-native-screens": "~2.2.0",
+    "react-native-scrollable-tab-view": "^1.0.0",
+    "react-native-scrollable-tab-view-forked": "^1.1.1",
     "react-native-sms": "^1.11.0",
     "react-native-sms-verifycode": "^2.4.3",
+    "react-native-splash-screen": "^3.2.0",
     "react-native-svg": "11.0.1",
+    "react-native-unimodules": "~0.9.0",
     "react-native-vector-icons": "^6.7.0",
     "react-native-web": "^0.11.7",
     "react-navigation": "^4.4.3",
@@ -64,7 +70,12 @@
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
+    "babel-jest": "~25.2.6",
+    "jest": "~25.2.6",
+    "react-test-renderer": "~16.9.0",
     "babel-preset-expo": "^8.1.0"
   },
-  "private": true
+  "private": true,
+  "name": "churrapp",
+  "version": "1.0.0"
 }

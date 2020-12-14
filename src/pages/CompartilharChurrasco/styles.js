@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, StatusBar } from 'react-native';
 import Constants from 'expo-constants';
 
 export default StyleSheet.create({
@@ -10,14 +10,14 @@ export default StyleSheet.create({
 
     header: {
         flexDirection: 'row',
-        paddingTop: Constants.statusBarHeight + 20,
+        paddingTop: StatusBar.currentHeight + 15,
         paddingBottom: '5%',
         backgroundColor: 'maroon',
         justifyContent: 'center',
     },
     backBtn: {
         position: "absolute",
-        top: Constants.statusBarHeight + 20,
+        paddingTop: StatusBar.currentHeight + 20,
         left: 0,
         justifyContent: 'center',
         paddingHorizontal: 20,

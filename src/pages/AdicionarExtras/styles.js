@@ -1,11 +1,11 @@
-import { StyleSheet, YellowBox } from 'react-native';
+import { StyleSheet, YellowBox, StatusBar } from 'react-native';
 import Constants from 'expo-constants';
 import { ceil } from 'react-native-reanimated';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight + 15,
+    paddingTop: StatusBar.currentHeight + 15,
     backgroundColor: 'white',
   },
   body: {

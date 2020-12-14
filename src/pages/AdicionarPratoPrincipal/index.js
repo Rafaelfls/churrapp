@@ -173,7 +173,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                     </TouchableOpacity>
                     <View style={style.headerTextGroup}>
 
-                        <Text style={style.textHeader}>Carnes</Text>
+                        <Text style={style.textHeader}>Pratos Principais</Text>
                     </View>
 
                     <TouchableOpacity style={style.exitBtn} onPress={() => setModalSair(true)}>
