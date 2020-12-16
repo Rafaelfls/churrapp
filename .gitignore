@@ -10,6 +10,10 @@ npm-debug.*
 web-build/
 web-report/
 src/services/*
+android/*
+ios/*
+*.zip
+.gitattributes
 
 # macOS
 .DS_Store

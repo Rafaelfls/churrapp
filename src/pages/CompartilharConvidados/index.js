@@ -200,7 +200,7 @@ console.log(convid)
     .then((res) =>{
       valorFinal = (res.data[0].valorPagar).toFixed(2);
     })
-    
+    console.log(convid.telefone)
     var cvt = convite.replace('R$XX,XX.','R$'+valorFinal+".")
     
     Linking.canOpenURL(`whatsapp://send?text=${cvt}`).then(supported => {

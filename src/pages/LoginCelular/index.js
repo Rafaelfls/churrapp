@@ -106,7 +106,7 @@ export default function LoginCelular() {
                     />
                     <Text style={style.textLabel}>Senha:</Text>
                     <TextInput
-                        style={style.inputStandard}
+                        style={[style.inputStandard, {fontFamily: 'poppins-medium'}]}
                         placeholder={"8 ~ 16 caracteres"}
                         maxLength={16}
                         secureTextEntry={true}
