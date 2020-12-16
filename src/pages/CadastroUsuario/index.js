@@ -186,9 +186,6 @@ export default function CadastroUsuario() {
                             value={nomeUsuario}
                             placeholder={'Nome'}
                         />
-                        <TouchableOpacity onPress={() => { setNomeUsuario('') }} style={style.cleanInput}>
-                            <Text style={style.mudarSenha}>X</Text>
-                        </TouchableOpacity>
                     </View>
                     <Text style={style.textLabel}>Celular:</Text>
                     <View>
@@ -206,9 +203,6 @@ export default function CadastroUsuario() {
                             includeRawValueInChangeText={true}
                             onChangeText={(text, rawText) => setCelularUsuario(rawText)}
                         />
-                        <TouchableOpacity onPress={() => { setCelularUsuario('') }} style={style.cleanInput}>
-                            <Text style={style.mudarSenha}>X</Text>
-                        </TouchableOpacity>
                     </View>
                     <Text style={style.textLabel}>Senha:</Text>
                     <View>
@@ -220,9 +214,6 @@ export default function CadastroUsuario() {
                             value={senhaUsuarioUncrpt}
                             onChangeText={text => criptoSenha1(text)}
                         />
-                        <TouchableOpacity onPress={() => { setSenhaUsuarioUncrpt('') }} style={style.cleanInput}>
-                            <Text style={style.mudarSenha}>X</Text>
-                        </TouchableOpacity>
                     </View>
                     <Text style={style.textLabel}>Confirmar senha:</Text>
                     <View>
@@ -234,9 +225,6 @@ export default function CadastroUsuario() {
                             value={senhaUsuarioUncrpt2}
                             onChangeText={text => criptoSenha2(text)}
                         />
-                        <TouchableOpacity onPress={() => { setSenhaUsuarioUncrpt2('') }} style={style.cleanInput}>
-                            <Text style={style.mudarSenha}>X</Text>
-                        </TouchableOpacity>
                     </View>
                     {/* <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
                         <CheckBox value={idadeCheck} onValueChange={(idadeCheck) => setIdadeCheck(idadeCheck)} tintColors={{ true: 'maroon', false: 'maroon' }} />

@@ -133,14 +133,12 @@ export default function ResumoChurras() {
     }
     function deletar(churrass) {
         showToast(churrass)
-        setLoading(true)
+        setRefreshChurras(!refreshChurras)
         api.delete(`/churras/${churrass.id}`, config).then(function () {
             setVisivel(!visivel)
-            setLoading(false)
             setChurrasCount(churrasCount - 1)
             setContadorCriado(contadorCriado - 1)
             api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: contadorCriado });
-            setRefreshChurras(!refreshChurras)
 
         });
 

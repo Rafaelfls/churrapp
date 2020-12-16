@@ -288,7 +288,7 @@ export default function DetalheChurras() {
   function editPerfil() {
     formatarDataPicker(editChurrasData)
     formatarDataPickerLimite(editChurrasDataLimite)
-    // formatDataInicio(editChurrasInicio)
+    // formatDataInicio(hrComeco)
     // formatDataFim(editChurrasFim)
     setAllowEditing([true, 'black']);
   }
@@ -296,6 +296,7 @@ export default function DetalheChurras() {
 
   async function savePerfil(sair) {
     var dataNova = new Date(editChurrasData)
+    var dataLimiteNova = new Date(editChurrasDataLimite)
     if (sair) {
       setLoading(true)
       setAllowEditing([false, 'darkgray']);
@@ -304,12 +305,10 @@ export default function DetalheChurras() {
       } else {
         var novaUrl = editChurrasFotoUrlC;
       }
-      console.log(editChurrasData)
-      // console.log(editChurrasDataPicker)
       await api.put(`/churrasUpdate/${newChurras}`, {
         nomeChurras: editChurrasNome,
         data: dataNova,
-        limiteConfirmacao: editChurrasDataLimite,
+        limiteConfirmacao: dataLimiteNova,
         hrInicio: editChurrasInicio,
         hrFim: editChurrasFim,
         local: editChurrasLocal,
@@ -565,11 +564,12 @@ export default function DetalheChurras() {
     setEditChurrasLocal(res.data[0].local)
     const dataFormatada = formatData(res.data[0].data)
     if (res.data[0].limiteConfirmacao === null) {
-      setEditChurrasDataLimite(dataFormatada)
+      setEditChurrasDataLimite(res.data[0].data)
       setEditChurrasDataLimitePicker(dataFormatada)
     } else {
       const dataFormatadaLimite = formatData(res.data[0].limiteConfirmacao)
-      setEditChurrasDataLimite(dataFormatadaLimite)
+      var dataLimite = (new Date(res.data[0].limiteConfirmacao).getMonth() + 1) + "/" + (new Date(res.data[0].limiteConfirmacao).getDate() + 1) + "/" + new Date(res.data[0].limiteConfirmacao).getFullYear()
+      setEditChurrasDataLimite(new Date(dataLimite))
       setEditChurrasDataLimitePicker(dataFormatadaLimite)
 
     }
@@ -583,7 +583,6 @@ export default function DetalheChurras() {
     setEditChurrasFotoUrlU(res.data[0].fotoUrlU)
     setEditChurrasValorTotal(res.data[0].valorTotal)
     setEditChurrasValorPago(res.data[0].valorPago)
-
   }
 
   function formatData(data) {
@@ -660,20 +659,19 @@ export default function DetalheChurras() {
 
   }
   function formatDataInicio(data) {
-    var hours = data.getHours();
-    var min = data.getMinutes();
-    var sec = data.getSeconds();
-
+    var hours = new Date(data).getHours();
+    var min = new Date(data).getMinutes();
+    var sec = new Date(data).getSeconds();
     setEditChurrasInicio(hours + ':' + min + ':' + sec)
-    setHrComeco(hours + ':' + min + ':' + sec)
+    setHrComeco(data)
   }
   function formatDataFim(data) {
-    var hours = data.getHours();
-    var min = data.getMinutes();
-    var sec = data.getSeconds();
-
+    var hours = new Date(data).getHours();
+    var min = new Date(data).getMinutes();
+    var sec = new Date(data).getSeconds();
+    
     setEditChurrasFim(hours + ':' + min + ':' + sec)
-    setHrFim(hours + ':' + min + ':' + sec)
+    setHrFim(data)
   }
 
   useEffect(() => {
@@ -829,9 +827,8 @@ export default function DetalheChurras() {
                     // style={{ width: '100%' }}
                     date={hrComeco}
                     mode="time"
-                    placeholder="00:00"
                     disabled={!allowEditing[0]}
-                    onDateChange={(hrInicio) => { formatDataInicio(hrInicio) }}
+                    onDateChange={(hrInicio) => { formatDataInicio(hrInicio); console.log(hrInicio) }}
                   />
                 </View>
                 <View style={style.formGroup}>
@@ -1367,7 +1364,7 @@ export default function DetalheChurras() {
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <Text style={style.churrasNome}>Valor por pessoa: </Text>
               </View>
-              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', textAlign: 'center' }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount+ 1)).toFixed(2)}</Text>
+              <Text style={[style.churrasInfo, style.inputStandard, { borderBottomColor: 'darkgray', color: 'darkgray', textAlign: 'center' }]}>{editChurrasValorTotal == null ? "R$ 00.00" : "R$ " + (editChurrasValorTotal / (convidadosCount + 1)).toFixed(2)}</Text>
             </View>
               <Picker
                 mode="dropdown"

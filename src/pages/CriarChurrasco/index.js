@@ -24,6 +24,7 @@ export default function CriarChurrasco() {
   const [hrFim, sethrFim] = useState();
   const [descricao, setdescricao] = useState();
   const [date, setDate] = useState();
+  const [dataFormatada, setDataFormatada] = useState()
   const [limiteConfirmacao, setLimiteConfirmacao] = useState();
   const [image, setImage] = useState({ cancelled: true });
   const [churrasCodeCriado, setChurrasCodeCriado] = useState('')
@@ -156,19 +157,41 @@ export default function CriarChurrasco() {
           hrInicio: hrInicio,
           hrFim: hrFim,
           descricao: descricao,
-          data: date,
+          data: dataFormatada,
           limiteConfirmacao: limiteConfirmacao,
         },
       });
     })
   }
-
+  function formatData(data) {
+    var date = new Date(data).getDate()
+    var month = new Date(data).getMonth() + 1
+    var year = new Date(data).getFullYear()
+    if (date === 32) {
+      date = "01"
+      month = month + 1
+      if (month === 13) {
+        month = 1
+        year += 1
+      }
+    }
+    if (month < 10) {
+      month = "0" + month
+    }
+    setDataFormatada(date + '/' + month + '/' + year)
+    console.log(dataFormatada)
+  }
   function formatDataInicio(data) {
     var hours = data.getHours();
     var min = data.getMinutes();
     var sec = data.getSeconds();
-
-    sethrInicio(hours + ':' + min + ':' + sec)
+    console.log(hours)
+    if (hours == 0) {
+      hours = "00"
+      sethrInicio(hours + ':' + min + ':' + sec)
+    } else {
+      sethrInicio(hours + ':' + min + ':' + sec)
+    }
     console.log(hrInicio)
   }
   function formatDataFim(data) {
@@ -230,7 +253,7 @@ export default function CriarChurrasco() {
               locale="pt"
               format="DD/MM/YYYY"
               minimumDate={new Date()}
-              onDateChange={(date) => { setDate(date); console.log(date) }}
+              onDateChange={(date) => { setDate(date); formatData(date); console.log(date) }}
             />
             <Text style={style.textLabel}>Início</Text>
             <DatePicker

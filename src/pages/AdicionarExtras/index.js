@@ -27,6 +27,7 @@ export default function AdicionarExtras({ route, navigation }) {
     const [convidados, setConvidados] = useState([]);
     const [modalSair, setModalSair] = useState(false)
     const [isEnabled, setIsEnabled] = useState(false);
+    const [modalSugestao, setModalSugestao] = useState(false)
     const { churrascode } = route.params;
 
     const config = {
@@ -64,57 +65,81 @@ export default function AdicionarExtras({ route, navigation }) {
             })
     }
 
-    function enviaMensagens(convid, todosConvid) { 
+    function enviaMensagens(convid, todosConvid) {
         var telefone = convid.celular
-        var valorFinal = (convid.valorTotal / todosConvid).toFixed(2);
-        var cvt = CONVITE
-        cvt = cvt.replace('R$XX,XX.','R$'+valorFinal+".")
-        cvt = cvt.replace('R$0.00.','R$'+valorFinal+".")
-        cvt = cvt.replace(',,',',')
-        cvt = cvt.replace(',.','.')
-        cvt = cvt.replace('..','.')
-        Linking.canOpenURL(`whatsapp://send?text=${cvt}`).then(supported => {
-            if (supported) {
-                return Linking.openURL(`whatsapp://send?text=${cvt}&phone=+55${telefone}`);
-            } else {
-                return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${telefone}&text=${cvt}`)
-            }
-        })
+        if (convid.valorTotal != 0) {
+            var valorFinal = (convid.valorTotal / todosConvid).toFixed(2);
+            var cvt = CONVITE
+            cvt = cvt.replace('R$XX,XX.', 'R$' + valorFinal + ".")
+            cvt = cvt.replace('R$0.00.', 'R$' + valorFinal + ".")
+            cvt = cvt.replace(',,', ',')
+            cvt = cvt.replace(',.', '.')
+            cvt = cvt.replace('..', '.')
+            Linking.canOpenURL(`whatsapp://send?text=${cvt}`).then(supported => {
+                if (supported) {
+                    return Linking.openURL(`whatsapp://send?text=${cvt}&phone=+55${telefone}`);
+                } else {
+                    return Linking.openURL(`https://api.whatsapp.com/send?phone=+55${telefone}&text=${cvt}`)
+                }
+            })
+        } else {
+            alert("convid.valorTotal")
+        }
 
     }
 
     async function updateValorPagar(convidado, quantosConvid) {
         var valorAPagar = convidado.valorTotal / quantosConvid;
-        await api.put(`/atualizarValor/${convidado.id}`,{
-            valorPagar:valorAPagar
+        await api.put(`/atualizarValor/${convidado.id}`, {
+            valorPagar: valorAPagar
         })
 
-        
-    }     
-    
-    async function next() {
-        await carregaConvidados()
-        var convidQtd = convidados.length +1 
-        await convidados.map(convid => updateValorPagar(convid,convidQtd))
-        await carregaConvidados()
-        await convidados.map(convid => enviaMensagens(convid,convidQtd))
-        await convidados.map(convid => enviaNotificacao(convid,convidQtd))
 
-        setLoading(false)
-        navigation.replace('FinalCriaChurras');
+    }
+
+    async function next(sugestao) {
+        if (sugestao) {
+            await carregaConvidados()
+            var convidQtd = convidados.length + 1
+            await convidados.map(convid => updateValorPagar(convid, convidQtd))
+            await carregaConvidados()
+            await convidados.map(convid => enviaMensagens(convid, convidQtd))
+            await convidados.map(convid => enviaNotificacao(convid, convidQtd))
+
+            setLoading(false)
+            navigation.replace('FinalCriaChurras');
+        } else {
+            if (isSugestao) {
+                setModalSugestao(true)
+            } else {
+                var item = itemList.map((items) => item = items.nomeItem)
+                var temCarvao = false
+                item.map((item) => {
+                    if (item == "Carvão" || item == "Álcool em Gel") {
+                        temCarvao = true
+                    }
+                })
+                if (temCarvao) {
+                    next(true)
+                } else {
+                    setModalSugestao(true)
+                }
+            }
+        }
+
     }
 
 
-    async function enviaNotificacao(convid,todosConvid) {
+    async function enviaNotificacao(convid, todosConvid) {
         var valorFinal = (convid.valorTotal / todosConvid).toFixed(2);
-        if(convid.limiteConfirmacao == null){
+        if (convid.limiteConfirmacao == null) {
             await api.post(`/notificacoes/${convid.usuario_id}/${churrascode}`, {
                 mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${convid.nomeChurras}, e o valor por pessoa é de R$${valorFinal}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
                 negar: "Não vou",
                 confirmar: "Vou",
                 validade: convid.date,
             })
-        }else{
+        } else {
             await api.post(`/notificacoes/${convid.usuario_id}/${churrascode}`, {
                 mensagem: `${USUARIOLOGADO.nome} está te convidando para o churras ${convid.nomeChurras}, e o valor por pessoa é de R$${valorFinal}. Para mais informações acesse o churrasco na pagina de churras futuros. `,
                 negar: "Não vou",
@@ -125,7 +150,7 @@ export default function AdicionarExtras({ route, navigation }) {
     }
 
     function escolherNovosItens() {
-        navigation.push('EscolherNovosItens4', { churrascode, convidadosQtd, subtipo:null })
+        navigation.push('EscolherNovosItens4', { churrascode, convidadosQtd, subtipo: null })
     }
 
     function backHome() {
@@ -150,19 +175,19 @@ export default function AdicionarExtras({ route, navigation }) {
         var precoFinalTotal = item.precoItem * item.quantidade;
         await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
             valorTotal: -precoFinalTotal
-        }).then(async function(){
+        }).then(async function () {
             await api.delete(`/listadochurras/${item.id}`)
-            .then(function (res) {
-                setIsEnabled(false)
-                setIsVisible(false)
-                setReload(!reload)
-                setLoading(false)
-            })
-        }) 
+                .then(function (res) {
+                    setIsEnabled(false)
+                    setIsVisible(false)
+                    setReload(!reload)
+                    setLoading(false)
+                })
+        })
     }
 
     function updateValue(qtdSugestao) {
-        var convidQtd = convidados.length +1 
+        var convidQtd = convidados.length + 1
         if (isSugestao) {
             if (convidQtd == 0 || convidQtd == undefined || convidQtd == null) {
                 return (qtdSugestao).toFixed(2)
@@ -175,7 +200,7 @@ export default function AdicionarExtras({ route, navigation }) {
 
 
     async function adicionarSugestao() {
-        var convidQtd = convidados.length +1 
+        var convidQtd = convidados.length + 1
         setLoading(true)
         setIsEnabled(previousState => !previousState)
         if (!isEnabled) {
@@ -194,7 +219,7 @@ export default function AdicionarExtras({ route, navigation }) {
                         precoItem: item.precoMedio,
                     })
                 })
-                
+
                 await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
                     valorTotal: precoFinalTotal
                 })
@@ -315,11 +340,19 @@ export default function AdicionarExtras({ route, navigation }) {
                         </View>
                     </View>
                 </Modal>
-                <View style={style.footer2}>
-                    <TouchableOpacity style={style.continueBtn2} onPress={next}>
-                        <Text style={style.textBtn}>Continuar</Text>
-                    </TouchableOpacity>
-                </View>
+                {isEnabled
+                    ? <View style={style.footer2}>
+                        <TouchableOpacity style={style.continueBtn2} onPress={() => next(true)}>
+                            <Text style={style.textBtn}>Continuar</Text>
+                        </TouchableOpacity>
+                    </View>
+                    : <View style={style.footer2}>
+                        <TouchableOpacity style={style.continueBtn2} onPress={() => next(false)}>
+                            <Text style={style.textBtn}>Continuar</Text>
+                        </TouchableOpacity>
+                    </View>
+                }
+
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -335,6 +368,27 @@ export default function AdicionarExtras({ route, navigation }) {
                                     <Text style={style.iconExitBtn}>Não</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={style.salvarBtn} onPress={() => backHome()}>
+                                    <Text style={style.textBtn}>Sim</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalSugestao}
+                >
+                    <View style={style.centeredView}>
+                        <View style={style.modalView}>
+                            <Text style={style.modalTitle}>Dica</Text>
+                            <Text style={style.modalText}>Não quer voltar e acrescentar carvão e/ou acendedor ao churrasco?</Text>
+                            {/* <Text style={style.confirmarSairSubTitle}>?</Text> */}
+                            <View style={style.footerModalSair}>
+                                <TouchableOpacity style={style.sairBtn} onPress={() => next(true)}>
+                                    <Text style={style.iconExitBtn}>Não</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={style.salvarBtn} onPress={() => setModalSugestao(false)}>
                                     <Text style={style.textBtn}>Sim</Text>
                                 </TouchableOpacity>
                             </View>
