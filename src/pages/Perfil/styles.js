@@ -62,7 +62,6 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   inputStandard: {
-    height: 40,
     borderBottomWidth: 0.5,
     paddingHorizontal: 5,
     marginBottom: 10,

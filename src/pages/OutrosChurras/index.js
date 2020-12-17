@@ -111,7 +111,6 @@ export default function OutrosChurras() {
                 tabBarTextStyle={{ fontWeight: 'normal', fontFamily: 'poppins-semi-bold', fontSize: 15 }}
                 tabBarBackgroundColor='white'
                 tabBarUnderlineStyle={{ backgroundColor: 'maroon', height: 2 }}
-                renderTabBar={() => <DefaultTabBar />}
                 ref={(tabView) => { tabView = tabView; }}
             >
 

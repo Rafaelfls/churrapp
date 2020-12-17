@@ -382,7 +382,7 @@ export default function AdicionarExtras({ route, navigation }) {
                     <View style={style.centeredView}>
                         <View style={style.modalView}>
                             <Text style={style.modalTitle}>Dica</Text>
-                            <Text style={style.modalText}>Não quer voltar e acrescentar carvão e/ou acendedor ao churrasco?</Text>
+                            <Text style={style.modalText}>Notamos que não acrescentou carvão e/ou acendedor ao churrasco, deseja adicionar?</Text>
                             {/* <Text style={style.confirmarSairSubTitle}>?</Text> */}
                             <View style={style.footerModalSair}>
                                 <TouchableOpacity style={style.sairBtn} onPress={() => next(true)}>

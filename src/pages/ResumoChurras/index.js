@@ -429,35 +429,33 @@ export default function ResumoChurras() {
 
                     <Text style={style.textSubHeader}>Você tem {contadorCriado} eventos criados</Text>
                 </View>
-                <View style={{ left: 110, top: 30 }}>
-                    <Fab
-                        active={ativado}
-                        onPress={() => rotateFab()}
-                        direction="down"
-                        containerStyle={{}}
-                        style={{ backgroundColor: 'maroon', zIndex: 4 }}
-                    // position="topRight"
-                    >
-                        <View style={style.fab}>
-                            <Animated.View style={[style.plus1, animatedStyles.rotate]} />
-                            <Animated.View style={[style.plus2, animatedStyles.rotateBack]} />
-                        </View>
-                        <Button onPress={() => inicioCriarChurras()} style={{ backgroundColor: 'maroon', zIndex: 3 }}>
-                            <Animated.View style={[animatedStyles.plusMove]}>
-                                <Text style={{ position: "absolute", color: 'black', left: -125, fontSize: 15, width: '1000%', fontFamily: 'poppins-medium' }}>Criar Churras</Text>
-                                <Icon name="plus" style={style.fabBtnIcon} />
-                            </Animated.View>
-                        </Button>
-                        <Button onPress={() => ParticiparChurras()} style={{ backgroundColor: 'maroon', zIndex: 3 }}>
-                            <Animated.View style={[animatedStyles.plusMove]}>
-                                <Text style={{ position: "absolute", color: 'black', left: -180, fontSize: 15, width: '1000%', fontFamily: 'poppins-medium' }}>Participar do Churras</Text>
-                                <Icon name="users" style={style.fabBtnIcon} />
-                            </Animated.View>
-                        </Button>
-                    </Fab>
-                </View>
-            </View>
 
+            </View>
+            <View style={{ right: -10, top: -30, }}>
+                <Fab
+                    active={ativado}
+                    onPress={() => rotateFab()}
+                    direction="down"
+                    style={{ width: 40, height: 40, backgroundColor: 'maroon' }}
+                >
+                    <View style={style.fab}>
+                        <Animated.View style={[style.plus1, animatedStyles.rotate]} />
+                        <Animated.View style={[style.plus2, animatedStyles.rotateBack]} />
+                    </View>
+                    <Button onPress={() => inicioCriarChurras()} style={{ backgroundColor: 'maroon', zIndex: 3, }}>
+                        <Animated.View style={[animatedStyles.plusMove]}>
+                            <Text style={{ position: "absolute", color: 'black', right: 10, fontSize: 15, width: '1000%', fontFamily: 'poppins-medium', }}>Criar Churras</Text>
+                            <Icon name="plus" style={style.fabBtnIcon} />
+                        </Animated.View>
+                    </Button>
+                    <Button onPress={() => ParticiparChurras()} style={{ backgroundColor: 'maroon', zIndex: 3 }}>
+                        <Animated.View style={[animatedStyles.plusMove]}>
+                            <Text style={{ position: "absolute", color: 'black', right: 10, fontSize: 15, width: '1000%', fontFamily: 'poppins-medium' }}>Participar do Churras</Text>
+                            <Icon name="users" style={style.fabBtnIcon} />
+                        </Animated.View>
+                    </Button>
+                </Fab>
+            </View>
             {churras.length == 0
                 ? (<View style={style.semChurrasbg1}><Image style={style.semChurras1} source={Component1} /></View>)
                 : null
@@ -505,17 +503,13 @@ export default function ResumoChurras() {
                                         <Animated.View style={[style.dot, animatedStyles.dotMove2]} />
                                         <Animated.View style={[style.dot, animatedStyles.dotMove3]} />
                                     </View>
-                                    <Animated.View style={[{ top: 8, width: 80, right: 10, backgroundColor: 'rgba(211,211,211,0.8 )', borderRadius: 15, padding: 10 }, animatedStyles.dotMenu]}>
-                                        <View>
-                                            <TouchableOpacity style={{ borderRadius: 8, backgroundColor: 'rgba(128,128,128 ,0.9)', margin: 2, padding: 1 }} onPress={() => { detalheChurras(churras.id); setEditavel(true) }}>
-                                                <Text style={{ color: 'black', fontSize: 12, textAlign: 'center', fontFamily: 'poppins-bold' }}>Editar</Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View>
-                                            <TouchableOpacity style={{ borderRadius: 8, backgroundColor: 'rgba(128,128,128 ,0.9)', margin: 2, padding: 1 }} onPress={() => { setVisivel(true); setChurrasDeletar(churras) }}>
-                                                <Text style={{ color: 'maroon', fontSize: 12, textAlign: 'center', fontFamily: 'poppins-bold' }}>Excluir</Text>
-                                            </TouchableOpacity>
-                                        </View>
+                                    <Animated.View style={[{ top: 8, width: 100, right: 25, backgroundColor: 'rgba(211,211,211,0.8 )', borderRadius: 15, padding: 10 }, animatedStyles.dotMenu]}>
+                                        <TouchableOpacity style={{ borderRadius: 8, backgroundColor: 'rgba(128,128,128 ,0.9)', margin: 2, marginVertical: 5, paddingVertical: 5 }} onPress={() => { detalheChurras(churras.id); setEditavel(true) }}>
+                                            <Text style={{ color: 'white', fontSize: 12, textAlign: 'center', fontFamily: 'poppins-bold' }}>Editar</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={{ borderRadius: 8, backgroundColor: 'rgba(128,128,128 ,0.9)', margin: 2, marginVertical: 5, paddingVertical: 5 }} onPress={() => { setVisivel(true); setChurrasDeletar(churras) }}>
+                                            <Text style={{ color: 'maroon', fontSize: 12, textAlign: 'center', fontFamily: 'poppins-bold' }}>Excluir</Text>
+                                        </TouchableOpacity>
                                     </Animated.View>
                                 </View>
                                 :
