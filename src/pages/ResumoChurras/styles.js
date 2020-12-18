@@ -111,14 +111,12 @@ export default StyleSheet.create({
     height: 100
   },
   semChurrasbg2: {
-    position: 'absolute',
-    top: 180,
     width: '100%',
     alignItems: 'center'
   },
   semChurras2: {
-    width: 250,
-    height: 160
+    width: 641*0.4,
+    height: 802*0.4
   },
 
   // fim imagem quando nao tem churras
