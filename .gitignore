@@ -14,7 +14,7 @@ android/*
 ios/*
 *.zip
 .gitattributes
-key.ts
+key.js
 
 # macOS
 .DS_Store

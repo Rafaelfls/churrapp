@@ -16,6 +16,8 @@ import { useLoadingModal, createLoadingModal, useChurrasCount } from '../../cont
 import MapView, { Marker } from 'react-native-maps'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 
+import {KEY_GOOGLE} from '../../../key.js'
+
 export default function CriarChurrasco() {
 
   const { churrasCount, setChurrasCount } = useChurrasCount();
@@ -253,7 +255,7 @@ export default function CriarChurrasco() {
 
   function pegarEndereco() {
     //function to get address using current lat and lng
-    fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + regiao.latitude + "," + regiao.longitude + "&key=" + 'AIzaSyBBIKzday1KBaxHkcL0OMVVQ3NlwFVFD6E').then((response) => response.json()).then((responseJson) => {
+    fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + regiao.latitude + "," + regiao.longitude + "&key=" + KEY_GOOGLE).then((response) => response.json()).then((responseJson) => {
       console.log("ADDRESS GEOCODE is BACK!! => " +
         JSON.stringify(responseJson));
       setEndereco(JSON.stringify(responseJson.results[0].formatted_address).replace(/"/g, ""));
@@ -271,7 +273,6 @@ export default function CriarChurrasco() {
     pegarEndereco()
   }
   useEffect(() => {
-    // pegarEndereco()
   }, []);
 
   return (
@@ -583,7 +584,7 @@ export default function CriarChurrasco() {
                   setLgnAtual(details.geometry.location.lng)
                 }}
                 query={{
-                  key: 'AIzaSyBBIKzday1KBaxHkcL0OMVVQ3NlwFVFD6E',
+                  key: KEY_GOOGLE,
                   language: 'pt-br',
                   components: 'country:br'
                 }}
