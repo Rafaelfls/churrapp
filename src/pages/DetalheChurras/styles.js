@@ -14,9 +14,11 @@ export default StyleSheet.create({
     paddingTop: StatusBar.currentHeight,
     paddingBottom: '2%',
     backgroundColor: 'maroon',
-    justifyContent: 'space-between',
+    justifyContent:'space-between',
+    width:'100%',
   },
   title: {
+    flex:1,
     marginTop: 10,
 
   },
@@ -28,6 +30,7 @@ export default StyleSheet.create({
     paddingBottom: 15,
     opacity: 0.9,
     textAlign: "center",
+    flexWrap:'wrap'
   },
   backBtn: {
     justifyContent: 'center',
@@ -69,9 +72,7 @@ export default StyleSheet.create({
     fontFamily: 'poppins-medium',
     marginBottom: 5,
   },
-
-  inputStandard: {
-    minHeight: 40,
+  inputStandard:{ 
     borderBottomWidth: 0.5,
     paddingHorizontal: 5,
     marginBottom: 10,
