@@ -11,7 +11,7 @@ import { QRCode } from 'react-native-custom-qr-codes-expo';
 
 import style from './styles';
 
-import { useEditavel, useChurras, useInitialPage } from '../../context/churrasContext.js'
+import { useEditavel, useChurras } from '../../context/churrasContext.js'
 
 
 export default function CompartilharChurrasco({ route, navigation }) {

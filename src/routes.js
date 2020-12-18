@@ -205,7 +205,7 @@ export default function Routes() {
 
     return (
         <ChurrasProvider>
-            <StatusBar hidden />
+            <StatusBar backgroundColor={'maroon'} translucent/>
             <NavigationContainer linking={linking} fallback={<Text>Carregando...</Text>}>
                 <AppStack.Navigator screenOptions={{ headerShown: false }}>
                     {/* Telas fora do app */}
