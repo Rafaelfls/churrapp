@@ -10,8 +10,8 @@ npm-debug.*
 web-build/
 web-report/
 src/services/*
-android/*
-ios/*
+android/
+ios/
 *.zip
 .gitattributes
 key.js
