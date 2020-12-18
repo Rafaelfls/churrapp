@@ -11,14 +11,14 @@ export default StyleSheet.create({
   //header
   containerHeader: {
     flexDirection: 'row',
-    paddingTop: StatusBar.currentHeight +  15,
+    paddingTop: StatusBar.currentHeight,
     paddingBottom: '2%',
     backgroundColor: 'maroon',
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
   },
   title: {
     marginTop: 10,
-    
+
   },
   detalheTitle: {
     fontSize: 30,
@@ -32,23 +32,23 @@ export default StyleSheet.create({
   backBtn: {
     justifyContent: 'center',
     paddingHorizontal: 20,
-    width:100
+    width: 100
   },
   shareBtn: {
     justifyContent: 'center',
     paddingHorizontal: 20,
-    width:100,
-    alignItems:'flex-end'
+    width: 100,
+    alignItems: 'flex-end'
   },
-  shareBtnIcon:{
-    padding:0,
-    margin:0
+  shareBtnIcon: {
+    padding: 0,
+    margin: 0
   },
   participateBtn: {
     paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    width:100
+    width: 100
   },
   textSwitch: {
     color: 'white',
@@ -70,8 +70,8 @@ export default StyleSheet.create({
     marginBottom: 5,
   },
 
-  inputStandard:{ 
-    minHeight: 40, 
+  inputStandard: {
+    minHeight: 40,
     borderBottomWidth: 0.5,
     paddingHorizontal: 5,
     marginBottom: 10,
@@ -892,4 +892,8 @@ export default StyleSheet.create({
     textAlign: 'center',
   },
   //fim editar foto churras
+  //map
+  map: {
+    ...StyleSheet.absoluteFillObject
+  },
 });

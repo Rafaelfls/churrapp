@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Image, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Image, Modal, KeyboardAvoidingView, Switch } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../services/api';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
@@ -8,9 +8,13 @@ import DatePicker from 'react-native-date-picker';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconFA from 'react-native-vector-icons/FontAwesome';
+import IconFA5 from 'react-native-vector-icons/FontAwesome5';
 
 import style from './styles';
 import { useLoadingModal, createLoadingModal, useChurrasCount } from '../../context/churrasContext';
+
+import MapView, { Marker } from 'react-native-maps'
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 
 export default function CriarChurrasco() {
 
@@ -25,12 +29,35 @@ export default function CriarChurrasco() {
   const [descricao, setdescricao] = useState();
   const [date, setDate] = useState();
   const [dataFormatada, setDataFormatada] = useState()
+  const [dataFormatadaLimite, setDataFormatadaLimite] = useState()
   const [limiteConfirmacao, setLimiteConfirmacao] = useState();
   const [image, setImage] = useState({ cancelled: true });
   const [churrasCodeCriado, setChurrasCodeCriado] = useState('')
   const [visivel, setVisivel] = useState(false)
   const [modalSair, setModalSair] = useState(false)
   const [url] = useState("https://churrappuploadteste.s3.amazonaws.com/default/churrapp_default.png")
+
+  const [switchData, setSwitchData] = useState(false)
+  const [switchDataLimite, setSwitchDataLimite] = useState(false)
+  const [switchComponentDataLimite, setSwitchComponentDataLimite] = useState(false)
+  const [switchComponentHrFim, setSwitchComponentHrFim] = useState(false)
+  const [switchHrInicio, setSwitchHrInicio] = useState(false)
+  const [switchHrFim, setSwitchHrFim] = useState(false)
+
+  //Maps
+  const [regiao, setRegiao] = useState({
+    latitude: -22.9329252,
+    longitude: -47.073845,
+    latitudeDelta: 0.015,
+    longitudeDelta: 0.0121
+  })
+  const [endereco, setEndereco] = useState('')
+  const [searchText, setSearchText] = useState()
+  const [modalMap, setModalMap] = useState(false)
+  const [mapView, setMapView] = useState()
+  const [latAtual, setLatAtual] = useState()
+  const [lgnAtual, setLgnAtual] = useState()
+  //Fim Maps
 
   const [borderColorRed1, setBorderColorRed1] = useState(style.formOk);
   const [borderColorRed2, setBorderColorRed2] = useState(style.formOk);
@@ -50,7 +77,7 @@ export default function CriarChurrasco() {
     } else {
       setBorderColorRed1(style.formOk)
     }
-    if (local == '') {
+    if (endereco == '') {
       setBorderColorRed2(style.formNok)
     } else {
       setBorderColorRed2(style.formOk)
@@ -67,7 +94,7 @@ export default function CriarChurrasco() {
     }
 
     if (nomeChurras == '' ||
-      local == '' ||
+      endereco == '' ||
       date == '' ||
       hrInicio == '') {
       return setVisivel(true)
@@ -137,13 +164,15 @@ export default function CriarChurrasco() {
 
     await api.post('/churras', {
       nomeChurras: nomeChurras,
-      local: local,
+      local: endereco,
       hrInicio: hrInicio,
       hrFim: hrFim,
       descricao: descricao,
       data: date,
       fotoUrlC: novaUrl,
       limiteConfirmacao: limiteConfirmacao,
+      latitude: latAtual,
+      longitude: lgnAtual
     }, config).then(function (response) {
       setLoading(false)
       navigation.navigate('AdicionaConvidados', {
@@ -153,12 +182,14 @@ export default function CriarChurrasco() {
         churrasAtual: {
           churrasCode: response.data.id,
           nomeChurras: nomeChurras,
-          local: local,
+          local: endereco,
           hrInicio: hrInicio,
           hrFim: hrFim,
           descricao: descricao,
           data: dataFormatada,
           limiteConfirmacao: limiteConfirmacao,
+          latitude: latAtual,
+          longitude: lgnAtual
         },
       });
     })
@@ -181,6 +212,24 @@ export default function CriarChurrasco() {
     setDataFormatada(date + '/' + month + '/' + year)
     console.log(dataFormatada)
   }
+  function formatDataLimite(data) {
+    var date = new Date(data).getDate()
+    var month = new Date(data).getMonth() + 1
+    var year = new Date(data).getFullYear()
+    if (date === 32) {
+      date = "01"
+      month = month + 1
+      if (month === 13) {
+        month = 1
+        year += 1
+      }
+    }
+    if (month < 10) {
+      month = "0" + month
+    }
+    setDataFormatadaLimite(date + '/' + month + '/' + year)
+    console.log(dataFormatadaLimite)
+  }
   function formatDataInicio(data) {
     var hours = data.getHours();
     var min = data.getMinutes();
@@ -201,6 +250,29 @@ export default function CriarChurrasco() {
 
     sethrFim(hours + ':' + min + ':' + sec)
   }
+
+  function pegarEndereco() {
+    //function to get address using current lat and lng
+    fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + regiao.latitude + "," + regiao.longitude + "&key=" + 'AIzaSyBBIKzday1KBaxHkcL0OMVVQ3NlwFVFD6E').then((response) => response.json()).then((responseJson) => {
+      console.log("ADDRESS GEOCODE is BACK!! => " +
+        JSON.stringify(responseJson));
+      setEndereco(JSON.stringify(responseJson.results[0].formatted_address).replace(/"/g, ""));
+    });
+  }
+
+  function irParaLocalInicial(regiao) {
+    let initialRegion = Object.assign({}, regiao);
+    initialRegion["latitudeDelta"] = 0.005;
+    initialRegion["longitudeDelta"] = 0.005;
+    mapView.animateToRegion(initialRegion, 2000)
+  }
+  function mudarRegiao(regiao) {
+    setRegiao(regiao)
+    pegarEndereco()
+  }
+  useEffect(() => {
+    // pegarEndereco()
+  }, []);
 
   return (
     <View style={style.container}>
@@ -226,12 +298,17 @@ export default function CriarChurrasco() {
               />
             </View>
             <Text style={style.textLabel}>Local</Text>
+            <TouchableOpacity onPress={() => setModalMap(true)} style={{ left: 320, top: 100, position: 'absolute' }}>
+              {/* <Text>Abrir MAPA</Text> */}
+              <IconFA5 name="map-marked-alt" size={20} style={style.icons} />
+            </TouchableOpacity>
             <View>
               <TextInput
-                style={[style.inputStandard, borderColorRed2]}
+                style={[style.inputStandard, borderColorRed2, { height: 'auto' }]}
                 placeholder={"Local do churrasco"}
-                onChangeText={text => setlocal(text)}
-                value={local}
+                multiline
+                onChangeText={text => setEndereco(text)}
+                value={endereco}
               />
             </View>
             <Text style={style.textLabel}>Descrição</Text>
@@ -246,41 +323,147 @@ export default function CriarChurrasco() {
               />
             </View>
             <Text style={style.textLabel}>Data</Text>
-            <DatePicker
-              style={{ marginBottom: 10 }}
-              date={date}
-              mode="date"
-              locale="pt"
-              format="DD/MM/YYYY"
-              minimumDate={new Date()}
-              onDateChange={(date) => { setDate(date); formatData(date); console.log(date) }}
-            />
+            <Modal
+              transparent
+              visible={switchData}
+            >
+              <View style={{
+                position: 'relative',
+                width: '100%',
+                height: "100%",
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'rgba(155,155,155,0.8)'
+              }}>
+                <View style={{
+                  backgroundColor: 'white', width: '80%',
+                  height: '30%', justifyContent: 'center',
+                  alignItems: 'center', borderRadius: 8
+                }}>
+                  <DatePicker
+                    style={{ marginBottom: 10 }}
+                    date={date}
+                    mode="date"
+                    locale="pt"
+                    format="DD/MM/YYYY"
+                    minimumDate={new Date()}
+                    onDateChange={(date) => { setDate(date); formatData(date); console.log(date) }}
+                  />
+                  <Text onPress={() => { setSwitchData(false); }}>FECHA</Text>
+                </View>
+              </View>
+            </Modal>
+            <Text onPress={() => setSwitchData(true)} style={[style.inputStandard, { borderBottomColor: 'black', color: 'black', height: 'auto' }]}>{dataFormatada}</Text>
             <Text style={style.textLabel}>Início</Text>
-            <DatePicker
-              style={{ marginBottom: 10 }}
-              date={hrInicio}
-              mode="time"
-              placeholder="00:00"
-              onDateChange={(hrInicio) => { formatDataInicio(hrInicio); }}
-            />
+            <Modal
+              transparent
+              visible={switchHrInicio}
+            >
+              <View style={{
+                position: 'relative',
+                width: '100%',
+                height: "100%",
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'rgba(155,155,155,0.8)'
+              }}>
+                <View style={{
+                  backgroundColor: 'white', width: '80%',
+                  height: '30%', justifyContent: 'center',
+                  alignItems: 'center', borderRadius: 8
+                }}>
+                  <DatePicker
+                    style={{ marginBottom: 10 }}
+                    date={hrInicio}
+                    mode="time"
+                    onDateChange={(hrInicio) => { formatDataInicio(hrInicio); }}
+                  />
+                  <Text onPress={() => { setSwitchHrInicio(false); }}>FECHA</Text>
+                </View>
+              </View>
+            </Modal>
+            <Text onPress={() => setSwitchHrInicio(true)} style={[style.inputStandard, { borderBottomColor: 'black', color: 'black', height: 'auto' }]}>{hrInicio}</Text>
             <Text style={style.textLabel}>Término</Text>
-            <DatePicker
-              style={{ marginBottom: 10 }}
-              date={hrFim}
-              mode="time"
-              onDateChange={(hrFim) => { formatDataFim(hrFim) }}
-            />
+            <Switch
+              trackColor={{ false: "gray", true: "green" }}
+              style={{ bottom: 30 }}
+              value={switchComponentHrFim}
+              onValueChange={() => { setSwitchComponentHrFim(!switchComponentHrFim); sethrFim() }} />
+            {switchComponentHrFim == false
+              ? null
+              : <Text onPress={() => setSwitchHrFim(true)} style={[style.inputStandard, { borderBottomColor: 'black', color: 'black', height: 'auto' }]}>{hrFim}</Text>
+            }
+            <Modal
+              transparent
+              visible={switchHrFim}
+            >
+              <View style={{
+                position: 'relative',
+                width: '100%',
+                height: "100%",
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'rgba(155,155,155,0.8)'
+              }}>
+                <View style={{
+                  backgroundColor: 'white', width: '80%',
+                  height: '30%', justifyContent: 'center',
+                  alignItems: 'center', borderRadius: 8
+                }}>
+                  <DatePicker
+                    style={{ marginBottom: 10 }}
+                    date={hrFim}
+                    mode="time"
+                    onDateChange={(hrFim) => { formatDataFim(hrFim) }}
+                  />
+                  <Text onPress={() => { setSwitchHrFim(false); }}>FECHA</Text>
+                </View>
+              </View>
+            </Modal>
+
+
             <Text style={style.textLabel}>Confirmação de presença até</Text>
-            <DatePicker
-              style={{ marginBottom: 10 }}
-              date={limiteConfirmacao}
-              mode="date"
-              locale='pt'
-              format="DD/MM/YYYY"
-              minimumDate={new Date()}
-              maximumDate={date}
-              onDateChange={(date) => { setLimiteConfirmacao(date) }}
-            />
+            <Switch
+              trackColor={{ false: "gray", true: "green" }}
+              style={{ bottom: 30 }}
+              value={switchComponentDataLimite}
+              onValueChange={() => { setSwitchComponentDataLimite(!switchComponentDataLimite); setDataFormatadaLimite() }} />
+            {switchComponentDataLimite == false
+              ? null
+              : <Text onPress={() => setSwitchDataLimite(true)} style={[style.inputStandard, { borderBottomColor: 'black', color: 'black', height: 'auto' }]}>{dataFormatadaLimite}</Text>
+            }
+            <Modal
+              transparent
+              visible={switchDataLimite}
+            >
+              <View style={{
+                position: 'relative',
+                width: '100%',
+                height: "100%",
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'rgba(155,155,155,0.8)'
+              }}>
+                <View style={{
+                  backgroundColor: 'white', width: '80%',
+                  height: '30%', justifyContent: 'center',
+                  alignItems: 'center', borderRadius: 8
+                }}>
+                  <DatePicker
+                    style={{ marginBottom: 10 }}
+                    date={limiteConfirmacao}
+                    mode="date"
+                    locale='pt'
+                    format="DD/MM/YYYY"
+                    minimumDate={new Date()}
+                    maximumDate={date}
+                    onDateChange={(date) => { setLimiteConfirmacao(date); formatDataLimite(date) }}
+                  />
+                  <Text onPress={() => { setSwitchDataLimite(false); }}>FECHA</Text>
+                </View>
+              </View>
+            </Modal>
+
             <View style={{ marginVertical: 10 }}>
               <Text style={style.textLabel}>Foto do churras</Text>
               <View style={style.imagePicker}>
@@ -334,6 +517,96 @@ export default function CriarChurrasco() {
                   <Text style={style.textBtn}>Sim</Text>
                 </TouchableOpacity>
               </View>
+            </View>
+          </View>
+        </Modal>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalMap}
+        >
+          <View style={{
+            position: 'relative',
+            width: '100%',
+            height: "100%",
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'rgba(155,155,155,0.8)'
+          }}>
+            <View style={{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 150, right: 10 }}>
+              <TouchableOpacity onPress={() => setModalMap(false)}>
+                <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{ width: '100%', height: 450 }}>
+              <MapView
+                ref={(ref) => setMapView(ref)}
+                onMapReady={() => irParaLocalInicial(regiao)}
+                onRegionChangeComplete={() => mudarRegiao(regiao)}
+                style={style.map}
+                initialRegion={regiao}
+              >
+                <Marker
+                  coordinate={regiao}
+                />
+              </MapView>
+              <GooglePlacesAutocomplete
+                currentLocation={false}
+                fetchDetails={true}
+                placeholder={"Procurar"}
+                renderDescription={(row) => row.description}
+                returnKeyType={"search"}
+                enablePoweredByContainer={false}
+                nearbyPlacesAPI='GooglePlacesSearch'
+                textInputProps={{
+                  onChangeText: (text) => {
+                    console.log(text)
+                  }
+                }}
+                onPress={(data, details) => {
+                  // 'details' is provided when fetchDetails = true
+                  setRegiao({
+                    latitude: details.geometry.location.lat,
+                    longitude: details.geometry.location.lng,
+                    latitudeDelta: regiao.latitudeDelta,
+                    longitudeDelta: regiao.longitudeDelta
+                  })
+                  setEndereco(data.description)
+                  irParaLocalInicial({
+                    latitude: details.geometry.location.lat,
+                    longitude: details.geometry.location.lng,
+                    latitudeDelta: regiao.latitudeDelta,
+                    longitudeDelta: regiao.longitudeDelta
+                  })
+                  setLatAtual(details.geometry.location.lat)
+                  setLgnAtual(details.geometry.location.lng)
+                }}
+                query={{
+                  key: 'AIzaSyBBIKzday1KBaxHkcL0OMVVQ3NlwFVFD6E',
+                  language: 'pt-br',
+                  components: 'country:br'
+                }}
+                styles={{
+                  description: {
+                    fontFamily: "Calibri",
+                    color: "black",
+                    fontSize: 12,
+                  },
+                  predefinedPlacesDescription: {
+                    color: "black",
+                  },
+                  listView: {
+                    position: "absolute",
+                    marginTop: 44,
+                    backgroundColor: "white",
+                    borderBottomEndRadius: 15,
+                    elevation: 2,
+                  },
+                }}
+
+              />
+
             </View>
           </View>
         </Modal>

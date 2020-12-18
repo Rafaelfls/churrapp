@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, Image, FlatList, TouchableOpacity, Linking,
-  Picker, ScrollView, Modal, TextInput, TouchableHighlight, Switch, AppState, StatusBar
+  Picker, ScrollView, Modal, TextInput, TouchableHighlight, Switch, AppState, StatusBar, TouchableWithoutFeedback
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import NumericInput from 'react-native-numeric-input';
@@ -17,6 +17,11 @@ import api from '../../services/api';
 import * as ImagePicker from 'expo-image-picker';
 import { FloatingAction } from "react-native-floating-action";
 import DatePicker from 'react-native-date-picker';
+
+//Maps
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
+import { showLocation, Popup } from 'react-native-map-link'
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 // import { Rating, AirbnbRating } from 'react-native-elements'
 
 
@@ -31,6 +36,34 @@ export default function DetalheChurras() {
   const { newChurras, setNewChurras } = useChurras();
   const { editavel, setEditavel } = useEditavel();
   const { initialPage } = useInitialPage();
+  //Map
+  const [modalMap, setModalMap] = useState(false)// Modal ver mapa 
+  const [mapVisible, setMapVisible] = useState(false) // Abrir modal de app de mapa
+  const [modalEditMap, setModalEditMap] = useState(false) //Modal edição de mapa
+  const [regiao, setRegiao] = useState({
+    latitude: 0,
+    longitude: 0,
+    latitudeDelta: 0.015,
+    longitudeDelta: 0.0121
+  })
+  const [mapView, setMapView] = useState()
+  const [mapViewEdit, setMapViewEdit] = useState()
+  const [mapMode, setMapMode] = useState('standard')
+  const [endereco, setEndereco] = useState('')
+  const [latAtual, setLatAtual] = useState()
+  const [lgnAtual, setLgnAtual] = useState()
+  //Fim Map
+
+  //Switchs data
+  const [switchData, setSwitchData] = useState(false)
+  const [switchDataLimite, setSwitchDataLimite] = useState(false)
+  const [dataNovaModal, setDataNovaModal] = useState()
+  const [dataLimiteNovaModal, setDataLimiteNovaModal] = useState()
+  const [switchHrInicio, setSwitchHrInicio] = useState(false)
+  const [switchHrFim, setSwitchHrFim] = useState(false)
+  const [hrInicioNova, setHrInicioNova] = useState()
+  const [hrFimNova, setHrFimNova] = useState()
+  //fim
 
   // const churras = route.params.churras;
   // const editavel = route.params.editavel;
@@ -314,6 +347,8 @@ export default function DetalheChurras() {
         local: editChurrasLocal,
         descricao: editChurrasDescricao,
         fotoUrlC: novaUrl,
+        latitude: latAtual,
+        longitude: lgnAtual
       }).then(function (res) {
         setReturnVisivel([true, res.data.mensagem])
         setRefresh(!refresh)
@@ -554,10 +589,38 @@ export default function DetalheChurras() {
     })
   }
 
+  function pegarRegiao(regiao, isEditable) {
+    if (isEditable) {
+      let initialRegion = Object.assign({}, regiao);
+      initialRegion["latitudeDelta"] = 0.005;
+      initialRegion["longitudeDelta"] = 0.005;
+      mapViewEdit.animateToRegion(initialRegion, 2000)
+      setRegiao(regiao)
+      console.log(regiao)
+    } else {
+      let initialRegion = Object.assign({}, regiao);
+      initialRegion["latitudeDelta"] = 0.005;
+      initialRegion["longitudeDelta"] = 0.005;
+      mapView.animateToRegion(initialRegion, 2000)
+      setRegiao(regiao)
+      console.log(regiao)
+    }
+
+
+  }
+  function mudarRegiao(regiao) {
+    setRegiao(regiao)
+  }
   async function carregaChurras() {
     const res = await api.get(`churrasPeloId/${newChurras}`)
 
     // console.log(res)
+    setRegiao({
+      latitude: res.data[0].latitude,
+      longitude: res.data[0].longitude,
+      latitudeDelta: 0.015,
+      longitudeDelta: 0.0121
+    })
     setChurrasAtual(res.data[0])
     setEditChurrasNome(res.data[0].nomeChurras)
     setEditChurrasNomeUsuario(res.data[0].nome)
@@ -587,6 +650,20 @@ export default function DetalheChurras() {
 
   function formatData(data) {
     var date = new Date(data).getDate() + 1
+    var month = new Date(data).getMonth() + 1
+    var year = new Date(data).getFullYear()
+    if (date === 32) {
+      date = "01"
+      month = month + 1
+      if (month === 13) {
+        month = 1
+        year += 1
+      }
+    }
+    return date + '/' + month + '/' + year
+  }
+  function formatNovaData(data) {
+    var date = new Date(data).getDate()
     var month = new Date(data).getMonth() + 1
     var year = new Date(data).getFullYear()
     if (date === 32) {
@@ -669,9 +746,24 @@ export default function DetalheChurras() {
     var hours = new Date(data).getHours();
     var min = new Date(data).getMinutes();
     var sec = new Date(data).getSeconds();
-    
+
     setEditChurrasFim(hours + ':' + min + ':' + sec)
     setHrFim(data)
+  }
+
+  function abrirMapApp() {
+    showLocation({
+      latitude: regiao.latitude,
+      longitude: regiao.longitude,
+      dialogTitle: "Local " + editChurrasLocal,
+      dialogMessage: "Quall app gostaria de utilizar?",
+      cancelText: "Fechar",
+      appsWhiteList: ['google-maps', 'waze']
+    })
+  }
+
+  function mudarRegiao(regiao) {
+    setRegiao(regiao)
   }
 
   useEffect(() => {
@@ -684,6 +776,7 @@ export default function DetalheChurras() {
 
   return (
     <View style={style.container}>
+      <StatusBar backgroundColor='maroon' />
       <View style={style.containerHeader}>
         <TouchableOpacity style={style.backBtn} onPress={() => backHome()} >
           <IconOct name="chevron-left" size={25} color={"white"} />
@@ -773,13 +866,37 @@ export default function DetalheChurras() {
                 <IconFA name="map-o" size={20} style={style.icons} />
                 <Text style={style.churrasNome}>Local: </Text>
               </View>
-              <TextInput
-                style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}
-                editable={allowEditing[0]}
-                multiline={true}
-                onChangeText={text => setEditChurrasLocal(text)}
-                value={editChurrasLocal}
-              />
+              {allowEditing[0]
+                ? <View>
+                  <View style={{ position: 'absolute', right: -10, zIndex: 20 }}>
+                    <TouchableWithoutFeedback onPress={() => setModalEditMap(true)}>
+                      <Icon name="map-marked-alt" size={20} style={style.icons} />
+                    </TouchableWithoutFeedback>
+                  </View>
+                  <TextInput
+                    style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}
+                    editable={allowEditing[0]}
+                    multiline={true}
+                    onChangeText={text => setEditChurrasLocal(text)}
+                    value={editChurrasLocal}
+                  />
+                </View>
+                : <View>
+                  <View style={{ position: 'absolute', right: -10 }}>
+                    <TouchableWithoutFeedback onPress={() => setModalMap(true)}>
+                      <Icon name="map-marked-alt" size={20} style={style.icons} />
+                    </TouchableWithoutFeedback>
+                  </View>
+                  <TextInput
+                    style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}
+                    editable={allowEditing[0]}
+                    multiline={true}
+                    onChangeText={text => setEditChurrasLocal(text)}
+                    value={editChurrasLocal}
+                  />
+                </View>
+              }
+
             </View>
             {allowEditing[0]
               ? <View>
@@ -788,61 +905,156 @@ export default function DetalheChurras() {
                     <IconEnt name="calendar" size={22} style={style.icons} />
                     <Text style={style.churrasNome}>Data: </Text>
                   </View>
-                  <DatePicker
-                    // style={{ width: '100%' }}
-                    date={editChurrasData}
-                    mode="date"
-                    locale='pt'
-                    disabled={!allowEditing[0]}
-                    placeholder="DD/MM/AAAA"
-                    format="DD/MM/YYYY"
-                    minimumDate={new Date()}
-                    onDateChange={(date) => { setEditChurrasData(date); console.log(date) }}
-                  />
+                  <Modal
+                    transparent
+                    visible={switchData}
+                  >
+                    <View style={{
+                      position: 'relative',
+                      width: '100%',
+                      height: "100%",
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: 'rgba(155,155,155,0.8)'
+                    }}>
+                      <View style={{
+                        backgroundColor: 'white', width: '80%',
+                        height: '30%', justifyContent: 'center',
+                        alignItems: 'center', borderRadius: 8
+                      }}>
+                        <DatePicker
+                          // style={{ width: '100%' }}
+                          date={editChurrasData}
+                          mode="date"
+                          locale='pt'
+                          disabled={!allowEditing[0]}
+                          placeholder="DD/MM/AAAA"
+                          format="DD/MM/YYYY"
+                          minimumDate={new Date()}
+                          onDateChange={(date) => { setEditChurrasData(date); console.log(date) }}
+                        />
+                        <Text onPress={() => { setSwitchData(false); setDataNovaModal(formatNovaData(editChurrasData)) }}>FECHA</Text>
+                      </View>
+                    </View>
+                  </Modal>
+                  {dataNovaModal == null
+                    ? <Text onPress={() => setSwitchData(true)} style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}>{editChurrasDataPicker}</Text>
+                    : <Text onPress={() => setSwitchData(true)} style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}>{dataNovaModal}</Text>
+                  }
                 </View>
                 <View style={style.formGroup}>
                   <View style={{ flexDirection: 'row' }}>
                     <IconEnt name="calendar" size={22} style={style.icons} />
                     <Text style={style.churrasNome}>Data limite confirmação: </Text>
                   </View>
-                  <DatePicker
-                    // style={{ width: '100%' }}
-                    date={editChurrasDataLimite}
-                    mode="date"
-                    locale='pt'
-                    disabled={!allowEditing[0]}
-                    placeholder="DD/MM/AAAA"
-                    format="DD/MM/YYYY"
-                    minimumDate={new Date()}
-                    maximumDate={editChurrasData}
-                    onDateChange={(date) => { setEditChurrasDataLimite(date); console.log(date) }}
-                  />
+                  <Modal
+                    transparent
+                    visible={switchDataLimite}
+                  >
+                    <View style={{
+                      position: 'relative',
+                      width: '100%',
+                      height: "100%",
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: 'rgba(155,155,155,0.8)'
+                    }}>
+                      <View style={{
+                        backgroundColor: 'white', width: '80%',
+                        height: '30%', justifyContent: 'center',
+                        alignItems: 'center', borderRadius: 8
+                      }}>
+                        <DatePicker
+                          // style={{ width: '100%' }}
+                          date={editChurrasDataLimite}
+                          mode="date"
+                          locale='pt'
+                          disabled={!allowEditing[0]}
+                          placeholder="DD/MM/AAAA"
+                          format="DD/MM/YYYY"
+                          minimumDate={new Date()}
+                          maximumDate={editChurrasData}
+                          onDateChange={(date) => { setEditChurrasDataLimite(date); console.log(date) }}
+                        />
+                        <Text onPress={() => { setSwitchDataLimite(false); setDataLimiteNovaModal(formatNovaData(editChurrasDataLimite)) }}>FECHA</Text>
+                      </View>
+                    </View>
+                  </Modal>
+                  {dataLimiteNovaModal == null
+                    ? <Text onPress={() => setSwitchDataLimite(true)} style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}>{editChurrasDataLimitePicker}</Text>
+                    : <Text onPress={() => setSwitchDataLimite(true)} style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}>{dataLimiteNovaModal}</Text>
+                  }
                 </View>
                 <View style={style.formGroup}>
                   <View style={{ flexDirection: 'row' }}>
                     <IconEnt name="clock" size={22} style={style.icons} />
                     <Text style={style.churrasNome}>Horário de início: </Text>
                   </View>
-                  <DatePicker
-                    // style={{ width: '100%' }}
-                    date={hrComeco}
-                    mode="time"
-                    disabled={!allowEditing[0]}
-                    onDateChange={(hrInicio) => { formatDataInicio(hrInicio); console.log(hrInicio) }}
-                  />
+                  <Modal
+                    transparent
+                    visible={switchHrInicio}
+                  >
+                    <View style={{
+                      position: 'relative',
+                      width: '100%',
+                      height: "100%",
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: 'rgba(155,155,155,0.8)'
+                    }}>
+                      <View style={{
+                        backgroundColor: 'white', width: '80%',
+                        height: '30%', justifyContent: 'center',
+                        alignItems: 'center', borderRadius: 8
+                      }}>
+                        <DatePicker
+                          // style={{ width: '100%' }}
+                          date={hrComeco}
+                          mode="time"
+                          disabled={!allowEditing[0]}
+                          onDateChange={(hrInicio) => { formatDataInicio(hrInicio); console.log(hrInicio) }}
+                        />
+                        <Text onPress={() => { setSwitchHrInicio(false); setHrInicioNova(editChurrasInicio) }}>FECHA</Text>
+                      </View>
+                    </View>
+                  </Modal>
+                  <Text onPress={() => setSwitchHrInicio(true)} style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}>{editChurrasInicio}</Text>
                 </View>
                 <View style={style.formGroup}>
                   <View style={{ flexDirection: 'row' }}>
                     <IconEnt name="clock" size={22} style={style.icons} />
                     <Text style={style.churrasNome}>Horário de Fim: </Text>
                   </View>
-                  <DatePicker
-                    // style={{ width: '100%' }}
-                    date={hrFim}
-                    mode="time"
-                    disabled={!allowEditing[0]}
-                    onDateChange={(hrFim) => { formatDataFim(hrFim) }}
-                  />
+                  <Modal
+                    transparent
+                    visible={switchHrFim}
+                  >
+                    <View style={{
+                      position: 'relative',
+                      width: '100%',
+                      height: "100%",
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: 'rgba(155,155,155,0.8)'
+                    }}>
+                      <View style={{
+                        backgroundColor: 'white', width: '80%',
+                        height: '30%', justifyContent: 'center',
+                        alignItems: 'center', borderRadius: 8
+                      }}>
+                        <DatePicker
+                          // style={{ width: '100%' }}
+                          date={hrFim}
+                          mode="time"
+                          disabled={!allowEditing[0]}
+                          onDateChange={(hrFim) => { formatDataFim(hrFim) }}
+                        />
+                        <Text onPress={() => { setSwitchHrFim(false); setHrFimNova(editChurrasFim) }}>FECHA</Text>
+                      </View>
+                    </View>
+                  </Modal>
+                  <Text onPress={() => setSwitchHrFim(true)} style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}>{editChurrasFim}</Text>
+
                 </View>
               </View>
               :
@@ -1715,6 +1927,149 @@ export default function DetalheChurras() {
                 <Text style={style.iconSalvarBtnQtd}>Confirmar</Text>
               </TouchableOpacity>
             </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalMap}
+      >
+        <View style={{
+          position: 'relative',
+          width: '100%',
+          height: "100%",
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'rgba(155,155,155,0.8)'
+        }}>
+          <View style={{ width: 400, height: 600, alignSelf: 'center' }}>
+            <MapView
+              ref={(ref) => setMapView(ref)}
+              onMapReady={() => { pegarRegiao(regiao, false); setRefresh(!refresh) }}
+              // onRegionChangeComplete={() => mudarRegiao(regiao)}
+              provider={PROVIDER_GOOGLE}
+              style={style.map}
+              initialRegion={regiao}
+              loadingEnabled
+              mapType={mapMode}
+            >
+              <Marker
+                coordinate={regiao}
+                title={editChurrasLocal}
+                description={editChurrasDescricao}
+                onPress={() => setMapVisible(true)}
+              />
+            </MapView>
+            <Popup
+              isVisible={mapVisible}
+              onCancelPressed={() => setMapVisible(false)}
+              onAppPressed={() => setMapVisible(false)}
+              onBackButtonPressed={() => setMapVisible(false)}
+              options={{
+                latitude: regiao.latitude,
+                longitude: regiao.longitude,
+                dialogTitle: "Local: " + editChurrasLocal,
+                dialogMessage: "Qual app gostaria de utilizar?",
+                cancelText: "Fechar"
+              }}
+              appsWhiteList={['google-maps', 'waze']}
+            />
+          </View>
+          <View style={{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 75, right: 10 }}>
+            <TouchableOpacity onPress={() => setModalMap(false)}>
+              <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalEditMap}
+      >
+        <View style={{
+          position: 'absolute',
+          width: '100%',
+          height: "100%",
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'rgba(155,155,155,0.8)'
+        }}>
+          <View style={{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 150, right: 10 }}>
+            <TouchableOpacity onPress={() => setModalEditMap(false)}>
+              <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ width: '100%', height: 450 }}>
+            <MapView
+              ref={(ref) => setMapViewEdit(ref)}
+              onMapReady={() => pegarRegiao(regiao, true)}
+              onRegionChangeComplete={() => mudarRegiao(regiao)}
+              style={style.map}
+              initialRegion={regiao}
+            >
+              <Marker
+                coordinate={regiao}
+              />
+            </MapView>
+            <GooglePlacesAutocomplete
+              currentLocation={false}
+              fetchDetails={true}
+              placeholder={"Procurar"}
+              renderDescription={(row) => row.description}
+              returnKeyType={"search"}
+              enablePoweredByContainer={false}
+              nearbyPlacesAPI='GooglePlacesSearch'
+              debounce={200}
+              textInputProps={{
+                onChangeText: (text) => {
+                  console.log(text)
+                }
+              }}
+              onPress={(data, details) => {
+                // 'details' is provided when fetchDetails = true
+                setRegiao({
+                  latitude: details.geometry.location.lat,
+                  longitude: details.geometry.location.lng,
+                  latitudeDelta: regiao.latitudeDelta,
+                  longitudeDelta: regiao.longitudeDelta
+                })
+                setEditChurrasLocal(data.description)
+                pegarRegiao({
+                  latitude: details.geometry.location.lat,
+                  longitude: details.geometry.location.lng,
+                  latitudeDelta: regiao.latitudeDelta,
+                  longitudeDelta: regiao.longitudeDelta
+                }, true)
+                setLatAtual(details.geometry.location.lat)
+                setLgnAtual(details.geometry.location.lng)
+              }}
+              query={{
+                key: 'AIzaSyBBIKzday1KBaxHkcL0OMVVQ3NlwFVFD6E',
+                language: 'pt-br',
+                components: 'country:br'
+              }}
+              styles={{
+                description: {
+                  fontFamily: "Calibri",
+                  color: "black",
+                  fontSize: 12,
+                },
+                predefinedPlacesDescription: {
+                  color: "black",
+                },
+                listView: {
+                  position: "absolute",
+                  marginTop: 44,
+                  backgroundColor: "white",
+                  borderBottomEndRadius: 15,
+                  elevation: 2,
+                },
+              }}
+
+            />
+
           </View>
         </View>
       </Modal>

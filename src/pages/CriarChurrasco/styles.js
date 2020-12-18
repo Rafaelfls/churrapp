@@ -303,4 +303,12 @@ export default StyleSheet.create({
     backgroundColor: 'white',
   },
   //fim modal
+  icons: {
+    color: 'maroon',
+    marginRight: 8,
+  },
+  //map
+  map: {
+    ...StyleSheet.absoluteFillObject
+  },
 });
