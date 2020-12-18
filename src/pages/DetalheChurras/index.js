@@ -22,7 +22,7 @@ import DatePicker from 'react-native-date-picker';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import { showLocation, Popup } from 'react-native-map-link'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
-import KEY_GOOGLE from '../../../key.js'
+import {KEY_GOOGLE} from '../../../key.js'
 // import { Rating, AirbnbRating } from 'react-native-elements'
 
 
