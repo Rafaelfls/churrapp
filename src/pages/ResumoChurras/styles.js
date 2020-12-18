@@ -226,23 +226,23 @@ export default StyleSheet.create({
     color: 'white'
   },
   plus1: {
-    width: '50%',
-    height: 5,
+    width: '25%',
+    height: 2,
     borderRadius: 10,
     backgroundColor: 'white',
     margin: 10,
     position: "absolute"
   },
   plus2: {
-    height: '50%',
-    width: 5,
+    height: '25%',
+    width: 2,
     borderRadius: 10,
     backgroundColor: 'white',
     margin: 10,
     position: "absolute"
   },
   fab: {
-    backgroundColor: 'maroon',
+    backgroundColor: 'transparent',
     height: 60,
     width: 60,
     borderRadius: 30,

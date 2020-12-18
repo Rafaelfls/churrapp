@@ -102,7 +102,6 @@ export default StyleSheet.create({
     marginBottom: 5,
   },
   inputStandard:{ 
-    height: 40, 
     borderColor: 'gray', 
     fontFamily: 'poppins-regular',
     borderBottomWidth: 0.5,
