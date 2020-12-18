@@ -22,6 +22,7 @@ import DatePicker from 'react-native-date-picker';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import { showLocation, Popup } from 'react-native-map-link'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
+import {key} from 'my_google_key'
 // import { Rating, AirbnbRating } from 'react-native-elements'
 
 
@@ -2046,7 +2047,7 @@ export default function DetalheChurras() {
                 setLgnAtual(details.geometry.location.lng)
               }}
               query={{
-                key: 'AIzaSyBBIKzday1KBaxHkcL0OMVVQ3NlwFVFD6E',
+                key: key,
                 language: 'pt-br',
                 components: 'country:br'
               }}
