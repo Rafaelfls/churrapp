@@ -49,7 +49,6 @@ export default StyleSheet.create({
     marginBottom: 5,
   },
   inputStandard: {
-    height: 40,
     fontFamily: 'poppins-regular',
     borderBottomWidth: 0.5,
     paddingHorizontal: 5,

@@ -32,7 +32,6 @@ export default StyleSheet.create({
         fontFamily: 'poppins-medium',
     },
     inputStandard:{ 
-        height: 40, 
         borderColor: 'gray', 
         borderBottomWidth: 1 ,
         paddingHorizontal: 20,
