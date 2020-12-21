@@ -458,15 +458,18 @@ export default function Perfil() {
     const pickImage = async () => {
         setLoading(true)
         setPickImageOptions([false])
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [1, 1],
-        });
+        const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+        if (status == 'granted') {
+            let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
+            });
 
-        if (!result.cancelled) {
-            setFotoUrlUNovo(result.uri);
-            setImage(result);
+            if (!result.cancelled) {
+                setFotoUrlUNovo(result.uri);
+                setImage(result);
+            }
         }
         setLoading(false)
     };

@@ -142,6 +142,16 @@ export default StyleSheet.create({
     shadowRadius: 4.65,
 
     elevation: 6,
+  },  
+  continueBtnDisabled: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    backgroundColor: '#80808080',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
   },
   sairBtn: {
     alignItems: 'center',
@@ -255,8 +265,31 @@ export default StyleSheet.create({
     alignItems: "center",
     marginTop: 22
   },
+  centeredView2: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor:"#80808050"
+  },
   modalView: {
     margin: 20,
+    backgroundColor: "white",
+    borderRadius: 8,
+    paddingHorizontal: 35,
+    paddingVertical: 25,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  modalView2: {
+    margin: 20,
+    width:'90%',
     backgroundColor: "white",
     borderRadius: 8,
     paddingHorizontal: 35,
@@ -274,8 +307,8 @@ export default StyleSheet.create({
   modalTitle: {
     color: "#800000",
     fontSize: 30,
-    marginBottom: 15,
     fontFamily: 'poppins-medium',
+    textAlign: "center"
   },
   confirmarSairTitle: {
     color: "#800000",
@@ -293,6 +326,7 @@ export default StyleSheet.create({
     textAlign: 'center',
     color: "grey",
     fontFamily: 'poppins-light',
+    marginBottom: 15,
   },
   footerModal: {
     height: 90,

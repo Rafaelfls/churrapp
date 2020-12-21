@@ -16,7 +16,7 @@ import { useLoadingModal, createLoadingModal, useChurrasCount } from '../../cont
 import MapView, { Marker } from 'react-native-maps'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 
-import {KEY_GOOGLE} from '../../../key.js'
+import { KEY_GOOGLE } from '../../../key.js'
 
 export default function CriarChurrasco() {
 
@@ -30,8 +30,8 @@ export default function CriarChurrasco() {
   const [hrFim, sethrFim] = useState();
   const [descricao, setdescricao] = useState();
   const [date, setDate] = useState();
-  const [dataFormatada, setDataFormatada] = useState()
-  const [dataFormatadaLimite, setDataFormatadaLimite] = useState()
+  const [dataFormatada, setDataFormatada] = useState('')
+  const [dataFormatadaLimite, setDataFormatadaLimite] = useState('')
   const [limiteConfirmacao, setLimiteConfirmacao] = useState();
   const [image, setImage] = useState({ cancelled: true });
   const [churrasCodeCriado, setChurrasCodeCriado] = useState('')
@@ -45,6 +45,7 @@ export default function CriarChurrasco() {
   const [switchComponentHrFim, setSwitchComponentHrFim] = useState(false)
   const [switchHrInicio, setSwitchHrInicio] = useState(false)
   const [switchHrFim, setSwitchHrFim] = useState(false)
+  const [liberado, setLiberado] = useState(true)
 
   //Maps
   const [regiao, setRegiao] = useState({
@@ -115,15 +116,18 @@ export default function CriarChurrasco() {
   }
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
+    const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+    if (status == 'granted') {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
 
-    if (!result.cancelled) {
-      setImage(result);
+      if (!result.cancelled) {
+        setImage(result);
+      }
     }
   };
 
@@ -235,13 +239,15 @@ export default function CriarChurrasco() {
   function formatDataInicio(data) {
     var hours = data.getHours();
     var min = data.getMinutes();
-    var sec = data.getSeconds();
     console.log(hours)
-    if (hours == 0) {
-      hours = "00"
-      sethrInicio(hours + ':' + min + ':' + sec)
+    if (hours < 10) {
+      if (min < 10) {
+        sethrInicio("0" + hours + ':' + '0' + min)
+      } else {
+        sethrInicio("0" + hours + ':' + min)
+      }
     } else {
-      sethrInicio(hours + ':' + min + ':' + sec)
+      sethrInicio(hours + ':' + min)
     }
     console.log(hrInicio)
   }
@@ -249,8 +255,15 @@ export default function CriarChurrasco() {
     var hours = data.getHours();
     var min = data.getMinutes();
     var sec = data.getSeconds();
-
-    sethrFim(hours + ':' + min + ':' + sec)
+    if (hours < 10) {
+      if (min < 10) {
+        sethrInicio("0" + hours + ':' + '0' + min)
+      } else {
+        sethrInicio("0" + hours + ':' + min)
+      }
+    } else {
+      sethrInicio(hours + ':' + min)
+    }
   }
 
   function pegarEndereco() {
@@ -298,17 +311,18 @@ export default function CriarChurrasco() {
                 placeholder={'Nome do churrasco'}
               />
             </View>
-            <Text style={style.textLabel}>Local</Text>
-            <TouchableOpacity onPress={() => setModalMap(true)} style={{ left: 320, top: 100, position: 'absolute' }}>
-              {/* <Text>Abrir MAPA</Text> */}
-              <IconFA5 name="map-marked-alt" size={20} style={style.icons} />
-            </TouchableOpacity>
+            <View>
+              <Text style={style.textLabel}>Local</Text>
+              <TouchableOpacity onPress={() => setModalMap(true)} style={{ position: 'absolute', right: 0 }}>
+                <IconFA5 name="map-marked-alt" size={20} style={style.icons} />
+              </TouchableOpacity>
+            </View>
             <View>
               <TextInput
                 style={[style.inputStandard, borderColorRed2, { height: 'auto' }]}
                 placeholder={"Local do churrasco"}
                 multiline
-                onChangeText={text => setEndereco(text)}
+                onPress={() => setModalMap(true)}
                 value={endereco}
               />
             </View>
@@ -325,22 +339,14 @@ export default function CriarChurrasco() {
             </View>
             <Text style={style.textLabel}>Data</Text>
             <Modal
+              animationType="slide"
               transparent
               visible={switchData}
             >
-              <View style={{
-                position: 'relative',
-                width: '100%',
-                height: "100%",
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'rgba(155,155,155,0.8)'
-              }}>
-                <View style={{
-                  backgroundColor: 'white', width: '80%',
-                  height: '30%', justifyContent: 'center',
-                  alignItems: 'center', borderRadius: 8
-                }}>
+              <View style={style.centeredView2}>
+                <View style={style.modalView2}>
+                  <Text style={style.modalTitle}>Data do churrasco!</Text>
+                  <Text style={style.confirmarSairSubTitle}>(Escolha a data do seu churrasco)</Text>
                   <DatePicker
                     style={{ marginBottom: 10 }}
                     date={date}
@@ -348,108 +354,121 @@ export default function CriarChurrasco() {
                     locale="pt"
                     format="DD/MM/YYYY"
                     minimumDate={new Date()}
-                    onDateChange={(date) => { setDate(date); formatData(date); console.log(date) }}
+                    onDateChange={(date) => { setDate(date); formatData(date); setLiberado(false) }}
                   />
-                  <Text onPress={() => { setSwitchData(false); }}>FECHA</Text>
+                  <View style={style.footerModal}>
+                    <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn } onPress={() => { setSwitchData(false);  setLiberado(true)}}>
+                      <Text style={style.textBtn}>Selecionar</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </Modal>
-            <Text onPress={() => setSwitchData(true)} style={[style.inputStandard, { borderBottomColor: 'black', color: 'black', height: 'auto' }]}>{dataFormatada}</Text>
+            <View>
+              <TextInput
+                style={[style.inputStandard, borderColorRed3]}
+                value={dataFormatada != '' ? dataFormatada : "DD/MM/AAAA"}
+                onPress={() => setSwitchData(true)}
+              />
+            </View>
             <Text style={style.textLabel}>Início</Text>
             <Modal
+              animationType="slide"
               transparent
               visible={switchHrInicio}
             >
-              <View style={{
-                position: 'relative',
-                width: '100%',
-                height: "100%",
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'rgba(155,155,155,0.8)'
-              }}>
-                <View style={{
-                  backgroundColor: 'white', width: '80%',
-                  height: '30%', justifyContent: 'center',
-                  alignItems: 'center', borderRadius: 8
-                }}>
+              <View style={style.centeredView2}>
+                <View style={style.modalView2}>
+                  <Text style={style.modalTitle}>Início do churrasco!</Text>
+                  <Text style={style.confirmarSairSubTitle}>(Escolha a hora de início do churrasco)</Text>
                   <DatePicker
                     style={{ marginBottom: 10 }}
                     date={hrInicio}
                     mode="time"
-                    onDateChange={(hrInicio) => { formatDataInicio(hrInicio); }}
+                    onDateChange={(hrInicio) => { formatDataInicio(hrInicio); ; setLiberado(false)}}
                   />
-                  <Text onPress={() => { setSwitchHrInicio(false); }}>FECHA</Text>
+                  <View style={style.footerModal}>
+                    <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn } onPress={() => { setSwitchHrInicio(false); setLiberado(true)}}>
+                      <Text style={style.textBtn}>Selecionar</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </Modal>
-            <Text onPress={() => setSwitchHrInicio(true)} style={[style.inputStandard, { borderBottomColor: 'black', color: 'black', height: 'auto' }]}>{hrInicio}</Text>
-            <Text style={style.textLabel}>Término</Text>
-            <Switch
-              trackColor={{ false: "gray", true: "green" }}
-              style={{ bottom: 30 }}
-              value={switchComponentHrFim}
-              onValueChange={() => { setSwitchComponentHrFim(!switchComponentHrFim); sethrFim() }} />
+            <View>
+              <TextInput
+                style={[style.inputStandard, borderColorRed4]}
+                value={hrInicio != undefined ? hrInicio : "HH:MM"}
+                onPress={() => setSwitchHrInicio(true)}
+              />
+            </View>
+            <View>
+              <Text style={style.textLabel}>Término</Text>
+              <Switch
+                trackColor={{ false: "gray", true: "green" }}
+                thumbColor={switchComponentHrFim ? "lightgray" : "lightgray"}
+                style={{ position: 'absolute', right: 0 }}
+                value={switchComponentHrFim}
+                onValueChange={() => { setSwitchComponentHrFim(!switchComponentHrFim); if (!switchComponentHrFim) { setSwitchHrFim(true) } }} />
+            </View>
             {switchComponentHrFim == false
               ? null
-              : <Text onPress={() => setSwitchHrFim(true)} style={[style.inputStandard, { borderBottomColor: 'black', color: 'black', height: 'auto' }]}>{hrFim}</Text>
+              : (<TextInput
+                style={style.inputStandard}
+                value={hrFim != undefined ? hrFim : "HH:MM"}
+                onPress={() => setSwitchHrFim(true)}
+              />)
             }
             <Modal
+              animationType="slide"
               transparent
               visible={switchHrFim}
             >
-              <View style={{
-                position: 'relative',
-                width: '100%',
-                height: "100%",
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'rgba(155,155,155,0.8)'
-              }}>
-                <View style={{
-                  backgroundColor: 'white', width: '80%',
-                  height: '30%', justifyContent: 'center',
-                  alignItems: 'center', borderRadius: 8
-                }}>
+              <View style={style.centeredView2}>
+                <View style={style.modalView2}>
+                  <Text style={style.modalTitle}>Final do churrasco!</Text>
+                  <Text style={style.confirmarSairSubTitle}>(Escolha a hora de termino do churrasco)</Text>
                   <DatePicker
                     style={{ marginBottom: 10 }}
                     date={hrFim}
                     mode="time"
-                    onDateChange={(hrFim) => { formatDataFim(hrFim) }}
+                    onDateChange={(hrFim) => { formatDataFim(hrFim); setLiberado(false) }}
                   />
-                  <Text onPress={() => { setSwitchHrFim(false); }}>FECHA</Text>
+                  <View style={style.footerModal}>
+                    <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn } onPress={() => { setSwitchHrFim(false);setLiberado(true) }}>
+                      <Text style={style.textBtn}>Selecionar</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </Modal>
 
-
-            <Text style={style.textLabel}>Confirmação de presença até</Text>
-            <Switch
-              trackColor={{ false: "gray", true: "green" }}
-              style={{ bottom: 30 }}
-              value={switchComponentDataLimite}
-              onValueChange={() => { setSwitchComponentDataLimite(!switchComponentDataLimite); setDataFormatadaLimite() }} />
+            <View>
+              <Text style={style.textLabel}>Confirmação de presença até</Text>
+              <Switch
+                trackColor={{ false: "gray", true: "green" }}
+                thumbColor={switchComponentDataLimite ? "lightgray" : "lightgray"}
+                style={{ position: 'absolute', right: 0 }}
+                value={switchComponentDataLimite}
+                onValueChange={() => { setSwitchComponentDataLimite(!switchComponentDataLimite); if (!switchComponentDataLimite) { setSwitchDataLimite(true) } }} />
+            </View>
             {switchComponentDataLimite == false
               ? null
-              : <Text onPress={() => setSwitchDataLimite(true)} style={[style.inputStandard, { borderBottomColor: 'black', color: 'black', height: 'auto' }]}>{dataFormatadaLimite}</Text>
+              : (<TextInput
+                style={style.inputStandard}
+                value={dataFormatadaLimite != '' ? dataFormatadaLimite : "DD/MM/AAAA"}
+                onPress={() => setSwitchDataLimite(true)}
+              />)
             }
             <Modal
+              animationType="slide"
               transparent
               visible={switchDataLimite}
             >
-              <View style={{
-                position: 'relative',
-                width: '100%',
-                height: "100%",
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'rgba(155,155,155,0.8)'
-              }}>
-                <View style={{
-                  backgroundColor: 'white', width: '80%',
-                  height: '30%', justifyContent: 'center',
-                  alignItems: 'center', borderRadius: 8
-                }}>
+              <View style={style.centeredView2}>
+                <View style={style.modalView2}>
+                  <Text style={style.modalTitle}>Confirmar presença?</Text>
+                  <Text style={style.confirmarSairSubTitle}>(Escolha a data limite para os convidados confirmarem presença no churrasco)</Text>
                   <DatePicker
                     style={{ marginBottom: 10 }}
                     date={limiteConfirmacao}
@@ -458,9 +477,13 @@ export default function CriarChurrasco() {
                     format="DD/MM/YYYY"
                     minimumDate={new Date()}
                     maximumDate={date}
-                    onDateChange={(date) => { setLimiteConfirmacao(date); formatDataLimite(date) }}
+                    onDateChange={(date) => { setLimiteConfirmacao(date); formatDataLimite(date); setLiberado(false) }}
                   />
-                  <Text onPress={() => { setSwitchDataLimite(false); }}>FECHA</Text>
+                  <View style={style.footerModal}>
+                    <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn } onPress={() => { setSwitchDataLimite(false);setLiberado(true) }}>
+                      <Text style={style.textBtn}>Selecionar</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </Modal>

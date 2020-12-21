@@ -457,10 +457,6 @@ export default function ResumoChurras() {
                 </Fab>
             </View>
             {churras.length == 0
-                ? (<View style={style.semChurrasbg1}><Image style={style.semChurras1} source={Component1} /></View>)
-                : null
-            }
-            {churras.length == 0
                 ? (<View style={style.semChurrasbg2}><Image style={style.semChurras2} source={Component2} /></View>)
                 : null
             }

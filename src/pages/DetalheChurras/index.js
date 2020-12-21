@@ -22,7 +22,7 @@ import DatePicker from 'react-native-date-picker';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import { showLocation, Popup } from 'react-native-map-link'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
-import {KEY_GOOGLE} from '../../../key.js'
+import { KEY_GOOGLE } from '../../../key.js'
 // import { Rating, AirbnbRating } from 'react-native-elements'
 
 
@@ -681,15 +681,18 @@ export default function DetalheChurras() {
   const pickImage = async () => {
     setLoading(true)
 
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-    });
+    const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+    if (status == 'granted') {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+      });
 
-    if (!result.cancelled) {
-      setEditChurrasFotoUrlC(result.uri);
-      setImage(result);
+      if (!result.cancelled) {
+        setEditChurrasFotoUrlC(result.uri);
+        setImage(result);
+      }
     }
     setLoading(false)
   };
