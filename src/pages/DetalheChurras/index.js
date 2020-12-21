@@ -55,6 +55,8 @@ export default function DetalheChurras() {
   const [lgnAtual, setLgnAtual] = useState()
   //Fim Map
 
+  const [liberado, setLiberado] = useState(true)
+
   //Switchs data
   const [switchData, setSwitchData] = useState(false)
   const [switchDataLimite, setSwitchDataLimite] = useState(false)
@@ -329,8 +331,20 @@ export default function DetalheChurras() {
 
 
   async function savePerfil(sair) {
-    var dataNova = new Date(editChurrasData)
-    var dataLimiteNova = new Date(editChurrasDataLimite)
+    var dataNova
+    var dataLimiteNova
+    if (dataNovaModal == null) {
+      dataNova = new Date(editChurrasData)
+    } else {
+      var dataSave = formatNovaData(dataNovaModal)
+      dataNova = new Date(dataSave)
+    }
+    if (dataLimiteNovaModal == null) {
+      dataLimiteNova = new Date(editChurrasDataLimite)
+    } else {
+      var dataLimiteSave = formatNovaData(dataLimiteNovaModal)
+      dataLimiteNova = new Date(dataLimiteSave)
+    }
     if (sair) {
       setLoading(true)
       setAllowEditing([false, 'darkgray']);
@@ -653,6 +667,11 @@ export default function DetalheChurras() {
     var date = new Date(data).getDate() + 1
     var month = new Date(data).getMonth() + 1
     var year = new Date(data).getFullYear()
+    if ((month === 4 || month === 6 || month === 9 || month === 11) && date === 31) {
+      date = "01"
+      month += 1
+      console.log("MESES")
+    }
     if (date === 32) {
       date = "01"
       month = month + 1
@@ -667,6 +686,11 @@ export default function DetalheChurras() {
     var date = new Date(data).getDate()
     var month = new Date(data).getMonth() + 1
     var year = new Date(data).getFullYear()
+    if ((month === 4 || month === 6 || month === 9 || month === 11) && date === 31) {
+      date = "01"
+      month += 1
+      console.log("MESES")
+    }
     if (date === 32) {
       date = "01"
       month = month + 1
@@ -910,22 +934,14 @@ export default function DetalheChurras() {
                     <Text style={style.churrasNome}>Data: </Text>
                   </View>
                   <Modal
+                    animationType="slide"
                     transparent
                     visible={switchData}
                   >
-                    <View style={{
-                      position: 'relative',
-                      width: '100%',
-                      height: "100%",
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      backgroundColor: 'rgba(155,155,155,0.8)'
-                    }}>
-                      <View style={{
-                        backgroundColor: 'white', width: '80%',
-                        height: '30%', justifyContent: 'center',
-                        alignItems: 'center', borderRadius: 8
-                      }}>
+                    <View style={style.centeredView2}>
+                      <View style={style.modalView2}>
+                        <Text style={style.modalTitle}>Data do churrasco!</Text>
+                        <Text style={style.confirmarSairSubTitle}>(Escolha a data do seu churrasco)</Text>
                         <DatePicker
                           // style={{ width: '100%' }}
                           date={editChurrasData}
@@ -935,9 +951,19 @@ export default function DetalheChurras() {
                           placeholder="DD/MM/AAAA"
                           format="DD/MM/YYYY"
                           minimumDate={new Date()}
-                          onDateChange={(date) => { setEditChurrasData(date); console.log(date) }}
+                          onDateChange={(date) => { setEditChurrasData(date); console.log(date); setLiberado(false) }}
                         />
-                        <Text onPress={() => { setSwitchData(false); setDataNovaModal(formatNovaData(editChurrasData)) }}>FECHA</Text>
+                        <View style={style.footerModal2}>
+                          <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn}
+                            onPress={() => { setSwitchData(false); setDataNovaModal(formatNovaData(editChurrasData)); setLiberado(true) }}>
+                            <Text style={style.textBtn}>Selecionar</Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={style.closeBtnModal}>
+                          <TouchableOpacity onPress={() => setSwitchData(false)}>
+                            <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
+                          </TouchableOpacity>
+                        </View>
                       </View>
                     </View>
                   </Modal>
@@ -952,22 +978,14 @@ export default function DetalheChurras() {
                     <Text style={style.churrasNome}>Data limite confirmação: </Text>
                   </View>
                   <Modal
+                    animationType="slide"
                     transparent
                     visible={switchDataLimite}
                   >
-                    <View style={{
-                      position: 'relative',
-                      width: '100%',
-                      height: "100%",
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      backgroundColor: 'rgba(155,155,155,0.8)'
-                    }}>
-                      <View style={{
-                        backgroundColor: 'white', width: '80%',
-                        height: '30%', justifyContent: 'center',
-                        alignItems: 'center', borderRadius: 8
-                      }}>
+                    <View style={style.centeredView2}>
+                      <View style={style.modalView2}>
+                        <Text style={style.modalTitle}>Confirmar presença?</Text>
+                        <Text style={style.confirmarSairSubTitle}>(Escolha a data limite para os convidados confirmarem presença no churrasco)</Text>
                         <DatePicker
                           // style={{ width: '100%' }}
                           date={editChurrasDataLimite}
@@ -978,9 +996,19 @@ export default function DetalheChurras() {
                           format="DD/MM/YYYY"
                           minimumDate={new Date()}
                           maximumDate={editChurrasData}
-                          onDateChange={(date) => { setEditChurrasDataLimite(date); console.log(date) }}
+                          onDateChange={(date) => { setEditChurrasDataLimite(date); console.log(date); setLiberado(false) }}
                         />
-                        <Text onPress={() => { setSwitchDataLimite(false); setDataLimiteNovaModal(formatNovaData(editChurrasDataLimite)) }}>FECHA</Text>
+                        <View style={style.footerModal2}>
+                          <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn}
+                            onPress={() => { setSwitchDataLimite(false); setDataLimiteNovaModal(formatNovaData(editChurrasDataLimite)); setLiberado(true) }}>
+                            <Text style={style.textBtn}>Selecionar</Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={style.closeBtnModal}>
+                          <TouchableOpacity onPress={() => setSwitchDataLimite(false)}>
+                            <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
+                          </TouchableOpacity>
+                        </View>
                       </View>
                     </View>
                   </Modal>
@@ -995,30 +1023,32 @@ export default function DetalheChurras() {
                     <Text style={style.churrasNome}>Horário de início: </Text>
                   </View>
                   <Modal
+                    animationType="slide"
                     transparent
                     visible={switchHrInicio}
                   >
-                    <View style={{
-                      position: 'relative',
-                      width: '100%',
-                      height: "100%",
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      backgroundColor: 'rgba(155,155,155,0.8)'
-                    }}>
-                      <View style={{
-                        backgroundColor: 'white', width: '80%',
-                        height: '30%', justifyContent: 'center',
-                        alignItems: 'center', borderRadius: 8
-                      }}>
+                    <View style={style.centeredView2}>
+                      <View style={style.modalView2}>
+                        <Text style={style.modalTitle}>Início do churrasco!</Text>
+                        <Text style={style.confirmarSairSubTitle}>(Escolha a hora de início do churrasco)</Text>
                         <DatePicker
                           // style={{ width: '100%' }}
                           date={hrComeco}
                           mode="time"
                           disabled={!allowEditing[0]}
-                          onDateChange={(hrInicio) => { formatDataInicio(hrInicio); console.log(hrInicio) }}
+                          onDateChange={(hrInicio) => { formatDataInicio(hrInicio); console.log(hrInicio); setLiberado(false) }}
                         />
-                        <Text onPress={() => { setSwitchHrInicio(false); setHrInicioNova(editChurrasInicio) }}>FECHA</Text>
+                        <View style={style.footerModal2}>
+                          <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn}
+                            onPress={() => { setSwitchHrInicio(false); setHrInicioNova(editChurrasInicio); setLiberado(true) }}>
+                            <Text style={style.textBtn}>Selecionar</Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={style.closeBtnModal}>
+                          <TouchableOpacity onPress={() => setSwitchHrInicio(false)}>
+                            <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
+                          </TouchableOpacity>
+                        </View>
                       </View>
                     </View>
                   </Modal>
@@ -1030,35 +1060,37 @@ export default function DetalheChurras() {
                     <Text style={style.churrasNome}>Horário de Fim: </Text>
                   </View>
                   <Modal
+                    animationType="slide"
                     transparent
                     visible={switchHrFim}
                   >
-                    <View style={{
-                      position: 'relative',
-                      width: '100%',
-                      height: "100%",
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      backgroundColor: 'rgba(155,155,155,0.8)'
-                    }}>
-                      <View style={{
-                        backgroundColor: 'white', width: '80%',
-                        height: '30%', justifyContent: 'center',
-                        alignItems: 'center', borderRadius: 8
-                      }}>
+                    <View style={style.centeredView2}>
+                      <View style={style.modalView2}>
+                        <Text style={style.modalTitle}>Final do churrasco!</Text>
+                        <Text style={style.confirmarSairSubTitle}>(Escolha a hora de termino do churrasco)</Text>
                         <DatePicker
                           // style={{ width: '100%' }}
                           date={hrFim}
                           mode="time"
                           disabled={!allowEditing[0]}
-                          onDateChange={(hrFim) => { formatDataFim(hrFim) }}
+                          onDateChange={(hrFim) => { formatDataFim(hrFim); setLiberado(false) }}
                         />
-                        <Text onPress={() => { setSwitchHrFim(false); setHrFimNova(editChurrasFim) }}>FECHA</Text>
+                        <View style={style.footerModal2}>
+                          <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn}
+                            onPress={() => { setSwitchHrFim(false); setHrFimNova(editChurrasFim); setLiberado(true) }}>
+                            <Text style={style.textBtn}>Selecionar</Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={style.closeBtnModal}>
+                          <TouchableOpacity onPress={() => setSwitchHrFim(false)}>
+                            <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
+                          </TouchableOpacity>
+                        </View>
                       </View>
                     </View>
                   </Modal>
-                  <Text onPress={() => setSwitchHrFim(true)} style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}>{editChurrasFim}</Text>
-
+                  <Text onPress={() => setSwitchHrFim(true)}
+                    style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}>{editChurrasFim}</Text>
                 </View>
               </View>
               :
@@ -1947,40 +1979,43 @@ export default function DetalheChurras() {
           justifyContent: 'center',
           backgroundColor: 'rgba(155,155,155,0.8)'
         }}>
-          <View style={{ width: 400, height: 600, alignSelf: 'center' }}>
-            <MapView
-              ref={(ref) => setMapView(ref)}
-              onMapReady={() => { pegarRegiao(regiao, false); setRefresh(!refresh) }}
-              // onRegionChangeComplete={() => mudarRegiao(regiao)}
-              provider={PROVIDER_GOOGLE}
-              style={style.map}
-              initialRegion={regiao}
-              loadingEnabled
-              mapType={mapMode}
-            >
-              <Marker
-                coordinate={regiao}
-                title={editChurrasLocal}
-                description={editChurrasDescricao}
-                onPress={() => setMapVisible(true)}
+          <View style={style.mapModal2}>
+            <Text style={style.mapTitle}>Localização do Churras</Text>
+            <View style={{ width: '100%', height: 600, alignSelf: 'center' }}>
+              <MapView
+                ref={(ref) => setMapView(ref)}
+                onMapReady={() => { pegarRegiao(regiao, false); setRefresh(!refresh) }}
+                // onRegionChangeComplete={() => mudarRegiao(regiao)}
+                provider={PROVIDER_GOOGLE}
+                style={style.map}
+                initialRegion={regiao}
+                loadingEnabled
+                mapType={mapMode}
+              >
+                <Marker
+                  coordinate={regiao}
+                  title={editChurrasLocal}
+                  description={editChurrasDescricao}
+                  onPress={() => setMapVisible(true)}
+                />
+              </MapView>
+              <Popup
+                isVisible={mapVisible}
+                onCancelPressed={() => setMapVisible(false)}
+                onAppPressed={() => setMapVisible(false)}
+                onBackButtonPressed={() => setMapVisible(false)}
+                options={{
+                  latitude: regiao.latitude,
+                  longitude: regiao.longitude,
+                  dialogTitle: "Local: " + editChurrasLocal,
+                  dialogMessage: "Qual app gostaria de utilizar?",
+                  cancelText: "Fechar"
+                }}
+                appsWhiteList={['google-maps', 'waze']}
               />
-            </MapView>
-            <Popup
-              isVisible={mapVisible}
-              onCancelPressed={() => setMapVisible(false)}
-              onAppPressed={() => setMapVisible(false)}
-              onBackButtonPressed={() => setMapVisible(false)}
-              options={{
-                latitude: regiao.latitude,
-                longitude: regiao.longitude,
-                dialogTitle: "Local: " + editChurrasLocal,
-                dialogMessage: "Qual app gostaria de utilizar?",
-                cancelText: "Fechar"
-              }}
-              appsWhiteList={['google-maps', 'waze']}
-            />
+            </View>
           </View>
-          <View style={{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 75, right: 10 }}>
+          <View style={{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 165, right: 10 }}>
             <TouchableOpacity onPress={() => setModalMap(false)}>
               <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
             </TouchableOpacity>
@@ -2000,80 +2035,83 @@ export default function DetalheChurras() {
           justifyContent: 'center',
           backgroundColor: 'rgba(155,155,155,0.8)'
         }}>
-          <View style={{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 150, right: 10 }}>
+          <View style={{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 238, right: 10, zIndex: 2 }}>
             <TouchableOpacity onPress={() => setModalEditMap(false)}>
               <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
             </TouchableOpacity>
           </View>
-          <View style={{ width: '100%', height: 450 }}>
-            <MapView
-              ref={(ref) => setMapViewEdit(ref)}
-              onMapReady={() => pegarRegiao(regiao, true)}
-              onRegionChangeComplete={() => mudarRegiao(regiao)}
-              style={style.map}
-              initialRegion={regiao}
-            >
-              <Marker
-                coordinate={regiao}
+          <View style={style.mapModal}>
+            <Text style={style.mapTitle}>Digite uma região</Text>
+            <View style={{ width: '100%', height: 450 }}>
+              <MapView
+                ref={(ref) => setMapViewEdit(ref)}
+                onMapReady={() => pegarRegiao(regiao, true)}
+                onRegionChangeComplete={() => mudarRegiao(regiao)}
+                style={style.map}
+                initialRegion={regiao}
+              >
+                <Marker
+                  coordinate={regiao}
+                />
+              </MapView>
+              <GooglePlacesAutocomplete
+                currentLocation={false}
+                fetchDetails={true}
+                placeholder={"Procurar"}
+                renderDescription={(row) => row.description}
+                returnKeyType={"search"}
+                enablePoweredByContainer={false}
+                nearbyPlacesAPI='GooglePlacesSearch'
+                debounce={200}
+                textInputProps={{
+                  onChangeText: (text) => {
+                    console.log(text)
+                  }
+                }}
+                onPress={(data, details) => {
+                  // 'details' is provided when fetchDetails = true
+                  setRegiao({
+                    latitude: details.geometry.location.lat,
+                    longitude: details.geometry.location.lng,
+                    latitudeDelta: regiao.latitudeDelta,
+                    longitudeDelta: regiao.longitudeDelta
+                  })
+                  setEditChurrasLocal(data.description)
+                  pegarRegiao({
+                    latitude: details.geometry.location.lat,
+                    longitude: details.geometry.location.lng,
+                    latitudeDelta: regiao.latitudeDelta,
+                    longitudeDelta: regiao.longitudeDelta
+                  }, true)
+                  setLatAtual(details.geometry.location.lat)
+                  setLgnAtual(details.geometry.location.lng)
+                }}
+                query={{
+                  key: KEY_GOOGLE,
+                  language: 'pt-br',
+                  components: 'country:br'
+                }}
+                styles={{
+                  description: {
+                    fontFamily: "Calibri",
+                    color: "black",
+                    fontSize: 12,
+                  },
+                  predefinedPlacesDescription: {
+                    color: "black",
+                  },
+                  listView: {
+                    position: "absolute",
+                    marginTop: 44,
+                    backgroundColor: "white",
+                    borderBottomEndRadius: 15,
+                    elevation: 2,
+                  },
+                }}
+
               />
-            </MapView>
-            <GooglePlacesAutocomplete
-              currentLocation={false}
-              fetchDetails={true}
-              placeholder={"Procurar"}
-              renderDescription={(row) => row.description}
-              returnKeyType={"search"}
-              enablePoweredByContainer={false}
-              nearbyPlacesAPI='GooglePlacesSearch'
-              debounce={200}
-              textInputProps={{
-                onChangeText: (text) => {
-                  console.log(text)
-                }
-              }}
-              onPress={(data, details) => {
-                // 'details' is provided when fetchDetails = true
-                setRegiao({
-                  latitude: details.geometry.location.lat,
-                  longitude: details.geometry.location.lng,
-                  latitudeDelta: regiao.latitudeDelta,
-                  longitudeDelta: regiao.longitudeDelta
-                })
-                setEditChurrasLocal(data.description)
-                pegarRegiao({
-                  latitude: details.geometry.location.lat,
-                  longitude: details.geometry.location.lng,
-                  latitudeDelta: regiao.latitudeDelta,
-                  longitudeDelta: regiao.longitudeDelta
-                }, true)
-                setLatAtual(details.geometry.location.lat)
-                setLgnAtual(details.geometry.location.lng)
-              }}
-              query={{
-                key: KEY_GOOGLE,
-                language: 'pt-br',
-                components: 'country:br'
-              }}
-              styles={{
-                description: {
-                  fontFamily: "Calibri",
-                  color: "black",
-                  fontSize: 12,
-                },
-                predefinedPlacesDescription: {
-                  color: "black",
-                },
-                listView: {
-                  position: "absolute",
-                  marginTop: 44,
-                  backgroundColor: "white",
-                  borderBottomEndRadius: 15,
-                  elevation: 2,
-                },
-              }}
 
-            />
-
+            </View>
           </View>
         </View>
       </Modal>

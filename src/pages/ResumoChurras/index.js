@@ -156,8 +156,8 @@ export default function ResumoChurras() {
 
     function inicioCriarChurras() {
         setRefreshChurras(!refreshChurras);
-        newChurrasCriados = churrasCount + 1;
-        api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: newChurrasCriados });
+        // newChurrasCriados = churrasCount + 1;
+        // api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: newChurrasCriados });
         navigation.navigate('InicioCriaChurras');
 
     }
@@ -282,7 +282,7 @@ export default function ResumoChurras() {
                 {
                     translateY: animation.interpolate({
                         inputRange: [0, 1],
-                        outputRange: [-20, 0]
+                        outputRange: [-30, 0]
                     })
                 }
             ],
@@ -436,19 +436,19 @@ export default function ResumoChurras() {
                     active={ativado}
                     onPress={() => rotateFab()}
                     direction="down"
-                    style={{ width: 40, height: 40, backgroundColor: 'maroon' }}
+                    style={{ width: 50, height: 50, backgroundColor: 'maroon', zIndex: 23 }}
                 >
                     <View style={style.fab}>
                         <Animated.View style={[style.plus1, animatedStyles.rotate]} />
                         <Animated.View style={[style.plus2, animatedStyles.rotateBack]} />
                     </View>
-                    <Button onPress={() => inicioCriarChurras()} style={{ backgroundColor: 'maroon', zIndex: 3, }}>
+                    <Button onPress={() => inicioCriarChurras()} style={{ backgroundColor: 'maroon', zIndex: 21, }}>
                         <Animated.View style={[animatedStyles.plusMove]}>
                             <Text style={{ position: "absolute", color: 'black', right: 10, fontSize: 15, width: '1000%', fontFamily: 'poppins-medium', }}>Criar Churras</Text>
                             <Icon name="plus" style={style.fabBtnIcon} />
                         </Animated.View>
                     </Button>
-                    <Button onPress={() => ParticiparChurras()} style={{ backgroundColor: 'maroon', zIndex: 3 }}>
+                    <Button onPress={() => ParticiparChurras()} style={{ backgroundColor: 'maroon', zIndex: 21 }}>
                         <Animated.View style={[animatedStyles.plusMove]}>
                             <Text style={{ position: "absolute", color: 'black', right: 10, fontSize: 15, width: '1000%', fontFamily: 'poppins-medium' }}>Participar do Churras</Text>
                             <Icon name="users" style={style.fabBtnIcon} />

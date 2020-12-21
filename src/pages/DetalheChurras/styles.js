@@ -14,11 +14,11 @@ export default StyleSheet.create({
     paddingTop: StatusBar.currentHeight,
     paddingBottom: '2%',
     backgroundColor: 'maroon',
-    justifyContent:'space-between',
-    width:'100%',
+    justifyContent: 'space-between',
+    width: '100%',
   },
   title: {
-    flex:1,
+    flex: 1,
     marginTop: 10,
 
   },
@@ -30,7 +30,7 @@ export default StyleSheet.create({
     paddingBottom: 15,
     opacity: 0.9,
     textAlign: "center",
-    flexWrap:'wrap'
+    flexWrap: 'wrap'
   },
   backBtn: {
     justifyContent: 'center',
@@ -72,7 +72,7 @@ export default StyleSheet.create({
     fontFamily: 'poppins-medium',
     marginBottom: 5,
   },
-  inputStandard:{ 
+  inputStandard: {
     borderBottomWidth: 0.5,
     paddingHorizontal: 5,
     marginBottom: 10,
@@ -897,4 +897,115 @@ export default StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject
   },
+  mapTitle: {
+    color: 'maroon',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
+  mapModal: {
+    backgroundColor: 'rgba(255,255,255,0.8)', 
+    width: '100%', 
+    height: 485, 
+    justifyContent: 'flex-end', 
+    borderRadius: 8
+  },
+  mapModal2: {
+    backgroundColor: 'rgba(255,255,255,0.8)', 
+    width: '100%', 
+    height: 640, 
+    justifyContent: 'flex-end', 
+    borderRadius: 8
+  },
+  //fim map
+  //modal
+  centeredView2: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#80808050"
+  },
+  modalView2: {
+    margin: 20,
+    width: '90%',
+    backgroundColor: "white",
+    borderRadius: 8,
+    paddingHorizontal: 35,
+    paddingVertical: 25,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  continueBtnDisabled: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    backgroundColor: '#80808080',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+  },
+  continueBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    backgroundColor: 'maroon',
+    height: '60%',
+    width: 125,
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },
+  modalTitle: {
+    color: "#800000",
+    fontSize: 30,
+    fontFamily: 'poppins-medium',
+    textAlign: "center"
+  },
+  confirmarSairSubTitle: {
+    fontSize: 12,
+    textAlign: 'center',
+    color: "grey",
+    fontFamily: 'poppins-light',
+    marginBottom: 15,
+  },
+  footerModal2: {
+    height: 90,
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "center",
+    backgroundColor: 'white',
+  },
+  textBtn: {
+    color: 'white',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
+  closeBtnModal: {
+    backgroundColor: 'maroon', 
+    width: 30, 
+    height: 30,
+    alignItems: 'center', 
+    borderRadius: 15, 
+    position: 'absolute',
+    top: 10, 
+    right: 10
+  },
+  //fim modal
 });

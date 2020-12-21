@@ -172,7 +172,7 @@ export default StyleSheet.create({
     height: 110,
     width: 100,
     // backgroundColor: 'red',
-    zIndex: 100
+    zIndex: 20
   },
   extraIcon: {
     color: 'maroon',
@@ -246,7 +246,8 @@ export default StyleSheet.create({
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "column"
+    flexDirection: "column",
+    zIndex: 22, 
   },
   //modal
   modalView: {
