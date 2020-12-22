@@ -11,10 +11,11 @@ import IconFat from 'react-native-vector-icons/Feather';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import style from './styles';
-import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
+import { useLoadingModal, createLoadingModal, useChurrasCount } from '../../context/churrasContext';
 
 export default function AdicionarPratoPrincipal({ route, navigation }) {
 
+    const { churrasCount, setChurrasCount } = useChurrasCount();
     const { loading, setLoading } = useLoadingModal();
     const criarModal = createLoadingModal(loading);
     const { convidadosQtd } = route.params;
@@ -28,6 +29,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     const [isFirstTime, setIsFirstTime] = React.useState(primeiroAcesso);
     const [isEnabled, setIsEnabled] = useState(false);
     const [modalSair, setModalSair] = useState(false)
+    var newChurrasCriados
 
     const config = {
         headers: { 'Authorization': USUARIOLOGADO.id }
@@ -61,7 +63,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
     }
 
     function escolherNovosItens() {
-        navigation.push('EscolherNovosItens', { churrascode, convidadosQtd, subtipo:null })
+        navigation.push('EscolherNovosItens', { churrascode, convidadosQtd, subtipo: null })
     }
 
 
@@ -74,6 +76,9 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                 setLoading(false)
                 navigation.replace('Tabs');
             })
+        newChurrasCriados = churrasCount - 1;
+        api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: newChurrasCriados });
+        navigation.replace('Tabs');
         setModalSair(false)
     }
 
@@ -101,15 +106,15 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
         var precoFinalTotal = item.precoItem * item.quantidade;
         await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
             valorTotal: -precoFinalTotal
-        }).then(async function(){
+        }).then(async function () {
             await api.delete(`/listadochurras/${item.id}`)
-            .then(function (res) {
-                setIsEnabled(false)
-                setIsVisible(false)
-                setReload(!reload)
-                setLoading(false)
-            })
-        })        
+                .then(function (res) {
+                    setIsEnabled(false)
+                    setIsVisible(false)
+                    setReload(!reload)
+                    setLoading(false)
+                })
+        })
     }
 
     async function adicionarSugestao() {
@@ -117,7 +122,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
         setIsEnabled(previousState => !previousState)
         if (!isEnabled) {
             if (isSugestao) {
-                setLoading(true) 
+                setLoading(true)
                 var precoFinalTotal = 0;
                 itemList.map(async item => {
                     var quantidadeFinal = item.quantidade * convidadosQtd
@@ -131,7 +136,7 @@ export default function AdicionarPratoPrincipal({ route, navigation }) {
                         precoItem: item.precoMedio,
                     })
                 })
-                
+
                 await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
                     valorTotal: precoFinalTotal
                 })

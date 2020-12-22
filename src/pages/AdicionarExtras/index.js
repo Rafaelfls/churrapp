@@ -12,10 +12,11 @@ import IconFat from 'react-native-vector-icons/Feather';
 
 
 import style from './styles';
-import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
+import { useLoadingModal, createLoadingModal, useChurrasCount } from '../../context/churrasContext';
 
 export default function AdicionarExtras({ route, navigation }) {
 
+    const { churrasCount, setChurrasCount } = useChurrasCount();
     const { loading, setLoading } = useLoadingModal();
     const criarModal = createLoadingModal(loading);
     const { convidadosQtd } = route.params;
@@ -29,6 +30,7 @@ export default function AdicionarExtras({ route, navigation }) {
     const [isEnabled, setIsEnabled] = useState(false);
     const [modalSugestao, setModalSugestao] = useState(false)
     const { churrascode } = route.params;
+    var newChurrasCriados
 
     const config = {
         headers: { 'Authorization': USUARIOLOGADO.id }
@@ -161,6 +163,9 @@ export default function AdicionarExtras({ route, navigation }) {
                 setLoading(false)
                 navigation.replace('Tabs');
             })
+        newChurrasCriados = churrasCount - 1;
+        api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: newChurrasCriados });
+        navigation.replace('Tabs');
         setModalSair(false)
     }
     function backOnePage() {

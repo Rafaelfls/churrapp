@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, Image, FlatList, TouchableOpacity, Linking,
-  Picker, ScrollView, Modal, TextInput, TouchableHighlight, Switch, AppState, StatusBar, TouchableWithoutFeedback
+  Picker, ScrollView, Modal, TextInput, TouchableHighlight, Switch,
+  AppState, StatusBar,
+  TouchableWithoutFeedback, Keyboard, Animated
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import NumericInput from 'react-native-numeric-input';
@@ -56,6 +58,7 @@ export default function DetalheChurras() {
   //Fim Map
 
   const [liberado, setLiberado] = useState(true)
+  const [animation, setAnimation] = useState(new Animated.Value(0));
 
   //Switchs data
   const [switchData, setSwitchData] = useState(false)
@@ -794,12 +797,50 @@ export default function DetalheChurras() {
     setRegiao(regiao)
   }
 
+  const animatedStyles = {
+    modalClose: {
+      transform: [
+        {
+          translateY: animation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, -140]
+          })
+        }
+      ],
+    }
+  }
+
+  const _keyboardDidShow = () => {
+    animateCloseModal(false)
+  };
+
+  const _keyboardDidHide = () => {
+    animateCloseModal(true)
+  };
+
+  function animateCloseModal(ativado) {
+    const toValue = ativado ? 0 : 1
+    Animated.spring(animation, {
+      toValue,
+      speed: 2000,
+      useNativeDriver: true
+    }).start()
+  }
+
   useEffect(() => {
     carregaChurras();
     carregarItens();
     carregarConvidados();
     carregarSubTipos();
     loadUnidadeFormato();
+    Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
+    Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+
+    // cleanup function
+    return () => {
+      Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
+      Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+    };
   }, [refresh]);
 
   return (
@@ -2035,11 +2076,11 @@ export default function DetalheChurras() {
           justifyContent: 'center',
           backgroundColor: 'rgba(155,155,155,0.8)'
         }}>
-          <View style={{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 238, right: 10, zIndex: 2 }}>
+          <Animated.View style={[{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 238, right: 10, zIndex: 2 }, animatedStyles.modalClose]}>
             <TouchableOpacity onPress={() => setModalEditMap(false)}>
               <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
             </TouchableOpacity>
-          </View>
+          </Animated.View>
           <View style={style.mapModal}>
             <Text style={style.mapTitle}>Digite uma região</Text>
             <View style={{ width: '100%', height: 450 }}>
