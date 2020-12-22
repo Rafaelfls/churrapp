@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Image, Modal, KeyboardAvoidingView, Switch } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Image, Modal, KeyboardAvoidingView, Switch, Animated, Keyboard } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../services/api';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
@@ -46,6 +46,9 @@ export default function CriarChurrasco() {
   const [switchHrInicio, setSwitchHrInicio] = useState(false)
   const [switchHrFim, setSwitchHrFim] = useState(false)
   const [liberado, setLiberado] = useState(true)
+
+  const [animation, setAnimation] = useState(new Animated.Value(0));
+  const [ativado, setAtivado] = useState(false);
 
   //Maps
   const [regiao, setRegiao] = useState({
@@ -283,11 +286,47 @@ export default function CriarChurrasco() {
   }
   function mudarRegiao(regiao) {
     setRegiao(regiao)
-    pegarEndereco()
+    // pegarEndereco()
   }
   useEffect(() => {
+    Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
+    Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+
+    // cleanup function
+    return () => {
+      Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
+      Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+    };
   }, []);
 
+  const _keyboardDidShow = () => {
+    animateCloseModal(false)
+  };
+
+  const _keyboardDidHide = () => {
+    animateCloseModal(true)
+  };
+  
+  const animatedStyles = {
+    modalClose: {
+      transform: [
+        {
+          translateY: animation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, -140]
+          })
+        }
+      ],
+    }
+  }
+  function animateCloseModal(ativado) {
+    const toValue = ativado ? 0 : 1
+    Animated.spring(animation, {
+      toValue,
+      speed: 2000,
+      useNativeDriver: true
+    }).start()
+  }
   return (
     <View style={style.container}>
       <SafeAreaView style={style.body}>
@@ -357,8 +396,13 @@ export default function CriarChurrasco() {
                     onDateChange={(date) => { setDate(date); formatData(date); setLiberado(false) }}
                   />
                   <View style={style.footerModal}>
-                    <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn } onPress={() => { setSwitchData(false);  setLiberado(true)}}>
+                    <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn} onPress={() => { setSwitchData(false); setLiberado(true) }}>
                       <Text style={style.textBtn}>Selecionar</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={style.closeBtnModal}>
+                    <TouchableOpacity onPress={() => setSwitchData(false)}>
+                      <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -385,11 +429,16 @@ export default function CriarChurrasco() {
                     style={{ marginBottom: 10 }}
                     date={hrInicio}
                     mode="time"
-                    onDateChange={(hrInicio) => { formatDataInicio(hrInicio); ; setLiberado(false)}}
+                    onDateChange={(hrInicio) => { formatDataInicio(hrInicio);; setLiberado(false) }}
                   />
                   <View style={style.footerModal}>
-                    <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn } onPress={() => { setSwitchHrInicio(false); setLiberado(true)}}>
+                    <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn} onPress={() => { setSwitchHrInicio(false); setLiberado(true) }}>
                       <Text style={style.textBtn}>Selecionar</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={style.closeBtnModal}>
+                    <TouchableOpacity onPress={() => setSwitchHrInicio(false)}>
+                      <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -435,8 +484,13 @@ export default function CriarChurrasco() {
                     onDateChange={(hrFim) => { formatDataFim(hrFim); setLiberado(false) }}
                   />
                   <View style={style.footerModal}>
-                    <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn } onPress={() => { setSwitchHrFim(false);setLiberado(true) }}>
+                    <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn} onPress={() => { setSwitchHrFim(false); setLiberado(true) }}>
                       <Text style={style.textBtn}>Selecionar</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={style.closeBtnModal}>
+                    <TouchableOpacity onPress={() => setSwitchHrFim(false)}>
+                      <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -480,8 +534,13 @@ export default function CriarChurrasco() {
                     onDateChange={(date) => { setLimiteConfirmacao(date); formatDataLimite(date); setLiberado(false) }}
                   />
                   <View style={style.footerModal}>
-                    <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn } onPress={() => { setSwitchDataLimite(false);setLiberado(true) }}>
+                    <TouchableOpacity disabled={liberado} style={liberado ? style.continueBtnDisabled : style.continueBtn} onPress={() => { setSwitchDataLimite(false); setLiberado(true) }}>
                       <Text style={style.textBtn}>Selecionar</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={style.closeBtnModal}>
+                    <TouchableOpacity onPress={() => setSwitchDataLimite(false)}>
+                      <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -557,80 +616,82 @@ export default function CriarChurrasco() {
             justifyContent: 'center',
             backgroundColor: 'rgba(155,155,155,0.8)'
           }}>
-            <View style={{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 150, right: 10 }}>
+            <Animated.View style={[{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 238, right: 10, zIndex: 2 }, animatedStyles.modalClose]}>
               <TouchableOpacity onPress={() => setModalMap(false)}>
                 <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
               </TouchableOpacity>
-            </View>
+            </Animated.View>
+            <View style={style.mapModal}>
+              <Text style={style.mapTitle}>Digite uma região</Text>
+              <View style={{ width: '100%', height: 450 }}>
+                <MapView
+                  ref={(ref) => setMapView(ref)}
+                  onMapReady={() => irParaLocalInicial(regiao)}
+                  onRegionChangeComplete={() => mudarRegiao(regiao)}
+                  style={style.map}
+                  initialRegion={regiao}
+                >
+                  <Marker
+                    coordinate={regiao}
+                  />
+                </MapView>
+                <GooglePlacesAutocomplete
+                  currentLocation={false}
+                  fetchDetails={true}
+                  placeholder={"Procurar"}
+                  renderDescription={(row) => row.description}
+                  returnKeyType={"search"}
+                  enablePoweredByContainer={false}
+                  nearbyPlacesAPI='GooglePlacesSearch'
+                  textInputProps={{
+                    onChangeText: (text) => {
+                      console.log(text)
+                    }
+                  }}
+                  onPress={(data, details) => {
+                    // 'details' is provided when fetchDetails = true
+                    setRegiao({
+                      latitude: details.geometry.location.lat,
+                      longitude: details.geometry.location.lng,
+                      latitudeDelta: regiao.latitudeDelta,
+                      longitudeDelta: regiao.longitudeDelta
+                    })
+                    setEndereco(data.description)
+                    irParaLocalInicial({
+                      latitude: details.geometry.location.lat,
+                      longitude: details.geometry.location.lng,
+                      latitudeDelta: regiao.latitudeDelta,
+                      longitudeDelta: regiao.longitudeDelta
+                    })
+                    setLatAtual(details.geometry.location.lat)
+                    setLgnAtual(details.geometry.location.lng)
+                  }}
+                  query={{
+                    key: KEY_GOOGLE,
+                    language: 'pt-br',
+                    components: 'country:br'
+                  }}
+                  styles={{
+                    description: {
+                      fontFamily: "Calibri",
+                      color: "black",
+                      fontSize: 12,
+                    },
+                    predefinedPlacesDescription: {
+                      color: "black",
+                    },
+                    listView: {
+                      position: "absolute",
+                      marginTop: 44,
+                      backgroundColor: "white",
+                      borderBottomEndRadius: 15,
+                      elevation: 2,
+                    },
+                  }}
 
-            <View style={{ width: '100%', height: 450 }}>
-              <MapView
-                ref={(ref) => setMapView(ref)}
-                onMapReady={() => irParaLocalInicial(regiao)}
-                onRegionChangeComplete={() => mudarRegiao(regiao)}
-                style={style.map}
-                initialRegion={regiao}
-              >
-                <Marker
-                  coordinate={regiao}
                 />
-              </MapView>
-              <GooglePlacesAutocomplete
-                currentLocation={false}
-                fetchDetails={true}
-                placeholder={"Procurar"}
-                renderDescription={(row) => row.description}
-                returnKeyType={"search"}
-                enablePoweredByContainer={false}
-                nearbyPlacesAPI='GooglePlacesSearch'
-                textInputProps={{
-                  onChangeText: (text) => {
-                    console.log(text)
-                  }
-                }}
-                onPress={(data, details) => {
-                  // 'details' is provided when fetchDetails = true
-                  setRegiao({
-                    latitude: details.geometry.location.lat,
-                    longitude: details.geometry.location.lng,
-                    latitudeDelta: regiao.latitudeDelta,
-                    longitudeDelta: regiao.longitudeDelta
-                  })
-                  setEndereco(data.description)
-                  irParaLocalInicial({
-                    latitude: details.geometry.location.lat,
-                    longitude: details.geometry.location.lng,
-                    latitudeDelta: regiao.latitudeDelta,
-                    longitudeDelta: regiao.longitudeDelta
-                  })
-                  setLatAtual(details.geometry.location.lat)
-                  setLgnAtual(details.geometry.location.lng)
-                }}
-                query={{
-                  key: KEY_GOOGLE,
-                  language: 'pt-br',
-                  components: 'country:br'
-                }}
-                styles={{
-                  description: {
-                    fontFamily: "Calibri",
-                    color: "black",
-                    fontSize: 12,
-                  },
-                  predefinedPlacesDescription: {
-                    color: "black",
-                  },
-                  listView: {
-                    position: "absolute",
-                    marginTop: 44,
-                    backgroundColor: "white",
-                    borderBottomEndRadius: 15,
-                    elevation: 2,
-                  },
-                }}
 
-              />
-
+              </View>
             </View>
           </View>
         </Modal>

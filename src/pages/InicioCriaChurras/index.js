@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import api from '../../services/api';
+import { useChurrasCount } from '../../context/churrasContext';
 
 import { useAppState } from '../../context/churrasContext'
 
@@ -10,9 +12,13 @@ import style from './styles';
 export default function InicioCriaChurras() {
 
     const navigation = useNavigation();
+    const { churrasCount, setChurrasCount } = useChurrasCount();
+    var newChurrasCriados;
 
 
     function next() {
+        newChurrasCriados = churrasCount + 1;
+        api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: newChurrasCriados });
         navigation.navigate('CriarChurrasco');
     }
 

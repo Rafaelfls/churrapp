@@ -8,7 +8,7 @@ import api from '../../services/api';
 import CheckBox from '@react-native-community/checkbox';
 
 import style from './styles';
-import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
+import { useLoadingModal, createLoadingModal, useChurrasCount } from '../../context/churrasContext';
 
 export default function AdicionaConvidados({ route, navigation }) {
 
@@ -40,21 +40,23 @@ export default function AdicionaConvidados({ route, navigation }) {
   const [isSelected5, setSelection5] = useState(true);
   const [isDisabled, setDisabled] = useState(true)
   const [convidadosList, setConvidadosList] = useState()
+  const { churrasCount, setChurrasCount } = useChurrasCount();
+  var newChurrasCriados
 
   const config = {
     headers: { 'Authorization': USUARIOLOGADO.id }
   };
 
-  async function loadConvidados(){
+  async function loadConvidados() {
     api.get(`/convidados/${churrasAtual.churrasCode}`)
-    .then(res => {
-      setConvidadosList(res.data)
-      if (res.data.length > 0) {
-        setDisabled(false)
-      } else {
-        setDisabled(true)
-      }
-    })
+      .then(res => {
+        setConvidadosList(res.data)
+        if (res.data.length > 0) {
+          setDisabled(false)
+        } else {
+          setDisabled(true)
+        }
+      })
   }
 
   useEffect(() => {
@@ -89,6 +91,9 @@ export default function AdicionaConvidados({ route, navigation }) {
         setLoading(false)
         navigation.replace('Tabs');
       })
+    newChurrasCriados = churrasCount - 1;
+    api.put(`/usuariosQntCriado/${USUARIOLOGADO.id}`, { churrasCriados: newChurrasCriados });
+    navigation.replace('Tabs');
     setModalSair(false)
   }
 

@@ -335,6 +335,16 @@ export default StyleSheet.create({
     justifyContent: "center",
     backgroundColor: 'white',
   },
+  closeBtnModal: {
+    backgroundColor: 'maroon', 
+    width: 30, 
+    height: 30,
+    alignItems: 'center', 
+    borderRadius: 15, 
+    position: 'absolute',
+    top: 10, 
+    right: 10
+  },
   //fim modal
   icons: {
     color: 'maroon',
@@ -343,5 +353,18 @@ export default StyleSheet.create({
   //map
   map: {
     ...StyleSheet.absoluteFillObject
+  },
+  mapTitle: {
+    color: 'maroon',
+    fontSize: 17,
+    fontFamily: 'poppins-medium',
+    textAlign: 'center',
+  },
+  mapModal: {
+    backgroundColor: 'rgba(255,255,255,0.8)', 
+    width: '100%', 
+    height: 485, 
+    justifyContent: 'flex-end', 
+    borderRadius: 8
   },
 });
