@@ -2029,8 +2029,8 @@ export default function DetalheChurras() {
         <View style={style.centeredView2}>
           <View style={style.modalView2}>
             <Text style={[style.modalTitle, { fontSize: 23 }]}>Encontre o endereço!</Text>
-            <TouchableOpacity style={{ backgroundColor: 'maroon', width: 16, height: 16, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 10, right: 10, zIndex: 2 }} onPress={() => setModalEditMap(false)}>
-              <Text style={{ fontFamily: 'poppins-bold', fontSize: 10, color: 'white' }}>X</Text>
+            <TouchableOpacity style={{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 10, right: 10, zIndex: 2 }} onPress={() => setModalEditMap(false)}>
+              <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
             </TouchableOpacity>
             <View style={{ width: '100%', height: '90%' }}>
               <MapView
