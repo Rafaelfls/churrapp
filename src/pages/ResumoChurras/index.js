@@ -431,7 +431,7 @@ export default function ResumoChurras() {
                 </View>
 
             </View>
-            <View style={{ right: -10, top: -30, }}>
+            <View style={{ right: -10, top: -20, }}>
                 <Fab
                     active={ativado}
                     onPress={() => rotateFab()}

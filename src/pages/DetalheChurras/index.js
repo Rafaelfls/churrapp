@@ -3,7 +3,6 @@ import {
   View, Text, Image, FlatList, TouchableOpacity, Linking,
   Picker, ScrollView, Modal, TextInput, TouchableHighlight, Switch,
   AppState, StatusBar,
-  TouchableWithoutFeedback, Keyboard, Animated
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import NumericInput from 'react-native-numeric-input';
@@ -58,7 +57,6 @@ export default function DetalheChurras() {
   //Fim Map
 
   const [liberado, setLiberado] = useState(true)
-  const [animation, setAnimation] = useState(new Animated.Value(0));
 
   //Switchs data
   const [switchData, setSwitchData] = useState(false)
@@ -796,51 +794,12 @@ export default function DetalheChurras() {
   function mudarRegiao(regiao) {
     setRegiao(regiao)
   }
-
-  const animatedStyles = {
-    modalClose: {
-      transform: [
-        {
-          translateY: animation.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, -140]
-          })
-        }
-      ],
-    }
-  }
-
-  const _keyboardDidShow = () => {
-    animateCloseModal(false)
-  };
-
-  const _keyboardDidHide = () => {
-    animateCloseModal(true)
-  };
-
-  function animateCloseModal(ativado) {
-    const toValue = ativado ? 0 : 1
-    Animated.spring(animation, {
-      toValue,
-      speed: 2000,
-      useNativeDriver: true
-    }).start()
-  }
-
   useEffect(() => {
     carregaChurras();
     carregarItens();
     carregarConvidados();
     carregarSubTipos();
     loadUnidadeFormato();
-    Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
-    Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
-
-    // cleanup function
-    return () => {
-      Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
-      Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
-    };
   }, [refresh]);
 
   return (
@@ -881,15 +840,16 @@ export default function DetalheChurras() {
 
       <ScrollableTabView
         style={style.tabView}
-        tabBarPosition="top" tabBarActiveTextColor="maroon" tabBarInactiveTextColor="dimgray"
+        tabBarPosition="top" 
+        tabBarActiveTextColor="maroon" 
+        tabBarInactiveTextColor="dimgray"
         tabBarTextStyle={{ fontWeight: 'normal', marginTop: 10, fontFamily: 'poppins-semi-bold', fontSize: 15 }}
         tabBarBackgroundColor='white'
         tabBarUnderlineStyle={{ backgroundColor: 'maroon', height: 2 }}
         renderTabBar={() => <DefaultTabBar />}
         ref={(tabView) => { tabView = tabView; }}
-      // initialPage={initialPage}
       >
-        <View tabLabel="Info">
+        <View tabLabel="Info" >
           <ScrollView>
             <View style={style.churrasImgContainer}>
               {allowEditing[0]
@@ -931,16 +891,14 @@ export default function DetalheChurras() {
               </View>
               : null}
             <View style={style.formGroup}>
-              <View style={{ flexDirection: 'row' }}>
-                <IconFA name="map-o" size={20} style={style.icons} />
-                <Text style={style.churrasNome}>Local: </Text>
-              </View>
               {allowEditing[0]
                 ? <View>
-                  <View style={{ position: 'absolute', right: -10, zIndex: 20 }}>
-                    <TouchableWithoutFeedback onPress={() => setModalEditMap(true)}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <IconFA name="map-o" size={20} style={style.icons} />
+                    <Text style={style.churrasNome}>Local: </Text>
+                    <TouchableOpacity style={{ position: 'absolute', right: -10, zIndex: 20 }} onPress={() => setModalEditMap(true)}>
                       <Icon name="map-marked-alt" size={20} style={style.icons} />
-                    </TouchableWithoutFeedback>
+                    </TouchableOpacity>
                   </View>
                   <TextInput
                     style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}
@@ -951,10 +909,12 @@ export default function DetalheChurras() {
                   />
                 </View>
                 : <View>
-                  <View style={{ position: 'absolute', right: -10 }}>
-                    <TouchableWithoutFeedback onPress={() => setModalMap(true)}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <IconFA name="map-o" size={20} style={style.icons} />
+                    <Text style={style.churrasNome}>Local: </Text>
+                    <TouchableOpacity style={{ position: 'absolute', right: -10 }} onPress={() => setModalMap(true)}>
                       <Icon name="map-marked-alt" size={20} style={style.icons} />
-                    </TouchableWithoutFeedback>
+                    </TouchableOpacity>
                   </View>
                   <TextInput
                     style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1], height: 'auto' }]}
@@ -2056,11 +2016,9 @@ export default function DetalheChurras() {
               />
             </View>
           </View>
-          <View style={{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 165, right: 10 }}>
-            <TouchableOpacity onPress={() => setModalMap(false)}>
-              <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity style={{ backgroundColor: 'maroon', width: 24, height: 24, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 10, right: 10 }} onPress={() => setModalMap(false)}>
+            <Text style={{ fontFamily: 'poppins-bold', fontSize: 15, color: 'white' }}>X</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
       <Modal
@@ -2068,22 +2026,13 @@ export default function DetalheChurras() {
         transparent={true}
         visible={modalEditMap}
       >
-        <View style={{
-          position: 'absolute',
-          width: '100%',
-          height: "100%",
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'rgba(155,155,155,0.8)'
-        }}>
-          <Animated.View style={[{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 238, right: 10, zIndex: 2 }, animatedStyles.modalClose]}>
-            <TouchableOpacity onPress={() => setModalEditMap(false)}>
-              <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
+        <View style={style.centeredView2}>
+          <View style={style.modalView2}>
+            <Text style={[style.modalTitle, { fontSize: 23 }]}>Encontre o endereço!</Text>
+            <TouchableOpacity style={{ backgroundColor: 'maroon', width: 16, height: 16, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 10, right: 10, zIndex: 2 }} onPress={() => setModalEditMap(false)}>
+              <Text style={{ fontFamily: 'poppins-bold', fontSize: 10, color: 'white' }}>X</Text>
             </TouchableOpacity>
-          </Animated.View>
-          <View style={style.mapModal}>
-            <Text style={style.mapTitle}>Digite uma região</Text>
-            <View style={{ width: '100%', height: 450 }}>
+            <View style={{ width: '100%', height: '90%' }}>
               <MapView
                 ref={(ref) => setMapViewEdit(ref)}
                 onMapReady={() => pegarRegiao(regiao, true)}
