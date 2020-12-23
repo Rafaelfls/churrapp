@@ -768,7 +768,7 @@ export default function DetalheChurras() {
     var hours = new Date(data).getHours();
     var min = new Date(data).getMinutes();
     var sec = new Date(data).getSeconds();
-    setEditChurrasInicio(hours + ':' + min + ':' + sec)
+    setEditChurrasInicio(hours + ':' + min )
     setHrComeco(data)
   }
   function formatDataFim(data) {
@@ -776,7 +776,7 @@ export default function DetalheChurras() {
     var min = new Date(data).getMinutes();
     var sec = new Date(data).getSeconds();
 
-    setEditChurrasFim(hours + ':' + min + ':' + sec)
+    setEditChurrasFim(hours + ':' + min )
     setHrFim(data)
   }
 
