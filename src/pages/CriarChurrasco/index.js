@@ -27,6 +27,8 @@ export default function CriarChurrasco() {
   const [nomeChurras, setNomeChurras] = useState('');
   const [local, setlocal] = useState('');
   const [hrInicio, sethrInicio] = useState();
+  const [hrInicioPicker, setHrInicioPicker] = useState()
+  const [hrFimPicker, setHrFimPicker] = useState()
   const [hrFim, sethrFim] = useState();
   const [descricao, setdescricao] = useState();
   const [date, setDate] = useState();
@@ -251,6 +253,7 @@ export default function CriarChurrasco() {
     } else {
       sethrInicio(hours + ':' + min)
     }
+    setHrInicioPicker(data)
     console.log(hrInicio)
   }
   function formatDataFim(data) {
@@ -259,13 +262,14 @@ export default function CriarChurrasco() {
     var sec = data.getSeconds();
     if (hours < 10) {
       if (min < 10) {
-        sethrInicio("0" + hours + ':' + '0' + min)
+        sethrFim("0" + hours + ':' + '0' + min)
       } else {
-        sethrInicio("0" + hours + ':' + min)
+        sethrFim("0" + hours + ':' + min)
       }
     } else {
-      sethrInicio(hours + ':' + min)
+      sethrFim(hours + ':' + min)
     }
+    setHrFimPicker(data)
   }
 
   function pegarEndereco() {
@@ -384,7 +388,7 @@ export default function CriarChurrasco() {
                   <Text style={style.confirmarSairSubTitle}>(Escolha a hora de início do churrasco)</Text>
                   <DatePicker
                     style={{ marginBottom: 10 }}
-                    date={hrInicio}
+                    date={hrInicioPicker}
                     mode="time"
                     onDateChange={(hrInicio) => { formatDataInicio(hrInicio);; setLiberado(false) }}
                   />
@@ -432,7 +436,7 @@ export default function CriarChurrasco() {
                   <Text style={style.confirmarSairSubTitle}>(Escolha a hora de termino do churrasco)</Text>
                   <DatePicker
                     style={{ marginBottom: 10 }}
-                    date={hrFim}
+                    date={hrFimPicker}
                     mode="time"
                     onDateChange={(hrFim) => { formatDataFim(hrFim); setLiberado(false) }}
                   />
@@ -562,79 +566,79 @@ export default function CriarChurrasco() {
         >
           <View style={style.centeredView2}>
             <View style={style.modalView2}>
-              <Text style={[style.modalTitle,{fontSize:23}]}>Encontre o endereço!</Text>
-              <TouchableOpacity style={{ backgroundColor: 'maroon', width: 16, height: 16, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 10, right: 10, zIndex: 2 }} onPress={() => setModalMap(false)}>
-                <Text style={{ fontFamily: 'poppins-bold', fontSize: 10, color: 'white' }}>X</Text>
+              <Text style={[style.modalTitle, { fontSize: 23 }]}>Encontre o endereço!</Text>
+              <TouchableOpacity style={{ backgroundColor: 'maroon', width: 30, height: 30, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 10, right: 10, zIndex: 2 }} onPress={() => setModalMap(false)}>
+                <Text style={{ fontFamily: 'poppins-bold', fontSize: 20, color: 'white' }}>X</Text>
               </TouchableOpacity>
-                <View style={{ width: '100%', height: '90%' }}>
-                  <MapView
-                    ref={(ref) => setMapView(ref)}
-                    onMapReady={() => irParaLocalInicial(regiao)}
-                    onRegionChangeComplete={() => mudarRegiao(regiao)}
-                    style={style.map}
-                    initialRegion={regiao}
-                  >
-                    <Marker
-                      coordinate={regiao}
-                    />
-                  </MapView>
-                  <GooglePlacesAutocomplete
-                    currentLocation={false}
-                    fetchDetails={true}
-                    placeholder={"Procurar"}
-                    renderDescription={(row) => row.description}
-                    returnKeyType={"search"}
-                    enablePoweredByContainer={false}
-                    nearbyPlacesAPI='GooglePlacesSearch'
-                    textInputProps={{
-                      onChangeText: (text) => {
-                        console.log(text)
-                      }
-                    }}
-                    onPress={(data, details) => {
-                      // 'details' is provided when fetchDetails = true
-                      setRegiao({
-                        latitude: details.geometry.location.lat,
-                        longitude: details.geometry.location.lng,
-                        latitudeDelta: regiao.latitudeDelta,
-                        longitudeDelta: regiao.longitudeDelta
-                      })
-                      setEndereco(data.description)
-                      irParaLocalInicial({
-                        latitude: details.geometry.location.lat,
-                        longitude: details.geometry.location.lng,
-                        latitudeDelta: regiao.latitudeDelta,
-                        longitudeDelta: regiao.longitudeDelta
-                      })
-                      setLatAtual(details.geometry.location.lat)
-                      setLgnAtual(details.geometry.location.lng)
-                    }}
-                    query={{
-                      key: KEY_GOOGLE,
-                      language: 'pt-br',
-                      components: 'country:br'
-                    }}
-                    styles={{
-                      description: {
-                        fontFamily: "poppins-light",
-                        color: "black",
-                        fontSize: 12,
-                      },
-                      predefinedPlacesDescription: {
-                        color: "black",
-                      },
-                      listView: {
-                        position: "absolute",
-                        marginTop: 44,
-                        backgroundColor: "white",
-                        borderBottomEndRadius: 15,
-                        elevation: 2,
-                      },
-                    }}
-
+              <View style={{ width: '100%', height: '90%' }}>
+                <MapView
+                  ref={(ref) => setMapView(ref)}
+                  onMapReady={() => irParaLocalInicial(regiao)}
+                  onRegionChangeComplete={() => mudarRegiao(regiao)}
+                  style={style.map}
+                  initialRegion={regiao}
+                >
+                  <Marker
+                    coordinate={regiao}
                   />
+                </MapView>
+                <GooglePlacesAutocomplete
+                  currentLocation={false}
+                  fetchDetails={true}
+                  placeholder={"Procurar"}
+                  renderDescription={(row) => row.description}
+                  returnKeyType={"search"}
+                  enablePoweredByContainer={false}
+                  nearbyPlacesAPI='GooglePlacesSearch'
+                  textInputProps={{
+                    onChangeText: (text) => {
+                      console.log(text)
+                    }
+                  }}
+                  onPress={(data, details) => {
+                    // 'details' is provided when fetchDetails = true
+                    setRegiao({
+                      latitude: details.geometry.location.lat,
+                      longitude: details.geometry.location.lng,
+                      latitudeDelta: regiao.latitudeDelta,
+                      longitudeDelta: regiao.longitudeDelta
+                    })
+                    setEndereco(data.description)
+                    irParaLocalInicial({
+                      latitude: details.geometry.location.lat,
+                      longitude: details.geometry.location.lng,
+                      latitudeDelta: regiao.latitudeDelta,
+                      longitudeDelta: regiao.longitudeDelta
+                    })
+                    setLatAtual(details.geometry.location.lat)
+                    setLgnAtual(details.geometry.location.lng)
+                  }}
+                  query={{
+                    key: KEY_GOOGLE,
+                    language: 'pt-br',
+                    components: 'country:br'
+                  }}
+                  styles={{
+                    description: {
+                      fontFamily: "poppins-light",
+                      color: "black",
+                      fontSize: 12,
+                    },
+                    predefinedPlacesDescription: {
+                      color: "black",
+                    },
+                    listView: {
+                      position: "absolute",
+                      marginTop: 44,
+                      backgroundColor: "white",
+                      borderBottomEndRadius: 15,
+                      elevation: 2,
+                    },
+                  }}
 
-                </View>
+                />
+
+              </View>
             </View>
           </View>
         </Modal>
