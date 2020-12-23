@@ -1975,7 +1975,7 @@ export default function DetalheChurras() {
         <View style={style.centeredView2}>
           <View style={style.modalView2}>
             <Text style={[style.modalTitle, { fontSize: 23 }]}>Local do churras!</Text>
-            <TouchableOpacity style={{ backgroundColor: 'maroon', width: 25, height: 25, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 10, right: 10, zIndex: 2 }} onPress={() => setModalEditMap(false)}>
+            <TouchableOpacity style={{ backgroundColor: 'maroon', width: 25, height: 25, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 10, right: 10, zIndex: 2 }} onPress={() => setModalMap(false)}>
               <Text style={{ fontFamily: 'poppins-bold', fontSize: 16, color: 'white' }}>X</Text>
             </TouchableOpacity>
             <View style={{ width: '100%', height: '90%' }}>
