@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, SafeAreaView, Linking, TouchableOpacity, Modal, TextInput, FlatList,AsyncStorage } from 'react-native';
+import { View, Text, Image, SafeAreaView, Linking, TouchableOpacity, Modal, TextInput, FlatList, AsyncStorage } from 'react-native';
 import { DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { EmailSender } from './EmailSender.js'
@@ -38,7 +38,6 @@ const CustomSideBarMenu = (props) => {
 
         })
     }
-
     useEffect(() => {
         loadPerfil()
     }, [loading]);
@@ -48,7 +47,7 @@ const CustomSideBarMenu = (props) => {
                 {usuario == undefined
                     ? <Text></Text>
                     : <View>
-                        <TouchableOpacity style={style.sideMenuProfileIcon} onPress={() => {setEditavel(false);navigation.navigate('Tabs', { screen: 'Perfil' })}}>
+                        <TouchableOpacity style={style.sideMenuProfileIcon} onPress={() => { setEditavel(false); navigation.navigate('Tabs', { screen: 'Perfil' }) }}>
                             <Image
                                 source={{ uri: usuario[0].fotoUrlU }}
                                 style={{

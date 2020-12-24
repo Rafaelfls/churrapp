@@ -272,13 +272,16 @@ export default function CriarChurrasco() {
     setHrFimPicker(data)
   }
 
-  function pegarEndereco() {
+  function pegarEndereco(regiao) {
     //function to get address using current lat and lng
+    irParaLocalInicial(regiao);
     fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + regiao.latitude + "," + regiao.longitude + "&key=" + KEY_GOOGLE).then((response) => response.json()).then((responseJson) => {
       console.log("ADDRESS GEOCODE is BACK!! => " +
         JSON.stringify(responseJson));
       setEndereco(JSON.stringify(responseJson.results[0].formatted_address).replace(/"/g, ""));
     });
+    setLatAtual(regiao.latitude)
+    setLgnAtual(regiao.longitude)
   }
 
   function irParaLocalInicial(regiao) {
@@ -579,7 +582,11 @@ export default function CriarChurrasco() {
                   initialRegion={regiao}
                 >
                   <Marker
+                    draggable
                     coordinate={regiao}
+                    onDragEnd={(e) => {
+                      pegarEndereco(e.nativeEvent.coordinate);
+                    }}
                   />
                 </MapView>
                 <GooglePlacesAutocomplete
@@ -593,7 +600,8 @@ export default function CriarChurrasco() {
                   textInputProps={{
                     onChangeText: (text) => {
                       console.log(text)
-                    }
+                    },
+                    style: { backgroundColor: 'rgba(228, 233, 237, 1)', borderRadius: 8, fontFamily: 'poppins-medium', width: '100%' }
                   }}
                   onPress={(data, details) => {
                     // 'details' is provided when fetchDetails = true
@@ -603,7 +611,8 @@ export default function CriarChurrasco() {
                       latitudeDelta: regiao.latitudeDelta,
                       longitudeDelta: regiao.longitudeDelta
                     })
-                    setEndereco(data.description)
+                    // setEndereco(data.description)
+                    setEndereco(details.formatted_address)
                     irParaLocalInicial({
                       latitude: details.geometry.location.lat,
                       longitude: details.geometry.location.lng,
@@ -621,7 +630,7 @@ export default function CriarChurrasco() {
                   styles={{
                     description: {
                       fontFamily: "poppins-light",
-                      color: "black",
+                      color: "maroon",
                       fontSize: 12,
                     },
                     predefinedPlacesDescription: {

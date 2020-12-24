@@ -253,6 +253,7 @@ export default function ResumoChurras() {
         }
     }
     function abrirDrawer() {
+        rotateFab(true)
         navigation.toggleDrawer()
     }
 
@@ -286,6 +287,10 @@ export default function ResumoChurras() {
                     })
                 }
             ],
+            opacity: animation.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 1]
+            })
             // height: animation.interpolate({
             //     inputRange: [0, 1],
             //     outputRange: [-20, 20]
@@ -360,51 +365,101 @@ export default function ResumoChurras() {
                         outputRange: [0, 1]
                     })
                 }
-            ]
+            ],
+            opacity: dotsMenu.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 1]
+            })
         },
         cardExpand: {
             marginBottom: dotsMenu.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, 20]
+                outputRange: [0, 30]
             })
         }
     }
-
-    function rotateFab() {
-        const toValue = ativado ? 0 : 1
-        setAtivado(!ativado)
-        Animated.spring(rotation, {
-            toValue,
-            friction: 50,
-            tension: 140,
-            useNativeDriver: true
-        }).start()
-        Animated.spring(animation, {
-            toValue,
-            friction: 5,
-            tension: 140,
-            useNativeDriver: true
-        }).start()
-    }
-    function moveDots() {
-        const toValue = dots ? 0 : 1
-        setDots(!dots)
-        Animated.parallel([
-            Animated.spring(dotsAnimation, {
+    useEffect(() => {
+        rotateFab(true)
+        moveDots(true)
+    }, [isDrawerOpen]);
+    function rotateFab(drawer) {
+        var toValue
+        if (drawer) {
+            if (isDrawerOpen == true) {
+                setAtivado(false)
+                Animated.spring(rotation, {
+                    toValue: 0,
+                    friction: 50,
+                    tension: 140,
+                    useNativeDriver: true
+                }).start()
+                Animated.spring(animation, {
+                    toValue: 0,
+                    friction: 5,
+                    tension: 140,
+                    useNativeDriver: true
+                }).start()
+            }
+        } else {
+            setAtivado(!ativado)
+            if (ativado) {
+                toValue = 0
+            } else {
+                toValue = 1
+            }
+            Animated.spring(rotation, {
                 toValue,
                 friction: 50,
                 tension: 140,
                 useNativeDriver: true
-            }),
-            Animated.spring(dotsMenu, {
+            }).start()
+            Animated.spring(animation, {
                 toValue,
-                friction: 50,
+                friction: 5,
                 tension: 140,
-                delay: 100,
-                useNativeDriver: false
-            })
-        ]).start()
-
+                useNativeDriver: true
+            }).start()
+        }
+    }
+    function moveDots(drawer) {
+        const toValue = dots ? 0 : 1
+        if (drawer) {
+            if (isDrawerOpen == true) {
+                setDots(false)
+                Animated.parallel([
+                    Animated.spring(dotsAnimation, {
+                        toValue,
+                        friction: 50,
+                        tension: 140,
+                        useNativeDriver: true
+                    }),
+                    Animated.spring(dotsMenu, {
+                        toValue,
+                        friction: 50,
+                        tension: 140,
+                        delay: 100,
+                        useNativeDriver: false
+                    })
+                ]).start()
+            }
+        } else {
+            setDots(!dots)
+            Animated.parallel([
+                Animated.spring(dotsAnimation, {
+                    toValue,
+                    friction: 50,
+                    tension: 140,
+                    useNativeDriver: true
+                }),
+                Animated.spring(dotsMenu, {
+                    toValue,
+                    friction: 50,
+                    tension: 140,
+                    delay: 100,
+                    useNativeDriver: false
+                })
+            ]).start()
+        }
     }
     return (
         <View style={style.container}>
@@ -434,7 +489,7 @@ export default function ResumoChurras() {
             <View style={{ right: -10, top: -20, }}>
                 <Fab
                     active={ativado}
-                    onPress={() => rotateFab()}
+                    onPress={() => rotateFab(false)}
                     direction="down"
                     style={{ width: 50, height: 50, backgroundColor: 'maroon', zIndex: 23 }}
                 >
@@ -444,13 +499,21 @@ export default function ResumoChurras() {
                     </View>
                     <Button onPress={() => inicioCriarChurras()} style={{ backgroundColor: 'maroon', zIndex: 21, }}>
                         <Animated.View style={[animatedStyles.plusMove]}>
-                            <Text style={{ position: "absolute", color: 'black', right: 10, fontSize: 15, width: '1000%', fontFamily: 'poppins-medium', }}>Criar Churras</Text>
+                            <Text style={{
+                                position: "absolute", color: 'black', right: 27,
+                                fontSize: 15, width: '1000%', fontFamily: 'poppins-medium',
+                                backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 8, textAlign: 'center'
+                            }}>Criar Churras</Text>
                             <Icon name="plus" style={style.fabBtnIcon} />
                         </Animated.View>
                     </Button>
                     <Button onPress={() => ParticiparChurras()} style={{ backgroundColor: 'maroon', zIndex: 21 }}>
                         <Animated.View style={[animatedStyles.plusMove]}>
-                            <Text style={{ position: "absolute", color: 'black', right: 10, fontSize: 15, width: '1000%', fontFamily: 'poppins-medium' }}>Participar do Churras</Text>
+                            <Text style={{
+                                position: "absolute", color: 'black', right: 30,
+                                fontSize: 15, width: '1000%', fontFamily: 'poppins-medium',
+                                backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 8, textAlign: 'center'
+                            }}>Participar do Churras</Text>
                             <Icon name="users" style={style.fabBtnIcon} />
                         </Animated.View>
                     </Button>
@@ -475,22 +538,39 @@ export default function ResumoChurras() {
                             delayLongPress={300}
                             onPress={() => { detalheChurras(churras.id); setEditavel(true) }}
                             onLongPress={() => { setVisivel(true); setChurrasDeletar(churras) }}>
-                            <View style={[style.slideBtn]}>
-                                <Image source={{ uri: churras.fotoUrlC }} style={style.churrasFoto} />
-                                <View style={style.churrasInfosView}>
-                                    <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
-                                    <Text style={style.churrasDono}>{churras.nome} </Text>
-                                    <View style={style.churrasLocDat}>
-                                        <IconFea style={style.dataIcon} name="calendar" size={15} />
-                                        <Text style={style.churrasData}> {formatData(churras.data)}</Text>
-                                        <Text style={style.locDatSeparator}>  |  </Text>
-                                        <IconMI style={style.localIcon} name="access-time" size={15} />
-                                        <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - " + churras.hrFim : ''}</Text>
+                            {churras.id == indexToAnimate
+                                ? <Animated.View style={[style.slideBtn, animatedStyles.cardExpand]}>
+                                    <Image source={{ uri: churras.fotoUrlC }} style={style.churrasFoto} />
+                                    <View style={style.churrasInfosView}>
+                                        <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
+                                        <Text style={style.churrasDono}>{churras.nome} </Text>
+                                        <View style={style.churrasLocDat}>
+                                            <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                            <Text style={style.churrasData}> {formatData(churras.data)}</Text>
+                                            <Text style={style.locDatSeparator}>  |  </Text>
+                                            <IconMI style={style.localIcon} name="access-time" size={15} />
+                                            <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - " + churras.hrFim : ''}</Text>
+                                        </View>
+                                    </View>
+                                </Animated.View>
+                                : <View style={[style.slideBtn]}>
+                                    <Image source={{ uri: churras.fotoUrlC }} style={style.churrasFoto} />
+                                    <View style={style.churrasInfosView}>
+                                        <Text style={style.churrasTitle}>{churras.nomeChurras}</Text>
+                                        <Text style={style.churrasDono}>{churras.nome} </Text>
+                                        <View style={style.churrasLocDat}>
+                                            <IconFea style={style.dataIcon} name="calendar" size={15} />
+                                            <Text style={style.churrasData}> {formatData(churras.data)}</Text>
+                                            <Text style={style.locDatSeparator}>  |  </Text>
+                                            <IconMI style={style.localIcon} name="access-time" size={15} />
+                                            <Text style={style.churrasLocal}> {churras.hrInicio}{churras.hrFim != null ? " - " + churras.hrFim : ''}</Text>
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
+                            }
+
                         </Pressable>
-                        <TouchableOpacity style={[style.extraIconTO]} onPressIn={() => { setIndexToanimate(churras.id); setContador(true) }} onPress={() => { moveDots(); }}>
+                        <TouchableOpacity style={[style.extraIconTO]} onPressIn={() => { setIndexToanimate(churras.id); setContador(true) }} onPress={() => { moveDots(false); }}>
                             {churras.id == indexToAnimate
                                 ?
                                 <View>

@@ -4,7 +4,7 @@ import {
   Picker, ScrollView, Modal, TextInput, TouchableHighlight, Switch,
   AppState, StatusBar,
 } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute, TabActions } from '@react-navigation/native'
 import NumericInput from 'react-native-numeric-input';
 import IconEnt from 'react-native-vector-icons/Entypo';
 import IconFA from 'react-native-vector-icons/FontAwesome';
@@ -68,7 +68,7 @@ export default function DetalheChurras() {
   const [hrInicioNova, setHrInicioNova] = useState()
   const [hrFimNova, setHrFimNova] = useState()
   //fim
-
+  const [page, setPage] = useState(0)
   // const churras = route.params.churras;
   // const editavel = route.params.editavel;
   const { loading, setLoading } = useLoadingModal();
@@ -251,7 +251,7 @@ export default function DetalheChurras() {
       navigation.replace('Tabs')
       savePerfil(false)
     } else {
-      navigation.goBack()
+      navigation.replace('Tabs')
       savePerfil(false)
     }
   }
@@ -611,18 +611,31 @@ export default function DetalheChurras() {
       initialRegion["latitudeDelta"] = 0.005;
       initialRegion["longitudeDelta"] = 0.005;
       mapViewEdit.animateToRegion(initialRegion, 2000)
-      setRegiao(regiao)
+      setRegiao(initialRegion)
       console.log(regiao)
     } else {
       let initialRegion = Object.assign({}, regiao);
       initialRegion["latitudeDelta"] = 0.005;
       initialRegion["longitudeDelta"] = 0.005;
       mapView.animateToRegion(initialRegion, 2000)
-      setRegiao(regiao)
+      setRegiao(initialRegion)
       console.log(regiao)
     }
 
 
+  }
+  function pegarEndereco(regiao) {
+    //function to get address using current lat and lng
+    console.log("Entrou")
+    pegarRegiao(regiao, true);
+    fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + regiao.latitude + "," + regiao.longitude + "&key=" + KEY_GOOGLE)
+    .then((response) => response.json()).then((responseJson) => {
+      console.log("ADDRESS GEOCODE is BACK!! => " +
+        JSON.stringify(responseJson));
+      setEditChurrasLocal(JSON.stringify(responseJson.results[0].formatted_address).replace(/"/g, ""));
+    });
+    setLatAtual(regiao.latitude)
+    setLgnAtual(regiao.longitude)
   }
   function mudarRegiao(regiao) {
     setRegiao(regiao)
@@ -840,8 +853,8 @@ export default function DetalheChurras() {
 
       <ScrollableTabView
         style={style.tabView}
-        tabBarPosition="top" 
-        tabBarActiveTextColor="maroon" 
+        tabBarPosition="top"
+        tabBarActiveTextColor="maroon"
         tabBarInactiveTextColor="dimgray"
         tabBarTextStyle={{ fontWeight: 'normal', marginTop: 10, fontFamily: 'poppins-semi-bold', fontSize: 15 }}
         tabBarBackgroundColor='white'
@@ -1214,6 +1227,8 @@ export default function DetalheChurras() {
               <Picker.Item label={"Não Vou"} value={"false"} key={2} />
               <Picker.Item label={"Nome"} value={"nome"} key={3} />
               <Picker.Item label={"Aguardando Resposta"} value={"null"} key={4} />
+              <Picker.Item label={"Pagou"} value={"pago"} key={5} />
+              <Picker.Item label={"Não Pagou"} value={"naoPago"} key={6} />
             </Picker>
             {/* Sem filto */}
             {convidadosFiltro == "" && (
@@ -1360,6 +1375,75 @@ export default function DetalheChurras() {
                 )}
               />
             )}
+            {convidadosFiltro == "pago" && (
+              <FlatList
+                data={convidados}
+                style={{ height: 170, width: "100%" }}
+                showsVerticalScrollIndicator={false}
+                refreshing={loading}
+                onRefresh={carregarConvidados}
+                keyExtractor={convidados => String(convidados.id)}
+                renderItem={({ item: convidados }) => (
+                  <View style={style.containerConvidados}>
+                    {convidados.pagou == true && (
+                      (<TouchableOpacity onPress={() => setContactar([true, convidados.confirmado, convidados.nome, convidados.celular, convidados.pagou, convidados.id])} style={style.convidadoNaoConfirm}>
+                        <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
+                        <View>
+                          <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
+                          <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
+                          <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
+                        </View>
+                        {convidados.pagou
+                          ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                          : null}
+                      </TouchableOpacity>)
+                    )}
+                  </View>
+
+                )}
+              />
+            )}
+            {convidadosFiltro == "naoPago" && (
+              <FlatList
+                data={convidados}
+                style={{ height: 170, width: "100%" }}
+                showsVerticalScrollIndicator={false}
+                refreshing={loading}
+                onRefresh={carregarConvidados}
+                keyExtractor={convidados => String(convidados.id)}
+                renderItem={({ item: convidados }) => (
+                  <View style={style.containerConvidados}>
+                    {convidados.pagou == false
+                      ? convidados.confirmado == true
+                        ? <View style={style.convidadoPresente}>
+                          <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
+                          <View>
+                            <Text style={style.nomeConvidado}>{convidados.nome}</Text>
+                            <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
+                            <Text style={style.statusConvidado}>Vou comparecer</Text>
+                          </View>
+                          {convidados.pagou
+                            ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                            : null}
+                        </View>
+                        : <View style={style.convidadoNaoConfirm}>
+                          <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
+                          <View>
+                            <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
+                            <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
+                            <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
+                          </View>
+                          {convidados.pagou
+                            ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                            : null}
+                        </View>
+                      : null
+                    }
+                  </View>
+
+                )}
+              />
+            )}
           </View>)
           : (<View tabLabel='Convidados' style={{ height: '100%', width: "100%" }}>
 
@@ -1381,6 +1465,8 @@ export default function DetalheChurras() {
               <Picker.Item label={"Não Vou"} value={"false"} key={2} />
               <Picker.Item label={"Nome"} value={"nome"} key={3} />
               <Picker.Item label={"Aguardando Resposta"} value={"null"} key={4} />
+              <Picker.Item label={"Pagou"} value={"pago"} key={5} />
+              <Picker.Item label={"Não Pagou"} value={"naoPago"} key={6} />
             </Picker>
             {/* Sem filto */}
             {convidadosFiltro == "" && (
@@ -1522,6 +1608,77 @@ export default function DetalheChurras() {
                           : null}
                       </View>)
                     )}
+                  </View>
+
+                )}
+              />
+            )}
+            {convidadosFiltro == "pago" && (
+              <FlatList
+                data={convidados}
+                style={{ height: 170, width: "100%" }}
+                showsVerticalScrollIndicator={false}
+                refreshing={loading}
+                onRefresh={carregarConvidados}
+                keyExtractor={convidados => String(convidados.id)}
+                renderItem={({ item: convidados }) => (
+                  <View style={style.containerConvidados}>
+                    {convidados.pagou == true && (
+                      (convidados.confirmado == true
+                        ? <View style={style.convidadoPresente}>
+                          <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
+                          <View>
+                            <Text style={style.nomeConvidado}>{convidados.nome}</Text>
+                            <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
+                            <Text style={style.statusConvidado}>Vou comparecer</Text>
+                          </View>
+                          {convidados.pagou
+                            ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                            : null}
+                        </View>
+                        : null)
+                    )}
+                  </View>
+
+                )}
+              />
+            )}
+            {convidadosFiltro == "naoPago" && (
+              <FlatList
+                data={convidados}
+                style={{ height: 170, width: "100%" }}
+                showsVerticalScrollIndicator={false}
+                refreshing={loading}
+                onRefresh={carregarConvidados}
+                keyExtractor={convidados => String(convidados.id)}
+                renderItem={({ item: convidados }) => (
+                  <View style={style.containerConvidados}>
+                    {convidados.pagou == false
+                      ? convidados.confirmado == true
+                        ? <View style={style.convidadoPresente}>
+                          <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImg} />
+                          <View>
+                            <Text style={style.nomeConvidado}>{convidados.nome}</Text>
+                            <Text style={style.foneConvidado}>{formataNumeroCelular(convidados.celular)}</Text>
+                            <Text style={style.statusConvidado}>Vou comparecer</Text>
+                          </View>
+                          {convidados.pagou
+                            ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                            : null}
+                        </View>
+                        : <View style={style.convidadoNaoConfirm}>
+                          <Image source={{ uri: convidados.fotoUrlU }} style={style.profileImgNaoConfirm} />
+                          <View>
+                            <Text style={style.nomeConvidadoNaoConfirm}>{convidados.nome}</Text>
+                            <Text style={style.foneConvidadoNaoConfirm}>{formataNumeroCelular(convidados.celular)}</Text>
+                            <Text style={style.statusConvidadoNaoConfirm}>Aguardando resposta</Text>
+                          </View>
+                          {convidados.pagou
+                            ? <Icon style={style.convidadoPago} name="money-bill-wave" size={20} />
+                            : null}
+                        </View>
+                      : null
+                    }
                   </View>
 
                 )}
@@ -2034,11 +2191,16 @@ export default function DetalheChurras() {
                 initialRegion={regiao}
               >
                 <Marker
+                  draggable
                   coordinate={regiao}
+                  onDragEnd={(e) => {
+                    pegarEndereco(e.nativeEvent.coordinate);
+                  }}
                 />
               </MapView>
               <GooglePlacesAutocomplete
                 currentLocation={false}
+                multiline={true}
                 fetchDetails={true}
                 placeholder={"Procurar"}
                 renderDescription={(row) => row.description}
@@ -2049,7 +2211,8 @@ export default function DetalheChurras() {
                 textInputProps={{
                   onChangeText: (text) => {
                     console.log(text)
-                  }
+                  },
+                  style:{backgroundColor: 'rgba(228, 233, 237, 1)', borderRadius: 8, fontFamily: 'poppins-medium', width: '100%'}
                 }}
                 onPress={(data, details) => {
                   // 'details' is provided when fetchDetails = true
@@ -2059,7 +2222,8 @@ export default function DetalheChurras() {
                     latitudeDelta: regiao.latitudeDelta,
                     longitudeDelta: regiao.longitudeDelta
                   })
-                  setEditChurrasLocal(data.description)
+                  // setEditChurrasLocal(data.description)
+                  setEditChurrasLocal(details.formatted_address)
                   pegarRegiao({
                     latitude: details.geometry.location.lat,
                     longitude: details.geometry.location.lng,
@@ -2076,8 +2240,8 @@ export default function DetalheChurras() {
                 }}
                 styles={{
                   description: {
-                    fontFamily: "Calibri",
-                    color: "black",
+                    fontFamily: "poppins-light",
+                    color: "maroon",
                     fontSize: 12,
                   },
                   predefinedPlacesDescription: {

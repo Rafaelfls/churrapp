@@ -181,16 +181,18 @@ export default function OpenContactList({ route }) {
                   ? null
                   : contacts.celular === '055' + USUARIOLOGADO.celular
                     ? null
-                    :
-                    <TouchableOpacity onPress={() => addContact(contacts.nome, contacts.celular)}
-                      style={{ minHeight: 70, padding: 5, paddingHorizontal: 20 }}>
-                      <Text style={{ color: 'black', fontFamily: 'poppins-semi-bold', fontSize: 18 }}>
-                        {contacts.nome}
-                      </Text>
-                      <Text style={{ color: 'gray', fontFamily: 'poppins-medium' }}>
-                        {contacts.celular}
-                      </Text>
-                    </TouchableOpacity>
+                    : contacts.celular === USUARIOLOGADO.celular
+                      ? null
+                      :
+                      <TouchableOpacity onPress={() => addContact(contacts.nome, contacts.celular)}
+                        style={{ minHeight: 70, padding: 5, paddingHorizontal: 20 }}>
+                        <Text style={{ color: 'black', fontFamily: 'poppins-semi-bold', fontSize: 18 }}>
+                          {contacts.nome}
+                        </Text>
+                        <Text style={{ color: 'gray', fontFamily: 'poppins-medium' }}>
+                          {contacts.celular}
+                        </Text>
+                      </TouchableOpacity>
                 }
               </View>
             )}

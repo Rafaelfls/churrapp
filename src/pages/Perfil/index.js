@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import * as ImagePicker from 'expo-image-picker';
 import { FloatingAction } from "react-native-floating-action";
 import * as Crypto from 'expo-crypto';
+import { useIsDrawerOpen } from '@react-navigation/drawer'
 
 
 //Criando Icone Customizável
@@ -85,6 +86,8 @@ export default function Perfil() {
     const { loading, setLoading } = useLoadingModal();
     const { editavel, setEditavel } = useEditavel();
     const criarModal = createLoadingModal(loading);
+
+    const isDrawerOpen = useIsDrawerOpen()
 
     async function pegarItemPorTipo(carneVisivel, acompanhamentoVisivel, bebidaVisivel, sobremesaVisivel) {
         // setLoading(true)
@@ -347,6 +350,10 @@ export default function Perfil() {
         if (idadeformatada != "02/01/1900") {
             setIdadeNovo(idadeformatada)
         }
+        setSearchCarne("");
+        setSearchAcompanhamento("");
+        setSearchBebida("");
+        setSearchSobremesa("");
         setAllowEditing([true, 'black']);
         setEditavel(true);
     }
@@ -508,6 +515,10 @@ export default function Perfil() {
         setAllowEditing([false, 'darkgray']);
 
     }
+    useEffect(()=>{
+        setEditavel(false)
+        setAllowEditing([false, 'darkgray']);
+    },[isDrawerOpen])
 
     return (
         <View style={style.container}>
@@ -762,13 +773,16 @@ export default function Perfil() {
                             </View>
                             {allowEditing[0]
                                 ? <View style={{ flex: 1 }}>
-                                    <TextInput
-                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
-                                        editable={allowEditing[0]}
-                                        onChangeText={(text) => { searchFilterFunction(text, 1) }}
-                                        onFocus={() => pegarItemPorTipo(true, false, false, false)}
-                                        value={search}
-                                    />
+                                     <TextInput
+                                            style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                            editable={allowEditing[0]}
+                                            onChangeText={(text) => { searchFilterFunction(text, 1) }}
+                                            onFocus={() => pegarItemPorTipo(true, false, false, false)}
+                                            placeholder={usuario.carnePreferida}
+                                            value={search}
+                                        />
+                                    
+
                                     {dadoFiltrado === null
                                         ? null
                                         : <TouchableOpacity style={{ alignItems: 'flex-end' }} onPress={() => pegarItemPorTipo(false, false, false, false)}>
@@ -813,12 +827,14 @@ export default function Perfil() {
                             {allowEditing[0]
                                 ? <View>
                                     <TextInput
-                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
-                                        editable={allowEditing[0]}
-                                        onChangeText={(text) => { searchFilterFunction(text, 2) }}
-                                        onFocus={() => pegarItemPorTipo(false, true, false, false)}
-                                        value={searchAcompanhamento}
-                                    />
+                                            style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                            editable={allowEditing[0]}
+                                            onChangeText={(text) => { searchFilterFunction(text, 2) }}
+                                            onFocus={() => pegarItemPorTipo(false, true, false, false)}
+                                            value={searchAcompanhamento}
+                                            placeholder={usuario.acompanhamentoPreferido}
+                                        />
+
                                     {dadoFiltradoAcompanhamento === null
                                         ? null
                                         : <TouchableOpacity style={{ alignItems: 'flex-end' }} onPress={() => pegarItemPorTipo(false, false, false, false)}>
@@ -861,13 +877,15 @@ export default function Perfil() {
                             </View>
                             {allowEditing[0]
                                 ? <View>
-                                    <TextInput
-                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
-                                        editable={allowEditing[0]}
-                                        onChangeText={(text) => { searchFilterFunction(text, 3) }}
-                                        onFocus={() => pegarItemPorTipo(false, false, true, false)}
-                                        value={searchBebida}
-                                    />
+                                     <TextInput
+                                            style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                            editable={allowEditing[0]}
+                                            onChangeText={(text) => { searchFilterFunction(text, 3) }}
+                                            onFocus={() => pegarItemPorTipo(false, false, true, false)}
+                                            value={searchBebida}
+                                            placeholder={usuario.bebidaPreferida}
+                                        />
+
                                     {dadoFiltradoBebida === null
                                         ? null
                                         : <TouchableOpacity style={{ alignItems: 'flex-end' }} onPress={() => pegarItemPorTipo(false, false, false, false)}>
@@ -887,7 +905,7 @@ export default function Perfil() {
                                                         style={style.textoDadosFiltrados}
                                                         onPress={() => getItem(todosItens)}
                                                     >
-                                                        {todosItens.nomeItem.toUpperCase()}
+                                                        {todosItens.tipo} {"-"} {todosItens.nomeItem.toUpperCase()}
                                                     </Text>
                                                     <View style={style.linha}></View>
 
@@ -912,13 +930,15 @@ export default function Perfil() {
                             </View>
                             {allowEditing[0]
                                 ? <View>
-                                    <TextInput
-                                        style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
-                                        editable={allowEditing[0]}
-                                        onChangeText={(text) => { searchFilterFunction(text, 5) }}
-                                        onFocus={() => pegarItemPorTipo(false, false, false, true)}
-                                        value={searchSobremesa}
-                                    />
+                                     <TextInput
+                                            style={[style.inputStandard, { borderBottomColor: allowEditing[1], color: allowEditing[1] }]}
+                                            editable={allowEditing[0]}
+                                            onChangeText={(text) => { searchFilterFunction(text, 5) }}
+                                            onFocus={() => pegarItemPorTipo(false, false, false, true)}
+                                            value={searchSobremesa}
+                                            placeholder={usuario.sobremesaPreferida}
+                                        />
+
                                     {dadoFiltradoSobremesa === null
                                         ? null
                                         : <TouchableOpacity style={{ alignItems: 'flex-end' }} onPress={() => pegarItemPorTipo(false, false, false, false)}>
