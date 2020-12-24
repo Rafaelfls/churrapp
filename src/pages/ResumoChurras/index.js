@@ -428,13 +428,13 @@ export default function ResumoChurras() {
                 setDots(false)
                 Animated.parallel([
                     Animated.spring(dotsAnimation, {
-                        toValue,
+                        toValue: 0,
                         friction: 50,
                         tension: 140,
                         useNativeDriver: true
                     }),
                     Animated.spring(dotsMenu, {
-                        toValue,
+                        toValue: 0,
                         friction: 50,
                         tension: 140,
                         delay: 100,
