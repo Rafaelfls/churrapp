@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   View, Text, Image, FlatList, TouchableOpacity, Linking,
   Picker, ScrollView, Modal, TextInput, TouchableHighlight, Switch,
-  AppState, StatusBar,
+  AppState, StatusBar, PermissionsAndroid, Platform
 } from 'react-native';
 import { useNavigation, useRoute, TabActions } from '@react-navigation/native'
 import NumericInput from 'react-native-numeric-input';
@@ -24,6 +24,7 @@ import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import { showLocation, Popup } from 'react-native-map-link'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import { KEY_GOOGLE } from '../../../key.js'
+import Geolocation from 'react-native-geolocation-service'
 // import { Rating, AirbnbRating } from 'react-native-elements'
 
 
@@ -54,6 +55,7 @@ export default function DetalheChurras() {
   const [endereco, setEndereco] = useState('')
   const [latAtual, setLatAtual] = useState()
   const [lgnAtual, setLgnAtual] = useState()
+  navigator.geolocation = require('react-native-geolocation-service');
   //Fim Map
 
   const [liberado, setLiberado] = useState(true)
@@ -605,6 +607,70 @@ export default function DetalheChurras() {
     })
   }
 
+  async function requestLocationPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: "Churrapp quer utilizar sua localização",
+          message:
+            "Churrapp quer utilizar sua localização para marcar seus churrascos.",
+          buttonNeutral: "Me pergunte depois",
+          buttonNegative: "Cancelar",
+          buttonPositive: "Confirmar"
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("Pode usar a localização");
+      } else {
+        console.log("Não pode usar a localização");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  async function hasLocationPermission() {
+    // if (Platform.OS === 'ios') {
+    //   const hasPermission = await this.hasLocationPermissionIOS();
+    //   return hasPermission;
+    // }
+
+    if (Platform.OS === 'android' && Platform.Version < 23) {
+      return true;
+    }
+
+    const hasPermission = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    );
+
+    if (hasPermission) {
+      return true;
+    }
+
+    const status = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    );
+
+    if (status === PermissionsAndroid.RESULTS.GRANTED) {
+      return true;
+    }
+
+    if (status === PermissionsAndroid.RESULTS.DENIED) {
+      ToastAndroid.show(
+        'Location permission denied by user.',
+        ToastAndroid.LONG,
+      );
+    } else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+      ToastAndroid.show(
+        'Location permission revoked by user.',
+        ToastAndroid.LONG,
+      );
+    }
+
+    return false;
+  };
+
   function pegarRegiao(regiao, isEditable) {
     if (isEditable) {
       let initialRegion = Object.assign({}, regiao);
@@ -629,11 +695,11 @@ export default function DetalheChurras() {
     console.log("Entrou")
     pegarRegiao(regiao, true);
     fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + regiao.latitude + "," + regiao.longitude + "&key=" + KEY_GOOGLE)
-    .then((response) => response.json()).then((responseJson) => {
-      console.log("ADDRESS GEOCODE is BACK!! => " +
-        JSON.stringify(responseJson));
-      setEditChurrasLocal(JSON.stringify(responseJson.results[0].formatted_address).replace(/"/g, ""));
-    });
+      .then((response) => response.json()).then((responseJson) => {
+        console.log("ADDRESS GEOCODE is BACK!! => " +
+          JSON.stringify(responseJson));
+        setEditChurrasLocal(JSON.stringify(responseJson.results[0].formatted_address).replace(/"/g, ""));
+      });
     setLatAtual(regiao.latitude)
     setLgnAtual(regiao.longitude)
   }
@@ -807,6 +873,33 @@ export default function DetalheChurras() {
   function mudarRegiao(regiao) {
     setRegiao(regiao)
   }
+
+  function pegarLocalizacaoAtual() {
+    if (hasLocationPermission()) {
+      Geolocation.getCurrentPosition(
+        (position) => {
+          pegarRegiao({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            latitudeDelta: regiao.latitudeDelta,
+            longitudeDelta: regiao.longitudeDelta
+          }, true)
+          pegarEndereco({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            latitudeDelta: regiao.latitudeDelta,
+            longitudeDelta: regiao.longitudeDelta
+          })
+        },
+        (error) => {
+          // See error code charts below.
+          console.log(error.code, error.message);
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      );
+    }
+  }
+
   useEffect(() => {
     carregaChurras();
     carregarItens();
@@ -909,7 +1002,7 @@ export default function DetalheChurras() {
                   <View style={{ flexDirection: 'row' }}>
                     <IconFA name="map-o" size={20} style={style.icons} />
                     <Text style={style.churrasNome}>Local: </Text>
-                    <TouchableOpacity style={{ position: 'absolute', right: -10, zIndex: 20 }} onPress={() => setModalEditMap(true)}>
+                    <TouchableOpacity style={{ position: 'absolute', right: -10, zIndex: 20 }} onPress={() => { setModalEditMap(true); requestLocationPermission() }}>
                       <Icon name="map-marked-alt" size={20} style={style.icons} />
                     </TouchableOpacity>
                   </View>
@@ -2182,6 +2275,13 @@ export default function DetalheChurras() {
             <TouchableOpacity style={{ backgroundColor: 'maroon', width: 25, height: 25, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 10, right: 10, zIndex: 2 }} onPress={() => setModalEditMap(false)}>
               <Text style={{ fontFamily: 'poppins-bold', fontSize: 16, color: 'white' }}>X</Text>
             </TouchableOpacity>
+            <TouchableOpacity style={{
+              backgroundColor: 'maroon', padding: 5,
+              alignItems: 'center', borderRadius: 50, position: 'absolute',
+              bottom: 70, right: 40, zIndex: 2
+            }} onPress={() => pegarLocalizacaoAtual()}>
+              <IconMa name="my-location" size={50} color="white" />
+            </TouchableOpacity>
             <View style={{ width: '100%', height: '90%' }}>
               <MapView
                 ref={(ref) => setMapViewEdit(ref)}
@@ -2199,7 +2299,6 @@ export default function DetalheChurras() {
                 />
               </MapView>
               <GooglePlacesAutocomplete
-                currentLocation={false}
                 multiline={true}
                 fetchDetails={true}
                 placeholder={"Procurar"}
@@ -2210,9 +2309,10 @@ export default function DetalheChurras() {
                 debounce={200}
                 textInputProps={{
                   onChangeText: (text) => {
-                    console.log(text)
+                    setEditChurrasLocal(text)
                   },
-                  style:{backgroundColor: 'rgba(228, 233, 237, 1)', borderRadius: 8, fontFamily: 'poppins-medium', width: '100%'}
+                  style: { backgroundColor: 'rgba(228, 233, 237, 1)', borderRadius: 8, fontFamily: 'poppins-medium', width: '100%' },
+                  value:editChurrasLocal
                 }}
                 onPress={(data, details) => {
                   // 'details' is provided when fetchDetails = true
