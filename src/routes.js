@@ -110,7 +110,7 @@ function criarDrawer() {
             <Drawer.Screen name='Início' component={CriarTabs}
                 options={{
                     drawerIcon: (({ focused }) => <IconMI size={25} name={focused ? 'home' : 'home'} ></IconMI>),
-                    title: "Início",
+                    title: "Início"
                 }}
             />
             <Drawer.Screen name='Notificações' component={Notificacoes}

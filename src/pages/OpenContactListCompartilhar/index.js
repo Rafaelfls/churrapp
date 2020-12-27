@@ -111,19 +111,21 @@ export default function OpenContactListCompartilhar() {
                   ? null
                   : contacts.celular === '055' + USUARIOLOGADO.celular
                     ? null
-                    :
-                    <TouchableOpacity onPress={() => navigation.navigate('CompartilharConvidados', {
-                      nomeContato: contacts.nome,
-                      telefoneContato: contacts.celular,
-                      churrasCodeAtual: null
-                    })} style={{ minHeight: 70, padding: 5, paddingHorizontal: 20 }}>
-                      <Text style={{ color: 'black', fontFamily: 'poppins-semi-bold', fontSize: 18 }}>
-                        {contacts.nome}
-                      </Text>
-                      <Text style={{ color: 'gray', fontFamily: 'poppins-medium' }}>
-                        {contacts.celular}
-                      </Text>
-                    </TouchableOpacity>
+                    : contacts.celular === USUARIOLOGADO.celular
+                      ? null
+                      :
+                      <TouchableOpacity onPress={() => navigation.navigate('CompartilharConvidados', {
+                        nomeContato: contacts.nome,
+                        telefoneContato: contacts.celular,
+                        churrasCodeAtual: null
+                      })} style={{ minHeight: 70, padding: 5, paddingHorizontal: 20 }}>
+                        <Text style={{ color: 'black', fontFamily: 'poppins-semi-bold', fontSize: 18 }}>
+                          {contacts.nome}
+                        </Text>
+                        <Text style={{ color: 'gray', fontFamily: 'poppins-medium' }}>
+                          {contacts.celular}
+                        </Text>
+                      </TouchableOpacity>
                 }
 
               </View>

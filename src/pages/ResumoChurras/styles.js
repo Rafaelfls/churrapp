@@ -81,6 +81,7 @@ export default StyleSheet.create({
     width: Dimensions.get('window').width + 10,
     paddingHorizontal: 20,
     paddingVertical: 5,
+    marginBottom: 0
   },
   detalheSlide: {
     backgroundColor: "darkgray",
