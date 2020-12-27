@@ -254,7 +254,11 @@ export default function CriarChurrasco() {
         sethrInicio("0" + hours + ':' + min)
       }
     } else {
-      sethrInicio(hours + ':' + min)
+      if (min < 10) {
+        sethrInicio(hours + ':' + '0' + min)
+      } else {
+        sethrInicio(hours + ':' + min)
+      }
     }
     setHrInicioPicker(data)
     console.log(hrInicio)
@@ -270,7 +274,11 @@ export default function CriarChurrasco() {
         sethrFim("0" + hours + ':' + min)
       }
     } else {
-      sethrFim(hours + ':' + min)
+      if (min < 10) {
+        sethrFim(hours + ':' + '0' + min)
+      } else {
+        sethrFim(hours + ':' + min)
+      }
     }
     setHrFimPicker(data)
   }

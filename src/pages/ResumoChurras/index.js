@@ -51,9 +51,7 @@ export default function ResumoChurras() {
     var newChurrasCriados;
     const [ativado, setAtivado] = useState(false);
 
-
     const isDrawerOpen = useIsDrawerOpen();
-
 
     const [dots, setDots] = useState(false);
     const [animation, setAnimation] = useState(new Animated.Value(0));
@@ -211,7 +209,7 @@ export default function ResumoChurras() {
     }, [refreshChurras]);
     useEffect(() => {
         loadNotificacoes();
-    }, [loading]);
+    }, [loading]);    
 
     async function loadNotificacoes() {
         await api.get(`/notificacoes/${USUARIOLOGADO.id}`).then(function (res) {

@@ -462,7 +462,7 @@ export default function Perfil() {
         setQuantidadeComeLista(response.data);
     }
 
-    const pickImage = async () => {
+    const pickImage = async () => {        
         setLoading(true)
         setPickImageOptions([false])
         const { status } = await ImagePicker.requestCameraRollPermissionsAsync();

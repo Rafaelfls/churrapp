@@ -48,6 +48,8 @@ export default StyleSheet.create({
     churrasLocal: {
         color: 'gray',
         fontSize: 18,
+        flexWrap:'wrap',
+        width:'80%'
     },
     localIcon: {
         color: 'gray',
