@@ -21,11 +21,9 @@ export default function CompartilharChurrasco({ route, navigation }) {
     const [churrasDateFormatted, setChurrasDateFormatted] = useState();
     const [churrasDateFormattedConf, setChurrasDateFormattedConf] = useState();
     const { setEditavel } = useEditavel();
-    const { setInitialPage } = useInitialPage()
 
     function goBack() {
         navigation.replace('DetalheChurras', { churras: churras.id })
-        // setInitialPage(1);
         setEditavel(true);
     }
 
@@ -102,7 +100,7 @@ export default function CompartilharChurrasco({ route, navigation }) {
 
                 <TouchableOpacity style={style.codigoTO} onPress={() => copyToClipboard()}><Text style={style.codigo}>{churras.id}</Text><IconFA name="copy" size={13} style={style.copyIcon} /></TouchableOpacity>
                 <View style={style.qrCode}>
-                    <QRCode size={180} logo={{ uri: churras.fotoUrlC }} logoSize={60} content={churras.id} />
+                    <QRCode size={150} logo={{ uri: churras.fotoUrlC }} logoSize={40} content={churras.id} />
                 </View>
             </View>
 
