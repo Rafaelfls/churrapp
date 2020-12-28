@@ -22,6 +22,7 @@ export default function EscolherNovosItens({ route, navigation }) {
     const [formato, setFormato] = useState([]);
     const [tipo, setTipo] = useState([]);
     const [visivel, setIsVisivel] = React.useState(false);
+    const [visivelUnidade, setVisivelUnidade] = React.useState([false])
     const [itemModal, setItemModal] = React.useState('');
     const [selectedUnidade, setSelectedUnidade] = useState("Selecione...");
     const [selectedFormato, setSelectedFormato] = useState(1);
@@ -91,8 +92,6 @@ export default function EscolherNovosItens({ route, navigation }) {
         }
     }
     async function addItem(isVisible, item, unidadeDrop, formatoDrop, qtdNova, precoModal) {
-        showToast(isVisible)
-        setIsVisivel(false)
         setLoading(true)
         var formatoFinal;
         var precoFinal;
@@ -109,31 +108,38 @@ export default function EscolherNovosItens({ route, navigation }) {
             precoFinal = precoModal
         }
 
-        await api.post('/listadochurras', {
-            quantidade: qtdNova,
-            churras_id: churrascode,
-            unidade_id: unidadeDrop,
-            formato_id: formatoFinal,
-            item_id: item,
-            precoItem: precoFinal,
-        }).then(async function (res) {
-            if (res.data.quantidadeAntiga) {
-                console.log("ola ")
-                var sub = res.data.quantidadeAntiga * res.data.precoAntigo;
-                var sum = precoFinal * (qtdNova + res.data.quantidadeAntiga);
-                var precoFinalTotal = sum - sub;
-                console.log("ola ", sub, sum, precoFinalTotal)
-            } else {
-                var precoFinalTotal = precoFinal * qtdNova;
-            }
-            await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
-                valorTotal: precoFinalTotal
-            }).then(function (res) {
-                setQuantidadeModal(0)
-                setPrecoModal(0)
-                setLoading(false)
+        if (typeof unidadeDrop == 'string' || unidadeDrop == 0) {
+            setLoading(false)
+            setVisivelUnidade([true])
+        } else {
+            setIsVisivel(false)
+            await api.post('/listadochurras', {
+                quantidade: qtdNova,
+                churras_id: churrascode,
+                unidade_id: unidadeDrop,
+                formato_id: formatoFinal,
+                item_id: item,
+                precoItem: precoFinal,
+            }).then(async function (res) {
+                if (res.data.quantidadeAntiga) {
+                    console.log("ola ")
+                    var sub = res.data.quantidadeAntiga * res.data.precoAntigo;
+                    var sum = precoFinal * (qtdNova + res.data.quantidadeAntiga);
+                    var precoFinalTotal = sum - sub;
+                    console.log("ola ", sub, sum, precoFinalTotal)
+                } else {
+                    var precoFinalTotal = precoFinal * qtdNova;
+                }
+                await api.put(`/churrasUpdate/valorTotal/${churrascode}`, {
+                    valorTotal: precoFinalTotal
+                }).then(function (res) {
+                    setQuantidadeModal(0)
+                    setPrecoModal(0)
+                    setLoading(false)
+                    showToast(isVisible)
+                })
             })
-        })
+        }
     }
 
     function backHome() {
@@ -317,6 +323,23 @@ export default function EscolherNovosItens({ route, navigation }) {
                             <View style={style.footerModal}>
                                 <TouchableOpacity style={style.salvarBtn} onPress={() => { setAdicionado(false) }}>
                                     <Text style={style.iconSalvarBtn}>OK</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={visivelUnidade[0]}
+                >
+                    <View style={style.centeredView2}>
+                        <View style={style.modalView2}>
+                            <Text style={style.modalTitle2}>Ops!</Text>
+                            <Text style={style.modalText2}>Escolha a unidade de medida do seu item!</Text>
+                            <View style={style.footerModal2}>
+                                <TouchableOpacity style={style.continueBtn2} onPress={() => setVisivelUnidade([false])}>
+                                    <Text style={style.textBtn2}>Ok</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

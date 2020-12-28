@@ -30,7 +30,6 @@ export default function QRCodeLeitor() {
     async function participarDoChurras() {
         setIsVisivel(false);
         setLoading(true)
-        console.log(qrCodeValue)
         await api.post(`/convidadosChurrasCriado/${USUARIOLOGADO.id}`, {
             churras_id: qrCodeValue.id
         }).then(async function (res) {
@@ -67,11 +66,17 @@ export default function QRCodeLeitor() {
         try {
             await api.get(`churrasPeloId/${id}`)
                 .then(function (res) {
-                    setQrCodeValue(res.data[0])
-                    setIsVisivel(true)
+                    console.log('res')
+                    console.log(res.data[0])
+                    if(res.data[0]){
+                        setQrCodeValue(res.data[0])
+                        setIsVisivel(true)
+                    }else{                        
+                        setScanError([true,'', "escaneado"])
+                    }
                 })
         } catch (error) {
-            setScanError([true, id])
+            setScanError([true, id,''])
         }
 
         setLoading(false)
@@ -83,6 +88,7 @@ export default function QRCodeLeitor() {
             <View style={style.top}></View>
             <BarCodeScanner
                 onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
                 style={StyleSheet.absoluteFillObject}
             />
             <Modal
@@ -131,7 +137,7 @@ export default function QRCodeLeitor() {
                 <View style={style.centeredView}>
                     <View style={style.modalView}>
                         <Text style={style.modalTitle}>Ops!</Text>
-                        <Text style={style.modalText}>Não encontramos churrasco com o codigo <Text style={{ fontWeight: 'bold' }}>{scanError[1]}</Text> !</Text>
+                        <Text style={style.modalText}>Não encontramos churrasco com o codigo <Text style={{ fontWeight: 'bold' }}>{scanError[1]}</Text><Text>{scanError[2]}</Text>!</Text>
                         <View style={style.footer}>
                             <TouchableOpacity style={style.salvarBtn} onPress={() => { setScanError([false]), setScanned(false) }}>
                                 <Text style={style.textSalvarBtn}>Ok</Text>
