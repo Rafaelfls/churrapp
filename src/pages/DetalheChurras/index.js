@@ -56,6 +56,7 @@ export default function DetalheChurras() {
   const [latAtual, setLatAtual] = useState()
   const [lgnAtual, setLgnAtual] = useState()
   navigator.geolocation = require('react-native-geolocation-service');
+  const [mapReady, setMapReady] = useState(false)
   //Fim Map
 
   const [liberado, setLiberado] = useState(true)
@@ -854,6 +855,10 @@ export default function DetalheChurras() {
         { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
       );
     }
+  }
+
+  function mapaPronto() {
+    setMapReady(true)
   }
 
   useEffect(() => {
@@ -2181,26 +2186,33 @@ export default function DetalheChurras() {
         <View style={style.centeredView2}>
           <View style={style.modalView2}>
             <Text style={[style.modalTitle, { fontSize: 23 }]}>Local do churras!</Text>
-            <TouchableOpacity style={{ backgroundColor: 'maroon', width: 25, height: 25, alignItems: 'center', borderRadius: 15, position: 'absolute', top: 10, right: 10, zIndex: 2 }} onPress={() => setModalMap(false)}>
+            <TouchableOpacity style={{
+              backgroundColor: 'maroon', width: 25, height: 25,
+              alignItems: 'center', borderRadius: 15, position: 'absolute',
+              top: 10, right: 10, zIndex: 2
+            }} onPress={() => setModalMap(false)}>
               <Text style={{ fontFamily: 'poppins-bold', fontSize: 16, color: 'white' }}>X</Text>
             </TouchableOpacity>
             <View style={{ width: '100%', height: '90%' }}>
               <MapView
                 ref={(ref) => setMapView(ref)}
-                onMapReady={() => { pegarRegiao(regiao, false); setRefresh(!refresh) }}
-                // onRegionChangeComplete={() => mudarRegiao(regiao)}
+                onMapReady={() => { pegarRegiao(regiao, false); setRefresh(!refresh);}}
+                onRegionChangeComplete={() => mudarRegiao(regiao)}
                 provider={PROVIDER_GOOGLE}
                 style={style.map}
                 initialRegion={regiao}
                 loadingEnabled
                 mapType={mapMode}
+                onLayout={mapaPronto}
               >
-                <Marker
-                  coordinate={regiao}
-                  title={editChurrasLocal}
-                  description={editChurrasDescricao}
-                  onPress={() => setMapVisible(true)}
-                />
+                {mapReady && <Marker
+                    coordinate={regiao}
+                    title={editChurrasLocal}
+                    description={editChurrasDescricao}
+                    onPress={() => setMapVisible(true)}
+                  />
+                }
+
               </MapView>
               <Popup
                 isVisible={mapVisible}
@@ -2265,12 +2277,12 @@ export default function DetalheChurras() {
                 debounce={200}
                 textInputProps={{
                   onChangeText: (text) => {
-                    if(text == ""){
+                    if (text == "") {
                       setEditChurrasLocal(editChurrasLocal)
                     }
                   },
                   style: { backgroundColor: 'rgba(228, 233, 237, 1)', borderRadius: 8, fontFamily: 'poppins-medium', width: '100%' },
-                  defaultValue:editChurrasLocal
+                  defaultValue: editChurrasLocal
                 }}
                 onPress={(data, details) => {
                   // 'details' is provided when fetchDetails = true
@@ -2325,12 +2337,12 @@ export default function DetalheChurras() {
         transparent={true}
         visible={unidadeInvalidaVisivel}
       >
-        <View style={style.centeredView2}>
-          <View style={style.modalView2}>
-            <Text style={style.modalTitle2}>Ops!</Text>
-            <Text style={style.modalText2}>Escolha a unidade de medida do seu item!</Text>
-            <View style={style.footerModal2}>
-              <TouchableOpacity style={style.continueBtn2} onPress={() => setUnidadeInvalidaVisivel(false)}>
+        <View style={style.centeredView3}>
+          <View style={style.modalView3}>
+            <Text style={style.modalTitle3}>Ops!</Text>
+            <Text style={style.modalText3}>Escolha a unidade de medida do seu item!</Text>
+            <View style={style.footerModal3}>
+              <TouchableOpacity style={style.continueBtn3} onPress={() => setUnidadeInvalidaVisivel(false)}>
                 <Text style={style.textBtn2}>Ok</Text>
               </TouchableOpacity>
             </View>

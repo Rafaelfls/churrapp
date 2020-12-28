@@ -371,8 +371,6 @@ export default function CriarChurrasco() {
     return false;
   };
 
-  console.log('key')
-  console.log(KEY_GOOGLE)
   function pegarLocalizacaoAtual() {
     if (hasLocationPermission()) {
       Geolocation.getCurrentPosition(

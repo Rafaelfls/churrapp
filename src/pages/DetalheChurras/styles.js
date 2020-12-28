@@ -1009,13 +1009,13 @@ export default StyleSheet.create({
   },
   //fim modal
   
-  centeredView2: {
+  centeredView3: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22
   },
-  modalView2: {
+  modalView3: {
     margin: 20,
     backgroundColor: "white",
     borderRadius: 8,
@@ -1031,25 +1031,25 @@ export default StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5
   },
-  modalTitle2: {
+  modalTitle3: {
     color: "#800000",
     fontSize: 30,
     fontFamily: 'poppins-medium',
     textAlign: "center"
   },
-  modalText2: {
+  modalText3: {
     fontSize: 17,
     textAlign: 'center',
     fontFamily: 'poppins-light',
   },
-  footerModal2: {
+  footerModal3: {
     height: 90,
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: "center",
     backgroundColor: 'white',
   },
-  continueBtn2: {
+  continueBtn3: {
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,
@@ -1068,7 +1068,7 @@ export default StyleSheet.create({
 
     elevation: 6,
   },  
-  textBtn2: {
+  textBtn3: {
     color: 'white',
     fontSize: 17,
     fontFamily: 'poppins-medium',
