@@ -708,10 +708,12 @@ export default function CriarChurrasco() {
                   nearbyPlacesAPI='GooglePlacesSearch'
                   textInputProps={{
                     onChangeText: (text) => {
-                      setEndereco(text)
+                      if(text == ""){
+                        setEndereco(endereco)
+                      }
                     },
                     style: { backgroundColor: 'rgba(228, 233, 237, 1)', borderRadius: 8, fontFamily: 'poppins-medium', width: '100%' },
-                    value:endereco
+                    defaultValue:endereco
                   }}
                   onPress={(data, details) => {
                     // 'details' is provided when fetchDetails = true

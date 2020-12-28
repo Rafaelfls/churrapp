@@ -2309,10 +2309,12 @@ export default function DetalheChurras() {
                 debounce={200}
                 textInputProps={{
                   onChangeText: (text) => {
-                    setEditChurrasLocal(text)
+                    if(text == ""){
+                      setEditChurrasLocal(editChurrasLocal)
+                    }
                   },
                   style: { backgroundColor: 'rgba(228, 233, 237, 1)', borderRadius: 8, fontFamily: 'poppins-medium', width: '100%' },
-                  value:editChurrasLocal
+                  defaultValue:editChurrasLocal
                 }}
                 onPress={(data, details) => {
                   // 'details' is provided when fetchDetails = true
