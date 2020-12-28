@@ -200,7 +200,7 @@ export default function CriarChurrasco() {
           hrFim: hrFim,
           descricao: descricao,
           data: dataFormatada,
-          limiteConfirmacao: limiteConfirmacao,
+          limiteConfirmacao: dataFormatadaLimite,
           latitude: latAtual,
           longitude: lgnAtual
         },
