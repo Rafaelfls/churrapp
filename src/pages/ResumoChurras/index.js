@@ -380,6 +380,7 @@ export default function ResumoChurras() {
         rotateFab(true)
         moveDots(true)
     }, [isDrawerOpen]);
+
     function rotateFab(drawer) {
         var toValue
         if (drawer) {
@@ -500,7 +501,7 @@ export default function ResumoChurras() {
                             <Text style={{
                                 position: "absolute", color: 'black', right: 27,
                                 fontSize: 15, width: '1000%', fontFamily: 'poppins-medium',
-                                backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 8, textAlign: 'center'
+                                backgroundColor: '#d3d3d3', borderRadius: 8, textAlign: 'center'
                             }}>Criar Churras</Text>
                             <Icon name="plus" style={style.fabBtnIcon} />
                         </Animated.View>
@@ -510,7 +511,7 @@ export default function ResumoChurras() {
                             <Text style={{
                                 position: "absolute", color: 'black', right: 30,
                                 fontSize: 15, width: '1000%', fontFamily: 'poppins-medium',
-                                backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 8, textAlign: 'center'
+                                backgroundColor: '#d3d3d3', borderRadius: 8, textAlign: 'center'
                             }}>Participar do Churras</Text>
                             <Icon name="users" style={style.fabBtnIcon} />
                         </Animated.View>

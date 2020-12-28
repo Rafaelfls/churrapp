@@ -415,60 +415,11 @@ export default function DetalheChurras() {
     return setConfirmados(qtd);
   }
 
-  async function addItem(isVisible, item, unidadeDrop, qtdNova, formato, precoModal) {
-    var form = formato;
-    var precoFinal;
-    if (form == 1) { form = 7 }
-    if (unidadeDrop == 'Selecione...' || unidadeDrop == 0) {
-      return setUnidadeInvalidaVisivel(true);
-    }
-
-    if (precoModal == 0) {
-      precoFinal = precoMedioModal;
-    } else {
-      precoFinal = precoModal
-    }
-
-    precoFinal = (precoFinal * qtdNova).toFixed(2)
-
-    setIsVisivel(isVisible)
-    setLoading(true)
-    await api.post('/listadochurras', {
-      quantidade: qtdNova,
-      churras_id: newChurras,
-      unidade_id: unidadeDrop,
-      item_id: item,
-      formato_id: form,
-      precoItem: precoFinal
-    }).then(async function (res) {
-      if (res.data.quantidadeAntiga) {
-        var sub = res.data.quantidadeAntiga * res.data.precoAntigo;
-        var sum = precoFinal * (qtdNova + res.data.quantidadeAntiga);
-        var precoFinalTotal = sum - sub;
-      } else {
-        var precoFinalTotal = precoFinal * qtdNova;
-      }
-      await api.put(`/churrasUpdate/valorTotal/${newChurras}`, {
-        valorTotal: precoFinalTotal,
-      })
-      setSelectedFormato(1)
-      setSelectedUnidade(0)
-      setQuantidadeModal(0)
-      setPrecoModal(0)
-      setPrecoMedioModal(0)
-      setModalSubTipoVisivel(false)
-      setModalTipoVisivel(false)
-      setLoading(false)
-    })
-  }
-
   async function updateItem(item, quantidade, unidade, formato, precoModal, itemTodo) {
     var form = formato;
     var precoFinal;
+
     if (form == 1) { form = 7 }
-    if (unidade == 'Selecione...' || unidade == 0) {
-      return setUnidadeInvalidaVisivel(true);
-    }
 
     if (precoModal == 0) {
       precoFinal = itemTodo.precoMedio
@@ -477,31 +428,36 @@ export default function DetalheChurras() {
     }
 
     setLoading(true)
-    await api.put(`/listadochurras/${item}`, {
-      quantidade: quantidade,
-      unidade_id: unidade,
-      formato_id: form,
-      precoItem: precoFinal,
-    }).then(async function (res) {
-      if (res.data.antigo) {
-        var sub = res.data.antigo[0].quantidade * res.data.antigo[0].precoItem;
-        var sum = precoFinal * (quantidade + res.data.antigo[0].quantidade);
-        var precoFinalTotal = sum - sub;
-      } else {
-        var precoFinalTotal = (precoFinal * quantidade).toFixed(2);
-      }
-      await api.put(`/churrasUpdate/valorTotal/${newChurras}`, {
-        valorTotal: precoFinalTotal,
-      })
-      setSelectedFormato(1)
-      setSelectedUnidade(0)
-      setRefresh(!refresh)
-      setQuantidadeModal(0)
+    if (typeof unidade == 'string' || unidade == 0) {
       setLoading(false)
-      setVisibility2([false])
-      setOpcaoItensVisible([false])
-      setRefresh(!refresh)
-    })
+      setUnidadeInvalidaVisivel(true)
+    } else {
+      await api.put(`/listadochurras/${item}`, {
+        quantidade: quantidade,
+        unidade_id: unidade,
+        formato_id: form,
+        precoItem: precoFinal,
+      }).then(async function (res) {
+        if (res.data.antigo) {
+          var sub = res.data.antigo[0].quantidade * res.data.antigo[0].precoItem;
+          var sum = precoFinal * (quantidade + res.data.antigo[0].quantidade);
+          var precoFinalTotal = sum - sub;
+        } else {
+          var precoFinalTotal = (precoFinal * quantidade).toFixed(2);
+        }
+        await api.put(`/churrasUpdate/valorTotal/${newChurras}`, {
+          valorTotal: precoFinalTotal,
+        })
+        setSelectedFormato(1)
+        setSelectedUnidade(0)
+        setRefresh(!refresh)
+        setQuantidadeModal(0)
+        setLoading(false)
+        setVisibility2([false])
+        setOpcaoItensVisible([false])
+        setRefresh(!refresh)
+      })
+    }
   }
 
   function passouDoLimite() {
@@ -847,7 +803,7 @@ export default function DetalheChurras() {
     var hours = new Date(data).getHours();
     var min = new Date(data).getMinutes();
     var sec = new Date(data).getSeconds();
-    setEditChurrasInicio(hours + ':' + min )
+    setEditChurrasInicio(hours + ':' + min)
     setHrComeco(data)
   }
   function formatDataFim(data) {
@@ -855,7 +811,7 @@ export default function DetalheChurras() {
     var min = new Date(data).getMinutes();
     var sec = new Date(data).getSeconds();
 
-    setEditChurrasFim(hours + ':' + min )
+    setEditChurrasFim(hours + ':' + min)
     setHrFim(data)
   }
 
@@ -2278,9 +2234,9 @@ export default function DetalheChurras() {
             <TouchableOpacity style={{
               backgroundColor: 'maroon', padding: 5,
               alignItems: 'center', borderRadius: 50, position: 'absolute',
-              bottom: 70, right: 40, zIndex: 2
+              bottom: 50, right: 50, zIndex: 2
             }} onPress={() => pegarLocalizacaoAtual()}>
-              <IconMa name="my-location" size={50} color="white" />
+              <IconMa name="my-location" size={25} color="white" />
             </TouchableOpacity>
             <View style={{ width: '100%', height: '90%' }}>
               <MapView
@@ -2312,7 +2268,7 @@ export default function DetalheChurras() {
                     setEditChurrasLocal(text)
                   },
                   style: { backgroundColor: 'rgba(228, 233, 237, 1)', borderRadius: 8, fontFamily: 'poppins-medium', width: '100%' },
-                  value:editChurrasLocal
+                  value: editChurrasLocal
                 }}
                 onPress={(data, details) => {
                   // 'details' is provided when fetchDetails = true
@@ -2358,6 +2314,23 @@ export default function DetalheChurras() {
 
               />
 
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={unidadeInvalidaVisivel}
+      >
+        <View style={style.centeredView2}>
+          <View style={style.modalView2}>
+            <Text style={style.modalTitle2}>Ops!</Text>
+            <Text style={style.modalText2}>Escolha a unidade de medida do seu item!</Text>
+            <View style={style.footerModal2}>
+              <TouchableOpacity style={style.continueBtn2} onPress={() => setUnidadeInvalidaVisivel(false)}>
+                <Text style={style.textBtn2}>Ok</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

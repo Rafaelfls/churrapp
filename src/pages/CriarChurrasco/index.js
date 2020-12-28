@@ -371,6 +371,8 @@ export default function CriarChurrasco() {
     return false;
   };
 
+  console.log('key')
+  console.log(KEY_GOOGLE)
   function pegarLocalizacaoAtual() {
     if (hasLocationPermission()) {
       Geolocation.getCurrentPosition(
@@ -678,9 +680,9 @@ export default function CriarChurrasco() {
               <TouchableOpacity style={{
                 backgroundColor: 'maroon', padding: 5,
                 alignItems: 'center', borderRadius: 50, position: 'absolute',
-                bottom: 70, right: 40, zIndex: 2
+                bottom: 50, right: 50, zIndex: 2
               }} onPress={() => pegarLocalizacaoAtual()}>
-                <IconMa name="my-location" size={50} color="white" />
+                <IconMa name="my-location" size={25} color="white" />
               </TouchableOpacity>
               <View style={{ width: '100%', height: '90%' }}>
                 <MapView
