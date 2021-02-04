@@ -1,11 +1,9 @@
 import axios from 'axios';
 
-const api = axios.create({
+// // Prod
+// const api = axios.create({baseURL: 'https://churrapp-back-prod.herokuapp.com/'});
 
-
-  baseURL: 'https://pure-island-99817.herokuapp.com/'
-
-
-});
+// Dev
+const api = axios.create({baseURL: 'https://churrapp-back-dev.herokuapp.com/'});
 
 export default api;
