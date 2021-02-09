@@ -8,6 +8,7 @@ import SMSVerifyCode from 'react-native-sms-verifycode';
 import api from '../../services/api';
 import { CodeField, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field'; //yarn add react-native-confirmation-code-field
 import RNOtpVerify from 'react-native-otp-verify';
+import SendSMS from 'react-native-sms'
 
 import { useLoadingModal, createLoadingModal } from '../../context/churrasContext';
 
@@ -20,6 +21,7 @@ const EsqueciSenha = () => {
     const { loading, setLoading } = useLoadingModal();
     const criarModal = createLoadingModal(loading);
     const [borderColor1, setBorderColor1] = useState(style.formOk)
+    const [refresh, setRefresh] = useState(false)
 
     function backToLogin() {
         navigation.replace('LoginCelular')
@@ -30,6 +32,7 @@ const EsqueciSenha = () => {
     const [celularUser, setCelularUser] = useState('');
     const [pin, setPin] = useState('');
     const [info, setInfo] = useState(false);
+    const [newPin, setNewPin] = useState('')
 
     // Input do código verificação SMS
     const [value, setValue] = useState('');
@@ -41,21 +44,21 @@ const EsqueciSenha = () => {
     // Termina aqui
 
     // Verificação SMS
-    function onInputCompleted(text) {
-        Alert.alert(text)
-    }
-    function celVerify() {
-        RNOtpVerify.getOtp()
-            .then(p => RNOtpVerify.addListener(otpHandler))
-            .catch(p => console.log(p));
-    }
+    // function onInputCompleted(text) {
+    //     Alert.alert(text)
+    // }
+    // function celVerify() {
+    //     RNOtpVerify.getOtp()
+    //         .then(p => RNOtpVerify.addListener(otpHandler))
+    //         .catch(p => console.log(p));
+    // }
 
-    function otpHandler(message) {
-        const otp = /(\d{4})/g.exec(message)[1];
-        this.setState({ otp });
-        RNOtpVerify.removeListener();
-        Keyboard.dismiss();
-    }
+    // function otpHandler(message) {
+    //     const otp = /(\d{4})/g.exec(message)[1];
+    //     this.setState({ otp });
+    //     RNOtpVerify.removeListener();
+    //     Keyboard.dismiss();
+    // }
     // Termina aqui
 
     async function alterarSenha() {
@@ -68,22 +71,25 @@ const EsqueciSenha = () => {
         setVisivel(!visivel);
         setValue('')
     }
+
     async function checkCelInput() {
         if (celularUser === "" || celularUser.length < 11) {
             setInfo(true)
             setBorderColor1(style.formNok)
         } else {
+            var msgBody = ''
             setLoading(true)
             await api.get(`/usuariosLoginCel/${celularUser}`)
                 .then(async function (res) {
                     USUARIOLOGADO = res.data[0]
                     console.log(USUARIOLOGADO)
                     if (USUARIOLOGADO != undefined) {
-                        await pegarPIN();
+                        // await pegarPIN(res.data[0].id);
                         if (pin === null || pin === '') {
                             await sendPIN(makeOTP(5));
                             console.log("ENTREI")
-                            console.log(pin)
+                            await pegarPIN(res.data[0].id)
+                            msgBody = ' ' + newPin
                         }
                         setVisivel(!visivel);
                     } else {
@@ -96,10 +102,16 @@ const EsqueciSenha = () => {
             setLoading(false);
         }
     }
-    async function pegarPIN() {
-        await api.get(`/getPIN/${USUARIOLOGADO.id}`)
+    async function pegarPIN(id) {
+        await api.get(`/getPIN/${id}`)
             .then((res) => {
-                setPin(res.data[0].pin);
+                setPin(res.data[0].pin)
+                setNewPin(() => 'PIN é ' + res.data[0].pin)
+                setNewPin((state) => {
+                    console.log(state);
+                    setNewPin(state)
+                    return state;
+                })
             })
     }
 
@@ -127,26 +139,30 @@ const EsqueciSenha = () => {
 
     async function sendPIN($pin) {
         setPin($pin)
-        await api.put(`/usuarios/${USUARIOLOGADO.id}`, {
-            nome: USUARIOLOGADO.nome,
-            sobrenome: USUARIOLOGADO.sobrenome,
-            email: USUARIOLOGADO.email,
-            cidade: USUARIOLOGADO.cidade,
-            uf: USUARIOLOGADO.uf,
-            idade: USUARIOLOGADO.idade,
-            joined: USUARIOLOGADO.joined,
-            celular: USUARIOLOGADO.celular,
-            apelido: USUARIOLOGADO.apelido,
-            senha: USUARIOLOGADO.senha,
-            pin: $pin
+        // await api.put(`/usuarios/${USUARIOLOGADO.id}`, {
+        //     nome: USUARIOLOGADO.nome,
+        //     sobrenome: USUARIOLOGADO.sobrenome,
+        //     email: USUARIOLOGADO.email,
+        //     cidade: USUARIOLOGADO.cidade,
+        //     uf: USUARIOLOGADO.uf,
+        //     idade: USUARIOLOGADO.idade,
+        //     joined: USUARIOLOGADO.joined,
+        //     celular: USUARIOLOGADO.celular,
+        //     apelido: USUARIOLOGADO.apelido,
+        //     senha: USUARIOLOGADO.senha,
+        //     pin: $pin
 
+        // })
+        await api.put(`/atualizaPin/${USUARIOLOGADO.id}`, {
+            celular: USUARIOLOGADO.celular,
+            pin: $pin
         })
     }
 
     useEffect(() => {
-        celVerify();
+        // celVerify();
         requestReadSmsPermission();
-        pegarPIN();
+        // pegarPIN();
     }, []);
 
     return (
