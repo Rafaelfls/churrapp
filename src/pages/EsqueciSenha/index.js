@@ -172,9 +172,6 @@ const EsqueciSenha = () => {
                 <TouchableOpacity style={style.exitBtn} onPress={() => backToLogin()}>
                     <Icon style={style.iconHeaderBtn} name="arrow-left" size={22} />
                 </TouchableOpacity>
-                <TouchableOpacity style={{ marginTop: 5, position: 'absolute', right: 3, top: 5 }} onPress={() => alert("Código de verificação: " + pin)}>
-                    <Icon style={style.iconHeaderBtn} name="user-secret" size={22} />
-                </TouchableOpacity>
             </View>
             <Text style={style.title}>Esqueceu sua senha?!</Text>
             <Text style={style.subtitle}>Não tem problema, vamos recuperar</Text>
