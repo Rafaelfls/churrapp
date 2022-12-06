@@ -21,7 +21,7 @@
     "axios": "^0.21.1",
     "expo": "^37.0.12",
     "expo-barcode-scanner": "~8.1.0",
-    "expo-cli": "^3.28.5",
+    "expo-cli": "^6.0.8",
     "expo-constants": "~9.0.0",
     "expo-contacts": "~8.1.0",
     "expo-crypto": "~8.1.0",
